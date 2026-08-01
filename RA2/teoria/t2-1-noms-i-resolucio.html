@@ -279,7 +279,7 @@
   .cq-table td:first-child { white-space: nowrap; }
   .cq-table tr:last-child td { border-bottom: none; }
 
-  /* ==== Nota de versió (Ubuntu 24.04 vs 26.04) ==== */
+  /* ==== Nota de versió de sistema (Ubuntu 26.04) ==== */
   .cq-note {
     margin: 14px 0 4px;
     padding: 10px 14px;
@@ -476,7 +476,8 @@
   </p>
 <pre><span class="c"># This file is managed by man:systemd-resolved(8).</span>
 nameserver 127.0.0.53
-options edns0</pre>
+options edns0 trust-ad
+search .</pre>
   <p>
     Aquesta adreça no és el teu servidor DNS: és el servei local. Per veure el servidor de
     veritat cal preguntar-l'hi:
@@ -521,8 +522,9 @@ options edns0</pre>
       <p><strong>Resol un nom</strong> i mira d'on surt la resposta:</p>
 <pre>resolvectl query www.upc.edu</pre>
       <p>
-        La primera vegada dirà que ve de la xarxa. Repeteix-ho i dirà
-        <code>(cache)</code>: ja no ha preguntat a ningú.
+        Mira l'última línia. La primera vegada acaba amb <code>Data from: network</code> i triga
+        centenars de mil·lisegons; repeteix-ho i dirà <code>Data from: cache</code> en un o dos:
+        ja no ha preguntat a ningú.
       </p>
     </li>
 
@@ -548,8 +550,9 @@ getent hosts provaordre.test</pre>
 
   <div class="cq-note">
     <span class="lbl">Ubuntu 26.04</span>
-    Aquestes comandes són iguals a 24.04 i 26.04. Comprova sempre la sortida real de la teva
-    màquina abans de donar per bona la d'aquests apunts.
+    <code>dig</code> i <code>host</code> ja vénen instal·lats amb el sistema: són dels paquets
+    <code>bind9-dnsutils</code> i <code>bind9-host</code>. Si et falten en una màquina retallada,
+    els portes tots amb <code>sudo apt install dnsutils</code>.
   </div>
 </div>
 

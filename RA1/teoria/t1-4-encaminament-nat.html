@@ -279,7 +279,7 @@
   .cq-table td:first-child { white-space: nowrap; }
   .cq-table tr:last-child td { border-bottom: none; }
 
-  /* ==== Nota de versió (Ubuntu 24.04 vs 26.04) ==== */
+  /* ==== Nota de versió de sistema (Ubuntu 26.04) ==== */
   .cq-note {
     margin: 14px 0 4px;
     padding: 10px 14px;
@@ -586,8 +586,10 @@ ping -c3 www.upc.edu  <span class="c"># funciona el DNS?</span></pre>
 
   <div class="cq-note">
     <span class="lbl">Ubuntu 26.04</span>
-    <code>nftables</code> i <code>sysctl</code> funcionen igual a 24.04 i 26.04. Comprova sempre
-    la sortida real de la teva màquina.
+    Al <code>nft list ruleset</code> les prioritats no surten com les has escrit: on tu poses
+    <code>priority 0</code> hi llegiràs <code>priority filter</code>, i on poses
+    <code>priority 100</code>, <code>priority srcnat</code>. Són els noms dels mateixos números:
+    la regla s'ha carregat bé.
   </div>
 </div>
 

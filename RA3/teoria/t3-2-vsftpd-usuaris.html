@@ -279,7 +279,7 @@
   .cq-table td:first-child { white-space: nowrap; }
   .cq-table tr:last-child td { border-bottom: none; }
 
-  /* ==== Nota de versió (Ubuntu 24.04 vs 26.04) ==== */
+  /* ==== Nota de versió de sistema (Ubuntu 26.04) ==== */
   .cq-note {
     margin: 14px 0 4px;
     padding: 10px 14px;
@@ -488,7 +488,7 @@ local_umask=022
 
 <span class="c"># On queda tancat</span>
 chroot_local_user=YES
-local_root=/home/$USER/fitxers
+local_root=/home/$USER
 user_sub_token=$USER
 
 <span class="c"># Llista blanca: només aquests usuaris</span>
@@ -497,7 +497,12 @@ userlist_file=/etc/vsftpd.userlist
 userlist_deny=NO</pre>
   <p>
     Amb <code>user_sub_token</code>, el <code>$USER</code> de <code>local_root</code> se substitueix
-    pel nom de qui entra: cadascú aterra a la seva carpeta <code>fitxers</code>.
+    pel nom de qui entra: cadascú aterra al seu directori personal i no en pot sortir.
+  </p>
+  <p>
+    Fixa't que <code>local_root</code> apunta a <code>/home/$USER</code> i <strong>no</strong> a
+    <code>/home/$USER/fitxers</code>. El que hi posis serà l'arrel de la gàbia, i una arrel on
+    l'usuari pugui escriure fa que vsftpd es negui a servir-lo. Ho tens al bloc següent.
   </p>
 </div>
 
@@ -505,13 +510,14 @@ userlist_deny=NO</pre>
 <div class="cq-block" data-kind="observació">
   <h4>L'arrel del chroot no pot ser escrivible</h4>
   <p>
-    Si actives el chroot sobre el directori personal i aquest és escrivible per l'usuari, vsftpd
-    es planta amb <code>500 OOPS: vsftpd: refusing to run with writable root inside chroot()</code>.
-    No és un error teu: és una protecció.
+    L'arrel de la gàbia és el directori que digui <code>local_root</code>. Si l'usuari hi pot
+    escriure, vsftpd no el deixa entrar i li respon
+    <code>500 OOPS: vsftpd: refusing to run with writable root inside chroot()</code>. No és un
+    error teu: és una protecció.
   </p>
   <p>Tens dues sortides, i no valen el mateix:</p>
   <ul>
-    <li><strong>La bona:</strong> l'arrel del chroot és de <code>root</code> i no s'hi pot escriure; a dins hi ha una carpeta <code>fitxers</code> que sí que és de l'usuari.</li>
+    <li><strong>La bona:</strong> l'arrel del chroot és de <code>root</code> i no s'hi pot escriure; a dins hi ha una carpeta <code>fitxers</code> que sí que és de l'usuari, i és on farà els <code>put</code>.</li>
     <li><strong>La ràpida:</strong> afegir <code>allow_writeable_chroot=YES</code>. Funciona, però renuncies a la protecció.</li>
   </ul>
 </div>
@@ -582,15 +588,21 @@ systemctl status vsftpd</pre>
       <p><strong>Prova-ho des del client</strong>, i mira que el <code>cd ..</code> no el tregui
       d'on és:</p>
 <pre>ftp 192.168.1.8</pre>
-      <p>Un cop dins: <code>put</code> ha de funcionar i <code>pwd</code> ha de dir <code>/</code>.</p>
+      <p>
+        Un cop dins, <code>pwd</code> ha de dir <code>/</code> i <code>cd ..</code> l'ha de deixar
+        al mateix lloc. El <code>put</code> a l'arrel fallarà: has d'entrar primer a
+        <code>cd fitxers</code>, que és l'única carpeta on l'usuari escriu.
+      </p>
     </li>
   </ol>
 
   <div class="cq-note">
-    <span class="lbl">Ubuntu 24.04 i 26.04</span>
+    <span class="lbl">Ubuntu 26.04</span>
     Si vols que l'usuari no pugui obrir sessió a la màquina, li pots posar
     <code>-s /usr/sbin/nologin</code>, però aleshores has d'afegir aquesta línia a
-    <code>/etc/shells</code>: vsftpd comprova la <em>shell</em> a través de PAM.
+    <code>/etc/shells</code>: vsftpd comprova la <em>shell</em> a través de PAM. Si te'n descuides,
+    el client només veu <code>530 Login incorrect</code>, i qui t'ho explica és el registre:
+    <code>pam_shells(vsftpd:auth): User has an invalid shell</code>.
   </div>
 </div>
 
@@ -631,7 +643,9 @@ systemctl status vsftpd</pre>
     <dt>El servei no arrenca després d'editar</dt>
     <dd>
       <p><span class="lbl">Causa</span> Un espai al voltant de l'<code>=</code>, o una directiva mal escrita.</p>
-      <p><span class="lbl">Solució</span> <code>journalctl -u vsftpd -n 20</code> et diu la línia.</p>
+      <p><span class="lbl">Solució</span> vsftpd plega sense dir res: al registre només hi veuràs
+      <code>status=2/INVALIDARGUMENT</code>. Comenta les línies que has tocat, arrenca, i torna-les
+      a posar d'una en una fins que caigui.</p>
     </dd>
   </dl>
 </div>

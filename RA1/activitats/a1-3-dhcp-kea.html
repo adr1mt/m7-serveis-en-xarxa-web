@@ -279,7 +279,7 @@
   .cq-table td:first-child { white-space: nowrap; }
   .cq-table tr:last-child td { border-bottom: none; }
 
-  /* ==== Nota de versió (Ubuntu 24.04 vs 26.04) ==== */
+  /* ==== Nota de versió de sistema (Ubuntu 26.04) ==== */
   .cq-note {
     margin: 14px 0 4px;
     padding: 10px 14px;
@@ -421,7 +421,7 @@
   </div>
   <p>
     Comença amb una <strong>màquina nova</strong> a isardVDI, acabada de crear. No reaprofitis la
-    de l'activitat 2: allà vas apartar Netplan i les dues configuracions es trepitjarien.
+    de l'activitat <strong>A1.2</strong>: allà vas apartar Netplan i les dues configuracions es trepitjarien.
   </p>
 </div>
 
@@ -431,7 +431,7 @@
   <ol>
     <li>Posar a punt la màquina nova: <em>hostname</em> amb el teu nom i <code>personal1</code> amb la IP fixa <code>10.0.0.1/8</code>.</li>
     <li>Instal·lar Kea i configurar-lo perquè reparteixi adreces <strong>per a 200 dispositius</strong>.</li>
-    <li>Repartir el DNS de <strong>Quad9</strong> (<code>9.9.9.9</code>), el domini <code>elteunom.local</code> i, com a porta d'enllaç, la <strong>IP del propi servidor</strong>.</li>
+    <li>Repartir el DNS de <strong>Quad9</strong> (<code>9.9.9.9</code>), el domini <code>elteunom.internal</code> i, com a porta d'enllaç, la <strong>IP del propi servidor</strong>.</li>
     <li>Fer una <strong>reserva d'IP</strong> per al client, fora del rang automàtic.</li>
     <li>Aconseguir que el client tingui <strong>Internet</strong> a través del servidor.</li>
   </ol>

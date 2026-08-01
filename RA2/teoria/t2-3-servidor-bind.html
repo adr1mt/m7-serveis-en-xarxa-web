@@ -279,7 +279,7 @@
   .cq-table td:first-child { white-space: nowrap; }
   .cq-table tr:last-child td { border-bottom: none; }
 
-  /* ==== Nota de versió (Ubuntu 24.04 vs 26.04) ==== */
+  /* ==== Nota de versió de sistema (Ubuntu 26.04) ==== */
   .cq-note {
     margin: 14px 0 4px;
     padding: 10px 14px;
@@ -588,8 +588,9 @@ dig @192.168.1.8 www.upc.edu +short</pre>
 
   <div class="cq-note">
     <span class="lbl">Ubuntu 26.04</span>
-    A 24.04 i 26.04 el servei es diu <code>named</code>. En documentació antiga el trobaràs com
-    <code>bind9</code>: encara funciona com a àlies.
+    A 26.04 el paquet porta BIND 9.20 i el servei es diu <code>named</code>. En documentació
+    antiga el trobaràs com <code>bind9</code>: continua funcionant com a àlies, i
+    <code>systemctl status bind9</code> et respon el mateix que <code>named</code>.
   </div>
 </div>
 
@@ -612,7 +613,7 @@ dig @192.168.1.8 www.upc.edu +short</pre>
     <dt>El servei no arrenca</dt>
     <dd>
       <p><span class="lbl">Causa</span> Un punt i coma que falta, o una clau sense tancar. La sintaxi de BIND no perdona.</p>
-      <p><span class="lbl">Solució</span> <code>sudo named-checkconf</code> et diu el fitxer i la línia. Després, <code>journalctl -u named -n 30</code>.</p>
+      <p><span class="lbl">Solució</span> <code>sudo named-checkconf</code> et diu el fitxer i la línia exacta: <code>named.conf.options:5: missing ';' before 'allow-query'</code>. Després, <code>journalctl -u named -n 30</code>.</p>
     </dd>
 
     <dt>El client rep <code>REFUSED</code></dt>

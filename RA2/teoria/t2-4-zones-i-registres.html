@@ -279,7 +279,7 @@
   .cq-table td:first-child { white-space: nowrap; }
   .cq-table tr:last-child td { border-bottom: none; }
 
-  /* ==== Nota de versió (Ubuntu 24.04 vs 26.04) ==== */
+  /* ==== Nota de versió de sistema (Ubuntu 26.04) ==== */
   .cq-note {
     margin: 14px 0 4px;
     padding: 10px 14px;
@@ -617,13 +617,13 @@ dig @192.168.1.8 -x 192.168.1.8 +short</pre>
     <dt><code>named-checkzone</code> es queixa de <code>NS record</code> o de l'SOA</dt>
     <dd>
       <p><span class="lbl">Causa</span> Falta el registre NS de la zona, o el nom del SOA no té punt final.</p>
-      <p><span class="lbl">Solució</span> Compara la capçalera amb l'exemple, caràcter a caràcter.</p>
+      <p><span class="lbl">Solució</span> El missatge és clar: <code>has no NS records</code> i <code>not loaded due to errors</code>. Compara la capçalera amb l'exemple, caràcter a caràcter.</p>
     </dd>
 
     <dt>El nom es resol amb el domini repetit dues vegades</dt>
     <dd>
       <p><span class="lbl">Causa</span> Has escrit un nom absolut sense punt final.</p>
-      <p><span class="lbl">Solució</span> <code>dig @elteuservidor nom</code> i mira la resposta sencera: hi veuràs el nom duplicat.</p>
+      <p><span class="lbl">Solució</span> <code>dig @elteuservidor nom</code> i mira la resposta sencera: hi veuràs <code>www.adria.internal.adria.internal.</code> La zona carrega igual i <code>named-checkzone</code> no es queixa; l'única pista és aquesta.</p>
     </dd>
 
     <dt>Has editat la zona i el canvi no es veu</dt>

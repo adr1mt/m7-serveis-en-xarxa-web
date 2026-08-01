@@ -279,7 +279,7 @@
   .cq-table td:first-child { white-space: nowrap; }
   .cq-table tr:last-child td { border-bottom: none; }
 
-  /* ==== Nota de versió (Ubuntu 24.04 vs 26.04) ==== */
+  /* ==== Nota de versió de sistema (Ubuntu 26.04) ==== */
   .cq-note {
     margin: 14px 0 4px;
     padding: 10px 14px;
@@ -479,11 +479,16 @@
 force_local_logins_ssl=YES
 force_local_data_ssl=YES
 ssl_tlsv1=NO
-ssl_tlsv1_1=NO
-ssl_tlsv1_2=YES
+ssl_tlsv11=NO
+ssl_tlsv12=YES
 allow_anon_ssl=NO
 rsa_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem
 rsa_private_key_file=/etc/ssl/private/ssl-cert-snakeoil.key</pre>
+  <p>
+    Compte amb els noms: són <code>ssl_tlsv11</code> i <code>ssl_tlsv12</code>, sense el guió baix
+    del final. El manual els escriu <code>ssl_tlsv1_1</code> i <code>ssl_tlsv1_2</code>, i molts
+    tutorials també, però vsftpd no els reconeix i es nega a arrencar.
+  </p>
   <p>SFTP enjaulat, <strong>al final</strong> de <code>/etc/ssh/sshd_config</code>:</p>
 <pre>Match Group sftpusers
     ChrootDirectory /home/%u
@@ -560,7 +565,11 @@ sudo tcpdump -i lo -A -n port 21</pre>
 <pre>sudo apt install -y lftp
 lftp -u alumne1 -e "set ssl:verify-certificate no" \
      localhost</pre>
-      <p>Repeteix la captura del pas 1: ara no s'hi llegeix res.</p>
+      <p>
+        El client <code>ftp</code> ha de rebre <code>530 Non-anonymous sessions must use
+        encryption</code>. Repeteix la captura del pas 1 amb <code>lftp</code>: l'única cosa
+        llegible que hi queda és l'<code>AUTH TLS</code> del principi.
+      </p>
     </li>
 
     <li>
@@ -582,17 +591,19 @@ sudo systemctl restart ssh</pre>
 <pre>sftp alumne1@192.168.1.8
 ssh alumne1@192.168.1.8</pre>
       <p>
-        El primer ha d'entrar i el segon ha de tancar-se de seguida. Dins de l'SFTP funcionen
-        <code>ls</code>, <code>get</code>, <code>put</code> i <code>bye</code>, com a l'FTP.
+        El primer ha d'entrar i el segon s'ha de tancar amb <code>This service allows sftp
+        connections only</code>. Dins de l'SFTP funcionen <code>ls</code>, <code>get</code>,
+        <code>put</code> i <code>bye</code>, com a l'FTP.
       </p>
     </li>
   </ol>
 
   <div class="cq-note">
-    <span class="lbl">Ubuntu 24.04 i 26.04</span>
+    <span class="lbl">Ubuntu 26.04</span>
     El certificat <em>snakeoil</em> que fa servir l'exemple ve amb el paquet
-    <code>ssl-cert</code> i és autosignat: els clients es queixaran fins que l'acceptis a mà. En
-    producció s'hi posa un certificat de veritat.
+    <code>ssl-cert</code>, ja instal·lat, i és autosignat: els clients es queixaran fins que
+    l'acceptis a mà, i per això <code>lftp</code> hi va amb
+    <code>set ssl:verify-certificate no</code>. En producció s'hi posa un certificat de veritat.
   </div>
 </div>
 
@@ -612,9 +623,15 @@ ssh alumne1@192.168.1.8</pre>
 <div class="cq-block" data-kind="problemes">
   <h4>Errors habituals</h4>
   <dl class="cq-issues">
+    <dt>vsftpd no arrenca en activar el TLS, i no diu res</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Una directiva que no existeix: <code>ssl_tlsv1_2</code> en comptes de <code>ssl_tlsv12</code>, o <code>ssl_enable=YES</code> sense les dues línies <code>rsa_</code>. Al registre només hi surt <code>status=2/INVALIDARGUMENT</code>.</p>
+      <p><span class="lbl">Solució</span> Comenta el bloc de TLS sencer, arrenca, i torna a posar les línies d'una en una fins que el servei caigui: la culpable és l'última que has escrit.</p>
+    </dd>
+
     <dt>El client <code>ftp</code> deixa de connectar en activar el TLS</dt>
     <dd>
-      <p><span class="lbl">Causa</span> És l'efecte buscat: aquest client no sap fer TLS i el servidor ja no accepta clar.</p>
+      <p><span class="lbl">Causa</span> És l'efecte buscat: aquest client no sap fer TLS i el servidor ja no accepta clar. Respon <code>530 Non-anonymous sessions must use encryption</code>.</p>
       <p><span class="lbl">Solució</span> Fes servir <code>lftp</code>, FileZilla o qualsevol client amb suport d'FTPS.</p>
     </dd>
 

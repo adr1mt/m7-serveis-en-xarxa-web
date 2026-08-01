@@ -279,7 +279,7 @@
   .cq-table td:first-child { white-space: nowrap; }
   .cq-table tr:last-child td { border-bottom: none; }
 
-  /* ==== Nota de versió (Ubuntu 24.04 vs 26.04) ==== */
+  /* ==== Nota de versió de sistema (Ubuntu 26.04) ==== */
   .cq-note {
     margin: 14px 0 4px;
     padding: 10px 14px;
@@ -524,7 +524,16 @@
 
   <ol class="cq-steps">
     <li>
-      <p><strong>Al primari</strong>, afegeix <code>allow-transfer</code> i <code>also-notify</code> a la zona, apuja el <strong>serial</strong> i recarrega:</p>
+      <p><strong>Al fitxer de zona del primari</strong>, dona d'alta el segon servidor: un
+      <code>NS</code> més per a la zona i el seu <code>A</code>. Sense això la zona es transfereix
+      igualment, però ningú de fora sabrà que el secundari existeix:</p>
+<pre>@       IN  NS      ns2.adria.internal.
+ns2     IN  A       192.168.1.9</pre>
+    </li>
+
+    <li>
+      <p><strong>A la declaració de la zona</strong>, afegeix <code>allow-transfer</code> i
+      <code>also-notify</code>, apuja el <strong>serial</strong> i recarrega:</p>
 <pre>sudo named-checkconf
 sudo rndc reload</pre>
     </li>
@@ -553,8 +562,10 @@ sudo journalctl -u named -n 20 | grep -i transfer</pre>
 <pre>ls -l /var/cache/bind/
 dig @192.168.1.9 www.adria.internal +short</pre>
       <p>
-        Ara fes una prova de veritat: canvia un registre al primari, apuja el serial, recarrega i
-        torna a preguntar al secundari.
+        Ara fes una prova de veritat: canvia un registre al primari, apuja el serial i recarrega.
+        No has de tocar res al secundari: en pocs segons el seu registre ha de dir
+        <code>received notify for zone</code> i, tot seguit,
+        <code>transferred serial</code> amb el número nou.
       </p>
     </li>
   </ol>

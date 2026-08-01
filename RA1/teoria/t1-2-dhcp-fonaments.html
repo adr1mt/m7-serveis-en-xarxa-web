@@ -279,7 +279,7 @@
   .cq-table td:first-child { white-space: nowrap; }
   .cq-table tr:last-child td { border-bottom: none; }
 
-  /* ==== Nota de versió (Ubuntu 24.04 vs 26.04) ==== */
+  /* ==== Nota de versió de sistema (Ubuntu 26.04) ==== */
   .cq-note {
     margin: 14px 0 4px;
     padding: 10px 14px;
@@ -607,8 +607,14 @@ sudo tcpdump -i enp1s0 -n port 67 or port 68</pre>
     </li>
 
     <li>
-      <p><strong>Des d'una altra consola</strong> (no tanquis la del <code>tcpdump</code>), força una renovació:</p>
-<pre>sudo networkctl renew enp1s0</pre>
+      <p><strong>Des d'una altra consola</strong> (no tanquis la del <code>tcpdump</code>), força
+      una <strong>configuració des de zero</strong>:</p>
+<pre>sudo networkctl reconfigure enp1s0</pre>
+      <p>
+        Ha de ser <code>reconfigure</code> i no <code>renew</code>. El client que ja té adreça no
+        torna a fer tot el DORA per renovar-la: li'n demana una pròrroga al mateix servidor, i
+        això són dos missatges, no quatre. Ho veuràs al pas següent.
+      </p>
     </li>
 
     <li>
@@ -624,6 +630,17 @@ IP 10.0.0.1.67 &gt; 255.255.255.255.68: BOOTP/DHCP, Reply</span></pre>
     </li>
 
     <li>
+      <p><strong>Ara compara-ho amb una renovació.</strong> Amb la captura oberta:</p>
+<pre>sudo networkctl renew enp1s0</pre>
+      <p>
+        Només en surten dues, i el client ja no parla des de <code>0.0.0.0</code> ni crida a
+        tothom: escriu directament al servidor que li va donar l'adreça.
+      </p>
+<pre><span class="o">IP 10.0.0.55.68 &gt; 10.0.0.1.67: BOOTP/DHCP, Request from 08:00:27:1f:a3:0c
+IP 10.0.0.1.67 &gt; 10.0.0.55.68: BOOTP/DHCP, Reply</span></pre>
+    </li>
+
+    <li>
       <p>Atura amb <kbd>Ctrl</kbd>+<kbd>C</kbd> i comprova què t'ha quedat configurat:</p>
 <pre>ip -c addr show enp1s0
 ip -c route
@@ -634,8 +651,9 @@ resolvectl status enp1s0</pre>
 
   <div class="cq-note">
     <span class="lbl">Ubuntu 26.04</span>
-    Aquestes comandes són iguals a 24.04 i 26.04. Comprova sempre la sortida real de la teva
-    màquina abans de donar per bona la d'aquests apunts.
+    A <code>networkctl status</code>, la concessió surt a la línia de l'adreça, entre parèntesis:
+    <code>Address: 10.0.0.55 (DHCPv4 via 10.0.0.1)</code>. Aquell segon número és el servidor que
+    te la va donar.
   </div>
 </div>
 
@@ -709,7 +727,8 @@ resolvectl status enp1s0</pre>
         <tr><td><code>ip -c route</code><br><code>ip -c r</code></td><td>Veure la porta d'enllaç</td></tr>
         <tr><td><code>resolvectl status</code></td><td>Veure el DNS actiu</td></tr>
         <tr><td><code>networkctl status &lt;if&gt;</code></td><td>Estat i concessió de la targeta</td></tr>
-        <tr><td><code>networkctl renew &lt;if&gt;</code></td><td>Forçar la renovació</td></tr>
+        <tr><td><code>networkctl renew &lt;if&gt;</code></td><td>Renovar: dos missatges, al mateix servidor</td></tr>
+        <tr><td><code>networkctl reconfigure &lt;if&gt;</code></td><td>Tornar a començar: el DORA sencer</td></tr>
         <tr><td><code>tcpdump -n port 67 or port 68</code></td><td>Capturar l'intercanvi DHCP</td></tr>
         <tr><td><code>ss -ulnp | grep :67</code></td><td>Veure si el servidor escolta</td></tr>
       </tbody>

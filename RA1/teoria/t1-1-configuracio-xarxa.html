@@ -279,7 +279,7 @@
   .cq-table td:first-child { white-space: nowrap; }
   .cq-table tr:last-child td { border-bottom: none; }
 
-  /* ==== Nota de versió (Ubuntu 24.04 vs 26.04) ==== */
+  /* ==== Nota de versió de sistema (Ubuntu 26.04) ==== */
   .cq-note {
     margin: 14px 0 4px;
     padding: 10px 14px;
@@ -439,7 +439,7 @@
   </p>
   <p>
     Els fitxers es llegeixen per ordre alfabètic, per això se'ls posa un número al davant:
-    <code>01-xarxa.yaml</code>. El nom concret és igual, però l'extensió ha de ser
+    <code>90-xarxa.yaml</code>. El nom concret és igual, però l'extensió ha de ser
     <code>.yaml</code>.
   </p>
 </div>
@@ -468,6 +468,28 @@
     Tres coses del YAML que has de vigilar: la <strong>indentació és amb espais</strong> (mai
     tabuladors), cada nivell són <strong>2 espais</strong> més, i els dos punts van
     <strong>enganxats</strong> a la paraula.
+  </p>
+</div>
+
+<!-- ============ 4b · MÉS D'UN FITXER ============ -->
+<div class="cq-block" data-kind="observació">
+  <h4>Si a /etc/netplan/ ja hi ha un fitxer, què passa amb el teu?</h4>
+  <p>
+    El nom del que hi trobis depèn de la instal·lació:
+    <code>00-installer-config.yaml</code> el deixa l'instal·lador d'Ubuntu Server,
+    <code>01-network-manager-all.yaml</code> l'escriptori i <code>50-cloud-init.yaml</code> les
+    màquines de núvol.
+  </p>
+  <p>
+    Netplan els llegeix <strong>tots</strong> per ordre alfabètic i els <strong>fusiona</strong>.
+    El que és nou se suma; si dos diuen coses diferents de la mateixa clau, mana el que va
+    <strong>després</strong>. Les llistes, com <code>addresses</code>, no se substitueixen:
+    s'acumulen, i la targeta acaba amb totes dues adreces.
+  </p>
+  <p>
+    Per això val més afegir un fitxer propi amb un número alt, <code>90-xarxa.yaml</code>, que
+    editar el que hi havia: el teu mana i l'original queda intacte. Mira com ha quedat la barreja
+    amb <code>sudo netplan get</code>.
   </p>
 </div>
 
@@ -516,13 +538,13 @@
 
     <li>
       <p><strong>Edita el fitxer</strong> de Netplan:</p>
-<pre>sudo nano /etc/netplan/01-xarxa.yaml</pre>
+<pre>sudo nano /etc/netplan/90-xarxa.yaml</pre>
       <p>Escriu-hi la configuració de l'exemple, canviant els noms de les targetes pels teus.</p>
     </li>
 
     <li>
       <p><strong>Posa-hi els permisos correctes.</strong> Si no ho fas, Netplan et renyarà cada vegada:</p>
-<pre>sudo chmod 600 /etc/netplan/01-xarxa.yaml</pre>
+<pre>sudo chmod 600 /etc/netplan/90-xarxa.yaml</pre>
     </li>
 
     <li>
@@ -546,12 +568,6 @@ resolvectl status</pre>
       </p>
     </li>
   </ol>
-
-  <div class="cq-note">
-    <span class="lbl">Ubuntu 26.04</span>
-    La sintaxi de Netplan i aquestes comandes són iguals a 24.04 i 26.04. Comprova sempre la
-    sortida real de la teva màquina.
-  </div>
 </div>
 
 <!-- ============ 8 · SOTA NETPLAN ============ -->
@@ -579,7 +595,7 @@ cat /run/systemd/network/*enp2s0*</pre>
     <li><strong>Un sol fitxer</strong> de Netplan per màquina, amb totes les targetes. Diversos fitxers es trepitgen entre ells.</li>
     <li><strong><code>netplan try</code>, mai <code>netplan apply</code></strong>, quan treballis per SSH.</li>
     <li><strong>Permisos 600.</strong> El fitxer pot contenir claus de Wi-Fi.</li>
-    <li><strong>Còpia de seguretat</strong> abans de tocar-lo: <code>sudo cp 01-xarxa.yaml 01-xarxa.yaml.bak</code>.</li>
+    <li><strong>Còpia de seguretat</strong> abans de tocar-lo: <code>sudo cp 90-xarxa.yaml 90-xarxa.yaml.bak</code>.</li>
     <li><strong>Documenta amb comentaris</strong> (<code>#</code>) quina targeta és quina. D'aquí a tres mesos no te'n recordaràs.</li>
   </ul>
 </div>
@@ -598,6 +614,12 @@ cat /run/systemd/network/*enp2s0*</pre>
     <dd>
       <p><span class="lbl">Causa</span> Falta <code>dhcp4: false</code>, i el DHCP li està sobreescrivint la teva adreça.</p>
       <p><span class="lbl">Solució</span> Afegeix-lo i torna a aplicar. Comprova-ho amb <code>networkctl status enp2s0</code>.</p>
+    </dd>
+
+    <dt><code>netplan apply</code> diu <code>'netplan try' is restoring configuration</code></dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Un <code>netplan try</code> anterior es va quedar a mitges: vas tancar la consola sense prémer <kbd>Enter</kbd> ni esperar els 120 segons.</p>
+      <p><span class="lbl">Solució</span> <code>sudo rm /run/netplan/netplan-try.ready</code> i torna a aplicar.</p>
     </dd>
 
     <dt>Es perd la connexió SSH en aplicar</dt>

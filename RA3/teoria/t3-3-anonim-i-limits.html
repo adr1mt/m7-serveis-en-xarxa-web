@@ -279,7 +279,7 @@
   .cq-table td:first-child { white-space: nowrap; }
   .cq-table tr:last-child td { border-bottom: none; }
 
-  /* ==== Nota de versió (Ubuntu 24.04 vs 26.04) ==== */
+  /* ==== Nota de versió de sistema (Ubuntu 26.04) ==== */
   .cq-note {
     margin: 14px 0 4px;
     padding: 10px 14px;
@@ -539,7 +539,7 @@ idle_session_timeout=120</pre>
   <ol class="cq-steps">
     <li>
       <p><strong>Comprova el directori públic.</strong> Ha de ser de <code>root</code> i no
-      escrivible, o el servei no arrencarà:</p>
+      escrivible. Si no, el servei arrenca igualment, però cap anònim hi podrà entrar:</p>
 <pre>ls -ld /srv/ftp
 sudo chown root:root /srv/ftp
 sudo chmod 755 /srv/ftp</pre>
@@ -562,28 +562,41 @@ sudo systemctl restart vsftpd</pre>
     <li>
       <p><strong>Prova-ho des del client</strong> amb l'usuari <code>anonymous</code>:</p>
 <pre>ftp 192.168.1.8
-<span class="c"># Name: anonymous · Password: (retorn)</span></pre>
-      <p>Has de poder fer <code>ls</code> i <code>get</code>, i <code>put</code> ha de fallar.</p>
+<span class="c"># Name: anonymous</span></pre>
+      <p>
+        Amb <code>no_anon_password=YES</code> ni tan sols et demana la contrasenya: entres directe
+        amb <code>230 Login successful</code>. Has de poder fer <code>ls</code> i <code>get</code>,
+        i <code>put</code> ha de fallar amb <code>550 Permission denied</code>.
+      </p>
     </li>
 
     <li>
       <p><strong>Comprova el límit per adreça</strong>: obre tres sessions alhora des de la mateixa
-      màquina i mira què diu la tercera.</p>
+      màquina, sense tancar-ne cap. La tercera ha de dir:</p>
+<pre><span class="o">421 There are too many connections from your internet address.</span></pre>
+      <p>
+        Compten les sessions obertes, encara que estiguin aturades: fins que no les tanquis o
+        passin els segons d'<code>idle_session_timeout</code>, ocupen lloc.
+      </p>
     </li>
 
     <li>
       <p><strong>Comprova el límit de velocitat</strong> amb un fitxer prou gran:</p>
 <pre>sudo dd if=/dev/zero of=/srv/ftp/public/gran.bin bs=1M count=100
 sudo chmod a+r /srv/ftp/public/gran.bin</pre>
-      <p>Baixa'l i mira la velocitat que reporta el client.</p>
+      <p>
+        Baixa'l i mira la velocitat que reporta el client: amb
+        <code>anon_max_rate=512000</code> ha de rondar els 500 KiB/s, ni que el servidor i el
+        client siguin la mateixa màquina.
+      </p>
     </li>
   </ol>
 
   <div class="cq-note">
-    <span class="lbl">Ubuntu 24.04 i 26.04</span>
-    El paquet crea l'usuari de sistema <code>ftp</code> amb <code>/srv/ftp</code> com a directori.
-    Si el canvies amb <code>anon_root</code>, el nou directori ha de complir la mateixa regla: de
-    <code>root</code> i no escrivible.
+    <span class="lbl">Ubuntu 26.04</span>
+    El paquet crea l'usuari de sistema <code>ftp</code> i el directori <code>/srv/ftp</code>, que ve
+    de <code>root:ftp</code> amb permisos <code>755</code>. Si el canvies amb <code>anon_root</code>,
+    el nou directori ha de complir la mateixa regla: de <code>root</code> i no escrivible.
   </div>
 </div>
 
@@ -603,9 +616,9 @@ sudo chmod a+r /srv/ftp/public/gran.bin</pre>
 <div class="cq-block" data-kind="problemes">
   <h4>Errors habituals</h4>
   <dl class="cq-issues">
-    <dt><code>500 OOPS: vsftpd: refusing to run with writable anonymous root</code></dt>
+    <dt><code>OOPS: vsftpd: refusing to run with writable root inside chroot()</code> en entrar com a anònim</dt>
     <dd>
-      <p><span class="lbl">Causa</span> <code>/srv/ftp</code> és escrivible per l'usuari <code>ftp</code>.</p>
+      <p><span class="lbl">Causa</span> <code>/srv/ftp</code> és escrivible pel grup o per l'usuari <code>ftp</code>. El servei arrenca, però la sessió cau just després del <code>230</code>.</p>
       <p><span class="lbl">Solució</span> <code>chown root:root</code> i <code>chmod 755</code> sobre l'arrel; el que hagi de ser escrivible, en una carpeta de dins.</p>
     </dd>
 

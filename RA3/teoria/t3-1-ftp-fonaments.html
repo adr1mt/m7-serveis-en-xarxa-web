@@ -279,7 +279,7 @@
   .cq-table td:first-child { white-space: nowrap; }
   .cq-table tr:last-child td { border-bottom: none; }
 
-  /* ==== Nota de versió (Ubuntu 24.04 vs 26.04) ==== */
+  /* ==== Nota de versió de sistema (Ubuntu 26.04) ==== */
   .cq-note {
     margin: 14px 0 4px;
     padding: 10px 14px;
@@ -479,14 +479,20 @@ USER alumne
 <span class="o">331 Please specify the password.</span>
 PASS ······
 <span class="o">230 Login successful.</span>
-PASV
-<span class="o">227 Entering Passive Mode (192,168,1,8,201,44)</span>
+EPSV
+<span class="o">229 Entering Extended Passive Mode (|||34277|)</span>
 RETR informe.pdf
 <span class="o">150 Opening BINARY mode data connection</span>
 <span class="o">226 Transfer complete.</span></pre>
   <p>
-    Els sis números del <code>227</code> són l'adreça i el port on has d'anar a buscar les dades:
-    els quatre primers són la IP, i els dos últims el port, com <code>201×256 + 44 = 51500</code>.
+    El número entre barres del <code>229</code> és el port on has d'anar a buscar les dades: el
+    <code>34277</code>. L'adreça no cal, perquè ja és la del servidor amb qui parles.
+  </p>
+  <p>
+    El client d'avui demana <code>EPSV</code>, la versió que també val per a IPv6. Si en trobes un
+    de vell, demanarà <code>PASV</code> i el servidor li respondrà amb sis números,
+    <code>227 Entering Passive Mode (192,168,1,8,201,44)</code>: els quatre primers són la IP i els
+    dos últims el port, <code>201×256 + 44 = 51500</code>.
   </p>
 </div>
 
@@ -598,14 +604,20 @@ sudo ss -lntp | grep :21</pre>
       canvia d'un mode a l'altre i et diu com queda:</p>
 <pre>passive
 <span class="o">Passive mode: off; fallback to active mode: off.</span></pre>
-      <p>Repeteix el <code>ls</code> amb cada mode i compara.</p>
+      <p>
+        Repeteix el <code>ls</code> amb cada mode i compara la línia que respon el servidor: en
+        passiu és <code>229 Entering Extended Passive Mode</code>, i en actiu
+        <code>200 EPRT command successful. Consider using EPSV.</code>
+      </p>
     </li>
   </ol>
 
   <div class="cq-note">
-    <span class="lbl">Ubuntu 24.04 i 26.04</span>
-    El paquet és <code>vsftpd</code> i el servei també. El client de text s'instal·la amb
-    <code>ftp</code>, que a Ubuntu és en realitat <code>tnftp</code>, i arrenca en mode passiu.
+    <span class="lbl">Ubuntu 26.04</span>
+    El paquet és <code>vsftpd</code> i el servei també. El client de text es diu
+    <code>tnftp</code>: <code>apt install ftp</code> continua funcionant, però ja només és un
+    paquet pont que instal·la el <code>tnftp</code>. Arrenca en mode passiu i demana
+    <code>EPSV</code>.
   </div>
 </div>
 

@@ -279,7 +279,7 @@
   .cq-table td:first-child { white-space: nowrap; }
   .cq-table tr:last-child td { border-bottom: none; }
 
-  /* ==== Nota de versió (Ubuntu 24.04 vs 26.04) ==== */
+  /* ==== Nota de versió de sistema (Ubuntu 26.04) ==== */
   .cq-note {
     margin: 14px 0 4px;
     padding: 10px 14px;
@@ -475,15 +475,16 @@
       "option-data": [
         { "name": "routers",             "data": "192.168.1.1" },
         { "name": "domain-name-servers", "data": "9.9.9.9"     },
-        { "name": "domain-name",         "data": "adria.local" }
+        { "name": "domain-name",         "data": "adria.internal" }
       ]
     }
   ]
 }
 }</pre>
   <p>
-    <strong>Compte amb les comes.</strong> A JSON, l'últim element d'una llista
-    <em>no</em> en porta. És l'error número u i deixa el servei sense arrencar.
+    <strong>Compte amb les comes i les claus.</strong> A JSON, cada element d'una llista en porta
+    una menys l'últim. La que falta i la clau sense tancar deixen el servei sense arrencar, i és
+    l'error número u: valida sempre el fitxer abans de reiniciar.
   </p>
 </div>
 
@@ -573,8 +574,17 @@ sudo apt install -y kea-dhcp4-server</pre>
 
     <li>
       <p><strong>Comprova la sintaxi abans d'arrencar.</strong> Kea té un mode de prova que llegeix el fitxer i et diu si està bé:</p>
-<pre>sudo kea-dhcp4 -t /etc/kea/kea-dhcp4.conf</pre>
-      <p>Si hi ha una coma de més, aquí ho sabràs, amb el número de línia.</p>
+<pre>sudo -u _kea kea-dhcp4 -t /etc/kea/kea-dhcp4.conf</pre>
+      <p>
+        Va com l'usuari <code>_kea</code>, el del servei, i no com a <code>root</code>: l'AppArmor
+        que porta el paquet no deixa que el programa obri fitxers fora dels seus. Si t'hi
+        descuides, la resposta és <code>Unable to open file</code> encara que el fitxer hi sigui.
+      </p>
+      <p>
+        Si falta una coma o una clau, aquí ho sabràs, amb el fitxer, la línia i la columna:
+        <code>syntax error, unexpected max-valid-lifetime, expecting "," or }</code>. Si tot va
+        bé, no diu res i acaba amb codi 0.
+      </p>
     </li>
 
     <li>
@@ -602,8 +612,10 @@ sudo systemctl status kea-dhcp4-server</pre>
 
   <div class="cq-note">
     <span class="lbl">Ubuntu 26.04</span>
-    Els noms de paquet, servei i fitxers són els mateixos a 24.04 i 26.04. El que pot canviar és
-    la versió de Kea i, amb ella, algun valor per defecte del fitxer que et ve instal·lat.
+    El paquet porta Kea 3.0. Molta documentació i molts tutorials escriuen la validació com
+    <code>sudo kea-dhcp4 -t</code>, sense l'usuari: així no funciona, perquè el perfil d'AppArmor
+    del paquet no deixa que el programa obri el fitxer. Compara sempre amb la sortida de la teva
+    màquina.
   </div>
 </div>
 
@@ -611,7 +623,7 @@ sudo systemctl status kea-dhcp4-server</pre>
 <div class="cq-block" data-kind="bones pràctiques">
   <h4>Criteris professionals</h4>
   <ul>
-    <li><strong>Valida sempre abans d'arrencar</strong> amb <code>kea-dhcp4 -t</code>. Estalvia la meitat dels problemes.</li>
+    <li><strong>Valida sempre abans d'arrencar</strong> amb <code>sudo -u _kea kea-dhcp4 -t</code>. Estalvia la meitat dels problemes.</li>
     <li><strong>Còpia de l'original.</strong> És la teva marxa enrere si t'hi perds.</li>
     <li><strong>Escolta només per la targeta interna.</strong> Mai posis la targeta que va a la xarxa del centre a <code>interfaces</code>.</li>
     <li><strong>Reserves fora del <em>pool</em></strong>, i totes juntes en una zona d'adreces baixes.</li>
@@ -626,7 +638,7 @@ sudo systemctl status kea-dhcp4-server</pre>
     <dt>El servei no arrenca</dt>
     <dd>
       <p><span class="lbl">Causa</span> Error de JSON (una coma sobrant) o la targeta de <code>interfaces</code> no existeix o no té IP.</p>
-      <p><span class="lbl">Solució</span> <code>sudo kea-dhcp4 -t /etc/kea/kea-dhcp4.conf</code> et dona el motiu i la línia. Si el fitxer és correcte, mira <code>journalctl -u kea-dhcp4-server -n 30</code>.</p>
+      <p><span class="lbl">Solució</span> <code>sudo -u _kea kea-dhcp4 -t /etc/kea/kea-dhcp4.conf</code> et dona el motiu, la línia i la columna. Si el fitxer és correcte, mira <code>journalctl -u kea-dhcp4-server -n 30</code>.</p>
     </dd>
 
     <dt>El servei està actiu però el client no rep res</dt>
@@ -665,7 +677,7 @@ sudo systemctl status kea-dhcp4-server</pre>
       <thead><tr><th>Comanda</th><th>Per a què serveix</th></tr></thead>
       <tbody>
         <tr><td><code>apt install kea-dhcp4-server</code></td><td>Instal·lar el servei</td></tr>
-        <tr><td><code>kea-dhcp4 -t &lt;fitxer&gt;</code></td><td>Validar la configuració</td></tr>
+        <tr><td><code>sudo -u _kea kea-dhcp4 -t &lt;fitxer&gt;</code></td><td>Validar la configuració</td></tr>
         <tr><td><code>systemctl restart kea-dhcp4-server</code></td><td>Aplicar els canvis</td></tr>
         <tr><td><code>systemctl status kea-dhcp4-server</code></td><td>Veure si està actiu o l'error</td></tr>
         <tr><td><code>journalctl -u kea-dhcp4-server -f</code></td><td>Veure les concessions en directe</td></tr>
@@ -708,7 +720,7 @@ sudo systemctl status kea-dhcp4-server</pre>
   <div class="cq-question" data-id="t1-3-validar" data-type="single">
     <div class="statement">Quina comanda comprova la configuració <em>abans</em> d'arrencar el servei?</div>
     <button class="cq-option" data-correct="false"><code>systemctl status kea-dhcp4-server</code></button>
-    <button class="cq-option" data-correct="true"><code>kea-dhcp4 -t /etc/kea/kea-dhcp4.conf</code></button>
+    <button class="cq-option" data-correct="true"><code>sudo -u _kea kea-dhcp4 -t /etc/kea/kea-dhcp4.conf</code></button>
     <button class="cq-option" data-correct="false"><code>netplan try</code></button>
     <button class="cq-option" data-correct="false"><code>ss -ulnp | grep :67</code></button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>

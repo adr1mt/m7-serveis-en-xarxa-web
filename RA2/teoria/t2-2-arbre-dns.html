@@ -279,7 +279,7 @@
   .cq-table td:first-child { white-space: nowrap; }
   .cq-table tr:last-child td { border-bottom: none; }
 
-  /* ==== Nota de versió (Ubuntu 24.04 vs 26.04) ==== */
+  /* ==== Nota de versió de sistema (Ubuntu 26.04) ==== */
   .cq-note {
     margin: 14px 0 4px;
     padding: 10px 14px;
@@ -591,6 +591,12 @@
 <div class="cq-block" data-kind="problemes">
   <h4>Errors habituals</h4>
   <dl class="cq-issues">
+    <dt>El <code>+trace</code> escup línies de <code>network unreachable</code></dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Alguns servidors arrel i de TLD tenen adreça IPv6, i la teva xarxa no en té. <code>dig</code> ho prova, no arriba, i tira per l'adreça IPv4.</p>
+      <p><span class="lbl">Solució</span> Cap: la resolució acaba bé igualment. Si vols la sortida neta, <code>dig -4 nom +trace</code>.</p>
+    </dd>
+
     <dt><code>dig</code> respon <code>NXDOMAIN</code></dt>
     <dd>
       <p><span class="lbl">Causa</span> El nom no existeix a la zona. Sovint és una errada d'escriptura o falta el punt final.</p>
