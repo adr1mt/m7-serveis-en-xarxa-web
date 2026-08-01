@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>A8 · Zona secundària per parelles — Serveis en Xarxa (0227)</title>
+<title>A1.2 · DHCP amb systemd-networkd — Serveis en Xarxa (0227)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -368,50 +368,65 @@
     .cq-block pre .c, .cq-block pre .o { color: #555; }
     .cq-check-btn { display: none; }
   }
+  /* ==== Contingut no copiable ====
+     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
+     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
+     queda exclòs. */
+  .cq-header, .cq-block {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  [contenteditable="true"], [contenteditable="true"] * {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    user-select: text;
+  }
+
 /* === SINAPSI-CSS FI ======================================== */
 </style>
 </head>
 <body>
 <header class="cq-header">
-  <div class="eyebrow">0227 · Serveis en Xarxa · RA2 · Activitat 8</div>
-  <h1>Zona secundària per parelles</h1>
-  <p class="lede">La teva zona, servida també des del servidor d'un company.</p>
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · A1.2</div>
+  <h1>Servidor DHCP mínim amb systemd-networkd</h1>
+  <p class="lede">Muntar un DHCP de laboratori sense instal·lar absolutament res.</p>
 </header>
 
 <!-- ============ OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
   <h4>Què has de saber abans de començar</h4>
   <p>
-    Teoria <strong>T9</strong> (primari i secundari), i tenir feta l'activitat
-    <strong>6</strong>: cal una zona pròpia funcionant per poder-la transferir.
+    Teoria <strong>T1.1</strong> (Netplan i systemd-networkd) i <strong>T1.2</strong> (fonaments de
+    DHCP).
   </p>
   <p>
-    Amb aquesta activitat aprendràs a replicar una zona entre dos servidors. Cadascú serà
-    <strong>primari de la seva zona i secundari de la del company</strong>, que és exactament com
-    es fa a la realitat.
+    Amb aquesta activitat aprendràs a muntar un servidor DHCP de laboratori amb el que ja porta
+    Ubuntu Server de sèrie: <code>systemd-networkd</code>, que a més de configurar targetes sap
+    fer de servidor DHCP bàsic. Aquí <strong>no faràs servir Kea</strong>.
+  </p>
+  <p>
+    Serveix per a un laboratori, no per a producció. Però et farà veure <strong>què hi ha sota
+    Netplan</strong>, que és el que de veritat gestiona la xarxa.
   </p>
 </div>
 
 <!-- ============ ESCENARI ============ -->
 <div class="cq-block" data-kind="escenari">
   <h4>Amb què treballaràs</h4>
-  <p>
-    Es treballa <strong>per parelles</strong>. Els dos servidors han de veure's per xarxa, així
-    que aquesta vegada tots dos van a la <strong>mateixa xarxa</strong>: poseu-vos d'acord amb el
-    professor sobre quina targeta feu servir i quina adreça pren cadascú.
-  </p>
   <div class="cq-tablewrap">
     <table class="cq-table">
-      <thead><tr><th>Màquina</th><th>És primari de</th><th>És secundari de</th></tr></thead>
+      <thead><tr><th>Màquina</th><th>Targeta</th><th>Paper</th></tr></thead>
       <tbody>
-        <tr><td>El teu servidor</td><td><code>elteunom.internal</code></td><td>La zona del company</td></tr>
-        <tr><td>El del company</td><td><code>elseunom.internal</code></td><td>La teva zona</td></tr>
+        <tr><td>Ubuntu <strong>Server</strong></td><td>personal1</td><td>Servidor DHCP, IP fixa <code>10.0.0.1/8</code></td></tr>
+        <tr><td>Ubuntu <strong>Desktop</strong></td><td>personal1</td><td>Client, ha de rebre la configuració</td></tr>
       </tbody>
     </table>
   </div>
   <p>
-    Cada servidor manté una zona i en copia una altra. Comproveu-ho tots dos: l'activitat no està
-    feta fins que funciona en els dos sentits.
+    Comença amb una <strong>màquina nova</strong> a isardVDI. Al client
+    <strong>no hauràs de tocar res</strong>: els escriptoris Ubuntu ja venen configurats per
+    demanar la configuració per DHCP.
   </p>
 </div>
 
@@ -419,11 +434,11 @@
 <div class="cq-block" data-kind="enunciat">
   <h4>Què has de fer</h4>
   <ol>
-    <li>Posar-vos d'acord en les adreces dels dos servidors i comprovar que us feu <code>ping</code>.</li>
-    <li>Afegir a la teva zona un registre <strong>NS per al servidor del company</strong>, i el seu registre A si cal.</li>
-    <li>Autoritzar <strong>només</strong> el servidor del company a endur-se la teva zona, i avisar-lo dels canvis.</li>
-    <li>Declarar al teu servidor la zona del company com a <strong>secundària</strong>, sense escriure'n cap fitxer.</li>
-    <li>Demostrar que la rèplica funciona: un canvi al primari s'ha de veure al secundari.</li>
+    <li>Fer que <strong>Netplan deixi de gestionar</strong> la xarxa d'aquesta màquina.</li>
+    <li>Configurar <code>personal1</code> amb la IP fixa <code>10.0.0.1/8</code> parlant directament amb <code>systemd-networkd</code>.</li>
+    <li>Activar-hi el <strong>servidor DHCP integrat</strong>, que ha de repartir <strong>20 adreces a partir de la <code>10.0.0.100</code></strong>.</li>
+    <li>Fer que reparteixi també el <strong>DNS de Quad9</strong> (<code>9.9.9.9</code>).</li>
+    <li>Comprovar des de l'Ubuntu Desktop que rep la configuració que has definit.</li>
   </ol>
 </div>
 
@@ -435,11 +450,11 @@
     <table class="cq-table">
       <thead><tr><th>Què has de fer</th><th>On ho tens</th></tr></thead>
       <tbody>
-        <tr><td>Declarar primari i secundari</td><td>Teoria <strong>T9</strong>, bloc d'exemple</td></tr>
-        <tr><td>Autoritzar i notificar</td><td><code>allow-transfer</code> i <code>also-notify</code>, a la T9</td></tr>
-        <tr><td>On desa el fitxer el secundari</td><td>Teoria <strong>T9</strong>, taula dels dos papers</td></tr>
-        <tr><td>Provar la transferència a mà</td><td><code>dig</code> amb el tipus <code>AXFR</code></td></tr>
-        <tr><td>Forçar una descàrrega</td><td><code>rndc</code>, a la taula del resum de la T9</td></tr>
+        <tr><td>Apartar Netplan</td><td>Canvia l'extensió dels seus fitxers <code>.yaml</code> i torna a aplicar</td></tr>
+        <tr><td>Per què cal apartar-lo</td><td>Teoria <strong>T1.1</strong>, bloc «Què hi ha sota Netplan»</td></tr>
+        <tr><td>Fitxers <code>.network</code> i seccions <code>[Match]</code> i <code>[Network]</code></td><td><code>man systemd.network</code></td></tr>
+        <tr><td>Servidor DHCP integrat</td><td>Secció <code>[DHCPServer]</code> del mateix manual</td></tr>
+        <tr><td>Recarregar i veure l'estat</td><td><code>networkctl --help</code></td></tr>
       </tbody>
     </table>
   </div>
@@ -447,29 +462,25 @@
 
 <!-- ============ RECORDATORI ============ -->
 <div class="cq-block" data-kind="recordatori">
-  <h4>Autoritza el company, no tothom</h4>
+  <h4>Serveix DHCP només per personal1</h4>
   <p>
-    És temptador posar <code>allow-transfer { any; };</code> perquè funcioni de seguida. No ho
-    facis: qui es descarrega la teva zona obté el mapa sencer de la teva xarxa. Posa-hi la IP del
-    company i prou, i explica-ho al document.
+    No posis mai el servidor DHCP a la targeta <code>puigcastellar1</code>. Estaries repartint
+    adreces a la xarxa del centre i interferint amb el seu servidor: és el que s'anomena un
+    <em>servidor DHCP furtiu</em> i deixa sense connexió els companys de classe.
   </p>
 </div>
 
-<!-- ============ OBSERVACIÓ ============ -->
+<!-- ============ OBSERVACIÓ TÈCNICA ============ -->
 <div class="cq-block" data-kind="observació">
-  <h4>Com demostrar que la rèplica és de veritat</h4>
+  <h4>Dues coses que et faran perdre temps</h4>
   <p>
-    Que el secundari respongui no vol dir gran cosa: potser el que veus és la resposta del
-    primari. La prova bona té tres passos.
+    <strong>L'ordre importa.</strong> Un servidor DHCP no pot escoltar per una targeta que no té
+    adreça. Deixa primer la IP fixa funcionant i comprova-la; només després activa el servei.
   </p>
-  <ol>
-    <li>Pregunta el <strong>serial</strong> de la zona als dos servidors: han de coincidir.</li>
-    <li>Al primari, canvia un registre i <strong>apuja el serial</strong>.</li>
-    <li>Torna a preguntar als dos: el secundari ha de servir el valor nou, ell sol.</li>
-  </ol>
   <p>
-    Si no canvia, mira els registres del servei del secundari abans de tocar res: t'hi dirà si la
-    transferència s'ha intentat i per què ha fallat.
+    <strong>El rang no s'escriu com a Kea.</strong> Aquí no es dona l'adreça inicial i la final,
+    sinó un <em>desplaçament</em> respecte del començament de la xarxa i una <em>mida</em>. Fes
+    el càlcul abans d'escriure els valors, i comprova després quines adreces reparteix de veritat.
   </p>
 </div>
 
@@ -481,11 +492,11 @@
     la sortida d'una comanda al davant:
   </p>
   <ul>
-    <li>La teva zona té un registre NS per a cada servidor, i <code>named-checkzone</code> no es queixa.</li>
-    <li>El fitxer de la zona secundària <strong>ha aparegut sol</strong> a la teva màquina.</li>
-    <li>Els dos servidors responen la mateixa zona amb el mateix serial.</li>
-    <li>Un canvi al primari arriba al secundari sense que ningú hi copiï res.</li>
-    <li>Un tercer equip que no sigui el company <strong>no</strong> es pot descarregar la teva zona.</li>
+    <li>Netplan ja no gestiona les targetes d'aquesta màquina.</li>
+    <li><code>personal1</code> té la <code>10.0.0.1/8</code> i surt com a <em>routable</em>.</li>
+    <li>Al servidor hi ha alguna cosa escoltant al port <strong>UDP 67</strong>.</li>
+    <li>El client rep una adreça <strong>del rang que has definit</strong> i el DNS <code>9.9.9.9</code>.</li>
+    <li>El client arriba al servidor amb <code>ping</code>. Internet encara no en tindrà: falta l'encaminament i el NAT, que són de l'activitat 3.</li>
   </ul>
 </div>
 
@@ -493,22 +504,22 @@
 <div class="cq-block" data-kind="problemes">
   <h4>Si alguna cosa no va</h4>
   <dl class="cq-issues">
-    <dt><code>Transfer failed</code> als registres del secundari</dt>
+    <dt>El client es queda amb una adreça 169.254.x.x</dt>
     <dd>
-      <p><span class="lbl">Causa</span> El primari no autoritza aquella IP, o no us arribeu pel port 53 TCP.</p>
-      <p><span class="lbl">Solució</span> Prova la transferència a mà amb <code>dig</code>. Si tampoc va, el problema és de l'autorització o de la xarxa, no de la declaració de la zona.</p>
+      <p><span class="lbl">Causa</span> No li arriba cap resposta: el servidor no escolta, o les dues màquines no comparteixen la xarxa <code>personal1</code>.</p>
+      <p><span class="lbl">Solució</span> Comprova primer si el servidor escolta al port 67. Si no, repassa a quina secció del fitxer has posat cada línia.</p>
     </dd>
 
-    <dt>El secundari no actualitza els canvis</dt>
+    <dt>La targeta no agafa la <code>10.0.0.1</code></dt>
     <dd>
-      <p><span class="lbl">Causa</span> El serial no ha pujat al primari.</p>
-      <p><span class="lbl">Solució</span> Compara els serials dels dos servidors. Si són iguals, el problema és al primari.</p>
+      <p><span class="lbl">Causa</span> El nom de la targeta que has escrit al fitxer no coincideix amb el real.</p>
+      <p><span class="lbl">Solució</span> Compara'l amb la sortida de <code>ip -c link show</code>.</p>
     </dd>
 
-    <dt>El servei del secundari es queixa en escriure el fitxer</dt>
+    <dt>El client rep adreça però no és del teu rang</dt>
     <dd>
-      <p><span class="lbl">Causa</span> Has posat el fitxer en un camí on el servei no pot escriure.</p>
-      <p><span class="lbl">Solució</span> Les zones secundàries van a la carpeta que fa servir BIND per al que escriu ell.</p>
+      <p><span class="lbl">Causa</span> Està agafant l'adreça d'un altre servidor DHCP: probablement el del centre, perquè la targeta no és <code>personal1</code>.</p>
+      <p><span class="lbl">Solució</span> Revisa a isardVDI a quina xarxa està connectada la targeta del client.</p>
     </dd>
   </dl>
 </div>
@@ -517,17 +528,28 @@
 <div class="cq-block" data-kind="lliurament">
   <h4>Què has d'entregar</h4>
   <p>
-    Un <strong>document tècnic</strong> on expliquis tot el que has anat fent, amb els teus
-    fitxers de configuració i les captures del resultat. Indica-hi amb qui has treballat i quina
-    adreça tenia cada servidor.
+    Un <strong>document tècnic</strong> on expliquis tot el que has anat fent, amb les captures
+    del resultat.
   </p>
   <p>
-    Respon-hi també, amb les teves paraules: <strong>per què el secundari respon amb la mateixa
-    autoritat que el primari, si les dades no són seves?</strong>
+    Respon-hi també, amb les teves paraules: <strong>per què has hagut d'apartar Netplan per fer
+    aquesta activitat?</strong>
   </p>
 </div>
 
 <script>
+  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  (function () {
+    function editant(node) {
+      return node && node.closest && node.closest('[contenteditable="true"]');
+    }
+    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+      document.addEventListener(nom, function (e) {
+        if (!editant(e.target)) { e.preventDefault(); }
+      });
+    });
+  })();
+
   // Motor únic per a totes les preguntes single i multi.
   document.querySelectorAll('.cq-question').forEach(function (question) {
     var id = question.dataset.id;

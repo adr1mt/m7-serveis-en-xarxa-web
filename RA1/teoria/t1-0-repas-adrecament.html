@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Serveis en Xarxa (0227) · RA1 — DHCP</title>
+<title>T1.0 · Repàs d'adreçament — Serveis en Xarxa (0227)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -388,77 +388,319 @@
 </head>
 <body>
 <header class="cq-header">
-  <div class="eyebrow">CFGM SMX · Mòdul 0227</div>
-  <h1>Serveis en Xarxa</h1>
-  <p class="lede">RA1 · Instal·lació de serveis de configuració dinàmica (DHCP)</p>
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · T1.0</div>
+  <h1>Repàs d'adreçament</h1>
+  <p class="lede">El mínim de xarxes que necessites tenir clar abans de començar el mòdul.</p>
 </header>
 
+<!-- ============ 1 · OBJECTIUS ============ -->
+<div class="cq-block" data-kind="objectius">
+  <h4>Què sabràs fer en acabar</h4>
+  <ul>
+    <li>Diferenciar l'adreça MAC de l'adreça IP.</li>
+    <li>Interpretar una màscara escrita en format CIDR (<code>/24</code>).</li>
+    <li>Dir quina és l'adreça de xarxa, la de difusió i quantes en queden per als equips.</li>
+    <li>Reconèixer els rangs privats.</li>
+  </ul>
+</div>
+
+<!-- ============ 2 · MAC I IP ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Teoria</h4>
-  <p>Llegeix-les en ordre. Cada pàgina acaba amb una guia pas a pas i un test per comprovar què has entès.</p>
-  <ul class="cq-index">
-    <li><a href="teoria/t1-0-repas-adrecament.html">
-      <span class="ref">T1.0</span>
-      <span class="ttl">Repàs d'adreçament
-        <span class="sub">IP, màscara, CIDR i rangs privats</span></span></a></li>
-    <li><a href="teoria/t1-1-configuracio-xarxa.html">
-      <span class="ref">T1.1</span>
-      <span class="ttl">Configurar la xarxa a Ubuntu Server
-        <span class="sub">Netplan i systemd-networkd</span></span></a></li>
-    <li><a href="teoria/t1-2-dhcp-fonaments.html">
-      <span class="ref">T1.2</span>
-      <span class="ttl">Fonaments de DHCP
-        <span class="sub">El procés DORA i les concessions</span></span></a></li>
-    <li><a href="teoria/t1-3-servidor-kea.html">
-      <span class="ref">T1.3</span>
-      <span class="ttl">Servidor DHCP amb Kea
-        <span class="sub">Instal·lació, configuració i reserves</span></span></a></li>
-    <li><a href="teoria/t1-4-encaminament-nat.html">
-      <span class="ref">T1.4</span>
-      <span class="ttl">Encaminament i NAT
-        <span class="sub">Donar Internet als clients amb nftables</span></span></a></li>
-  </ul>
-</div>
-
-<div class="cq-block" data-kind="activitats">
-  <h4>Activitats</h4>
+  <h4>Dues adreces per a cada targeta</h4>
   <p>
-    Cada activitat es fa sobre una <strong>màquina nova</strong> a isardVDI, amb les targetes
-    <code>puigcastellar1</code> i <code>personal1</code>.
+    Cada targeta de xarxa té <strong>dues</strong> adreces, i fan feines diferents:
   </p>
-  <ul class="cq-index">
-    <li><a href="activitats/a1-1-posada-a-punt.html">
-      <span class="ref">A1.1</span>
-      <span class="ttl">Posada a punt del servidor
-        <span class="sub">Nom, hora, actualitzacions i les dues targetes</span></span></a></li>
-    <li><a href="activitats/a1-2-dhcp-systemd-networkd.html">
-      <span class="ref">A1.2</span>
-      <span class="ttl">DHCP mínim amb systemd-networkd
-        <span class="sub">Un servidor de laboratori sense instal·lar res</span></span></a></li>
-    <li><a href="activitats/a1-3-dhcp-kea.html">
-      <span class="ref">A1.3</span>
-      <span class="ttl">Servidor DHCP amb Kea
-        <span class="sub">Reserves, IP forwarding i sortida a Internet</span></span></a></li>
-    <li><a href="activitats/a1-4-kea-escala-reserves.html">
-      <span class="ref">A1.4</span>
-      <span class="ttl">DHCP per a 2000 equips
-        <span class="sub">Dimensionar una xarxa /16 amb reserves</span></span></a></li>
+  <ul>
+    <li>
+      <strong>MAC</strong> (<code>08:00:27:1f:a3:0c</code>) — ve de fàbrica i no canvia. Serveix
+      dins de la xarxa local i és la que fa servir DHCP per reconèixer cada equip.
+    </li>
+    <li>
+      <strong>IP</strong> (<code>192.168.1.50</code>) — la poses tu o te la dona un servidor.
+      Serveix per arribar a qualsevol lloc, també fora de la teva xarxa.
+    </li>
   </ul>
+  <p>
+    La comparació habitual: la MAC és el número de sèrie del teu mòbil; la IP és el número de
+    telèfon. El primer no canvia mai; el segon depèn d'on estiguis donat d'alta.
+  </p>
 </div>
 
-<div class="cq-block" data-kind="ordre recomanat">
-  <h4>En quin ordre fer-ho</h4>
-  <p>La teoria i les activitats estan pensades per alternar-se, no per fer-les en dos blocs separats:</p>
+<!-- ============ 3 · IP I MÀSCARA ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>La màscara parteix l'adreça en dos</h4>
+  <p>
+    Una adreça IPv4 són quatre números de 0 a 255, i sempre va acompanyada d'una
+    <strong>màscara</strong>. La màscara diu quina part de l'adreça identifica la
+    <strong>xarxa</strong> i quina identifica l'<strong>equip</strong>.
+  </p>
+  <p>
+    A <code>192.168.1.50/24</code>, el <code>/24</code> vol dir que els <strong>24 primers
+    bits</strong> (els tres primers números) són la xarxa. Per tant: xarxa
+    <code>192.168.1</code>, equip <code>50</code>.
+  </p>
+  <p>
+    <strong>Dos equips es poden parlar directament si comparteixen la part de xarxa.</strong> Si
+    no, el trànsit ha de passar per la porta d'enllaç. Aquesta única frase explica la meitat dels
+    problemes de xarxa que et trobaràs.
+  </p>
+</div>
+
+<!-- ============ 4 · CIDR ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>Les màscares que faràs servir</h4>
   <div class="cq-tablewrap">
     <table class="cq-table">
-      <thead><tr><th>Primer llegeix</th><th>I després fes</th></tr></thead>
+      <thead><tr><th>CIDR</th><th>Màscara</th><th>Adreces</th><th>Equips</th></tr></thead>
       <tbody>
-        <tr><td>T1.0 · T1.1</td><td>A1.1 — posada a punt</td></tr>
-        <tr><td>T1.2</td><td>A1.2 — DHCP mínim</td></tr>
-        <tr><td>T1.3 · T1.4</td><td>A1.3 — DHCP amb Kea</td></tr>
-        <tr><td>—</td><td>A1.4 — DHCP a escala</td></tr>
+        <tr><td><code>/24</code></td><td>255.255.255.0</td><td>256</td><td>254</td></tr>
+        <tr><td><code>/20</code></td><td>255.255.240.0</td><td>4.096</td><td>4.094</td></tr>
+        <tr><td><code>/16</code></td><td>255.255.0.0</td><td>65.536</td><td>65.534</td></tr>
+        <tr><td><code>/8</code></td><td>255.0.0.0</td><td>16.777.216</td><td>16.777.214</td></tr>
       </tbody>
     </table>
+  </div>
+  <p>
+    Per què sempre <strong>dos equips menys</strong> del total? Perquè de cada xarxa hi ha dues
+    adreces que no es poden donar a ningú: la <strong>primera</strong> (adreça de xarxa) i
+    l'<strong>última</strong> (difusió).
+  </p>
+</div>
+
+<!-- ============ MÀSCARES NO RODONES ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>Les màscares no acaben sempre en un punt</h4>
+  <p>
+    El <code>/24</code>, el <code>/16</code> i el <code>/8</code> són còmodes perquè cauen just
+    entre dos números de l'adreça. Però la màscara pot ser <strong>qualsevol valor entre /0 i
+    /32</strong>, i a la pràctica en trobaràs moltes que no són rodones, com la <code>/20</code>
+    o la <code>/26</code>.
+  </p>
+  <p>
+    Partir una xarxa gran en trossos més petits és el que s'anomena <strong>subnetting</strong>.
+    Serveix per separar aules, plantes o departaments sense malgastar adreces: si una aula té 20
+    ordinadors, donar-li una <code>/24</code> sencera vol dir desaprofitar-ne 234.
+  </p>
+  <div class="cq-note">
+    <span class="lbl">En aquest mòdul</span>
+    Farem servir <code>/24</code>, <code>/16</code> i <code>/8</code> per centrar-nos en els
+    serveis. Aquí només cal que sàpigues que les altres existeixen i que <strong>qui mana sempre
+    és la màscara</strong>: és ella qui decideix quina és la primera adreça i quina l'última, no
+    el fet que un número acabi en 0 o en 255.
+  </div>
+</div>
+
+<!-- ============ 5 · EXEMPLE ============ -->
+<div class="cq-block" data-kind="exemple">
+  <h4>Desglossar la xarxa 192.168.1.0/24</h4>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Adreça</th><th>Què és</th><th>Es pot fer servir?</th></tr></thead>
+      <tbody>
+        <tr><td><code>192.168.1.0</code></td><td>Adreça de xarxa</td><td>No</td></tr>
+        <tr><td><code>192.168.1.1</code></td><td>Primera assignable — sol ser la porta d'enllaç</td><td>Sí</td></tr>
+        <tr><td><code>192.168.1.2 – .254</code></td><td>Equips</td><td>Sí</td></tr>
+        <tr><td><code>192.168.1.255</code></td><td>Difusió (<em>broadcast</em>)</td><td>No</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    La de <strong>difusió</strong> és la que fa servir un client DHCP per preguntar si hi ha
+    algun servidor: un missatge que arriba a tothom de la xarxa alhora.
+  </p>
+</div>
+
+<!-- ============ 6 · RANGS PRIVATS ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>Adreces privades i públiques</h4>
+  <p>
+    Hi ha tres rangs reservats per a xarxes internes. <strong>No existeixen a Internet</strong>:
+    els pots fer servir a casa, a l'institut i a l'empresa sense demanar permís a ningú.
+  </p>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Rang</th><th>En CIDR</th><th>On el veuràs</th></tr></thead>
+      <tbody>
+        <tr><td>10.0.0.0 – 10.255.255.255</td><td><code>10.0.0.0/8</code></td><td>Empreses grans</td></tr>
+        <tr><td>172.16.0.0 – 172.31.255.255</td><td><code>172.16.0.0/12</code></td><td>Xarxes mitjanes</td></tr>
+        <tr><td>192.168.0.0 – 192.168.255.255</td><td><code>192.168.0.0/16</code></td><td>Cases i oficines</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    Els faràs servir tots tres durant el mòdul. Com que no surten a Internet, cal un servidor que
+    tradueixi les adreces quan els clients hi volen sortir: és el <strong>NAT</strong> de la
+    teoria T1.4.
+  </p>
+</div>
+
+<!-- ============ 7 · PAS A PAS ============ -->
+<div class="cq-block" data-kind="pas a pas">
+  <h4>Llegir la teva pròpia xarxa</h4>
+
+  <ol class="cq-steps">
+    <li>
+      <p><strong>Mira les teves adreces</strong>, la MAC i la IP alhora:</p>
+<pre>ip -c addr show</pre>
+      <p>
+        La MAC surt a <code>link/ether</code> i la IP amb la màscara a <code>inet</code>, en
+        format CIDR. Apunta-les.
+      </p>
+      <div class="cq-note">
+        <span class="lbl">Escriu menys</span>
+        <code>ip</code> accepta les ordres abreujades mentre no siguin ambigües:
+        <code>ip -c a</code> és exactament el mateix que <code>ip -c addr show</code>. Igualment,
+        <code>ip -c r</code> per a les rutes, <code>ip -c l</code> per a les targetes i
+        <code>ip -c n</code> per als veïns. Als apunts hi trobaràs la forma llarga perquè es
+        llegeix millor, però al teclat faràs servir la curta.
+      </div>
+    </li>
+
+    <li>
+      <p><strong>Mira per on surts</strong> de la teva xarxa:</p>
+<pre>ip -c route</pre>
+      <p>
+        La línia que comença per <code>default via</code> és la porta d'enllaç. Comprova que
+        està dins de la teva mateixa xarxa: si no hi fos, no hi podries arribar.
+      </p>
+    </li>
+
+    <li>
+      <p><strong>Fes els càlculs sense fer-los.</strong> Python ve instal·lat a Ubuntu i sap de xarxes:</p>
+<pre>python3 -c "import ipaddress as i; n=i.ip_network('192.168.1.0/24'); \
+print('Xarxa:', n.network_address); \
+print('Difusió:', n.broadcast_address); \
+print('Equips:', n.num_addresses - 2)"</pre>
+      <p>Canvia la xarxa per la teva i comprova que et surt el que esperaves.</p>
+    </li>
+
+    <li>
+      <p><strong>Comprova qui tens a la vora</strong> amb la taula de veïns, que lliga IP i MAC:</p>
+<pre>ip -c neigh</pre>
+      <p>
+        Aquí veus les dues adreces treballant juntes: per parlar amb un veí de la teva xarxa, el
+        teu equip necessita saber-ne la MAC.
+      </p>
+    </li>
+  </ol>
+</div>
+
+<!-- ============ 8 · PROBLEMES ============ -->
+<div class="cq-block" data-kind="problemes">
+  <h4>Confusions habituals</h4>
+  <dl class="cq-issues">
+    <dt>Dos equips no es veuen tot i tenir IP</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Estan en xarxes diferents. Per exemple <code>192.168.1.5/24</code> i <code>192.168.2.5/24</code>: comparteixen els dos primers números, però amb <code>/24</code> en calen tres.</p>
+      <p><span class="lbl">Solució</span> Compara la part de xarxa de tots dos segons la màscara, no a ull.</p>
+    </dd>
+
+    <dt>Assignar la primera o l'última adreça a un equip</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Són la de xarxa i la de difusió. No es poden fer servir.</p>
+      <p><span class="lbl">Solució</span> A la <code>192.168.1.0/24</code>, el primer equip és la <code>.1</code> i l'últim la <code>.254</code>.</p>
+    </dd>
+
+    <dt>La porta d'enllaç està fora de la xarxa</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Un error de teclat, com posar <code>192.168.2.1</code> en una xarxa <code>192.168.1.0/24</code>.</p>
+      <p><span class="lbl">Solució</span> La porta d'enllaç ha de ser sempre una adreça de la teva pròpia xarxa. Comprova-ho amb <code>ip route</code>.</p>
+    </dd>
+  </dl>
+</div>
+
+<!-- ============ 9 · RESUM ============ -->
+<div class="cq-block" data-kind="resum">
+  <h4>Resum</h4>
+  <ul>
+    <li>La <strong>MAC</strong> ve de fàbrica i és local; la <strong>IP</strong> es configura i serveix arreu.</li>
+    <li>La <strong>màscara</strong> parteix l'adreça en part de xarxa i part d'equip.</li>
+    <li>De cada xarxa, la <strong>primera</strong> i l'<strong>última</strong> adreça no s'assignen.</li>
+    <li>Rangs privats: <code>10.0.0.0/8</code>, <code>172.16.0.0/12</code> i <code>192.168.0.0/16</code>.</li>
+    <li>La <strong>porta d'enllaç</strong> ha d'estar dins de la teva pròpia xarxa.</li>
+  </ul>
+
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Comanda</th><th>Per a què serveix</th></tr></thead>
+      <tbody>
+        <tr><td><code>ip -c addr show</code><br><code>ip -c a</code></td><td>Veure la MAC i la IP amb la màscara</td></tr>
+        <tr><td><code>ip -c route</code><br><code>ip -c r</code></td><td>Veure la porta d'enllaç</td></tr>
+        <tr><td><code>ip -c neigh</code><br><code>ip -c n</code></td><td>Veure els veïns i la seva MAC</td></tr>
+        <tr><td><code>ip -c link show</code><br><code>ip -c l</code></td><td>Veure les targetes i els seus noms</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p style="margin-top:16px">
+    <strong>Següent:</strong> a <em>T1.1 · Configurar la xarxa a Ubuntu Server</em> començaràs a
+    escriure tu aquesta configuració.
+  </p>
+</div>
+
+<!-- ============ 10 · QUIZ ============ -->
+<div class="cq-block" data-kind="quiz">
+  <h4>Comprova el que has après</h4>
+
+  <div class="cq-question" data-id="t1-0-cidr" data-type="single">
+    <div class="statement">Quina màscara correspon a <code>/24</code>?</div>
+    <button class="cq-option" data-correct="false">255.255.0.0</button>
+    <button class="cq-option" data-correct="true">255.255.255.0</button>
+    <button class="cq-option" data-correct="false">255.0.0.0</button>
+    <button class="cq-option" data-correct="false">255.255.255.255</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+
+  <div class="cq-question" data-id="t1-0-equips" data-type="single">
+    <div class="statement">Quants equips es poden connectar a la xarxa <code>192.168.1.0/24</code>?</div>
+    <button class="cq-option" data-correct="false">256</button>
+    <button class="cq-option" data-correct="false">255</button>
+    <button class="cq-option" data-correct="true">254</button>
+    <button class="cq-option" data-correct="false">253</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+
+  <div class="cq-question" data-id="t1-0-difusio-mascara" data-type="single">
+    <div class="statement">Quina és l'adreça de difusió de la xarxa <code>10.0.0.0/8</code>?</div>
+    <button class="cq-option" data-correct="false">10.0.0.255</button>
+    <button class="cq-option" data-correct="true">10.255.255.255</button>
+    <button class="cq-option" data-correct="false">10.0.255.255</button>
+    <button class="cq-option" data-correct="false">255.255.255.255</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+
+  <div class="cq-question" data-id="t1-0-privada" data-type="single">
+    <div class="statement">Quina d'aquestes adreces <em>no</em> és privada?</div>
+    <button class="cq-option" data-correct="false">10.5.4.3</button>
+    <button class="cq-option" data-correct="false">172.16.0.10</button>
+    <button class="cq-option" data-correct="false">192.168.30.1</button>
+    <button class="cq-option" data-correct="true">9.9.9.9</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+
+  <div class="cq-question" data-id="t1-0-mateixa-xarxa" data-type="single">
+    <div class="statement">Els equips <code>192.168.1.10/24</code> i <code>192.168.2.10/24</code> es poden parlar directament?</div>
+    <button class="cq-option" data-correct="false">Sí, comparteixen els dos primers números</button>
+    <button class="cq-option" data-correct="true">No, amb <code>/24</code> la part de xarxa són els tres primers i no coincideix</button>
+    <button class="cq-option" data-correct="false">Sí, perquè totes dues són privades</button>
+    <button class="cq-option" data-correct="false">Només si tenen la mateixa MAC</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+
+  <div class="cq-question" data-id="t1-0-certes" data-type="multi">
+    <div class="statement">Selecciona totes les afirmacions certes</div>
+    <button class="cq-option" data-correct="true">L'adreça MAC ve de fàbrica amb la targeta.</button>
+    <button class="cq-option" data-correct="true">L'última adreça d'una xarxa és la de difusió i no s'assigna.</button>
+    <button class="cq-option" data-correct="true">La porta d'enllaç ha d'estar dins de la mateixa xarxa que l'equip.</button>
+    <button class="cq-option" data-correct="false">Les adreces privades es poden fer servir a Internet.</button>
+    <button class="cq-option" data-correct="false">Una adreça IP funciona sense necessitat de màscara.</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
   </div>
 </div>
 

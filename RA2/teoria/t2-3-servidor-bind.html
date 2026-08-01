@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Serveis en Xarxa (0227) · RA1 — DHCP</title>
+<title>T2.3 · Servidor DNS amb BIND 9 — Serveis en Xarxa (0227)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -388,77 +388,330 @@
 </head>
 <body>
 <header class="cq-header">
-  <div class="eyebrow">CFGM SMX · Mòdul 0227</div>
-  <h1>Serveis en Xarxa</h1>
-  <p class="lede">RA1 · Instal·lació de serveis de configuració dinàmica (DHCP)</p>
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA2 · T2.3</div>
+  <h1>Servidor DNS amb BIND 9</h1>
+  <p class="lede">Muntar el resolutor que donarà servei de noms a la teva xarxa interna.</p>
 </header>
 
+<!-- ============ 1 · OBJECTIUS ============ -->
+<div class="cq-block" data-kind="objectius">
+  <h4>Què sabràs fer en acabar</h4>
+  <ul>
+    <li>Instal·lar BIND 9 i saber on és cada fitxer de configuració.</li>
+    <li>Configurar un resolutor amb memòria cau per a una xarxa concreta.</li>
+    <li>Limitar qui pot consultar el servidor amb una <strong>ACL</strong>.</li>
+    <li>Decidir si fas servir <em>forwarders</em> o vas als servidors arrel.</li>
+    <li>Validar la configuració i comprovar el servei abans de donar-lo per bo.</li>
+  </ul>
+</div>
+
+<!-- ============ 2 · QUÈ ÉS BIND ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Teoria</h4>
-  <p>Llegeix-les en ordre. Cada pàgina acaba amb una guia pas a pas i un test per comprovar què has entès.</p>
-  <ul class="cq-index">
-    <li><a href="teoria/t1-0-repas-adrecament.html">
-      <span class="ref">T1.0</span>
-      <span class="ttl">Repàs d'adreçament
-        <span class="sub">IP, màscara, CIDR i rangs privats</span></span></a></li>
-    <li><a href="teoria/t1-1-configuracio-xarxa.html">
-      <span class="ref">T1.1</span>
-      <span class="ttl">Configurar la xarxa a Ubuntu Server
-        <span class="sub">Netplan i systemd-networkd</span></span></a></li>
-    <li><a href="teoria/t1-2-dhcp-fonaments.html">
-      <span class="ref">T1.2</span>
-      <span class="ttl">Fonaments de DHCP
-        <span class="sub">El procés DORA i les concessions</span></span></a></li>
-    <li><a href="teoria/t1-3-servidor-kea.html">
-      <span class="ref">T1.3</span>
-      <span class="ttl">Servidor DHCP amb Kea
-        <span class="sub">Instal·lació, configuració i reserves</span></span></a></li>
-    <li><a href="teoria/t1-4-encaminament-nat.html">
-      <span class="ref">T1.4</span>
-      <span class="ttl">Encaminament i NAT
-        <span class="sub">Donar Internet als clients amb nftables</span></span></a></li>
-  </ul>
-</div>
-
-<div class="cq-block" data-kind="activitats">
-  <h4>Activitats</h4>
+  <h4>Per què BIND</h4>
   <p>
-    Cada activitat es fa sobre una <strong>màquina nova</strong> a isardVDI, amb les targetes
-    <code>puigcastellar1</code> i <code>personal1</code>.
+    <strong>BIND</strong> (<em>Berkeley Internet Name Domain</em>) és el servidor DNS més
+    utilitzat de la història d'Internet, i el que fan servir bona part dels servidors arrel. El
+    programa es diu <code>named</code>, de <em>name daemon</em>.
   </p>
-  <ul class="cq-index">
-    <li><a href="activitats/a1-1-posada-a-punt.html">
-      <span class="ref">A1.1</span>
-      <span class="ttl">Posada a punt del servidor
-        <span class="sub">Nom, hora, actualitzacions i les dues targetes</span></span></a></li>
-    <li><a href="activitats/a1-2-dhcp-systemd-networkd.html">
-      <span class="ref">A1.2</span>
-      <span class="ttl">DHCP mínim amb systemd-networkd
-        <span class="sub">Un servidor de laboratori sense instal·lar res</span></span></a></li>
-    <li><a href="activitats/a1-3-dhcp-kea.html">
-      <span class="ref">A1.3</span>
-      <span class="ttl">Servidor DHCP amb Kea
-        <span class="sub">Reserves, IP forwarding i sortida a Internet</span></span></a></li>
-    <li><a href="activitats/a1-4-kea-escala-reserves.html">
-      <span class="ref">A1.4</span>
-      <span class="ttl">DHCP per a 2000 equips
-        <span class="sub">Dimensionar una xarxa /16 amb reserves</span></span></a></li>
+  <p>El fem servir perquè, amb un sol paquet, cobreix les tres feines del mòdul:</p>
+  <ul>
+    <li><strong>Resolutor</strong> amb memòria cau per als clients de la teva xarxa.</li>
+    <li><strong>Autoritatiu</strong> de les zones que tu declaris.</li>
+    <li><strong>Transferències de zona</strong> entre un primari i un secundari.</li>
   </ul>
+  <p>
+    Alternatives com <code>dnsmasq</code> són més senzilles, però no fan zones jeràrquiques ni
+    transferències: es queden curtes per al que has de practicar.
+  </p>
 </div>
 
-<div class="cq-block" data-kind="ordre recomanat">
-  <h4>En quin ordre fer-ho</h4>
-  <p>La teoria i les activitats estan pensades per alternar-se, no per fer-les en dos blocs separats:</p>
+<!-- ============ 3 · ELS FITXERS ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>On és cada cosa</h4>
+  <p>
+    Tot viu a <code>/etc/bind/</code>. El fitxer principal, <code>named.conf</code>, gairebé no
+    té contingut: només inclou els altres tres. Tu no el tocaràs mai.
+  </p>
   <div class="cq-tablewrap">
     <table class="cq-table">
-      <thead><tr><th>Primer llegeix</th><th>I després fes</th></tr></thead>
+      <thead><tr><th>Fitxer</th><th>Què hi va</th></tr></thead>
       <tbody>
-        <tr><td>T1.0 · T1.1</td><td>A1.1 — posada a punt</td></tr>
-        <tr><td>T1.2</td><td>A1.2 — DHCP mínim</td></tr>
-        <tr><td>T1.3 · T1.4</td><td>A1.3 — DHCP amb Kea</td></tr>
-        <tr><td>—</td><td>A1.4 — DHCP a escala</td></tr>
+        <tr><td><code>named.conf.options</code></td><td>Configuració global: qui pot preguntar, forwarders, per on escolta</td></tr>
+        <tr><td><code>named.conf.local</code></td><td>Les teves zones</td></tr>
+        <tr><td><code>named.conf.default-zones</code></td><td>Les zones que porta de sèrie. No es toca</td></tr>
+        <tr><td><code>zones/</code></td><td>Carpeta que crearàs tu per als fitxers de zona</td></tr>
       </tbody>
     </table>
+  </div>
+  <p>
+    El servei s'anomena <code>named</code> (amb <code>bind9</code> com a àlies), i el paquet
+    <code>bind9-utils</code> hi afegeix les eines de comprovació.
+  </p>
+</div>
+
+<!-- ============ 4 · LES OPCIONS ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>Les cinc directives que has de decidir</h4>
+  <p>
+    Tot això va dins del bloc <code>options</code> de <code>named.conf.options</code>. Són poques
+    i totes tenen conseqüències de seguretat.
+  </p>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Directiva</th><th>Què decideix</th></tr></thead>
+      <tbody>
+        <tr><td><code>listen-on</code></td><td>Per quines adreces escolta. La de <code>personal1</code>, no totes</td></tr>
+        <tr><td><code>allow-query</code></td><td>Qui pot fer consultes. Aquí hi va la teva ACL</td></tr>
+        <tr><td><code>recursion</code></td><td>Si busca respostes que no són seves. Sí, però només per als teus</td></tr>
+        <tr><td><code>forwarders</code></td><td>A qui reenvia el que no sap. Si no n'hi ha, va a l'arrel</td></tr>
+        <tr><td><code>dnssec-validation</code></td><td>Si comprova la signatura de les respostes. Es deixa a <code>auto</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    Una <strong>ACL</strong> és una llista amb nom: la declares un cop, a dalt del fitxer, i la
+    fas servir a dins on calgui.
+  </p>
+</div>
+
+<!-- ============ 5 · EXEMPLE ============ -->
+<div class="cq-block" data-kind="exemple">
+  <h4>Un resolutor per a la xarxa 192.168.1.0/24</h4>
+  <p>Aquest és el fitxer sencer d'un servidor que dona servei només a la seva xarxa interna:</p>
+<pre>acl interna { 192.168.1.0/24; localhost; };
+
+options {
+    directory "/var/cache/bind";
+
+    listen-on { 127.0.0.1; 192.168.1.8; };
+    allow-query { interna; };
+    recursion yes;
+    allow-recursion { interna; };
+
+    forwarders { 9.9.9.9; 1.1.1.1; };
+
+    dnssec-validation auto;
+    listen-on-v6 { none; };
+};</pre>
+  <p>
+    Llegit en veu alta: escolta per la seva IP interna, només accepta consultes de la xarxa
+    <code>192.168.1.0/24</code>, busca el que no sap i, per fer-ho, ho pregunta a Quad9 i a
+    Cloudflare.
+  </p>
+</div>
+
+<!-- ============ 6 · FORWARDERS O ARREL ============ -->
+<div class="cq-block" data-kind="observació">
+  <h4>Forwarders: quan sí i quan no</h4>
+  <p>
+    Sense <code>forwarders</code>, el teu BIND resol pel seu compte: comença pels servidors arrel
+    i va baixant per l'arbre. Funciona i és el més independent.
+  </p>
+  <p>
+    Amb <code>forwarders</code>, delega la feina a un resolutor gran, que ja té mig Internet a la
+    memòria cau. Sol ser <strong>més ràpid</strong>, i a més et serveix quan la xarxa on ets no
+    deixa sortir cap al port 53 lliurement.
+  </p>
+  <p>
+    A l'aula fes servir forwarders. Però recorda que, si un dia poses una zona interna amb el
+    mateix nom que una de pública, hauràs de desactivar-los <em>per a aquella zona</em>.
+  </p>
+</div>
+
+<!-- ============ 7 · CAS REAL ============ -->
+<div class="cq-block" data-kind="cas real">
+  <h4>El resolutor obert que va acabar en un atac</h4>
+  <p>
+    Un servidor DNS que accepta consultes de tot Internet i fa recursió és un
+    <strong>resolutor obert</strong>. No és només una imprudència: és una arma.
+  </p>
+  <p>
+    L'atacant envia consultes petites al teu servidor falsificant l'adreça d'origen, i les
+    respostes, molt més grans, van a parar a la víctima. Amb pocs servidors com el teu es
+    fabriquen atacs de denegació de servei considerables.
+  </p>
+  <p>
+    Per això <code>allow-query</code> i <code>allow-recursion</code> no són opcionals. Un
+    servidor de la teva xarxa serveix la teva xarxa, i punt.
+  </p>
+</div>
+
+<!-- ============ 8 · PAS A PAS ============ -->
+<div class="cq-block" data-kind="pas a pas">
+  <h4>Muntar el resolutor</h4>
+  <p>
+    Amb una màquina que ja tingui IP fixa a <code>personal1</code>: un servidor DNS no pot
+    escoltar per una targeta sense adreça.
+  </p>
+
+  <ol class="cq-steps">
+    <li>
+      <p><strong>Instal·la el servidor i les eines:</strong></p>
+<pre>sudo apt update
+sudo apt install -y bind9 bind9-utils dnsutils</pre>
+    </li>
+
+    <li>
+      <p><strong>Desa una còpia</strong> abans de tocar res:</p>
+<pre>sudo cp /etc/bind/named.conf.options \
+        /etc/bind/named.conf.options.original</pre>
+    </li>
+
+    <li>
+      <p><strong>Escriu les opcions</strong> amb la teva xarxa i la teva IP:</p>
+<pre>sudo nano /etc/bind/named.conf.options</pre>
+      <p>Fes servir l'exemple d'aquesta pàgina com a model.</p>
+    </li>
+
+    <li>
+      <p><strong>Valida la sintaxi.</strong> Si no diu res, és que està bé:</p>
+<pre>sudo named-checkconf</pre>
+    </li>
+
+    <li>
+      <p><strong>Reinicia i comprova</strong> que el servei escolta al port 53:</p>
+<pre>sudo systemctl restart named
+systemctl status named
+sudo ss -ulnp | grep :53</pre>
+    </li>
+
+    <li>
+      <p><strong>Pregunta-li a ell</strong>, primer des del mateix servidor i després des del client:</p>
+<pre>dig @127.0.0.1 www.upc.edu +short
+dig @192.168.1.8 www.upc.edu +short</pre>
+      <p>
+        Repeteix la consulta: la segona vegada el <code>Query time</code> ha de ser molt més
+        petit. Això és la memòria cau treballant.
+      </p>
+    </li>
+  </ol>
+
+  <div class="cq-note">
+    <span class="lbl">Ubuntu 26.04</span>
+    A 24.04 i 26.04 el servei es diu <code>named</code>. En documentació antiga el trobaràs com
+    <code>bind9</code>: encara funciona com a àlies.
+  </div>
+</div>
+
+<!-- ============ 9 · BONES PRÀCTIQUES ============ -->
+<div class="cq-block" data-kind="bones pràctiques">
+  <h4>Criteris professionals</h4>
+  <ul>
+    <li><strong>Còpia del fitxer original</strong> abans de la primera edició. Sempre.</li>
+    <li><strong><code>named-checkconf</code> abans de reiniciar</strong>: t'estalvia deixar el servei aturat.</li>
+    <li><strong>Escolta només per on has de servir</strong>, mai per la targeta que va a Internet.</li>
+    <li><strong>ACL amb nom</strong> en lloc de repetir la xarxa a cada directiva.</li>
+    <li><strong>Dos forwarders</strong>, de proveïdors diferents.</li>
+  </ul>
+</div>
+
+<!-- ============ 10 · PROBLEMES ============ -->
+<div class="cq-block" data-kind="problemes">
+  <h4>Errors habituals</h4>
+  <dl class="cq-issues">
+    <dt>El servei no arrenca</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Un punt i coma que falta, o una clau sense tancar. La sintaxi de BIND no perdona.</p>
+      <p><span class="lbl">Solució</span> <code>sudo named-checkconf</code> et diu el fitxer i la línia. Després, <code>journalctl -u named -n 30</code>.</p>
+    </dd>
+
+    <dt>El client rep <code>REFUSED</code></dt>
+    <dd>
+      <p><span class="lbl">Causa</span> El servidor funciona, però no el deixa preguntar: no és dins de l'ACL.</p>
+      <p><span class="lbl">Solució</span> Comprova que la xarxa de l'<code>acl</code> és la del client, amb la màscara correcta.</p>
+    </dd>
+
+    <dt>Des del client no hi ha resposta, i des del servidor sí</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> <code>listen-on</code> no inclou la IP de <code>personal1</code>, o el servei escolta només a <code>127.0.0.1</code>.</p>
+      <p><span class="lbl">Solució</span> <code>sudo ss -ulnp | grep :53</code> al servidor i mira per quines adreces escolta de veritat.</p>
+    </dd>
+  </dl>
+</div>
+
+<!-- ============ 11 · RESUM ============ -->
+<div class="cq-block" data-kind="resum">
+  <h4>Resum</h4>
+  <ul>
+    <li>BIND s'instal·la amb <code>bind9</code>; el servei es diu <strong><code>named</code></strong>.</li>
+    <li>La configuració global va a <strong><code>named.conf.options</code></strong>; les zones, a <code>named.conf.local</code>.</li>
+    <li>Un resolutor intern ha de limitar <code>allow-query</code> i <code>allow-recursion</code> amb una <strong>ACL</strong>.</li>
+    <li>Els <strong>forwarders</strong> són opcionals: sense ells es va als servidors arrel.</li>
+    <li>La memòria cau es nota al <code>Query time</code> de la segona consulta.</li>
+  </ul>
+
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Comanda</th><th>Per a què serveix</th></tr></thead>
+      <tbody>
+        <tr><td><code>named-checkconf</code></td><td>Validar la configuració</td></tr>
+        <tr><td><code>systemctl restart named</code></td><td>Aplicar els canvis</td></tr>
+        <tr><td><code>journalctl -u named -f</code></td><td>Veure què diu el servei</td></tr>
+        <tr><td><code>ss -ulnp | grep :53</code></td><td>Comprovar per on escolta</td></tr>
+        <tr><td><code>dig @&lt;servidor&gt; &lt;nom&gt;</code></td><td>Provar-lo de veritat</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p style="margin-top:16px">
+    <strong>Següent:</strong> a <em>T2.4 · Zones i registres</em> el teu servidor deixarà de repetir
+    el que diuen els altres i tindrà noms propis.
+  </p>
+</div>
+
+<!-- ============ 12 · QUIZ ============ -->
+<div class="cq-block" data-kind="quiz">
+  <h4>Comprova el que has après</h4>
+
+  <div class="cq-question" data-id="t2-3-fitxer" data-type="single">
+    <div class="statement">On es configura qui pot fer consultes al servidor?</div>
+    <button class="cq-option" data-correct="false"><code>/etc/bind/named.conf.local</code></button>
+    <button class="cq-option" data-correct="true"><code>/etc/bind/named.conf.options</code></button>
+    <button class="cq-option" data-correct="false"><code>/etc/resolv.conf</code></button>
+    <button class="cq-option" data-correct="false"><code>/var/cache/bind/</code></button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+
+  <div class="cq-question" data-id="t2-3-refused" data-type="single">
+    <div class="statement">Un client rep <code>REFUSED</code> en preguntar al teu servidor. Què mires primer?</div>
+    <button class="cq-option" data-correct="false">El fitxer de zona, que deu tenir un error</button>
+    <button class="cq-option" data-correct="true">L'ACL de <code>allow-query</code>: probablement el client no hi és</button>
+    <button class="cq-option" data-correct="false">El TTL de la zona</button>
+    <button class="cq-option" data-correct="false">El registre MX</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+
+  <div class="cq-question" data-id="t2-3-forwarders" data-type="single">
+    <div class="statement">Què passa si no declares cap <code>forwarders</code>?</div>
+    <button class="cq-option" data-correct="false">El servidor no pot resoldre res que no sigui de la seva zona</button>
+    <button class="cq-option" data-correct="true">Resol pel seu compte, començant pels servidors arrel</button>
+    <button class="cq-option" data-correct="false">El servei no arrenca</button>
+    <button class="cq-option" data-correct="false">Fa servir automàticament els DNS del DHCP</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+
+  <div class="cq-question" data-id="t2-3-obert" data-type="single">
+    <div class="statement">Per què és perillós un resolutor obert a Internet?</div>
+    <button class="cq-option" data-correct="false">Perquè es queda sense memòria cau</button>
+    <button class="cq-option" data-correct="true">Perquè es pot fer servir per amplificar atacs de denegació de servei</button>
+    <button class="cq-option" data-correct="false">Perquè revela les contrasenyes dels usuaris</button>
+    <button class="cq-option" data-correct="false">Perquè deixa de ser autoritatiu</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+
+  <div class="cq-question" data-id="t2-3-afirmacions" data-type="multi">
+    <div class="statement">Selecciona totes les afirmacions certes sobre BIND</div>
+    <button class="cq-option" data-correct="true">El servei del sistema es diu <code>named</code>.</button>
+    <button class="cq-option" data-correct="true"><code>named-checkconf</code> valida la configuració sense reiniciar res.</button>
+    <button class="cq-option" data-correct="true">Convé escoltar només per la targeta interna.</button>
+    <button class="cq-option" data-correct="false">Cal editar <code>named.conf</code> per declarar les zones.</button>
+    <button class="cq-option" data-correct="false">Sense forwarders, BIND no pot sortir a Internet.</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
   </div>
 </div>
 

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Serveis en Xarxa (0227) · RA1 — DHCP</title>
+<title>A1.3 · Servidor DHCP amb Kea — Serveis en Xarxa (0227)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -388,78 +388,157 @@
 </head>
 <body>
 <header class="cq-header">
-  <div class="eyebrow">CFGM SMX · Mòdul 0227</div>
-  <h1>Serveis en Xarxa</h1>
-  <p class="lede">RA1 · Instal·lació de serveis de configuració dinàmica (DHCP)</p>
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · A1.3</div>
+  <h1>Servidor DHCP amb Kea</h1>
+  <p class="lede">Muntar el servidor DHCP que es fa servir de veritat, amb reserves i sortida a Internet.</p>
 </header>
 
-<div class="cq-block" data-kind="teoria">
-  <h4>Teoria</h4>
-  <p>Llegeix-les en ordre. Cada pàgina acaba amb una guia pas a pas i un test per comprovar què has entès.</p>
-  <ul class="cq-index">
-    <li><a href="teoria/t1-0-repas-adrecament.html">
-      <span class="ref">T1.0</span>
-      <span class="ttl">Repàs d'adreçament
-        <span class="sub">IP, màscara, CIDR i rangs privats</span></span></a></li>
-    <li><a href="teoria/t1-1-configuracio-xarxa.html">
-      <span class="ref">T1.1</span>
-      <span class="ttl">Configurar la xarxa a Ubuntu Server
-        <span class="sub">Netplan i systemd-networkd</span></span></a></li>
-    <li><a href="teoria/t1-2-dhcp-fonaments.html">
-      <span class="ref">T1.2</span>
-      <span class="ttl">Fonaments de DHCP
-        <span class="sub">El procés DORA i les concessions</span></span></a></li>
-    <li><a href="teoria/t1-3-servidor-kea.html">
-      <span class="ref">T1.3</span>
-      <span class="ttl">Servidor DHCP amb Kea
-        <span class="sub">Instal·lació, configuració i reserves</span></span></a></li>
-    <li><a href="teoria/t1-4-encaminament-nat.html">
-      <span class="ref">T1.4</span>
-      <span class="ttl">Encaminament i NAT
-        <span class="sub">Donar Internet als clients amb nftables</span></span></a></li>
-  </ul>
-</div>
-
-<div class="cq-block" data-kind="activitats">
-  <h4>Activitats</h4>
+<!-- ============ OBJECTIUS ============ -->
+<div class="cq-block" data-kind="objectius">
+  <h4>Què has de saber abans de començar</h4>
   <p>
-    Cada activitat es fa sobre una <strong>màquina nova</strong> a isardVDI, amb les targetes
-    <code>puigcastellar1</code> i <code>personal1</code>.
+    Teories <strong>T1.2</strong> (DHCP), <strong>T1.3</strong> (Kea) i <strong>T1.4</strong>
+    (encaminament i NAT).
   </p>
-  <ul class="cq-index">
-    <li><a href="activitats/a1-1-posada-a-punt.html">
-      <span class="ref">A1.1</span>
-      <span class="ttl">Posada a punt del servidor
-        <span class="sub">Nom, hora, actualitzacions i les dues targetes</span></span></a></li>
-    <li><a href="activitats/a1-2-dhcp-systemd-networkd.html">
-      <span class="ref">A1.2</span>
-      <span class="ttl">DHCP mínim amb systemd-networkd
-        <span class="sub">Un servidor de laboratori sense instal·lar res</span></span></a></li>
-    <li><a href="activitats/a1-3-dhcp-kea.html">
-      <span class="ref">A1.3</span>
-      <span class="ttl">Servidor DHCP amb Kea
-        <span class="sub">Reserves, IP forwarding i sortida a Internet</span></span></a></li>
-    <li><a href="activitats/a1-4-kea-escala-reserves.html">
-      <span class="ref">A1.4</span>
-      <span class="ttl">DHCP per a 2000 equips
-        <span class="sub">Dimensionar una xarxa /16 amb reserves</span></span></a></li>
-  </ul>
+  <p>
+    Amb aquesta activitat aprendràs a muntar amb <strong>Kea</strong> el servidor DHCP que es fa
+    servir a la feina: repartirà IP, màscara, porta d'enllaç i DNS, farà una reserva per un equip
+    concret i donarà sortida a Internet als seus clients.
+  </p>
 </div>
 
-<div class="cq-block" data-kind="ordre recomanat">
-  <h4>En quin ordre fer-ho</h4>
-  <p>La teoria i les activitats estan pensades per alternar-se, no per fer-les en dos blocs separats:</p>
+<!-- ============ ESCENARI ============ -->
+<div class="cq-block" data-kind="escenari">
+  <h4>Amb què treballaràs</h4>
   <div class="cq-tablewrap">
     <table class="cq-table">
-      <thead><tr><th>Primer llegeix</th><th>I després fes</th></tr></thead>
+      <thead><tr><th>Màquina</th><th>Targetes</th><th>Paper</th></tr></thead>
       <tbody>
-        <tr><td>T1.0 · T1.1</td><td>A1.1 — posada a punt</td></tr>
-        <tr><td>T1.2</td><td>A1.2 — DHCP mínim</td></tr>
-        <tr><td>T1.3 · T1.4</td><td>A1.3 — DHCP amb Kea</td></tr>
-        <tr><td>—</td><td>A1.4 — DHCP a escala</td></tr>
+        <tr><td>Ubuntu <strong>Server</strong></td><td>puigcastellar1 + personal1</td><td>Servidor DHCP i porta d'enllaç</td></tr>
+        <tr><td>Ubuntu <strong>Desktop</strong></td><td>només personal1</td><td>Client</td></tr>
       </tbody>
     </table>
   </div>
+  <p>
+    Comença amb una <strong>màquina nova</strong> a isardVDI, acabada de crear. No reaprofitis la
+    de l'activitat 2: allà vas apartar Netplan i les dues configuracions es trepitjarien.
+  </p>
+</div>
+
+<!-- ============ ENUNCIAT ============ -->
+<div class="cq-block" data-kind="enunciat">
+  <h4>Què has de fer</h4>
+  <ol>
+    <li>Posar a punt la màquina nova: <em>hostname</em> amb el teu nom i <code>personal1</code> amb la IP fixa <code>10.0.0.1/8</code>.</li>
+    <li>Instal·lar Kea i configurar-lo perquè reparteixi adreces <strong>per a 200 dispositius</strong>.</li>
+    <li>Repartir el DNS de <strong>Quad9</strong> (<code>9.9.9.9</code>), el domini <code>elteunom.local</code> i, com a porta d'enllaç, la <strong>IP del propi servidor</strong>.</li>
+    <li>Fer una <strong>reserva d'IP</strong> per al client, fora del rang automàtic.</li>
+    <li>Aconseguir que el client tingui <strong>Internet</strong> a través del servidor.</li>
+  </ol>
+</div>
+
+<!-- ============ ON BUSCAR ============ -->
+<div class="cq-block" data-kind="enunciat">
+  <h4>D'on has de treure cada cosa</h4>
+  <p>Tot el procediment ja l'has vist a la teoria. Aquí tens on és cada part:</p>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Què has de fer</th><th>On ho tens</th></tr></thead>
+      <tbody>
+        <tr><td>Posada a punt i Netplan</td><td>Teoria <strong>T1.1</strong> i activitat <strong>A1.1</strong></td></tr>
+        <tr><td>Instal·lar Kea i estructura de <code>kea-dhcp4.conf</code></td><td>Teoria <strong>T1.3</strong></td></tr>
+        <tr><td>Validar la configuració abans d'arrencar</td><td>Teoria <strong>T1.3</strong></td></tr>
+        <tr><td>Reserves MAC ↔ IP i registres del servei</td><td>Teoria <strong>T1.3</strong></td></tr>
+        <tr><td>IP forwarding i NAT amb nftables</td><td>Teoria <strong>T1.4</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ============ RECORDATORI ============ -->
+<div class="cq-block" data-kind="recordatori">
+  <h4>Només per personal1</h4>
+  <p>
+    Kea ha d'escoltar <strong>només</strong> per la targeta <code>personal1</code>. Si hi poses
+    <code>puigcastellar1</code>, el teu servidor començarà a repartir adreces a la xarxa del
+    centre i deixarà companys sense connexió.
+  </p>
+</div>
+
+<!-- ============ OBSERVACIÓ TÈCNICA ============ -->
+<div class="cq-block" data-kind="observació">
+  <h4>Tres decisions que has de prendre tu</h4>
+  <p>
+    <strong>La mida del rang.</strong> Han de cabre-hi 200 dispositius exactes. Vigila el càlcul:
+    quan dones una adreça inicial i una final, <strong>els dos extrems compten</strong>.
+  </p>
+  <p>
+    <strong>On col·loques el rang.</strong> Ha de deixar lloc lliure per al servidor i per a les
+    reserves. Si la IP reservada cau dins del rang automàtic, tens un conflicte esperant.
+  </p>
+  <p>
+    <strong>La MAC del client.</strong> L'has de llegir de la màquina client, i copiar-la, no
+    transcriure-la a mà: un caràcter canviat i la reserva no s'aplica mai.
+  </p>
+</div>
+
+<!-- ============ COMPROVACIÓ ============ -->
+<div class="cq-block" data-kind="comprovació">
+  <h4>Com sabràs que ho has fet bé</h4>
+  <p>
+    Abans d'entregar, has de poder respondre <strong>sí</strong> a totes aquestes preguntes, amb
+    la sortida d'una comanda al davant:
+  </p>
+  <ul>
+    <li>El servei de Kea està actiu i escoltant al port <strong>UDP 67</strong>.</li>
+    <li>Els registres del servidor mostren la concessió, amb la MAC del client i la IP donada.</li>
+    <li>El client té la porta d'enllaç <code>10.0.0.1</code>, el DNS <code>9.9.9.9</code> i el teu domini.</li>
+    <li>Després d'activar la reserva, el client rep <strong>sempre la mateixa adreça</strong>, i és la reservada.</li>
+    <li>El client fa <code>ping</code> a una IP d'Internet i a un nom de domini.</li>
+  </ul>
+</div>
+
+<!-- ============ PROBLEMES ============ -->
+<div class="cq-block" data-kind="problemes">
+  <h4>Si alguna cosa no va</h4>
+  <dl class="cq-issues">
+    <dt>Kea no arrenca</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Una coma sobrant al JSON, o <code>personal1</code> encara no té la IP fixa.</p>
+      <p><span class="lbl">Solució</span> Valida el fitxer amb l'opció que has vist a T1.3: et diu la línia exacta.</p>
+    </dd>
+
+    <dt>El client no rep res</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Kea escolta per la targeta equivocada, o el client està en una altra xarxa.</p>
+      <p><span class="lbl">Solució</span> Al servidor, captura el port 67 amb <code>tcpdump</code>. Si no hi arriba el DISCOVER, el problema és de connexió a isardVDI, no de Kea.</p>
+    </dd>
+
+    <dt>La reserva no s'aplica</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> La MAC està mal copiada, o el client conserva la concessió antiga.</p>
+      <p><span class="lbl">Solució</span> Compara la MAC lletra a lletra i força una renovació al client.</p>
+    </dd>
+
+    <dt>Arriba al servidor però no a Internet</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Falta l'encaminament o el NAT.</p>
+      <p><span class="lbl">Solució</span> Prova des del client per capes: porta d'enllaç, <code>ping</code> al servidor, <code>ping</code> a una IP d'Internet i <code>ping</code> a un nom. La primera que falli et diu on és el problema.</p>
+    </dd>
+  </dl>
+</div>
+
+<!-- ============ LLIURAMENT ============ -->
+<div class="cq-block" data-kind="lliurament">
+  <h4>Què has d'entregar</h4>
+  <p>
+    Un <strong>document tècnic</strong> on expliquis tot el que has anat fent, amb les captures
+    del resultat.
+  </p>
+  <p>
+    Respon-hi també, amb les teves paraules: <strong>per què la IP reservada ha de quedar fora del
+    rang automàtic?</strong>
+  </p>
 </div>
 
 <script>

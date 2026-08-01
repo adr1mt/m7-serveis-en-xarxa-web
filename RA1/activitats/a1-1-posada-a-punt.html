@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>A5 · El client davant dels noms — Serveis en Xarxa (0227)</title>
+<title>A1.1 · Posada a punt del servidor — Serveis en Xarxa (0227)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -368,27 +368,40 @@
     .cq-block pre .c, .cq-block pre .o { color: #555; }
     .cq-check-btn { display: none; }
   }
+  /* ==== Contingut no copiable ====
+     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
+     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
+     queda exclòs. */
+  .cq-header, .cq-block {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  [contenteditable="true"], [contenteditable="true"] * {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    user-select: text;
+  }
+
 /* === SINAPSI-CSS FI ======================================== */
 </style>
 </head>
 <body>
 <header class="cq-header">
-  <div class="eyebrow">0227 · Serveis en Xarxa · RA2 · Activitat 5</div>
-  <h1>El client davant dels noms</h1>
-  <p class="lede">Investigar com resol la teva màquina abans de muntar cap servidor.</p>
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · A1.1</div>
+  <h1>Posada a punt del servidor</h1>
+  <p class="lede">Deixar la màquina llesta: nom, hora, actualitzacions i les dues targetes de xarxa.</p>
 </header>
 
 <!-- ============ OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
   <h4>Què has de saber abans de començar</h4>
   <p>
-    Teoria <strong>T5</strong> (noms i resolució al client) i <strong>T6</strong> (l'arbre del
-    DNS).
+    Teoria <strong>T1.0</strong> (adreçament) i <strong>T1.1</strong> (Netplan).
   </p>
   <p>
-    Amb aquesta activitat aprendràs a fer de detectiu amb la resolució de noms: descobriràs quin
-    servidor fa servir la teva màquina, com respon i com es comporten els servidors públics
-    d'Internet.
+    Amb aquesta activitat aprendràs a posar a punt un servidor acabat d'instal·lar: nom, hora,
+    actualitzacions i configuració de les dues targetes de xarxa.
   </p>
 </div>
 
@@ -396,49 +409,37 @@
 <div class="cq-block" data-kind="escenari">
   <h4>Amb què treballaràs</h4>
   <p>
-    Una màquina virtual <strong>Ubuntu nova</strong> a isardVDI amb la targeta
-    <code>puigcastellar1</code>, que rep la configuració del DHCP del centre. Aquí no muntes cap
-    servei: només observes i documentes.
+    Una màquina virtual <strong>Ubuntu Server nova</strong> a <strong>isardVDI</strong> amb dues
+    targetes de xarxa:
   </p>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Targeta</th><th>Nom típic</th><th>Paper</th></tr></thead>
+      <tbody>
+        <tr><td><code>puigcastellar1</code></td><td><code>enp1s0</code></td><td>Xarxa del centre, amb Internet</td></tr>
+        <tr><td><code>personal1</code></td><td><code>enp2s0</code></td><td>Xarxa interna teva, per als teus clients</td></tr>
+      </tbody>
+    </table>
+  </div>
   <p>
-    Totes les respostes s'han d'acompanyar de la <strong>sortida de la comanda</strong> que les
-    justifica. Una resposta sense la seva captura no compta.
+    Els noms típics són orientatius: comprova sempre com es diuen a la teva màquina abans
+    d'escriure res. Connecta-t'hi per <strong>SSH</strong> des del teu equip.
   </p>
 </div>
 
-<!-- ============ ENUNCIAT 1 ============ -->
+<!-- ============ ENUNCIAT ============ -->
 <div class="cq-block" data-kind="enunciat">
-  <h4>1 · Com està configurada la teva màquina</h4>
+  <h4>Què has de fer</h4>
+  <p>
+    Acabes de rebre un servidor recent instal·lat i l'has de deixar en condicions per posar-hi
+    serveis a sobre. Ha de quedar així:
+  </p>
   <ol>
-    <li>Quin servidor DNS fa servir i <strong>d'on l'ha tret</strong>? Quin és el domini de cerca?</li>
-    <li>Què hi ha a <code>/etc/resolv.conf</code>? Per què hi surt aquella adreça i no la del servidor?</li>
-    <li>Quin procés escolta al port 53 de la teva màquina? Comprova-ho.</li>
-    <li>Quin percentatge d'encerts té la memòria cau ara mateix? Fes unes quantes consultes i torna-ho a mirar.</li>
-    <li>Quina línia de <code>/etc/nsswitch.conf</code> decideix l'ordre de resolució, i què vol dir?</li>
-  </ol>
-</div>
-
-<!-- ============ ENUNCIAT 2 ============ -->
-<div class="cq-block" data-kind="enunciat">
-  <h4>2 · Les eines de consulta</h4>
-  <ol>
-    <li>Resol <code>es.wikipedia.org</code> amb <code>host</code>, primer amb el DNS del centre i després amb <code>1.1.1.1</code>. Hi ha diferències?</li>
-    <li>Amb <code>dig</code>: com s'especifica el servidor? I que la consulta vagi per TCP? I que et doni qualsevol tipus de registre?</li>
-    <li>Esbrina quins servidors DNS són responsables de <code>xeill.net</code>, <code>wikipedia.org</code> i <code>fsf.org</code>.</li>
-    <li>Pregunta a un d'aquests servidors per un nom que <strong>no</strong> sigui de la seva zona. Respon? Què vol dir això?</li>
-    <li>Resol el domini <code>xn--j1ay.xn--p1ai</code> i mira com el mostra el navegador. Què és el <em>punycode</em>?</li>
-  </ol>
-</div>
-
-<!-- ============ ENUNCIAT 3 ============ -->
-<div class="cq-block" data-kind="enunciat">
-  <h4>3 · Els servidors públics</h4>
-  <ol>
-    <li>Consulta el mateix nom a <code>1.1.1.1</code>, <code>9.9.9.9</code> i <code>8.8.8.8</code> i compara el <code>Query time</code>. Repeteix-ho i explica per què canvia.</li>
-    <li>On és físicament cadascun? Pots fer servir <a href="https://geoiptool.com/es">geoiptool</a>.</li>
-    <li>Fes una llista de tres resolutors públics: qui els manté i amb quin interès.</li>
-    <li>On es pot obtenir la llista oficial dels <strong>servidors arrel</strong>?</li>
-    <li>Segueix la resolució de <code>moodle.elpuig.xeill.net</code> des de l'arrel i explica els salts que fa.</li>
+    <li>Tots els paquets del sistema <strong>actualitzats</strong>.</li>
+    <li>El nom de l'equip (<em>hostname</em>) canviat pel <strong>teu nom propi</strong>, en minúscules i sense accents.</li>
+    <li>La <strong>zona horària</strong> correcta per a on som.</li>
+    <li>Les <strong>actualitzacions automàtiques desactivades</strong>, com correspon a un servidor.</li>
+    <li>Netplan configurat: <code>puigcastellar1</code> automàtica i <code>personal1</code> fixa amb <code>192.168.1.1/24</code> i el DNS de <strong>Quad9</strong>.</li>
   </ol>
 </div>
 
@@ -450,40 +451,60 @@
     <table class="cq-table">
       <thead><tr><th>Què has de fer</th><th>On ho tens</th></tr></thead>
       <tbody>
-        <tr><td>Estat, cau i consultes del client</td><td>Teoria <strong>T5</strong>, taula del resum</td></tr>
-        <tr><td>Opcions de <code>dig</code></td><td><code>man dig</code></td></tr>
-        <tr><td>Qui escolta a un port</td><td><code>ss --help</code>, del RA1</td></tr>
-        <tr><td>Seguir la resolució des de l'arrel</td><td>Teoria <strong>T6</strong></td></tr>
-        <tr><td>Servidors arrel</td><td><a href="https://root-servers.org">root-servers.org</a></td></tr>
+        <tr><td>Actualitzar el sistema</td><td><code>apt</code>, del mòdul de sistemes operatius</td></tr>
+        <tr><td>Nom de l'equip</td><td><code>hostnamectl --help</code></td></tr>
+        <tr><td>Zona horària</td><td><code>timedatectl --help</code></td></tr>
+        <tr><td>Actualitzacions automàtiques</td><td>El fitxer <code>/etc/apt/apt.conf.d/20auto-upgrades</code></td></tr>
+        <tr><td>Configuració de xarxa</td><td>Teoria <strong>T1.1</strong> i els <a href="https://netplan.readthedocs.io/en/stable/examples/">exemples oficials de Netplan</a></td></tr>
       </tbody>
     </table>
   </div>
 </div>
 
-<!-- ============ OBSERVACIÓ ============ -->
-<div class="cq-block" data-kind="observació">
-  <h4>Compte amb la memòria cau quan comparis temps</h4>
+<!-- ============ RECORDATORI ============ -->
+<div class="cq-block" data-kind="recordatori">
+  <h4>Estàs treballant per SSH</h4>
   <p>
-    Si consultes dues vegades el mateix nom, la segona anirà molt més ràpid perquè la resposta ja
-    és a la memòria cau, i no estaràs comparant servidors sinó cau contra xarxa.
+    Un error a la configuració de xarxa et pot deixar fora de la màquina. Aplica els canvis
+    <strong>de la manera segura que has vist a T1.1</strong>, no de la ràpida: si perds la
+    connexió, la configuració es desfà sola al cap de dos minuts. Si tot i així et quedes fora,
+    entra per la consola de la VM a isardVDI.
+  </p>
+</div>
+
+<!-- ============ OBSERVACIÓ TÈCNICA ============ -->
+<div class="cq-block" data-kind="observació">
+  <h4>Un detall on gairebé tothom ensopega</h4>
+  <p>
+    A <code>personal1</code> <strong>no hi has de posar cap porta d'enllaç</strong>, encara que
+    aquesta màquina n'hagi de fer de porta d'enllaç per als seus clients. Són dues coses
+    diferents i val la pena que ho tinguis clar abans d'escriure el fitxer.
   </p>
   <p>
-    Per comparar de veritat, pregunta directament a cada servidor amb <code>dig @adreça</code>,
-    fes servir un nom diferent a cada prova o buida la cau entre consulta i consulta. Explica al
-    document quina d'aquestes tres coses has fet.
+    Un equip només té <strong>una ruta per defecte</strong>, i aquí ja la dona el DHCP del centre
+    per <code>puigcastellar1</code>, que és per on hi ha Internet. Si hi afegeixes una segona
+    ruta per defecte apuntant a la seva pròpia IP, el servidor perdrà la sortida.
+  </p>
+  <p>
+    Que els <strong>clients</strong> facin servir la <code>192.168.1.1</code> com a porta
+    d'enllaç no s'escriu aquí, sinó a l'opció <code>routers</code> del servidor DHCP. Això és de
+    les activitats 3 i 4.
   </p>
 </div>
 
 <!-- ============ COMPROVACIÓ ============ -->
 <div class="cq-block" data-kind="comprovació">
   <h4>Com sabràs que ho has fet bé</h4>
-  <p>Abans d'entregar, repassa que el document compleixi això:</p>
+  <p>
+    Abans d'entregar, has de poder respondre <strong>sí</strong> a totes aquestes preguntes, amb
+    la sortida d'una comanda al davant. Si alguna falla, encara no has acabat.
+  </p>
   <ul>
-    <li>Cada resposta va acompanyada de la comanda i de la seva sortida.</li>
-    <li>Has distingit el servei local <code>127.0.0.53</code> del servidor DNS de veritat.</li>
-    <li>Has trobat almenys un servidor que <strong>no</strong> et resol noms de fora de la seva zona, i saps per què.</li>
-    <li>Els temps de resposta que compares són comparables entre ells.</li>
-    <li>Expliques els salts de la resolució, no només enganxes la sortida.</li>
+    <li>El <em>prompt</em> mostra el teu <em>hostname</em> nou en tornar a entrar per SSH.</li>
+    <li>El rellotge del sistema dona l'hora d'aquí, amb la zona horària correcta.</li>
+    <li><code>enp2s0</code> té la <code>192.168.1.1/24</code> i <code>enp1s0</code> una adreça del centre.</li>
+    <li>Hi ha <strong>una sola</strong> ruta <code>default</code>, i és la de <code>puigcastellar1</code>.</li>
+    <li>Una consulta de nom de domini es resol correctament.</li>
   </ul>
 </div>
 
@@ -491,22 +512,22 @@
 <div class="cq-block" data-kind="problemes">
   <h4>Si alguna cosa no va</h4>
   <dl class="cq-issues">
-    <dt><code>dig</code> o <code>host</code> no existeixen</dt>
+    <dt>Error de sintaxi en aplicar el Netplan</dt>
     <dd>
-      <p><span class="lbl">Causa</span> Falta el paquet d'eines de consulta.</p>
-      <p><span class="lbl">Solució</span> Instal·la <code>dnsutils</code>.</p>
+      <p><span class="lbl">Causa</span> Indentació. Un tabulador que se t'ha colat en copiar i enganxar.</p>
+      <p><span class="lbl">Solució</span> Al <code>nano</code>, esborra els espais del davant de la línia i torna'ls a escriure a mà.</p>
     </dd>
 
-    <dt>Totes les consultes triguen el mateix, vinguin d'on vinguin</dt>
+    <dt><code>enp2s0</code> no té la IP que li has posat</dt>
     <dd>
-      <p><span class="lbl">Causa</span> Estàs preguntant sempre al servei local, que respon de la cau.</p>
-      <p><span class="lbl">Solució</span> Fes servir <code>dig @adreça</code> per anar directe al servidor.</p>
+      <p><span class="lbl">Causa</span> Falta desactivar-hi el DHCP, o el nom de la targeta no és el que has escrit.</p>
+      <p><span class="lbl">Solució</span> Compara el nom amb la sortida de <code>ip -c link show</code> i repassa T1.1.</p>
     </dd>
 
-    <dt>Un servidor públic no et respon</dt>
+    <dt>Has perdut la connexió SSH</dt>
     <dd>
-      <p><span class="lbl">Causa</span> La xarxa del centre pot filtrar el port 53 cap a fora.</p>
-      <p><span class="lbl">Solució</span> Documenta-ho: també és un resultat. Prova amb un altre servidor i digues què has observat.</p>
+      <p><span class="lbl">Causa</span> Has tocat la targeta per on estaves connectat.</p>
+      <p><span class="lbl">Solució</span> Si has aplicat els canvis de la manera segura, espera 120 segons. Si no, entra per la consola de la VM a isardVDI.</p>
     </dd>
   </dl>
 </div>
@@ -519,12 +540,24 @@
     del resultat.
   </p>
   <p>
-    Respon-hi també, amb les teves paraules: <strong>quina diferència hi ha entre el servidor que
-    surt a <code>/etc/resolv.conf</code> i el que et resol els noms de veritat?</strong>
+    Respon-hi també, amb les teves paraules: <strong>per què a <code>personal1</code> no hi has
+    posat porta d'enllaç?</strong>
   </p>
 </div>
 
 <script>
+  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  (function () {
+    function editant(node) {
+      return node && node.closest && node.closest('[contenteditable="true"]');
+    }
+    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+      document.addEventListener(nom, function (e) {
+        if (!editant(e.target)) { e.preventDefault(); }
+      });
+    });
+  })();
+
   // Motor únic per a totes les preguntes single i multi.
   document.querySelectorAll('.cq-question').forEach(function (question) {
     var id = question.dataset.id;

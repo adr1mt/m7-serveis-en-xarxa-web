@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>T3.4 · FTPS i SFTP: transferència xifrada — Serveis en Xarxa (0227)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* === SINAPSI-CSS INICI =======================================
+   0227 · Serveis en Xarxa — Identitat visual del mòdul
+   Blau estructural · taronja per als avisos · paper clar
+   per a la lectura · codi en fosc.
+   Aquest bloc és IDÈNTIC a totes les pàgines del mòdul.
+   No l'editis en una sola pàgina: edita'l a totes o extreu-lo
+   a un full compartit (_identitat/sinapsi.css).
+   ============================================================ */
+  :root {
+    --paper:        #FBFCFD;
+    --card:         #FFFFFF;
+    --ink:          #131A22;
+    --muted:        #5C6875;
+    --rule:         #E3E7EC;
+    --accent:       #1D4E89;
+    --accent-hover: #26639F;
+    --accent-soft:  #EFF5FB;
+    --accent-line:  #DCE7F3;
+    --warn:         #C2410C;
+    --warn-soft:    #FEF6EF;
+    --warn-line:    #F0CBAE;
+    --code-bg:      #16202E;
+    --code-ink:     #E2E9F1;
+    --ok:           #0E7A4B;
+    --ok-soft:      #F0FAF4;
+    --ok-line:      #C6E7D6;
+    --ko:           #B4232B;
+    --ko-soft:      #FEF4F4;
+    --ko-line:      #F2CFCF;
+    --font-display: "Ubuntu", -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-body:    "Source Sans 3", -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-mono:    "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+  }
+
+  body {
+    margin: 0;
+    padding: 40px 16px 72px;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ==== Capçalera de la pàgina ==== */
+  .cq-header {
+    max-width: 660px;
+    margin: 0 auto 26px;
+  }
+  .cq-header .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .cq-header h1 {
+    margin: 6px 0 4px;
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -.02em;
+    line-height: 1.15;
+  }
+  .cq-header .lede {
+    margin: 0;
+    color: var(--muted);
+    font-size: 1.05rem;
+  }
+
+  /* ==== Bloc de contingut: patró únic per a tots els tipus ==== */
+  .cq-block {
+    max-width: 660px;
+    margin: 0 auto 20px;
+    padding: 26px 30px 28px;
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    position: relative;
+  }
+
+  /* Etiqueta de secció: petita, monoespaiada, com la capçalera
+     d'una fitxa tècnica. El text surt de l'atribut data-kind. */
+  .cq-block::before {
+    content: attr(data-kind);
+    position: absolute;
+    top: -8px;
+    left: 26px;
+    padding: 1px 9px;
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 20px;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .cq-block h4 {
+    margin: 4px 0 14px;
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -.01em;
+    line-height: 1.3;
+    color: var(--ink);
+  }
+  .cq-block p { margin: 0 0 14px; }
+  .cq-block p:last-child { margin-bottom: 0; }
+  .cq-block em { font-style: italic; color: var(--muted); }
+  .cq-block strong { font-weight: 600; }
+  .cq-block ul, .cq-block ol { margin: 0 0 14px; padding-left: 22px; }
+  .cq-block li { margin-bottom: 6px; }
+  .cq-block li:last-child { margin-bottom: 0; }
+  .cq-block a { color: var(--accent); }
+
+  .cq-block code {
+    font-family: var(--font-mono);
+    font-size: .84em;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    border-radius: 4px;
+    padding: 1px 5px;
+    color: var(--accent);
+  }
+  .cq-block pre {
+    margin: 14px 0 18px;
+    padding: 16px 18px;
+    background: var(--code-bg);
+    color: var(--code-ink);
+    border-radius: 8px;
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: .82rem;
+    line-height: 1.6;
+  }
+  .cq-block pre code { all: unset; font: inherit; }
+  .cq-block pre .c { color: #7E93AB; }   /* comentari dins del codi */
+  .cq-block pre .o { color: #8FD0A5; }   /* sortida esperada */
+
+  /* ---- Variants de color per tipus de bloc ---- */
+  .cq-block[data-kind="objectius"],
+  .cq-block[data-kind="pas a pas"],
+  .cq-block[data-kind="lliurament"],
+  .cq-block[data-kind="resum"] { border-color: var(--accent-line); }
+  .cq-block[data-kind="objectius"]::before,
+  .cq-block[data-kind="pas a pas"]::before,
+  .cq-block[data-kind="lliurament"]::before,
+  .cq-block[data-kind="resum"]::before { border-color: var(--accent-line); color: var(--accent); }
+  .cq-block[data-kind="objectius"] h4,
+  .cq-block[data-kind="pas a pas"] h4,
+  .cq-block[data-kind="lliurament"] h4,
+  .cq-block[data-kind="resum"] h4 { color: var(--accent); }
+
+  .cq-block[data-kind="recordatori"] { background: var(--warn-soft); border-color: #F5DCC8; }
+  .cq-block[data-kind="recordatori"]::before { background: var(--warn-soft); border-color: var(--warn-line); color: var(--warn); }
+  .cq-block[data-kind="recordatori"] h4 { color: var(--warn); }
+
+  .cq-block[data-kind="bones pràctiques"] { background: var(--ok-soft); border-color: var(--ok-line); }
+  .cq-block[data-kind="bones pràctiques"]::before { background: var(--ok-soft); border-color: var(--ok-line); color: var(--ok); }
+  .cq-block[data-kind="bones pràctiques"] h4 { color: var(--ok); }
+
+  .cq-block[data-kind="problemes"] { background: var(--ko-soft); border-color: var(--ko-line); }
+  .cq-block[data-kind="problemes"]::before { background: var(--ko-soft); border-color: var(--ko-line); color: var(--ko); }
+  .cq-block[data-kind="problemes"] h4 { color: var(--ko); }
+
+  /* ==== Diagrama de passos en flux (DORA i similars) ==== */
+  .dora-flow {
+    display: flex;
+    align-items: stretch;
+    gap: 6px;
+    margin: 20px 0 22px;
+    flex-wrap: wrap;
+  }
+  .dora-step {
+    flex: 1 1 130px;
+    padding: 14px 12px 12px;
+    border: 1px solid var(--rule);
+    border-top: 2px solid var(--accent);
+    border-radius: 6px;
+    background: var(--paper);
+  }
+  .dora-step .n {
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: .08em;
+  }
+  .dora-step .t {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: .9rem;
+    letter-spacing: .02em;
+    margin: 2px 0 5px;
+  }
+  .dora-step .d { font-size: .8rem; line-height: 1.45; color: var(--muted); }
+  .dora-arrow { align-self: center; color: #B3C2D2; font-size: 1rem; }
+  @media (max-width: 620px) {
+    .dora-arrow { display: none; }
+    .dora-step { flex-basis: 100%; }
+  }
+
+  /* ==== Passos numerats de les guies pas a pas ==== */
+  .cq-steps { counter-reset: step; margin: 4px 0 0; padding: 0; list-style: none; }
+  .cq-steps > li {
+    counter-increment: step;
+    position: relative;
+    padding: 0 0 4px 34px;
+    margin-bottom: 18px;
+  }
+  .cq-steps > li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0; top: 1px;
+    width: 22px; height: 22px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    border-radius: 50%;
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    font-weight: 500;
+    color: var(--accent);
+  }
+  .cq-steps > li > :first-child { margin-top: 0; }
+
+  /* ==== Problemes: símptoma → causa → solució ==== */
+  .cq-issues { margin: 4px 0 0; }
+  .cq-issues dt {
+    font-weight: 600;
+    margin-top: 16px;
+    color: var(--ko);
+  }
+  .cq-issues dt:first-child { margin-top: 0; }
+  .cq-issues dd { margin: 4px 0 0 0; }
+  .cq-issues dd .lbl {
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-right: 6px;
+  }
+
+  /* ==== Taula de referència ==== */
+  .cq-tablewrap { overflow-x: auto; margin: 14px 0 4px; }
+  .cq-table { border-collapse: collapse; width: 100%; font-size: .9rem; }
+  .cq-table th, .cq-table td {
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+  }
+  .cq-table th {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: .78rem;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom-color: var(--accent-line);
+    white-space: nowrap;
+  }
+  .cq-table td:first-child { white-space: nowrap; }
+  .cq-table tr:last-child td { border-bottom: none; }
+
+  /* ==== Nota de versió (Ubuntu 24.04 vs 26.04) ==== */
+  .cq-note {
+    margin: 14px 0 4px;
+    padding: 10px 14px;
+    border-left: 3px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 0 6px 6px 0;
+    font-size: .9rem;
+  }
+  .cq-note .lbl {
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 2px;
+  }
+
+
+  /* ==== Índex del mòdul (portada) ==== */
+  .cq-index { display: grid; gap: 10px; margin: 4px 0 0; padding: 0; list-style: none; }
+  .cq-index a {
+    display: flex; align-items: baseline; gap: 12px;
+    padding: 13px 16px;
+    border: 1px solid var(--rule); border-radius: 8px;
+    background: var(--paper); color: var(--ink); text-decoration: none;
+    transition: border-color .12s ease, background .12s ease;
+  }
+  .cq-index a:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .cq-index .ref {
+    font-family: var(--font-mono); font-size: .74rem; font-weight: 500;
+    color: var(--accent); letter-spacing: .06em; flex: 0 0 auto;
+  }
+  .cq-index .ttl { font-family: var(--font-display); font-weight: 700; font-size: .98rem; }
+  .cq-index .sub { display: block; font-size: .84rem; color: var(--muted); font-weight: 400; font-family: var(--font-body); margin-top: 1px; }
+
+  /* ==== Quiz ==== */
+  .cq-question { margin: 22px 0 0; }
+  .cq-question + .cq-question { padding-top: 22px; border-top: 1px solid var(--rule); }
+  .cq-question .statement { font-weight: 600; margin-bottom: 10px; }
+  .cq-option {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 10px 14px;
+    margin: 7px 0;
+    border: 1px solid var(--rule);
+    border-radius: 7px;
+    background: var(--card);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: .95rem;
+    color: var(--ink);
+    transition: border-color .12s ease, background .12s ease;
+  }
+  .cq-option:hover:not(:disabled) { border-color: #B3C2D2; }
+  .cq-option:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .cq-option.cq-selected { border-color: var(--accent); background: var(--accent-soft); }
+  .cq-option.cq-correct { border-color: var(--ok); background: var(--ok-soft); color: var(--ok); }
+  .cq-option.cq-incorrect { border-color: var(--ko); background: var(--ko-soft); color: var(--ko); }
+  .cq-check-btn {
+    margin-top: 10px;
+    padding: 9px 20px;
+    border: none;
+    border-radius: 7px;
+    background: var(--accent);
+    color: #FFFFFF;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: .88rem;
+    cursor: pointer;
+  }
+  .cq-check-btn:hover:not(:disabled) { background: var(--accent-hover); }
+  .cq-check-btn:disabled { background: #B3C2D2; cursor: default; }
+  .cq-feedback { margin-top: 10px; font-size: .88rem; font-weight: 600; }
+  .cq-feedback.ok { color: var(--ok); }
+  .cq-feedback.ko { color: var(--ko); }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+  /* ==== Impressió: els alumnes imprimeixen la teoria ==== */
+  @media print {
+    body { background: #FFF; padding: 0; font-size: 11pt; }
+    .cq-block { border-color: #CCC; page-break-inside: avoid; margin-bottom: 12px; }
+    .cq-block pre { background: #F4F4F4; color: #000; border: 1px solid #DDD; }
+    .cq-block pre .c, .cq-block pre .o { color: #555; }
+    .cq-check-btn { display: none; }
+  }
+  /* ==== Contingut no copiable ====
+     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
+     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
+     queda exclòs. */
+  .cq-header, .cq-block {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  [contenteditable="true"], [contenteditable="true"] * {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    user-select: text;
+  }
+
+/* === SINAPSI-CSS FI ======================================== */
+</style>
+</head>
+<body>
+<header class="cq-header">
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA3 · T3.4</div>
+  <h1>FTPS i SFTP: transferència xifrada</h1>
+  <p class="lede">Dos noms que s'assemblen molt i són dues coses completament diferents.</p>
+</header>
+
+<!-- ============ 1 · OBJECTIUS ============ -->
+<div class="cq-block" data-kind="objectius">
+  <h4>Què sabràs fer en acabar</h4>
+  <ul>
+    <li>Distingir <strong>FTP</strong>, <strong>FTPS</strong> i <strong>SFTP</strong>, i saber quin és quin.</li>
+    <li>Veure amb un capturador que l'FTP en clar ensenya la contrasenya.</li>
+    <li>Activar <strong>TLS</strong> a vsftpd i obligar-lo a fer-lo servir.</li>
+    <li>Muntar <strong>SFTP</strong> enjaulat amb OpenSSH, sense instal·lar res.</li>
+    <li>Provar-ho amb clients de línia d'ordres i gràfics.</li>
+  </ul>
+</div>
+
+<!-- ============ 2 · TRES NOMS ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>Tres noms que sonen igual</h4>
+  <p>
+    La confusió és universal i val la pena aclarir-la d'entrada: <strong>SFTP no és FTP amb una
+    <em>s</em></strong>. No comparteixen ni protocol ni servidor.
+  </p>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th></th><th>Què és</th><th>Port</th><th>Servei</th></tr></thead>
+      <tbody>
+        <tr><td>FTP</td><td>El protocol de sempre, en clar</td><td>21</td><td><code>vsftpd</code></td></tr>
+        <tr><td>FTPS</td><td>El mateix FTP dins d'una capa TLS</td><td>21</td><td><code>vsftpd</code></td></tr>
+        <tr><td>SFTP</td><td>Un subsistema de SSH</td><td>22</td><td><code>ssh</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    FTPS conserva els dos canals i totes les seves complicacions. SFTP no en té cap: viatja per la
+    mateixa connexió SSH que ja fas servir per administrar la màquina.
+  </p>
+</div>
+
+<!-- ============ 3 · FTPS ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>FTPS: TLS damunt de l'FTP</h4>
+  <p>
+    Hi ha dues maneres d'encaixar-hi el TLS. En <strong>explícit</strong>, el client connecta al
+    port 21 de sempre i demana xifrar amb l'ordre <code>AUTH TLS</code>. És el normal, i el que
+    fan tots els clients d'avui.
+  </p>
+  <p>
+    En <strong>implícit</strong>, la connexió va xifrada des del primer byte per un port propi, el
+    990. És anterior a l'estàndard i està en desús.
+  </p>
+  <p>
+    A vsftpd s'activa amb <code>ssl_enable=YES</code>. Però activar-lo no n'obliga l'ús: si vols
+    que ningú no pugui entrar en clar, cal forçar-lo per a les credencials i per a les dades.
+  </p>
+</div>
+
+<!-- ============ 4 · SFTP ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>SFTP: un subsistema de SSH</h4>
+  <p>
+    Si la màquina té <code>openssh-server</code>, ja té SFTP. La línia
+    <code>Subsystem sftp</code> del <code>sshd_config</code> hi ve activada de sèrie: qualsevol
+    usuari que pugui fer SSH pot fer SFTP.
+  </p>
+  <p>
+    El problema és justament aquest. Un usuari d'SFTP acostuma a ser un usuari al qual
+    <strong>no</strong> vols donar una consola ni deixar passejar per la màquina. La solució és un
+    bloc <code>Match</code> al final del <code>sshd_config</code>:
+  </p>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Directiva</th><th>Què fa</th></tr></thead>
+      <tbody>
+        <tr><td><code>ForceCommand internal-sftp</code></td><td>Només SFTP: res de consola</td></tr>
+        <tr><td><code>ChrootDirectory</code></td><td>L'enjaula en un directori</td></tr>
+        <tr><td><code>AllowTcpForwarding no</code></td><td>Li tanca els túnels</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ============ 5 · EXEMPLE ============ -->
+<div class="cq-block" data-kind="exemple">
+  <h4>Les dues configuracions, de costat</h4>
+  <p>FTPS, a <code>/etc/vsftpd.conf</code>, amb el certificat que ja porta el sistema:</p>
+<pre>ssl_enable=YES
+force_local_logins_ssl=YES
+force_local_data_ssl=YES
+ssl_tlsv1=NO
+ssl_tlsv1_1=NO
+ssl_tlsv1_2=YES
+allow_anon_ssl=NO
+rsa_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem
+rsa_private_key_file=/etc/ssl/private/ssl-cert-snakeoil.key</pre>
+  <p>SFTP enjaulat, <strong>al final</strong> de <code>/etc/ssh/sshd_config</code>:</p>
+<pre>Match Group sftpusers
+    ChrootDirectory /home/%u
+    ForceCommand internal-sftp
+    AllowTcpForwarding no
+    X11Forwarding no</pre>
+  <p>
+    El <code>%u</code> és el nom de qui entra. Tot el que ve després d'un <code>Match</code>
+    s'aplica només a aquell grup, i per això ha d'anar al final del fitxer.
+  </p>
+</div>
+
+<!-- ============ 6 · PERMISOS DEL CHROOT ============ -->
+<div class="cq-block" data-kind="observació">
+  <h4>El chroot de SSH és més exigent que el de vsftpd</h4>
+  <p>
+    <code>ChrootDirectory</code> imposa una condició que sorprèn tothom la primera vegada: el
+    directori <strong>i tots els que hi ha per sobre</strong> han de ser de <code>root</code> i no
+    escrivibles per ningú més.
+  </p>
+  <p>
+    És a dir, <code>/home/alumne1</code> ha de ser de <code>root:root</code> amb permisos
+    <code>755</code>, i la carpeta on l'usuari sí que escriu ha d'anar a dins. Exactament el
+    mateix esquema que a la T3.2, però aquí sshd ho comprova sense excepcions.
+  </p>
+  <p>
+    Si no es compleix, la connexió es talla de seguida i el missatge del client no diu per què.
+    Qui t'ho explica és el registre del servidor.
+  </p>
+</div>
+
+<!-- ============ 7 · CAS REAL ============ -->
+<div class="cq-block" data-kind="cas real">
+  <h4>Els escàners no dormen</h4>
+  <p>
+    Qualsevol adreça pública rep, cada dia, intents automàtics de connexió als ports coneguts. El
+    21 és dels més visitats: els robots hi proven parells d'usuari i contrasenya habituals i
+    apunten els servidors que responen.
+  </p>
+  <p>
+    Amb FTP en clar n'hi ha prou que un sol usuari es connecti des d'una xarxa hostil perquè les
+    credencials quedin exposades. No cal trencar res: només escoltar.
+  </p>
+  <p>
+    Per això la recomanació professional d'avui és curta: si el servei ha de sortir de la xarxa
+    interna, SFTP. I si has de mantenir FTP per compatibilitat, FTPS forçat i mai en clar.
+  </p>
+</div>
+
+<!-- ============ 8 · PAS A PAS ============ -->
+<div class="cq-block" data-kind="pas a pas">
+  <h4>Veure el problema i tapar-lo</h4>
+
+  <ol class="cq-steps">
+    <li>
+      <p><strong>Captura una sessió FTP en clar.</strong> En una terminal:</p>
+<pre>sudo apt install -y tcpdump
+sudo tcpdump -i lo -A -n port 21</pre>
+      <p>
+        En una altra, <code>ftp localhost</code> i entra amb el teu usuari. Torna a la primera:
+        hi trobaràs les línies <code>USER</code> i <code>PASS</code> llegibles.
+      </p>
+    </li>
+
+    <li>
+      <p><strong>Activa el TLS</strong> a <code>/etc/vsftpd.conf</code> amb l'exemple d'aquesta
+      pàgina, i reinicia:</p>
+<pre>sudo systemctl restart vsftpd</pre>
+    </li>
+
+    <li>
+      <p><strong>Comprova que ara el clar no passa.</strong> El client <code>ftp</code> no fa TLS:
+      ha de fallar. Fes servir <code>lftp</code>, que sí que en fa:</p>
+<pre>sudo apt install -y lftp
+lftp -u alumne1 -e "set ssl:verify-certificate no" \
+     localhost</pre>
+      <p>Repeteix la captura del pas 1: ara no s'hi llegeix res.</p>
+    </li>
+
+    <li>
+      <p><strong>Prepara el grup d'SFTP</strong> i posa-hi l'usuari:</p>
+<pre>sudo groupadd sftpusers
+sudo usermod -aG sftpusers alumne1</pre>
+    </li>
+
+    <li>
+      <p><strong>Afegeix el bloc <code>Match</code></strong> al final de
+      <code>/etc/ssh/sshd_config</code>, valida i recarrega:</p>
+<pre>sudo nano /etc/ssh/sshd_config
+sudo sshd -t
+sudo systemctl restart ssh</pre>
+    </li>
+
+    <li>
+      <p><strong>Prova l'SFTP</strong> des del client, i mira que no et doni consola:</p>
+<pre>sftp alumne1@192.168.1.8
+ssh alumne1@192.168.1.8</pre>
+      <p>
+        El primer ha d'entrar i el segon ha de tancar-se de seguida. Dins de l'SFTP funcionen
+        <code>ls</code>, <code>get</code>, <code>put</code> i <code>bye</code>, com a l'FTP.
+      </p>
+    </li>
+  </ol>
+
+  <div class="cq-note">
+    <span class="lbl">Ubuntu 24.04 i 26.04</span>
+    El certificat <em>snakeoil</em> que fa servir l'exemple ve amb el paquet
+    <code>ssl-cert</code> i és autosignat: els clients es queixaran fins que l'acceptis a mà. En
+    producció s'hi posa un certificat de veritat.
+  </div>
+</div>
+
+<!-- ============ 9 · BONES PRÀCTIQUES ============ -->
+<div class="cq-block" data-kind="bones pràctiques">
+  <h4>Criteris professionals</h4>
+  <ul>
+    <li><strong>SFTP com a primera opció</strong>: un sol port, ja instal·lat, sense canal de dades.</li>
+    <li><strong>Si has de fer FTPS, força'l</strong>: activar el TLS sense obligar-lo no protegeix ningú.</li>
+    <li><strong>Grup dedicat i <code>Match</code></strong> per als comptes que només han de moure fitxers.</li>
+    <li><strong>Claus en lloc de contrasenyes</strong> quan el compte és per a un procés automàtic.</li>
+    <li><strong>Comprova-ho capturant</strong>: l'única prova que una cosa va xifrada és no poder-la llegir.</li>
+  </ul>
+</div>
+
+<!-- ============ 10 · PROBLEMES ============ -->
+<div class="cq-block" data-kind="problemes">
+  <h4>Errors habituals</h4>
+  <dl class="cq-issues">
+    <dt>El client <code>ftp</code> deixa de connectar en activar el TLS</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> És l'efecte buscat: aquest client no sap fer TLS i el servidor ja no accepta clar.</p>
+      <p><span class="lbl">Solució</span> Fes servir <code>lftp</code>, FileZilla o qualsevol client amb suport d'FTPS.</p>
+    </dd>
+
+    <dt>El client rebutja el certificat</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> És autosignat i no el signa cap autoritat coneguda.</p>
+      <p><span class="lbl">Solució</span> A l'aula, accepta'l a mà o desactiva'n la verificació al client. En producció, certificat signat.</p>
+    </dd>
+
+    <dt>L'SFTP es tanca just després d'autenticar</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> El <code>ChrootDirectory</code> o algun directori superior no és de <code>root</code>, o és escrivible pel grup.</p>
+      <p><span class="lbl">Solució</span> <code>sudo journalctl -u ssh -n 20</code> ho diu clar, i després <code>ls -ld</code> de tota la ruta.</p>
+    </dd>
+
+    <dt>El bloc <code>Match</code> afecta tothom</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Està enmig del fitxer: tot el que ve darrere queda dins del <code>Match</code>.</p>
+      <p><span class="lbl">Solució</span> Mou-lo al final i valida amb <code>sudo sshd -t</code>.</p>
+    </dd>
+  </dl>
+</div>
+
+<!-- ============ 11 · RESUM ============ -->
+<div class="cq-block" data-kind="resum">
+  <h4>Resum</h4>
+  <ul>
+    <li><strong>FTPS</strong> és FTP dins de TLS, mateix servidor i mateix port 21.</li>
+    <li><strong>SFTP</strong> és un subsistema de <strong>SSH</strong>, port 22, i no té res a veure amb FTP.</li>
+    <li>A vsftpd, activar el TLS no n'obliga l'ús: cal <code>force_local_logins_ssl</code> i <code>force_local_data_ssl</code>.</li>
+    <li>El bloc <code>Match Group</code> va <strong>al final</strong> del <code>sshd_config</code>.</li>
+    <li><code>ChrootDirectory</code> exigeix tota la ruta de <code>root</code> i no escrivible.</li>
+  </ul>
+
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Comanda</th><th>Per a què serveix</th></tr></thead>
+      <tbody>
+        <tr><td><code>tcpdump -i lo -A port 21</code></td><td>Veure què viatja en clar</td></tr>
+        <tr><td><code>sshd -t</code></td><td>Validar el <code>sshd_config</code></td></tr>
+        <tr><td><code>sftp usuari@servidor</code></td><td>Provar l'SFTP</td></tr>
+        <tr><td><code>lftp -u usuari servidor</code></td><td>Client amb suport d'FTPS</td></tr>
+        <tr><td><code>journalctl -u ssh -n 20</code></td><td>Saber per què es talla la sessió</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p style="margin-top:16px">
+    <strong>Següent:</strong> les activitats <strong>A3.1</strong>, <strong>A3.2</strong> i
+    <strong>A3.3</strong> munten aquest servei de cap a peus i el tanquen bé.
+  </p>
+</div>
+
+<!-- ============ 12 · QUIZ ============ -->
+<div class="cq-block" data-kind="quiz">
+  <h4>Comprova el que has après</h4>
+
+  <div class="cq-question" data-id="t3-4-sftp" data-type="single">
+    <div class="statement">Quin servei has de tenir en marxa per oferir SFTP?</div>
+    <button class="cq-option" data-correct="false"><code>vsftpd</code> amb <code>ssl_enable</code></button>
+    <button class="cq-option" data-correct="true"><code>ssh</code>, que ja porta el subsistema SFTP</button>
+    <button class="cq-option" data-correct="false">Un paquet propi, <code>sftpd</code></button>
+    <button class="cq-option" data-correct="false">Cap: SFTP funciona sense servidor</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+
+  <div class="cq-question" data-id="t3-4-ports" data-type="single">
+    <div class="statement">Per quins ports treballen FTPS explícit i SFTP?</div>
+    <button class="cq-option" data-correct="false">990 i 21</button>
+    <button class="cq-option" data-correct="true">21 i 22</button>
+    <button class="cq-option" data-correct="false">22 i 21</button>
+    <button class="cq-option" data-correct="false">Tots dos pel 990</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+
+  <div class="cq-question" data-id="t3-4-forca" data-type="single">
+    <div class="statement">Has posat <code>ssl_enable=YES</code> i prou. Què passa?</div>
+    <button class="cq-option" data-correct="false">Que ningú no pot connectar</button>
+    <button class="cq-option" data-correct="true">Que es pot xifrar, però qui vulgui encara pot entrar en clar</button>
+    <button class="cq-option" data-correct="false">Que el servidor passa a escoltar pel port 22</button>
+    <button class="cq-option" data-correct="false">Que l'accés anònim queda xifrat automàticament</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+
+  <div class="cq-question" data-id="t3-4-chroot" data-type="single">
+    <div class="statement">L'SFTP es tanca just després d'autenticar. Què mires primer?</div>
+    <button class="cq-option" data-correct="false">El mode passiu del client</button>
+    <button class="cq-option" data-correct="true">Els permisos del <code>ChrootDirectory</code> i de tota la ruta per sobre</button>
+    <button class="cq-option" data-correct="false">El certificat del servidor</button>
+    <button class="cq-option" data-correct="false">La directiva <code>write_enable</code></button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+
+  <div class="cq-question" data-id="t3-4-afirmacions" data-type="multi">
+    <div class="statement">Selecciona totes les afirmacions certes</div>
+    <button class="cq-option" data-correct="true">SFTP no fa servir cap canal de dades separat.</button>
+    <button class="cq-option" data-correct="true">FTPS explícit comença en clar i demana xifrar amb <code>AUTH TLS</code>.</button>
+    <button class="cq-option" data-correct="true"><code>ForceCommand internal-sftp</code> impedeix obrir una consola.</button>
+    <button class="cq-option" data-correct="false">SFTP és el mateix protocol que FTP amb xifratge.</button>
+    <button class="cq-option" data-correct="false">Un certificat autosignat el validen els clients sense dir res.</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+</div>
+
+<script>
+  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  (function () {
+    function editant(node) {
+      return node && node.closest && node.closest('[contenteditable="true"]');
+    }
+    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+      document.addEventListener(nom, function (e) {
+        if (!editant(e.target)) { e.preventDefault(); }
+      });
+    });
+  })();
+
+  // Motor únic per a totes les preguntes single i multi.
+  document.querySelectorAll('.cq-question').forEach(function (question) {
+    var id = question.dataset.id;
+    if (!id) {
+      throw new Error('Falta data-id a una pregunta del quiz.');
+    }
+    var type = question.dataset.type;
+    if (type !== 'single' && type !== 'multi') {
+      throw new Error('data-type invàlid ("' + type + '") a la pregunta "' + id + '".');
+    }
+
+    var options = question.querySelectorAll('.cq-option');
+    var checkBtn = question.querySelector('.cq-check-btn');
+    var feedback = question.querySelector('.cq-feedback');
+
+    options.forEach(function (opt) {
+      opt.addEventListener('click', function () {
+        if (type === 'single') {
+          options.forEach(function (o) { o.classList.remove('cq-selected'); });
+          opt.classList.add('cq-selected');
+        } else {
+          opt.classList.toggle('cq-selected');
+        }
+      });
+    });
+
+    checkBtn.addEventListener('click', function () {
+      var allCorrect = true;
+      options.forEach(function (opt) {
+        var isCorrect = opt.dataset.correct === 'true';
+        var isSelected = opt.classList.contains('cq-selected');
+        opt.classList.remove('cq-selected');
+        if (isCorrect) {
+          opt.classList.add('cq-correct');
+        } else if (isSelected) {
+          opt.classList.add('cq-incorrect');
+        }
+        opt.disabled = true;
+        if (isCorrect !== isSelected) {
+          allCorrect = false;
+        }
+      });
+      feedback.textContent = allCorrect ? 'Correcte!' : 'Incorrecte, revisa les respostes marcades.';
+      feedback.className = 'cq-feedback ' + (allCorrect ? 'ok' : 'ko');
+      checkBtn.disabled = true;
+    });
+  });
+</script>
+
+</body>
+</html>

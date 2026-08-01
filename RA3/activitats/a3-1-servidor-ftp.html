@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>A2 · DHCP amb systemd-networkd — Serveis en Xarxa (0227)</title>
+<title>A3.1 · Servidor FTP per a l'equip — Serveis en Xarxa (0227)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -368,31 +368,42 @@
     .cq-block pre .c, .cq-block pre .o { color: #555; }
     .cq-check-btn { display: none; }
   }
+  /* ==== Contingut no copiable ====
+     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
+     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
+     queda exclòs. */
+  .cq-header, .cq-block {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  [contenteditable="true"], [contenteditable="true"] * {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    user-select: text;
+  }
+
 /* === SINAPSI-CSS FI ======================================== */
 </style>
 </head>
 <body>
 <header class="cq-header">
-  <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · Activitat 2</div>
-  <h1>Servidor DHCP mínim amb systemd-networkd</h1>
-  <p class="lede">Muntar un DHCP de laboratori sense instal·lar absolutament res.</p>
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA3 · A3.1</div>
+  <h1>Servidor FTP per a l'equip</h1>
+  <p class="lede">Comptes propis, permís d'escriptura i cadascú tancat al seu directori.</p>
 </header>
 
 <!-- ============ OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
   <h4>Què has de saber abans de començar</h4>
   <p>
-    Teoria <strong>T1</strong> (Netplan i systemd-networkd) i <strong>T2</strong> (fonaments de
-    DHCP).
+    Teories <strong>T3.1</strong> (FTP) i <strong>T3.2</strong> (vsftpd amb usuaris locals). Del RA1
+    necessitaràs el Netplan de la <strong>T1.1</strong>.
   </p>
   <p>
-    Amb aquesta activitat aprendràs a muntar un servidor DHCP de laboratori amb el que ja porta
-    Ubuntu Server de sèrie: <code>systemd-networkd</code>, que a més de configurar targetes sap
-    fer de servidor DHCP bàsic. Aquí <strong>no faràs servir Kea</strong>.
-  </p>
-  <p>
-    Serveix per a un laboratori, no per a producció. Però et farà veure <strong>què hi ha sota
-    Netplan</strong>, que és el que de veritat gestiona la xarxa.
+    Amb aquesta activitat muntaràs un servidor FTP per a un equip de tres persones, amb un compte
+    per cadascuna, i comprovaràs que ningú no pot sortir del seu directori ni entrar-hi si no li
+    toca.
   </p>
 </div>
 
@@ -401,17 +412,16 @@
   <h4>Amb què treballaràs</h4>
   <div class="cq-tablewrap">
     <table class="cq-table">
-      <thead><tr><th>Màquina</th><th>Targeta</th><th>Paper</th></tr></thead>
+      <thead><tr><th>Màquina</th><th>Targetes</th><th>Adreça</th></tr></thead>
       <tbody>
-        <tr><td>Ubuntu <strong>Server</strong></td><td>personal1</td><td>Servidor DHCP, IP fixa <code>10.0.0.1/8</code></td></tr>
-        <tr><td>Ubuntu <strong>Desktop</strong></td><td>personal1</td><td>Client, ha de rebre la configuració</td></tr>
+        <tr><td>Ubuntu <strong>Server</strong></td><td>puigcastellar1 + personal1</td><td><code>192.168.1.8/24</code> a personal1</td></tr>
+        <tr><td>Ubuntu <strong>Desktop</strong></td><td>només personal1</td><td><code>192.168.1.100/24</code>, fixa</td></tr>
       </tbody>
     </table>
   </div>
   <p>
-    Comença amb una <strong>màquina nova</strong> a isardVDI. Al client
-    <strong>no hauràs de tocar res</strong>: els escriptoris Ubuntu ja venen configurats per
-    demanar la configuració per DHCP.
+    Comença amb una <strong>màquina nova</strong> a isardVDI. El client ha de ser d'escriptori:
+    part de les comprovacions es fan amb un client gràfic.
   </p>
 </div>
 
@@ -419,27 +429,38 @@
 <div class="cq-block" data-kind="enunciat">
   <h4>Què has de fer</h4>
   <ol>
-    <li>Fer que <strong>Netplan deixi de gestionar</strong> la xarxa d'aquesta màquina.</li>
-    <li>Configurar <code>personal1</code> amb la IP fixa <code>10.0.0.1/8</code> parlant directament amb <code>systemd-networkd</code>.</li>
-    <li>Activar-hi el <strong>servidor DHCP integrat</strong>, que ha de repartir <strong>20 adreces a partir de la <code>10.0.0.100</code></strong>.</li>
-    <li>Fer que reparteixi també el <strong>DNS de Quad9</strong> (<code>9.9.9.9</code>).</li>
-    <li>Comprovar des de l'Ubuntu Desktop que rep la configuració que has definit.</li>
+    <li>Preparar el servidor: <em>hostname</em> amb el teu nom i <code>192.168.1.8/24</code> a <code>personal1</code>.</li>
+    <li>Instal·lar <strong>vsftpd</strong> i deixar-lo servint només els usuaris del sistema, sense accés anònim.</li>
+    <li>Crear el grup i els <strong>tres comptes</strong> de la taula, amb el seu directori de treball.</li>
+    <li>Fer que cada usuari quedi <strong>tancat</strong> al seu directori i que hi pugui pujar fitxers.</li>
+    <li>Deixar entrar només els comptes autoritzats, amb una <strong>llista blanca</strong>.</li>
   </ol>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Compte</th><th>Grup</th><th>Pot entrar</th></tr></thead>
+      <tbody>
+        <tr><td><code>alumne1</code></td><td><code>ftpusers</code></td><td>Sí</td></tr>
+        <tr><td><code>alumne2</code></td><td><code>ftpusers</code></td><td>Sí</td></tr>
+        <tr><td><code>prof1</code></td><td><code>ftpusers</code></td><td>Sí</td></tr>
+        <tr><td><code>convidat</code></td><td><code>ftpusers</code></td><td><strong>No</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 
 <!-- ============ ON BUSCAR ============ -->
 <div class="cq-block" data-kind="enunciat">
   <h4>D'on has de treure cada cosa</h4>
-  <p>Les comandes no te les donem fetes; sí que et diem on trobar-les:</p>
+  <p>Tot el procediment ja l'has vist a la teoria. Aquí tens on és cada part:</p>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Què has de fer</th><th>On ho tens</th></tr></thead>
       <tbody>
-        <tr><td>Apartar Netplan</td><td>Canvia l'extensió dels seus fitxers <code>.yaml</code> i torna a aplicar</td></tr>
-        <tr><td>Per què cal apartar-lo</td><td>Teoria <strong>T1</strong>, bloc «Què hi ha sota Netplan»</td></tr>
-        <tr><td>Fitxers <code>.network</code> i seccions <code>[Match]</code> i <code>[Network]</code></td><td><code>man systemd.network</code></td></tr>
-        <tr><td>Servidor DHCP integrat</td><td>Secció <code>[DHCPServer]</code> del mateix manual</td></tr>
-        <tr><td>Recarregar i veure l'estat</td><td><code>networkctl --help</code></td></tr>
+        <tr><td>Posada a punt i Netplan</td><td>Teoria <strong>T1.1</strong> i activitat <strong>A1.1</strong></td></tr>
+        <tr><td>Instal·lació i primera prova</td><td>Teoria <strong>T3.1</strong></td></tr>
+        <tr><td>Escriptura, chroot i llista blanca</td><td>Teoria <strong>T3.2</strong></td></tr>
+        <tr><td>Permisos del directori de cada usuari</td><td>Teoria <strong>T3.2</strong>, bloc d'observació</td></tr>
+        <tr><td>Ordres dins de la sessió FTP</td><td>Teoria <strong>T3.1</strong>, taula del resum</td></tr>
       </tbody>
     </table>
   </div>
@@ -447,25 +468,30 @@
 
 <!-- ============ RECORDATORI ============ -->
 <div class="cq-block" data-kind="recordatori">
-  <h4>Serveix DHCP només per personal1</h4>
+  <h4>El directori on aterra l'usuari no pot ser seu</h4>
   <p>
-    No posis mai el servidor DHCP a la targeta <code>puigcastellar1</code>. Estaries repartint
-    adreces a la xarxa del centre i interferint amb el seu servidor: és el que s'anomena un
-    <em>servidor DHCP furtiu</em> i deixa sense connexió els companys de classe.
+    Si l'arrel del chroot és escrivible per l'usuari, vsftpd es negarà a servir-lo. La solució no
+    és desactivar el chroot ni afegir-hi <code>allow_writeable_chroot</code>: és col·locar bé els
+    permisos, amb l'arrel de <code>root</code> i una carpeta seva a dins.
+  </p>
+  <p>
+    I recorda que el compte necessita una <em>shell</em> vàlida per autenticar-se, o rebràs un
+    <code>530</code> tot i escriure bé la contrasenya.
   </p>
 </div>
 
-<!-- ============ OBSERVACIÓ TÈCNICA ============ -->
+<!-- ============ OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h4>Dues coses que et faran perdre temps</h4>
+  <h4>Dues decisions que has de prendre tu</h4>
   <p>
-    <strong>L'ordre importa.</strong> Un servidor DHCP no pot escoltar per una targeta que no té
-    adreça. Deixa primer la IP fixa funcionant i comprova-la; només després activa el servei.
+    <strong>Com bloqueges el <code>convidat</code>.</strong> Hi ha més d'una manera de deixar-lo
+    fora: la llista blanca, la llista de prohibits o no posar-lo al grup. Tria'n una, aplica-la i
+    explica per què és la que has triat.
   </p>
   <p>
-    <strong>El rang no s'escriu com a Kea.</strong> Aquí no es dona l'adreça inicial i la final,
-    sinó un <em>desplaçament</em> respecte del començament de la xarxa i una <em>mida</em>. Fes
-    el càlcul abans d'escriure els valors, i comprova després quines adreces reparteix de veritat.
+    <strong>Amb quins permisos arriben els fitxers pujats.</strong> Els valors de sèrie deixen els
+    fitxers només per al propietari. Decideix si a la teva situació això és el que vols, i
+    justifica-ho amb la directiva corresponent.
   </p>
 </div>
 
@@ -474,14 +500,15 @@
   <h4>Com sabràs que ho has fet bé</h4>
   <p>
     Abans d'entregar, has de poder respondre <strong>sí</strong> a totes aquestes preguntes, amb
-    la sortida d'una comanda al davant:
+    la sortida d'una comanda o una captura al davant:
   </p>
   <ul>
-    <li>Netplan ja no gestiona les targetes d'aquesta màquina.</li>
-    <li><code>personal1</code> té la <code>10.0.0.1/8</code> i surt com a <em>routable</em>.</li>
-    <li>Al servidor hi ha alguna cosa escoltant al port <strong>UDP 67</strong>.</li>
-    <li>El client rep una adreça <strong>del rang que has definit</strong> i el DNS <code>9.9.9.9</code>.</li>
-    <li>El client arriba al servidor amb <code>ping</code>. Internet encara no en tindrà: falta l'encaminament i el NAT, que són de l'activitat 3.</li>
+    <li>El servei està actiu i escolta al port 21 per la IP de <code>personal1</code>.</li>
+    <li>Des del client, <code>alumne1</code> entra, puja un fitxer i el torna a baixar.</li>
+    <li>Dins de la sessió, <code>pwd</code> retorna <code>/</code> i <code>cd ..</code> no el treu del seu directori.</li>
+    <li><code>alumne1</code> no veu els fitxers d'<code>alumne2</code> ni pot arribar a <code>/etc</code>.</li>
+    <li>El compte <code>convidat</code> rep un error d'autenticació.</li>
+    <li>La mateixa connexió funciona amb un <strong>client gràfic</strong> del sistema d'escriptori.</li>
   </ul>
 </div>
 
@@ -489,22 +516,28 @@
 <div class="cq-block" data-kind="problemes">
   <h4>Si alguna cosa no va</h4>
   <dl class="cq-issues">
-    <dt>El client es queda amb una adreça 169.254.x.x</dt>
+    <dt>El servei no arrenca després d'editar la configuració</dt>
     <dd>
-      <p><span class="lbl">Causa</span> No li arriba cap resposta: el servidor no escolta, o les dues màquines no comparteixen la xarxa <code>personal1</code>.</p>
-      <p><span class="lbl">Solució</span> Comprova primer si el servidor escolta al port 67. Si no, repassa a quina secció del fitxer has posat cada línia.</p>
+      <p><span class="lbl">Causa</span> Un espai al voltant de l'<code>=</code>, una directiva mal escrita o l'arrel del chroot escrivible.</p>
+      <p><span class="lbl">Solució</span> <code>journalctl -u vsftpd -n 20</code> et diu quina línia i quin motiu.</p>
     </dd>
 
-    <dt>La targeta no agafa la <code>10.0.0.1</code></dt>
+    <dt>Entra, però no pot pujar res</dt>
     <dd>
-      <p><span class="lbl">Causa</span> El nom de la targeta que has escrit al fitxer no coincideix amb el real.</p>
-      <p><span class="lbl">Solució</span> Compara'l amb la sortida de <code>ip -c link show</code>.</p>
+      <p><span class="lbl">Causa</span> Falta <code>write_enable</code>, o la carpeta de destinació no és de l'usuari.</p>
+      <p><span class="lbl">Solució</span> Revisa la directiva i després <code>ls -ld</code> de la carpeta on aterra.</p>
     </dd>
 
-    <dt>El client rep adreça però no és del teu rang</dt>
+    <dt>Des del client no arriba ni a demanar l'usuari</dt>
     <dd>
-      <p><span class="lbl">Causa</span> Està agafant l'adreça d'un altre servidor DHCP: probablement el del centre, perquè la targeta no és <code>personal1</code>.</p>
-      <p><span class="lbl">Solució</span> Revisa a isardVDI a quina xarxa està connectada la targeta del client.</p>
+      <p><span class="lbl">Causa</span> Problema de xarxa, no d'FTP: adreça equivocada o targeta mal configurada.</p>
+      <p><span class="lbl">Solució</span> <code>ping</code> primer i <code>ss -lntp</code> al servidor després.</p>
+    </dd>
+
+    <dt>El client gràfic es queda pensant en obrir la carpeta</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Canal de dades: mode actiu on caldria passiu.</p>
+      <p><span class="lbl">Solució</span> Comprova-ho amb el client de text canviant de mode, i deixa'n constància al document.</p>
     </dd>
   </dl>
 </div>
@@ -513,16 +546,29 @@
 <div class="cq-block" data-kind="lliurament">
   <h4>Què has d'entregar</h4>
   <p>
-    Un <strong>document tècnic</strong> on expliquis tot el que has anat fent, amb les captures
-    del resultat.
+    Un <strong>document tècnic</strong> on expliquis tot el que has anat fent, amb el teu
+    <code>/etc/vsftpd.conf</code>, els permisos dels directoris i les captures del resultat, tant
+    del client de text com del gràfic.
   </p>
   <p>
-    Respon-hi també, amb les teves paraules: <strong>per què has hagut d'apartar Netplan per fer
-    aquesta activitat?</strong>
+    Respon-hi també, amb les teves paraules: <strong>què podria fer <code>alumne1</code> si
+    desactivessis el chroot? Posa'n dos exemples concrets amb la teva màquina.</strong>
   </p>
 </div>
 
 <script>
+  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  (function () {
+    function editant(node) {
+      return node && node.closest && node.closest('[contenteditable="true"]');
+    }
+    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+      document.addEventListener(nom, function (e) {
+        if (!editant(e.target)) { e.preventDefault(); }
+      });
+    });
+  })();
+
   // Motor únic per a totes les preguntes single i multi.
   document.querySelectorAll('.cq-question').forEach(function (question) {
     var id = question.dataset.id;

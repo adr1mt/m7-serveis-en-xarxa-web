@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>T2 · Fonaments de DHCP — Serveis en Xarxa (0227)</title>
+<title>T3.1 · Transferència de fitxers i FTP — Serveis en Xarxa (0227)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -368,259 +368,244 @@
     .cq-block pre .c, .cq-block pre .o { color: #555; }
     .cq-check-btn { display: none; }
   }
+  /* ==== Contingut no copiable ====
+     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
+     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
+     queda exclòs. */
+  .cq-header, .cq-block {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  [contenteditable="true"], [contenteditable="true"] * {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    user-select: text;
+  }
+
 /* === SINAPSI-CSS FI ======================================== */
 </style>
 </head>
 <body>
 <header class="cq-header">
-  <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · Teoria 2</div>
-  <h1>Fonaments de DHCP</h1>
-  <p class="lede">Com aconsegueix un ordinador la seva configuració de xarxa sense que ningú la hi escrigui.</p>
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA3 · T3.1</div>
+  <h1>Transferència de fitxers i FTP</h1>
+  <p class="lede">Per què FTP fa servir dues connexions, i què canvia entre el mode actiu i el passiu.</p>
 </header>
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
   <h4>Què sabràs fer en acabar</h4>
   <ul>
-    <li>Explicar per què les xarxes no es configuren a mà.</li>
-    <li>Descriure els quatre passos del procés <strong>DORA</strong>.</li>
-    <li>Entendre què és una concessió i per què caduca.</li>
-    <li>Capturar un intercanvi DHCP real amb <code>tcpdump</code>.</li>
-    <li>Diagnosticar per què un client no rep adreça.</li>
+    <li>Explicar per a què serveix un servei de transferència de fitxers i quan se'n fa servir un altre.</li>
+    <li>Distingir el <strong>canal de control</strong> del <strong>canal de dades</strong>.</li>
+    <li>Diferenciar el <strong>mode actiu</strong> del <strong>mode passiu</strong> i saber quin funciona darrere d'un NAT.</li>
+    <li>Llegir els codis numèrics que respon un servidor FTP.</li>
+    <li>Fer una sessió completa amb un client de línia d'ordres.</li>
   </ul>
 </div>
 
-<!-- ============ 2 · INTRODUCCIÓ ============ -->
+<!-- ============ 2 · PER A QUÈ SERVEIX ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>El problema que resol DHCP</h4>
+  <h4>Un servei per moure fitxers, no per compartir-los</h4>
   <p>
-    Perquè un equip funcioni en xarxa necessita quatre dades: <strong>IP</strong>,
-    <strong>màscara</strong>, <strong>porta d'enllaç</strong> i <strong>DNS</strong>.
-    Posar-les a mà va bé amb tres màquines. Amb tres-centes, no.
+    Un servei de transferència de fitxers serveix perquè una màquina <strong>pugi</strong> o
+    <strong>baixi</strong> fitxers d'un servidor, amb un compte i uns permisos. No és el mateix
+    que una carpeta compartida: aquí el fitxer viatja sencer i es queda a les dues bandes.
   </p>
-  <p>Configurar a mà una xarxa gran té tres problemes:</p>
+  <p>Encara avui és la manera habitual de fer tres feines:</p>
   <ul>
-    <li>Cal apuntar quina IP té cada equip per no repetir-ne cap.</li>
-    <li>Si un portàtil canvia d'aula, s'ha de reconfigurar.</li>
-    <li>Canviar el DNS del centre vol dir tocar totes les màquines.</li>
+    <li>Publicar fitxers perquè qualsevol se'ls baixi, sense donar-los cap compte.</li>
+    <li>Recollir feina de gent de fora, cadascú al seu directori.</li>
+    <li>Deixar còpies de seguretat en una màquina que no és la que les genera.</li>
   </ul>
-  <p>
-    <strong>DHCP</strong> (<em>Dynamic Host Configuration Protocol</em>) posa aquesta feina en
-    un servidor. Tu defineixes la configuració <em>una sola vegada</em> i cada equip que es
-    connecta la demana i la rep sol. És el que fa el router de casa teva i el Wi-Fi de
-    l'institut: canvia la mida, no el mecanisme.
-  </p>
 </div>
 
-<!-- ============ 3 · FUNCIONAMENT INTERN ============ -->
+<!-- ============ 3 · DOS CANALS ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Funcionament: el procés DORA</h4>
+  <h4>Dos canals: control i dades</h4>
   <p>
-    Hi ha una pregunta òbvia: si el client encara no té IP, com pot demanar res? Ho fa per
-    <strong>difusió</strong> (<em>broadcast</em>), un missatge que arriba a tothom del segment.
-    DHCP treballa sobre <strong>UDP</strong>: el servidor escolta al <strong>port 67</strong> i
-    el client al <strong>68</strong>.
+    <strong>FTP</strong> (<em>File Transfer Protocol</em>) és de 1971 i té una particularitat que
+    cap protocol modern repeteix: fa servir <strong>dues connexions TCP</strong> alhora.
   </p>
-
-  <div class="dora-flow">
-    <div class="dora-step">
-      <div class="n">01</div>
-      <div class="t">DISCOVER</div>
-      <div class="d">El client crida: «hi ha algun servidor DHCP?»</div>
-    </div>
-    <div class="dora-arrow">→</div>
-    <div class="dora-step">
-      <div class="n">02</div>
-      <div class="t">OFFER</div>
-      <div class="d">El servidor ofereix una IP del seu rang.</div>
-    </div>
-    <div class="dora-arrow">→</div>
-    <div class="dora-step">
-      <div class="n">03</div>
-      <div class="t">REQUEST</div>
-      <div class="d">El client accepta aquella oferta.</div>
-    </div>
-    <div class="dora-arrow">→</div>
-    <div class="dora-step">
-      <div class="n">04</div>
-      <div class="t">ACK</div>
-      <div class="d">El servidor confirma. Ja pots fer servir l'adreça.</div>
-    </div>
-  </div>
-
-  <p>
-    Són quatre passos i no dos perquè <strong>pot haver-hi més d'un servidor</strong>. Si dos
-    responen, el client tria un i ho diu al REQUEST; l'altre s'assabenta que l'han descartat i
-    allibera l'adreça que havia guardat. El servidor reconeix cada equip per la seva
-    <strong>adreça MAC</strong>.
-  </p>
-</div>
-
-<!-- ============ 4 · EXEMPLE SENZILL ============ -->
-<div class="cq-block" data-kind="exemple">
-  <h4>Un DORA, missatge a missatge</h4>
-  <p>
-    Servidor <code>10.0.0.1</code>, que reparteix a partir de la <code>10.0.0.100</code>.
-    Un portàtil s'acaba de connectar:
-  </p>
-<pre><span class="c"># 1 · DISCOVER — el client encara no té IP</span>
-0.0.0.0:68  →  255.255.255.255:67
-   MAC: 08:00:27:1f:a3:0c
-
-<span class="c"># 2 · OFFER — el servidor proposa</span>
-10.0.0.1:67  →  255.255.255.255:68
-   IP: 10.0.0.100/8   Gateway: 10.0.0.1
-   DNS: 9.9.9.9       Lease: 600 s
-
-<span class="c"># 3 · REQUEST — el client accepta</span>
-0.0.0.0:68  →  255.255.255.255:67
-   Vull la 10.0.0.100, del servidor 10.0.0.1
-
-<span class="c"># 4 · ACK — confirmat</span>
-10.0.0.1:67  →  255.255.255.255:68
-   IP concedida: 10.0.0.100/8</pre>
-  <p>Tot això passa en menys d'una dècima de segon.</p>
-</div>
-
-<!-- ============ 5 · LA CONCESSIÓ ============ -->
-<div class="cq-block" data-kind="teoria">
-  <h4>L'adreça es presta, no es regala</h4>
-  <p>
-    El servidor concedeix l'adreça durant un temps limitat: és la <strong>concessió</strong>
-    (<em>lease</em>). Quan caduca, l'adreça torna al fons comú i pot anar a un altre equip.
-  </p>
-  <p>
-    Té sentit: els portàtils que hi ha al matí a l'institut no hi són a la tarda. Si les
-    adreces no caduquessin, el rang s'esgotaria en pocs dies amb màquines que ja no hi són.
-  </p>
-  <p>
-    El client no espera l'últim moment. <strong>Quan ha passat la meitat del temps, demana la
-    renovació</strong> directament al seu servidor, i el rellotge torna a començar sense que
-    l'usuari noti res. Només si ningú respon abans que caduqui, el client es queda sense
-    configuració i ha de tornar a fer tot el DORA.
-  </p>
-</div>
-
-<!-- ============ 6 · TIPUS D'ASSIGNACIÓ ============ -->
-<div class="cq-block" data-kind="teoria">
-  <h4>Tres maneres d'assignar adreces</h4>
   <div class="cq-tablewrap">
     <table class="cq-table">
-      <thead>
-        <tr><th>Tipus</th><th>Com funciona</th><th>Per a què</th></tr>
-      </thead>
+      <thead><tr><th>Canal</th><th>Port</th><th>Què hi passa</th></tr></thead>
       <tbody>
-        <tr>
-          <td><strong>Dinàmica</strong></td>
-          <td>El servidor tria qualsevol adreça lliure del rang (<em>pool</em>).</td>
-          <td>Equips d'usuari</td>
-        </tr>
-        <tr>
-          <td><strong>Reserva</strong></td>
-          <td>El servidor té apuntat MAC ↔ IP i sempre dona la mateixa adreça.</td>
-          <td>Impressores, servidors</td>
-        </tr>
-        <tr>
-          <td><strong>Estàtica</strong></td>
-          <td>La IP està escrita a l'equip. DHCP no hi intervé.</td>
-          <td>El propi servidor, routers</td>
-        </tr>
+        <tr><td>Control</td><td>21</td><td>Ordres i respostes. Dura tota la sessió</td></tr>
+        <tr><td>Dades</td><td>variable</td><td>El contingut dels fitxers i els llistats. S'obre i es tanca a cada transferència</td></tr>
       </tbody>
     </table>
   </div>
   <p>
-    A més de la IP, el servidor envia <strong>opcions</strong>: la porta d'enllaç
-    (<code>routers</code>), el DNS (<code>domain-name-servers</code>) i el nom de domini
-    (<code>domain-name</code>). Són els noms que faràs servir a Kea.
-  </p>
-  <p>
-    <strong>Compte:</strong> una IP estàtica ha de quedar sempre <em>fora</em> del rang
-    dinàmic, o dos equips acabaran amb la mateixa adreça.
+    Aquesta separació és la font de gairebé tots els problemes d'FTP: el tallafocs veu passar la
+    connexió del port 21 i la deixa, però la de dades va per un port que ningú no ha previst.
   </p>
 </div>
 
-<!-- ============ 7 · CAS REAL ============ -->
+<!-- ============ 4 · ACTIU I PASSIU ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>Mode actiu i mode passiu</h4>
+  <p>
+    La pregunta que resolen aquests dos modes és sempre la mateixa: <strong>qui obre la connexió
+    de dades</strong>, el client o el servidor.
+  </p>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th></th><th>Actiu (<code>PORT</code>)</th><th>Passiu (<code>PASV</code>)</th></tr></thead>
+      <tbody>
+        <tr><td>Qui connecta</td><td>El servidor cap al client</td><td>El client cap al servidor</td></tr>
+        <tr><td>Port de dades</td><td>Del servidor surt el 20</td><td>Un port alt del servidor</td></tr>
+        <tr><td>Client rere NAT</td><td>Falla</td><td>Funciona</td></tr>
+        <tr><td>Ús actual</td><td>Testimonial</td><td>El de sempre</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    En actiu el servidor truca a la porta del client, i el router del client no sap a qui l'ha de
+    passar. Per això tots els clients d'avui arrenquen en <strong>passiu</strong>.
+  </p>
+</div>
+
+<!-- ============ 5 · EXEMPLE ============ -->
+<div class="cq-block" data-kind="exemple">
+  <h4>Una sessió vista per dins</h4>
+  <p>
+    El client tradueix el que escrius a ordres del protocol. Aquestes són les que envia per baixar
+    un fitxer, amb la resposta del servidor al davant:
+  </p>
+<pre><span class="o">220 (vsFTPd 3.0.5)</span>          <span class="c"># el servidor es presenta</span>
+USER alumne
+<span class="o">331 Please specify the password.</span>
+PASS ······
+<span class="o">230 Login successful.</span>
+PASV
+<span class="o">227 Entering Passive Mode (192,168,1,8,201,44)</span>
+RETR informe.pdf
+<span class="o">150 Opening BINARY mode data connection</span>
+<span class="o">226 Transfer complete.</span></pre>
+  <p>
+    Els sis números del <code>227</code> són l'adreça i el port on has d'anar a buscar les dades:
+    els quatre primers són la IP, i els dos últims el port, com <code>201×256 + 44 = 51500</code>.
+  </p>
+</div>
+
+<!-- ============ 6 · CODIS ============ -->
+<div class="cq-block" data-kind="observació">
+  <h4>Els codis numèrics es llegeixen per la primera xifra</h4>
+  <p>
+    No cal memoritzar-los. La primera xifra ja diu de què va la resposta, i això et serveix per a
+    qualsevol servidor FTP del món.
+  </p>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Comença per</th><th>Vol dir</th><th>Exemple</th></tr></thead>
+      <tbody>
+        <tr><td>2</td><td>Fet correctament</td><td><code>230 Login successful</code></td></tr>
+        <tr><td>3</td><td>Falta un pas més</td><td><code>331 Specify the password</code></td></tr>
+        <tr><td>4</td><td>Error temporal, torna-ho a provar</td><td><code>421 Timeout</code></td></tr>
+        <tr><td>5</td><td>Error definitiu</td><td><code>530 Login incorrect</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ============ 7 · TEXT I BINARI ============ -->
+<div class="cq-block" data-kind="observació">
+  <h4>Mode text i mode binari</h4>
+  <p>
+    FTP pot transferir de dues maneres. En <strong>mode text</strong> (<em>ASCII</em>) converteix
+    el final de línia al del sistema de destinació; en <strong>mode binari</strong> copia byte a
+    byte sense tocar res.
+  </p>
+  <p>
+    Existeix perquè Windows acaba les línies amb <code>CR LF</code> i Linux només amb
+    <code>LF</code>. Passar una imatge o un PDF en mode text el <strong>corromp</strong>: el
+    fitxer arriba amb bytes canviats i no s'obre.
+  </p>
+  <p>
+    Avui tots els clients arrenquen en binari i no s'hi toca. Ho has de conèixer perquè encara
+    apareix a la documentació i als exàmens, i perquè explica avaries antigues molt cèlebres.
+  </p>
+</div>
+
+<!-- ============ 8 · CAS REAL ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h4>El router que algú va endollar a l'aula</h4>
+  <h4>La contrasenya viatja escrita</h4>
   <p>
-    Un alumne connecta un router domèstic a una roseta. Aquell router porta el DHCP activat de
-    fàbrica i comença a respondre OFFERs amb la seva pròpia IP com a porta d'enllaç. És el que
-    s'anomena un <strong>servidor DHCP furtiu</strong> (<em>rogue DHCP</em>).
+    FTP és anterior al xifratge. L'ordre <code>PASS</code> envia la contrasenya tal com és, en
+    text pla, i el mateix passa amb el contingut dels fitxers.
   </p>
   <p>
-    Com que cada client es queda amb el primer OFFER que li arriba, l'efecte és aleatori: uns
-    equips van i altres no. El símptoma clàssic és «a mi em funciona i al del costat no», i és
-    dels errors més difícils de trobar si no saps que això existeix.
+    Qualsevol que comparteixi xarxa amb el client —una wifi d'hotel, un cable a l'aula— pot llegir
+    l'usuari i la contrasenya amb un capturador de trànsit i sense cap coneixement especial. A la
+    <strong>T3.4</strong> ho veuràs tu mateix amb <code>tcpdump</code>.
   </p>
   <p>
-    Per això, a les activitats, muntaràs el teu servidor DHCP sempre a la targeta
-    <code>personal1</code> i mai a <code>puigcastellar1</code>: si el poses a la xarxa del
-    centre, el servidor furtiu ets tu.
-  </p>
-</div>
-
-<!-- ============ 8 · RECORDATORI ============ -->
-<div class="cq-block" data-kind="recordatori">
-  <h4>Canviar la xarxa en remot és arriscat</h4>
-  <p>
-    Si configures la xarxa d'un servidor per SSH, un error et pot tallar la connexió i deixar-te
-    fora. Fes servir sempre <code>sudo netplan try</code> en lloc de <code>netplan apply</code>:
-    aplica els canvis temporalment i, si en 120 segons no confirmes prement <kbd>Enter</kbd>,
-    els desfà sols.
+    Per això FTP en clar ja no es desplega mai cap a Internet. Sobreviu en xarxes internes i
+    tancades, i quan cal exposar-lo es fa amb <strong>FTPS</strong> o es canvia per
+    <strong>SFTP</strong>.
   </p>
 </div>
 
 <!-- ============ 9 · PAS A PAS ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h4>Veure el DORA amb els teus ulls</h4>
+  <h4>La teva primera sessió FTP</h4>
   <p>
-    Ara capturaràs els quatre missatges. Necessites la teva VM Ubuntu Server amb la targeta
-    <code>puigcastellar1</code>, que rep la configuració del DHCP del centre.
+    Sobre una màquina qualsevol amb Ubuntu Server. Encara no configures res: només instal·les el
+    servidor amb els valors de sèrie per veure el protocol funcionant.
   </p>
 
   <ol class="cq-steps">
     <li>
-      <p><strong>Mira quina concessió tens ara</strong> i apunta el nom de la interfície:</p>
-<pre>networkctl status enp1s0</pre>
-      <p>L'adreça, el <code>Gateway</code> i el <code>DNS</code> te'ls ha enviat el servidor.</p>
+      <p><strong>Instal·la el servidor i un client de línia d'ordres:</strong></p>
+<pre>sudo apt update
+sudo apt install -y vsftpd ftp</pre>
     </li>
 
     <li>
-      <p><strong>Deixa <code>tcpdump</code> escoltant</strong> els ports de DHCP. Es quedarà esperant: és el que volem.</p>
-<pre>sudo apt install -y tcpdump
-sudo tcpdump -i enp1s0 -n port 67 or port 68</pre>
+      <p><strong>Comprova que el servei escolta</strong> al port 21:</p>
+<pre>systemctl status vsftpd
+sudo ss -lntp | grep :21</pre>
     </li>
 
     <li>
-      <p><strong>Des d'una altra consola</strong> (no tanquis la del <code>tcpdump</code>), força una renovació:</p>
-<pre>sudo networkctl renew enp1s0</pre>
+      <p><strong>Deixa un fitxer de prova</strong> al teu directori personal:</p>
+<pre>echo "hola" &gt; ~/prova.txt</pre>
     </li>
 
     <li>
-      <p><strong>Llegeix la captura.</strong> Hi veuràs quatre línies:</p>
-<pre><span class="o">IP 0.0.0.0.68 &gt; 255.255.255.255.67: BOOTP/DHCP, Request from 08:00:27:1f:a3:0c
-IP 10.0.0.1.67 &gt; 255.255.255.255.68: BOOTP/DHCP, Reply
-IP 0.0.0.0.68 &gt; 255.255.255.255.67: BOOTP/DHCP, Request from 08:00:27:1f:a3:0c
-IP 10.0.0.1.67 &gt; 255.255.255.255.68: BOOTP/DHCP, Reply</span></pre>
+      <p><strong>Connecta't amb el teu propi usuari</strong> i mira els codis que van sortint:</p>
+<pre>ftp localhost</pre>
       <p>
-        Request, Reply, Request, Reply: són el DISCOVER, l'OFFER, el REQUEST i l'ACK. Fixa't que
-        les línies del client surten de <code>0.0.0.0</code>, perquè encara no té adreça.
+        Dins de la sessió: <code>ls</code> per veure el directori, <code>get prova.txt</code> per
+        baixar-lo i <code>bye</code> per sortir.
       </p>
     </li>
 
     <li>
-      <p>Atura amb <kbd>Ctrl</kbd>+<kbd>C</kbd> i comprova què t'ha quedat configurat:</p>
-<pre>ip -c addr show enp1s0
-ip -c route
-resolvectl status enp1s0</pre>
-      <p>Adreça, porta d'enllaç i DNS. Tot ho ha decidit el servidor, no tu.</p>
+      <p><strong>Prova de pujar-ne un.</strong> Ha de fallar:</p>
+<pre>put prova.txt copia.txt
+<span class="o">550 Permission denied.</span></pre>
+      <p>
+        No és cap avaria: de sèrie <code>write_enable</code> està desactivat. L'activaràs a la
+        <strong>T3.2</strong>.
+      </p>
+    </li>
+
+    <li>
+      <p><strong>Mira en quin mode estàs.</strong> Dins de la sessió, l'ordre <code>passive</code>
+      canvia d'un mode a l'altre i et diu com queda:</p>
+<pre>passive
+<span class="o">Passive mode: off; fallback to active mode: off.</span></pre>
+      <p>Repeteix el <code>ls</code> amb cada mode i compara.</p>
     </li>
   </ol>
 
   <div class="cq-note">
-    <span class="lbl">Ubuntu 26.04</span>
-    Aquestes comandes són iguals a 24.04 i 26.04. Comprova sempre la sortida real de la teva
-    màquina abans de donar per bona la d'aquests apunts.
+    <span class="lbl">Ubuntu 24.04 i 26.04</span>
+    El paquet és <code>vsftpd</code> i el servei també. El client de text s'instal·la amb
+    <code>ftp</code>, que a Ubuntu és en realitat <code>tnftp</code>, i arrenca en mode passiu.
   </div>
 </div>
 
@@ -628,47 +613,40 @@ resolvectl status enp1s0</pre>
 <div class="cq-block" data-kind="bones pràctiques">
   <h4>Criteris professionals</h4>
   <ul>
-    <li>
-      <strong>Infraestructura fora del rang dinàmic.</strong> Servidor, routers i punts d'accés
-      a la part baixa de la xarxa (<code>.1</code>–<code>.20</code>); el <em>pool</em> comença
-      per sobre.
-    </li>
-    <li>
-      <strong>Millor reserva que IP estàtica.</strong> Dona la mateixa previsibilitat, però es
-      gestiona des d'un únic lloc.
-    </li>
-    <li>
-      <strong>Dimensiona el <em>pool</em> amb marge:</strong> els dispositius reals més un
-      20–30 %.
-    </li>
-    <li>
-      <strong>Concessió curta</strong> en xarxes de pas (visitants) i <strong>llarga</strong>
-      en llocs de treball fixos.
-    </li>
-    <li><strong>Un sol servidor DHCP</strong> per xarxa.</li>
+    <li><strong>Passiu per defecte</strong>: és l'únic que funciona des de darrere d'un router.</li>
+    <li><strong>Rang de ports de dades acotat</strong> amb <code>pasv_min_port</code> i <code>pasv_max_port</code>, perquè el tallafocs el pugui obrir.</li>
+    <li><strong>Mai FTP en clar cap a Internet</strong>: dins de la xarxa interna i prou.</li>
+    <li><strong>Llegeix el codi de resposta</strong> abans de tocar res: ja et diu de qui és el problema.</li>
+    <li><strong>Un servei per a una feina</strong>: si només vols publicar fitxers per baixar, un servidor web ho fa millor.</li>
   </ul>
 </div>
 
-<!-- ============ 11 · PROBLEMES HABITUALS ============ -->
+<!-- ============ 11 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h4>Quan el client no rep adreça</h4>
+  <h4>Errors habituals</h4>
   <dl class="cq-issues">
-    <dt>El client té una adreça 169.254.x.x</dt>
+    <dt>Connecta i autentica, però <code>ls</code> es queda penjat</dt>
     <dd>
-      <p><span class="lbl">Causa</span> No ha arribat cap OFFER. Aquesta adreça se l'ha posat ell sol en rendir-se.</p>
-      <p><span class="lbl">Solució</span> Al servidor, comprova que escolta: <code>sudo ss -ulnp | grep :67</code>. Si no surt res, el servei està aturat o no escolta per aquella targeta.</p>
+      <p><span class="lbl">Causa</span> El canal de control va bé i el de dades no: estàs en mode actiu darrere d'un NAT o d'un tallafocs.</p>
+      <p><span class="lbl">Solució</span> Posa el client en passiu amb l'ordre <code>passive</code>.</p>
     </dd>
 
-    <dt>El servei no arrenca després d'editar la configuració</dt>
+    <dt><code>530 Login incorrect</code> amb la contrasenya bona</dt>
     <dd>
-      <p><span class="lbl">Causa</span> Gairebé sempre, una coma de més al JSON. També pot ser que la targeta encara no tingui IP fixa: un servidor DHCP no pot escoltar per una interfície sense adreça.</p>
-      <p><span class="lbl">Solució</span> <code>systemctl status kea-dhcp4-server</code> i llegeix l'última línia de l'error.</p>
+      <p><span class="lbl">Causa</span> L'usuari té prohibit l'accés: <code>root</code> i els comptes de sistema són a <code>/etc/ftpusers</code>.</p>
+      <p><span class="lbl">Solució</span> Fes servir un usuari normal. No treguis <code>root</code> d'aquesta llista.</p>
     </dd>
 
-    <dt>El client rep IP però no navega</dt>
+    <dt>El fitxer baixat no s'obre</dt>
     <dd>
-      <p><span class="lbl">Causa</span> DHCP ha funcionat; falla el que ha repartit (porta d'enllaç o DNS).</p>
-      <p><span class="lbl">Solució</span> <code>ping 9.9.9.9</code> prova l'encaminament i <code>ping www.upc.edu</code> prova el DNS. Si el primer va i el segon no, el problema és el DNS.</p>
+      <p><span class="lbl">Causa</span> S'ha transferit en mode text i s'han canviat els finals de línia.</p>
+      <p><span class="lbl">Solució</span> Escriu <code>binary</code> dins de la sessió i torna a baixar-lo.</p>
+    </dd>
+
+    <dt><code>ftp: command not found</code></dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Ubuntu Server no porta cap client FTP instal·lat.</p>
+      <p><span class="lbl">Solució</span> <code>sudo apt install ftp</code>, o fes servir <code>lftp</code>, més complet.</p>
     </dd>
   </dl>
 </div>
@@ -677,33 +655,30 @@ resolvectl status enp1s0</pre>
 <div class="cq-block" data-kind="resum">
   <h4>Resum</h4>
   <ul>
-    <li>DHCP reparteix IP, màscara, porta d'enllaç i DNS de manera automàtica.</li>
-    <li>Va sobre UDP: servidor al port <strong>67</strong>, client al <strong>68</strong>.</li>
-    <li>La negociació és <strong>DORA</strong>: Discover, Offer, Request, Ack.</li>
-    <li>L'adreça es presta amb una <strong>concessió</strong>, que el client renova a mitja vida.</li>
-    <li>Assignació <strong>dinàmica</strong>, <strong>reserva</strong> (MAC↔IP) o <strong>estàtica</strong>.</li>
+    <li>FTP fa servir <strong>dos canals</strong>: control al port 21 i dades a part.</li>
+    <li>En <strong>actiu</strong> connecta el servidor; en <strong>passiu</strong>, el client. Avui, passiu.</li>
+    <li>La primera xifra del codi de resposta ja et diu si ha anat bé, falta un pas o hi ha error.</li>
+    <li>El <strong>mode binari</strong> és l'únic segur; el mode text només retoca finals de línia.</li>
+    <li>Tot viatja <strong>en clar</strong>, contrasenya inclosa.</li>
   </ul>
 
   <div class="cq-tablewrap">
     <table class="cq-table">
-      <thead>
-        <tr><th>Comanda</th><th>Per a què serveix</th></tr>
-      </thead>
+      <thead><tr><th>Dins de la sessió</th><th>Per a què serveix</th></tr></thead>
       <tbody>
-        <tr><td><code>ip -c addr show</code><br><code>ip -c a</code></td><td>Veure l'adreça rebuda</td></tr>
-        <tr><td><code>ip -c route</code><br><code>ip -c r</code></td><td>Veure la porta d'enllaç</td></tr>
-        <tr><td><code>resolvectl status</code></td><td>Veure el DNS actiu</td></tr>
-        <tr><td><code>networkctl status &lt;if&gt;</code></td><td>Estat i concessió de la targeta</td></tr>
-        <tr><td><code>networkctl renew &lt;if&gt;</code></td><td>Forçar la renovació</td></tr>
-        <tr><td><code>tcpdump -n port 67 or port 68</code></td><td>Capturar l'intercanvi DHCP</td></tr>
-        <tr><td><code>ss -ulnp | grep :67</code></td><td>Veure si el servidor escolta</td></tr>
+        <tr><td><code>ls</code> · <code>cd</code></td><td>Moure's pel servidor</td></tr>
+        <tr><td><code>get</code> · <code>put</code></td><td>Baixar i pujar un fitxer</td></tr>
+        <tr><td><code>mget</code> · <code>mput</code></td><td>Baixar i pujar uns quants</td></tr>
+        <tr><td><code>binary</code> · <code>ascii</code></td><td>Canviar el mode de transferència</td></tr>
+        <tr><td><code>passive</code></td><td>Canviar entre passiu i actiu</td></tr>
+        <tr><td><code>bye</code></td><td>Tancar la sessió</td></tr>
       </tbody>
     </table>
   </div>
 
   <p style="margin-top:16px">
-    <strong>Següent:</strong> a <em>T3 · Servidor DHCP amb Kea</em> muntaràs el servidor que
-    fins ara només has vist des del costat del client.
+    <strong>Següent:</strong> a <em>T3.2 · Servidor vsftpd amb usuaris locals</em> deixaràs de fer
+    servir els valors de sèrie i configuraràs el servidor de veritat.
   </p>
 </div>
 
@@ -711,59 +686,71 @@ resolvectl status enp1s0</pre>
 <div class="cq-block" data-kind="quiz">
   <h4>Comprova el que has après</h4>
 
-  <div class="cq-question" data-id="t2-dora-ordre" data-type="single">
-    <div class="statement">Quin és el tercer pas del procés DORA?</div>
-    <button class="cq-option" data-correct="false">OFFER — el servidor ofereix una IP</button>
-    <button class="cq-option" data-correct="true">REQUEST — el client accepta l'oferta</button>
-    <button class="cq-option" data-correct="false">DISCOVER — el client busca un servidor</button>
-    <button class="cq-option" data-correct="false">ACK — el servidor confirma la concessió</button>
+  <div class="cq-question" data-id="t3-1-canals" data-type="single">
+    <div class="statement">Quantes connexions TCP fa servir una transferència per FTP?</div>
+    <button class="cq-option" data-correct="false">Una de sola, pel port 21</button>
+    <button class="cq-option" data-correct="true">Dues: una de control i una de dades</button>
+    <button class="cq-option" data-correct="false">Una per cada fitxer, sempre pel port 20</button>
+    <button class="cq-option" data-correct="false">Cap: FTP funciona sobre UDP</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t2-ports" data-type="single">
-    <div class="statement">Sobre quin protocol i ports treballa DHCP?</div>
-    <button class="cq-option" data-correct="false">TCP, ports 67 i 68</button>
-    <button class="cq-option" data-correct="true">UDP, port 67 al servidor i 68 al client</button>
-    <button class="cq-option" data-correct="false">UDP, port 53 al servidor i 68 al client</button>
-    <button class="cq-option" data-correct="false">TCP, port 80 als dos extrems</button>
+  <div class="cq-question" data-id="t3-1-passiu" data-type="single">
+    <div class="statement">Un client darrere d'un router amb NAT no aconsegueix llistar el directori. Què li dius?</div>
+    <button class="cq-option" data-correct="false">Que canviï a mode text</button>
+    <button class="cq-option" data-correct="true">Que faci servir el mode passiu</button>
+    <button class="cq-option" data-correct="false">Que faci servir el mode actiu</button>
+    <button class="cq-option" data-correct="false">Que canviï el port de control al 20</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t2-discover-origen" data-type="single">
-    <div class="statement">Quina IP d'origen porta el missatge DISCOVER?</div>
-    <button class="cq-option" data-correct="false">La seva IP anterior, si en tenia</button>
-    <button class="cq-option" data-correct="true">0.0.0.0, perquè encara no en té cap</button>
-    <button class="cq-option" data-correct="false">255.255.255.255</button>
-    <button class="cq-option" data-correct="false">169.254.0.1</button>
+  <div class="cq-question" data-id="t3-1-codi" data-type="single">
+    <div class="statement">El servidor respon <code>331</code>. Què vol dir?</div>
+    <button class="cq-option" data-correct="false">Que l'operació ha acabat bé</button>
+    <button class="cq-option" data-correct="true">Que falta un pas més: espera la contrasenya</button>
+    <button class="cq-option" data-correct="false">Que hi ha un error definitiu</button>
+    <button class="cq-option" data-correct="false">Que el servidor està saturat</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t2-apipa" data-type="single">
-    <div class="statement">Un client acaba amb l'adreça 169.254.12.7. Què vol dir?</div>
-    <button class="cq-option" data-correct="false">Que el servidor DHCP li ha donat una adreça privada</button>
-    <button class="cq-option" data-correct="true">Que no ha rebut cap resposta DHCP i se l'ha posat ell sol</button>
-    <button class="cq-option" data-correct="false">Que la concessió ha caducat però encara funciona</button>
-    <button class="cq-option" data-correct="false">Que hi ha un conflicte amb un altre equip</button>
+  <div class="cq-question" data-id="t3-1-binari" data-type="single">
+    <div class="statement">Per què una imatge transferida en mode text arriba malmesa?</div>
+    <button class="cq-option" data-correct="false">Perquè es comprimeix i es perd qualitat</button>
+    <button class="cq-option" data-correct="true">Perquè es canvien els bytes de final de línia dins del fitxer</button>
+    <button class="cq-option" data-correct="false">Perquè el mode text talla el fitxer als 64 KB</button>
+    <button class="cq-option" data-correct="false">Perquè el mode text xifra el contingut</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t2-afirmacions" data-type="multi">
-    <div class="statement">Selecciona totes les afirmacions certes sobre DHCP</div>
-    <button class="cq-option" data-correct="true">Cada concessió té una durada limitada.</button>
-    <button class="cq-option" data-correct="false">El client tria lliurement la IP que vol.</button>
-    <button class="cq-option" data-correct="true">El client renova la concessió quan n'ha passat la meitat del temps.</button>
-    <button class="cq-option" data-correct="true">Una reserva associa una MAC concreta a una IP concreta.</button>
-    <button class="cq-option" data-correct="false">Una IP estàtica ha d'estar dins del rang dinàmic.</button>
+  <div class="cq-question" data-id="t3-1-afirmacions" data-type="multi">
+    <div class="statement">Selecciona totes les afirmacions certes sobre FTP</div>
+    <button class="cq-option" data-correct="true">La contrasenya viatja en text pla.</button>
+    <button class="cq-option" data-correct="true">El canal de dades s'obre i es tanca a cada transferència.</button>
+    <button class="cq-option" data-correct="true">La resposta <code>227</code> indica al client on ha d'anar a buscar les dades.</button>
+    <button class="cq-option" data-correct="false">El mode actiu és el recomanat avui dia.</button>
+    <button class="cq-option" data-correct="false">Amb la configuració de sèrie de vsftpd els usuaris ja poden pujar fitxers.</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 </div>
 
 <script>
+  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  (function () {
+    function editant(node) {
+      return node && node.closest && node.closest('[contenteditable="true"]');
+    }
+    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+      document.addEventListener(nom, function (e) {
+        if (!editant(e.target)) { e.preventDefault(); }
+      });
+    });
+  })();
+
   // Motor únic per a totes les preguntes single i multi.
   document.querySelectorAll('.cq-question').forEach(function (question) {
     var id = question.dataset.id;

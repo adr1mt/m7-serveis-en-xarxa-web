@@ -368,6 +368,21 @@
     .cq-block pre .c, .cq-block pre .o { color: #555; }
     .cq-check-btn { display: none; }
   }
+  /* ==== Contingut no copiable ====
+     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
+     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
+     queda exclòs. */
+  .cq-header, .cq-block {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  [contenteditable="true"], [contenteditable="true"] * {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    user-select: text;
+  }
+
 /* === SINAPSI-CSS FI ======================================== */
 </style>
 </head>
@@ -390,6 +405,10 @@
       <span class="ref">RA2</span>
       <span class="ttl">Serveis de resolució de noms
         <span class="sub">DNS: client, jerarquia, BIND 9, zones i transferències</span></span></a></li>
+    <li><a href="RA3/index.html">
+      <span class="ref">RA3</span>
+      <span class="ttl">Serveis de transferència de fitxers
+        <span class="sub">FTP: vsftpd, accés anònim, límits, FTPS i SFTP</span></span></a></li>
   </ul>
   <p style="margin-top:16px; color:var(--muted); font-size:.92rem">
     Els resultats d'aprenentatge següents s'aniran publicant a mesura que estiguin llestos.

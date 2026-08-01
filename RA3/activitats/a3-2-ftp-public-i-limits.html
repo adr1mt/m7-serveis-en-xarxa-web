@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Serveis en Xarxa (0227) · RA1 — DHCP</title>
+<title>A3.2 · Repositori públic i límits — Serveis en Xarxa (0227)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -388,78 +388,168 @@
 </head>
 <body>
 <header class="cq-header">
-  <div class="eyebrow">CFGM SMX · Mòdul 0227</div>
-  <h1>Serveis en Xarxa</h1>
-  <p class="lede">RA1 · Instal·lació de serveis de configuració dinàmica (DHCP)</p>
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA3 · A3.2</div>
+  <h1>Repositori públic i límits</h1>
+  <p class="lede">Publicar fitxers per a qui no té compte, i que ningú no se't mengi el servidor.</p>
 </header>
 
-<div class="cq-block" data-kind="teoria">
-  <h4>Teoria</h4>
-  <p>Llegeix-les en ordre. Cada pàgina acaba amb una guia pas a pas i un test per comprovar què has entès.</p>
-  <ul class="cq-index">
-    <li><a href="teoria/t1-0-repas-adrecament.html">
-      <span class="ref">T1.0</span>
-      <span class="ttl">Repàs d'adreçament
-        <span class="sub">IP, màscara, CIDR i rangs privats</span></span></a></li>
-    <li><a href="teoria/t1-1-configuracio-xarxa.html">
-      <span class="ref">T1.1</span>
-      <span class="ttl">Configurar la xarxa a Ubuntu Server
-        <span class="sub">Netplan i systemd-networkd</span></span></a></li>
-    <li><a href="teoria/t1-2-dhcp-fonaments.html">
-      <span class="ref">T1.2</span>
-      <span class="ttl">Fonaments de DHCP
-        <span class="sub">El procés DORA i les concessions</span></span></a></li>
-    <li><a href="teoria/t1-3-servidor-kea.html">
-      <span class="ref">T1.3</span>
-      <span class="ttl">Servidor DHCP amb Kea
-        <span class="sub">Instal·lació, configuració i reserves</span></span></a></li>
-    <li><a href="teoria/t1-4-encaminament-nat.html">
-      <span class="ref">T1.4</span>
-      <span class="ttl">Encaminament i NAT
-        <span class="sub">Donar Internet als clients amb nftables</span></span></a></li>
-  </ul>
-</div>
-
-<div class="cq-block" data-kind="activitats">
-  <h4>Activitats</h4>
+<!-- ============ OBJECTIUS ============ -->
+<div class="cq-block" data-kind="objectius">
+  <h4>Què has de saber abans de començar</h4>
   <p>
-    Cada activitat es fa sobre una <strong>màquina nova</strong> a isardVDI, amb les targetes
-    <code>puigcastellar1</code> i <code>personal1</code>.
+    Teories <strong>T3.1</strong> (modes actiu i passiu) i <strong>T3.3</strong> (accés anònim i
+    límits). Del RA1, la configuració de xarxa de la <strong>T1.1</strong>.
   </p>
-  <ul class="cq-index">
-    <li><a href="activitats/a1-1-posada-a-punt.html">
-      <span class="ref">A1.1</span>
-      <span class="ttl">Posada a punt del servidor
-        <span class="sub">Nom, hora, actualitzacions i les dues targetes</span></span></a></li>
-    <li><a href="activitats/a1-2-dhcp-systemd-networkd.html">
-      <span class="ref">A1.2</span>
-      <span class="ttl">DHCP mínim amb systemd-networkd
-        <span class="sub">Un servidor de laboratori sense instal·lar res</span></span></a></li>
-    <li><a href="activitats/a1-3-dhcp-kea.html">
-      <span class="ref">A1.3</span>
-      <span class="ttl">Servidor DHCP amb Kea
-        <span class="sub">Reserves, IP forwarding i sortida a Internet</span></span></a></li>
-    <li><a href="activitats/a1-4-kea-escala-reserves.html">
-      <span class="ref">A1.4</span>
-      <span class="ttl">DHCP per a 2000 equips
-        <span class="sub">Dimensionar una xarxa /16 amb reserves</span></span></a></li>
-  </ul>
+  <p>
+    Amb aquesta activitat publicaràs un repositori obert de només lectura, hi posaràs límits de
+    connexions i de velocitat, i comprovaràs de veritat la diferència entre el mode actiu i el
+    passiu.
+  </p>
 </div>
 
-<div class="cq-block" data-kind="ordre recomanat">
-  <h4>En quin ordre fer-ho</h4>
-  <p>La teoria i les activitats estan pensades per alternar-se, no per fer-les en dos blocs separats:</p>
+<!-- ============ ESCENARI ============ -->
+<div class="cq-block" data-kind="escenari">
+  <h4>Amb què treballaràs</h4>
   <div class="cq-tablewrap">
     <table class="cq-table">
-      <thead><tr><th>Primer llegeix</th><th>I després fes</th></tr></thead>
+      <thead><tr><th>Màquina</th><th>Targetes</th><th>Adreça</th></tr></thead>
       <tbody>
-        <tr><td>T1.0 · T1.1</td><td>A1.1 — posada a punt</td></tr>
-        <tr><td>T1.2</td><td>A1.2 — DHCP mínim</td></tr>
-        <tr><td>T1.3 · T1.4</td><td>A1.3 — DHCP amb Kea</td></tr>
-        <tr><td>—</td><td>A1.4 — DHCP a escala</td></tr>
+        <tr><td>Ubuntu <strong>Server</strong></td><td>puigcastellar1 + personal1</td><td><code>192.168.1.8/24</code> a personal1</td></tr>
+        <tr><td>Ubuntu <strong>Desktop</strong></td><td>només personal1</td><td><code>192.168.1.100/24</code>, fixa</td></tr>
       </tbody>
     </table>
   </div>
+  <p>
+    <strong>Màquina nova</strong> a isardVDI: aquesta activitat no continua l'anterior. Hi tornaràs
+    a instal·lar vsftpd des de zero, però ara amb un altre objectiu.
+  </p>
+</div>
+
+<!-- ============ ENUNCIAT ============ -->
+<div class="cq-block" data-kind="enunciat">
+  <h4>Què has de fer</h4>
+  <ol>
+    <li>Muntar un servidor FTP amb <strong>accés anònim</strong> de només lectura sobre un directori públic.</li>
+    <li>Deixar-hi contingut: com a mínim una carpeta amb documents i un fitxer gran per provar velocitats.</li>
+    <li>Mantenir també <strong>un compte amb nom</strong> que sí que pugui pujar fitxers.</li>
+    <li>Aplicar els <strong>límits</strong> de la taula, diferents per a l'anònim i per a l'usuari.</li>
+    <li>Comprovar l'accés en <strong>mode actiu i en mode passiu</strong>, i documentar la diferència.</li>
+  </ol>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Límit</th><th>Anònim</th><th>Usuari amb compte</th></tr></thead>
+      <tbody>
+        <tr><td>Sessions des de la mateixa IP</td><td>2</td><td>4</td></tr>
+        <tr><td>Velocitat màxima</td><td>500 KB/s</td><td>2 MB/s</td></tr>
+        <tr><td>Sessions simultànies al servidor</td><td colspan="2">20 en total</td></tr>
+        <tr><td>Temps sense escriure cap ordre</td><td colspan="2">2 minuts</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ============ ON BUSCAR ============ -->
+<div class="cq-block" data-kind="enunciat">
+  <h4>D'on has de treure cada cosa</h4>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Què has de fer</th><th>On ho tens</th></tr></thead>
+      <tbody>
+        <tr><td>Activar l'anònim i triar-ne el directori</td><td>Teoria <strong>T3.3</strong></td></tr>
+        <tr><td>Permisos del directori públic</td><td>Teoria <strong>T3.3</strong>, pas a pas</td></tr>
+        <tr><td>Les cinc directives de límits</td><td>Teoria <strong>T3.3</strong>, taula de límits</td></tr>
+        <tr><td>Canviar de mode al client</td><td>Teoria <strong>T3.1</strong>, ordre <code>passive</code></td></tr>
+        <tr><td>Fabricar un fitxer gran</td><td>Teoria <strong>T3.3</strong>, pas a pas</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    Els límits de la taula estan en unitats humanes. A la configuració van en bytes per segon i en
+    segons: la conversió la fas tu.
+  </p>
+</div>
+
+<!-- ============ RECORDATORI ============ -->
+<div class="cq-block" data-kind="recordatori">
+  <h4>Anònim vol dir públic, i només de lectura</h4>
+  <p>
+    Tot el que deixis al directori anònim se'l pot baixar qualsevol persona de la xarxa sense
+    identificar-se. No hi posis res que no sigui per publicar.
+  </p>
+  <p>
+    I no activis les pujades anònimes. Si has de rebre fitxers de fora, es fa amb un compte amb
+    nom, encara que sigui temporal: a la teoria tens per què.
+  </p>
+</div>
+
+<!-- ============ OBSERVACIÓ ============ -->
+<div class="cq-block" data-kind="observació">
+  <h4>Com demostres que un límit funciona</h4>
+  <p>
+    Un límit que no has provat no compta. Per a cadascun has de tenir una <strong>evidència</strong>:
+    el missatge del servidor quan se supera, o una mesura que canvia.
+  </p>
+  <p>
+    Pensa abans com ho faràs. Per al límit per adreça necessites diverses sessions obertes alhora;
+    per al de velocitat, un fitxer prou gran perquè la mesura sigui estable; per al de temps, un
+    rellotge i paciència.
+  </p>
+</div>
+
+<!-- ============ COMPROVACIÓ ============ -->
+<div class="cq-block" data-kind="comprovació">
+  <h4>Com sabràs que ho has fet bé</h4>
+  <ul>
+    <li>Un anònim pot llistar i baixar el contingut públic, i no pot pujar res.</li>
+    <li>L'usuari amb compte sí que puja fitxers, i no veu el directori públic com a seu.</li>
+    <li>La tercera sessió anònima des de la mateixa màquina és rebutjada.</li>
+    <li>El mateix fitxer baixa clarament més de pressa amb el compte que com a anònim.</li>
+    <li>Una sessió aturada dos minuts es talla sola.</li>
+    <li>La connexió funciona en <strong>mode passiu</strong> i en <strong>mode actiu</strong>, i saps explicar què fa cadascun.</li>
+  </ul>
+</div>
+
+<!-- ============ PROBLEMES ============ -->
+<div class="cq-block" data-kind="problemes">
+  <h4>Si alguna cosa no va</h4>
+  <dl class="cq-issues">
+    <dt>El servei no arrenca en activar l'anònim</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> El directori públic és escrivible per l'usuari <code>ftp</code>.</p>
+      <p><span class="lbl">Solució</span> Arrel de <code>root</code> i no escrivible; el contingut, a dins.</p>
+    </dd>
+
+    <dt>L'anònim entra però el directori li surt buit</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Els fitxers no són llegibles per tothom.</p>
+      <p><span class="lbl">Solució</span> Revisa els permisos del contingut, no els de la configuració.</p>
+    </dd>
+
+    <dt>La velocitat surt igual amb compte i sense</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> El fitxer és massa petit, o estàs connectant sempre amb el mateix tipus d'usuari.</p>
+      <p><span class="lbl">Solució</span> Fitxer de 100 MB i comprova amb quin compte has entrat cada vegada.</p>
+    </dd>
+
+    <dt>En mode actiu el llistat es queda penjat</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> És el comportament esperat en moltes situacions: el servidor no arriba a connectar amb el client.</p>
+      <p><span class="lbl">Solució</span> No ho arreglis: documenta-ho. És justament el que has de saber explicar.</p>
+    </dd>
+  </dl>
+</div>
+
+<!-- ============ LLIURAMENT ============ -->
+<div class="cq-block" data-kind="lliurament">
+  <h4>Què has d'entregar</h4>
+  <p>
+    Un <strong>document tècnic</strong> amb la configuració, els permisos del directori públic i
+    una evidència per a cada límit de la taula: captura, missatge d'error o mesura de velocitat.
+  </p>
+  <p>
+    Respon-hi també, amb les teves paraules: <strong>per què el mode actiu falla quan el client és
+    darrere d'un router i el passiu no? Explica-ho amb el que has vist tu.</strong>
+  </p>
 </div>
 
 <script>

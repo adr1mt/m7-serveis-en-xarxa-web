@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>A7 · DHCP i DNS treballant junts — Serveis en Xarxa (0227)</title>
+<title>A2.4 · Zona secundària per parelles — Serveis en Xarxa (0227)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -368,46 +368,65 @@
     .cq-block pre .c, .cq-block pre .o { color: #555; }
     .cq-check-btn { display: none; }
   }
+  /* ==== Contingut no copiable ====
+     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
+     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
+     queda exclòs. */
+  .cq-header, .cq-block {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  [contenteditable="true"], [contenteditable="true"] * {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    user-select: text;
+  }
+
 /* === SINAPSI-CSS FI ======================================== */
 </style>
 </head>
 <body>
 <header class="cq-header">
-  <div class="eyebrow">0227 · Serveis en Xarxa · RA2 · Activitat 7</div>
-  <h1>DHCP i DNS treballant junts</h1>
-  <p class="lede">El client s'endolla, rep adreça i DNS, resol els teus noms i surt a Internet.</p>
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA2 · A2.4</div>
+  <h1>Zona secundària per parelles</h1>
+  <p class="lede">La teva zona, servida també des del servidor d'un company.</p>
 </header>
 
 <!-- ============ OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
   <h4>Què has de saber abans de començar</h4>
   <p>
-    Del RA1: <strong>T3</strong> (Kea) i <strong>T4</strong> (encaminament i NAT). D'aquest RA:
-    <strong>T7</strong> i <strong>T8</strong>, i tenir feta l'activitat <strong>6</strong>.
+    Teoria <strong>T2.5</strong> (primari i secundari), i tenir feta l'activitat
+    <strong>6</strong>: cal una zona pròpia funcionant per poder-la transferir.
   </p>
   <p>
-    Amb aquesta activitat aprendràs a integrar els dos serveis del mòdul: el DHCP reparteix la
-    configuració i, dins d'aquesta configuració, hi va el teu propi servidor DNS. El client no
-    s'ha de tocar.
+    Amb aquesta activitat aprendràs a replicar una zona entre dos servidors. Cadascú serà
+    <strong>primari de la seva zona i secundari de la del company</strong>, que és exactament com
+    es fa a la realitat.
   </p>
 </div>
 
 <!-- ============ ESCENARI ============ -->
 <div class="cq-block" data-kind="escenari">
   <h4>Amb què treballaràs</h4>
+  <p>
+    Es treballa <strong>per parelles</strong>. Els dos servidors han de veure's per xarxa, així
+    que aquesta vegada tots dos van a la <strong>mateixa xarxa</strong>: poseu-vos d'acord amb el
+    professor sobre quina targeta feu servir i quina adreça pren cadascú.
+  </p>
   <div class="cq-tablewrap">
     <table class="cq-table">
-      <thead><tr><th>Màquina</th><th>Targetes</th><th>Paper</th></tr></thead>
+      <thead><tr><th>Màquina</th><th>És primari de</th><th>És secundari de</th></tr></thead>
       <tbody>
-        <tr><td>Ubuntu <strong>Server</strong></td><td>puigcastellar1 + personal1</td><td>DNS, DHCP i porta d'enllaç</td></tr>
-        <tr><td>Ubuntu <strong>Desktop</strong></td><td>només personal1</td><td>Client, sense configurar res</td></tr>
+        <tr><td>El teu servidor</td><td><code>elteunom.internal</code></td><td>La zona del company</td></tr>
+        <tr><td>El del company</td><td><code>elseunom.internal</code></td><td>La teva zona</td></tr>
       </tbody>
     </table>
   </div>
   <p>
-    Comença amb una <strong>màquina nova</strong> a isardVDI i torna-hi a muntar el BIND de
-    l'activitat 6: amb el teu document al davant són cinc minuts, i és la millor manera de
-    comprovar que allò que vas escriure serveix.
+    Cada servidor manté una zona i en copia una altra. Comproveu-ho tots dos: l'activitat no està
+    feta fins que funciona en els dos sentits.
   </p>
 </div>
 
@@ -415,38 +434,27 @@
 <div class="cq-block" data-kind="enunciat">
   <h4>Què has de fer</h4>
   <ol>
-    <li>Deixar el servidor com al final de l'activitat 6: <code>192.168.1.8/24</code> a <code>personal1</code> i la teva zona funcionant.</li>
-    <li>Instal·lar <strong>Kea</strong> i repartir adreces per a la xarxa <code>192.168.1.0/24</code>, amb el rang que decideixis.</li>
-    <li>Repartir com a DNS <strong>el teu propi servidor</strong> i com a domini <code>elteunom.internal</code>.</li>
-    <li>Ampliar la zona amb els registres de la taula, i els seus PTR a la inversa.</li>
-    <li>Activar l'<strong>encaminament i el NAT</strong> perquè el client tingui Internet.</li>
+    <li>Posar-vos d'acord en les adreces dels dos servidors i comprovar que us feu <code>ping</code>.</li>
+    <li>Afegir a la teva zona un registre <strong>NS per al servidor del company</strong>, i el seu registre A si cal.</li>
+    <li>Autoritzar <strong>només</strong> el servidor del company a endur-se la teva zona, i avisar-lo dels canvis.</li>
+    <li>Declarar al teu servidor la zona del company com a <strong>secundària</strong>, sense escriure'n cap fitxer.</li>
+    <li>Demostrar que la rèplica funciona: un canvi al primari s'ha de veure al secundari.</li>
   </ol>
-  <div class="cq-tablewrap">
-    <table class="cq-table">
-      <thead><tr><th>Nom</th><th>Tipus</th><th>Valor</th></tr></thead>
-      <tbody>
-        <tr><td><code>maquina1</code></td><td>A</td><td><code>192.168.1.20</code></td></tr>
-        <tr><td><code>servidor2</code></td><td>A</td><td><code>192.168.1.21</code></td></tr>
-        <tr><td><code>intranet</code></td><td>CNAME</td><td>Àlies de <code>maquina1</code></td></tr>
-        <tr><td>La zona</td><td>TXT</td><td>Un missatge breu teu</td></tr>
-      </tbody>
-    </table>
-  </div>
 </div>
 
 <!-- ============ ON BUSCAR ============ -->
 <div class="cq-block" data-kind="enunciat">
   <h4>D'on has de treure cada cosa</h4>
-  <p>Tot això ja ho has fet abans, en activitats diferents. Aquí ho ajuntes:</p>
+  <p>Les comandes no te les donem fetes; sí que et diem on trobar-les:</p>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Què has de fer</th><th>On ho tens</th></tr></thead>
       <tbody>
-        <tr><td>BIND, zona directa i inversa</td><td>Teories <strong>T7</strong> i <strong>T8</strong>, activitat <strong>6</strong></td></tr>
-        <tr><td>Instal·lar i configurar Kea</td><td>Teoria <strong>T3</strong> del RA1</td></tr>
-        <tr><td>Opcions que reparteix el DHCP</td><td><code>domain-name-servers</code> i <code>domain-name</code>, a la T3</td></tr>
-        <tr><td>IP forwarding i NAT amb nftables</td><td>Teoria <strong>T4</strong> del RA1</td></tr>
-        <tr><td>Comprovar què ha rebut el client</td><td>Teoria <strong>T5</strong> d'aquest RA</td></tr>
+        <tr><td>Declarar primari i secundari</td><td>Teoria <strong>T2.5</strong>, bloc d'exemple</td></tr>
+        <tr><td>Autoritzar i notificar</td><td><code>allow-transfer</code> i <code>also-notify</code>, a la T2.5</td></tr>
+        <tr><td>On desa el fitxer el secundari</td><td>Teoria <strong>T2.5</strong>, taula dels dos papers</td></tr>
+        <tr><td>Provar la transferència a mà</td><td><code>dig</code> amb el tipus <code>AXFR</code></td></tr>
+        <tr><td>Forçar una descàrrega</td><td><code>rndc</code>, a la taula del resum de la T2.5</td></tr>
       </tbody>
     </table>
   </div>
@@ -454,26 +462,29 @@
 
 <!-- ============ RECORDATORI ============ -->
 <div class="cq-block" data-kind="recordatori">
-  <h4>Dos serveis, la mateixa regla</h4>
+  <h4>Autoritza el company, no tothom</h4>
   <p>
-    Ni Kea ni BIND han d'escoltar per <code>puigcastellar1</code>. Un DHCP furtiu deixa companys
-    sense adreça i un resolutor obert és un problema de seguretat. Tots dos serveis, només per
-    <code>personal1</code>.
+    És temptador posar <code>allow-transfer { any; };</code> perquè funcioni de seguida. No ho
+    facis: qui es descarrega la teva zona obté el mapa sencer de la teva xarxa. Posa-hi la IP del
+    company i prou, i explica-ho al document.
   </p>
 </div>
 
 <!-- ============ OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h4>Els dos serveis s'han de posar d'acord</h4>
+  <h4>Com demostrar que la rèplica és de veritat</h4>
   <p>
-    <strong>El rang i els registres no s'han de trepitjar.</strong> Si Kea pot donar la
-    <code>192.168.1.20</code> a qualsevol portàtil, el nom <code>maquina1</code> apuntarà a una
-    màquina que no toca. Decideix on comença el rang i deixa les adreces amb nom fora.
+    Que el secundari respongui no vol dir gran cosa: potser el que veus és la resposta del
+    primari. La prova bona té tres passos.
   </p>
+  <ol>
+    <li>Pregunta el <strong>serial</strong> de la zona als dos servidors: han de coincidir.</li>
+    <li>Al primari, canvia un registre i <strong>apuja el serial</strong>.</li>
+    <li>Torna a preguntar als dos: el secundari ha de servir el valor nou, ell sol.</li>
+  </ol>
   <p>
-    <strong>Aquí no hi ha DNS dinàmic.</strong> Kea no escriu res a la teva zona: els noms els
-    poses tu a mà. Que un client rebi adreça no vol dir que tingui nom, i és el motiu pel qual
-    les màquines importants es reserven per MAC.
+    Si no canvia, mira els registres del servei del secundari abans de tocar res: t'hi dirà si la
+    transferència s'ha intentat i per què ha fallat.
   </p>
 </div>
 
@@ -485,11 +496,11 @@
     la sortida d'una comanda al davant:
   </p>
   <ul>
-    <li>El client, <strong>sense tocar-hi res</strong>, rep adreça del teu rang, la teva porta d'enllaç i el teu DNS.</li>
-    <li>Els registres del servidor mostren la concessió, i <code>resolvectl status</code> al client mostra el teu servidor i el teu domini.</li>
-    <li>Des del client es resolen <code>maquina1</code>, l'àlies <code>intranet</code>, el registre TXT i la inversa.</li>
-    <li>Des del client es resolen també noms d'Internet.</li>
-    <li>El client fa <code>ping</code> a una IP d'Internet i a un nom de domini.</li>
+    <li>La teva zona té un registre NS per a cada servidor, i <code>named-checkzone</code> no es queixa.</li>
+    <li>El fitxer de la zona secundària <strong>ha aparegut sol</strong> a la teva màquina.</li>
+    <li>Els dos servidors responen la mateixa zona amb el mateix serial.</li>
+    <li>Un canvi al primari arriba al secundari sense que ningú hi copiï res.</li>
+    <li>Un tercer equip que no sigui el company <strong>no</strong> es pot descarregar la teva zona.</li>
   </ul>
 </div>
 
@@ -497,28 +508,22 @@
 <div class="cq-block" data-kind="problemes">
   <h4>Si alguna cosa no va</h4>
   <dl class="cq-issues">
-    <dt>El client rep IP i DNS correctes, però no resol els teus noms</dt>
+    <dt><code>Transfer failed</code> als registres del secundari</dt>
     <dd>
-      <p><span class="lbl">Causa</span> Gairebé sempre, el domini. Si l'has batejat <code>.local</code>, la consulta se'n va per mDNS i no arriba al teu servidor.</p>
-      <p><span class="lbl">Solució</span> Fes servir <code>.internal</code>. Comprova primer amb <code>dig @elteuservidor nom</code>: si el servidor respon i el client no, el problema és del client, no de la zona.</p>
+      <p><span class="lbl">Causa</span> El primari no autoritza aquella IP, o no us arribeu pel port 53 TCP.</p>
+      <p><span class="lbl">Solució</span> Prova la transferència a mà amb <code>dig</code>. Si tampoc va, el problema és de l'autorització o de la xarxa, no de la declaració de la zona.</p>
     </dd>
 
-    <dt>El client no fa cas del DNS que li has repartit</dt>
+    <dt>El secundari no actualitza els canvis</dt>
     <dd>
-      <p><span class="lbl">Causa</span> El fitxer <code>/etc/resolv.conf</code> del client no apunta al servei de systemd-resolved.</p>
-      <p><span class="lbl">Solució</span> Comprova <code>resolvectl status</code> i que <code>/etc/resolv.conf</code> sigui l'enllaç que gestiona el sistema. Si algú l'ha substituït per un fitxer normal, aquell fitxer mana.</p>
+      <p><span class="lbl">Causa</span> El serial no ha pujat al primari.</p>
+      <p><span class="lbl">Solució</span> Compara els serials dels dos servidors. Si són iguals, el problema és al primari.</p>
     </dd>
 
-    <dt>Resol noms però no navega</dt>
+    <dt>El servei del secundari es queixa en escriure el fitxer</dt>
     <dd>
-      <p><span class="lbl">Causa</span> Falta l'encaminament o el NAT.</p>
-      <p><span class="lbl">Solució</span> Prova per capes des del client: porta d'enllaç, <code>ping</code> al servidor, <code>ping</code> a una IP d'Internet i <code>ping</code> a un nom.</p>
-    </dd>
-
-    <dt>Un nom apunta a la màquina equivocada</dt>
-    <dd>
-      <p><span class="lbl">Causa</span> L'adreça del registre cau dins del rang que reparteix Kea.</p>
-      <p><span class="lbl">Solució</span> Treu-la del rang o reserva-la per MAC, i apuja el serial de la zona.</p>
+      <p><span class="lbl">Causa</span> Has posat el fitxer en un camí on el servei no pot escriure.</p>
+      <p><span class="lbl">Solució</span> Les zones secundàries van a la carpeta que fa servir BIND per al que escriu ell.</p>
     </dd>
   </dl>
 </div>
@@ -528,15 +533,28 @@
   <h4>Què has d'entregar</h4>
   <p>
     Un <strong>document tècnic</strong> on expliquis tot el que has anat fent, amb els teus
-    fitxers de configuració i les captures del resultat.
+    fitxers de configuració i les captures del resultat. Indica-hi amb qui has treballat i quina
+    adreça tenia cada servidor.
   </p>
   <p>
-    Respon-hi també, amb les teves paraules: <strong>per què el client acaba fent servir el teu
-    DNS sense que ningú l'hi hagi configurat?</strong>
+    Respon-hi també, amb les teves paraules: <strong>per què el secundari respon amb la mateixa
+    autoritat que el primari, si les dades no són seves?</strong>
   </p>
 </div>
 
 <script>
+  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  (function () {
+    function editant(node) {
+      return node && node.closest && node.closest('[contenteditable="true"]');
+    }
+    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+      document.addEventListener(nom, function (e) {
+        if (!editant(e.target)) { e.preventDefault(); }
+      });
+    });
+  })();
+
   // Motor únic per a totes les preguntes single i multi.
   document.querySelectorAll('.cq-question').forEach(function (question) {
     var id = question.dataset.id;

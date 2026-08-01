@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>T8 · Zones i registres — Serveis en Xarxa (0227)</title>
+<title>T2.2 · L'arbre del DNS — Serveis en Xarxa (0227)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -368,344 +368,348 @@
     .cq-block pre .c, .cq-block pre .o { color: #555; }
     .cq-check-btn { display: none; }
   }
+  /* ==== Contingut no copiable ====
+     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
+     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
+     queda exclòs. */
+  .cq-header, .cq-block {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  [contenteditable="true"], [contenteditable="true"] * {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    user-select: text;
+  }
+
 /* === SINAPSI-CSS FI ======================================== */
 </style>
 </head>
 <body>
 <header class="cq-header">
-  <div class="eyebrow">0227 · Serveis en Xarxa · RA2 · Teoria 8</div>
-  <h1>Zones i registres</h1>
-  <p class="lede">Donar noms propis a la teva xarxa: zona directa, zona inversa i tipus de registre.</p>
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA2 · T2.2</div>
+  <h1>L'arbre del DNS</h1>
+  <p class="lede">Com és possible que un sistema amb milers de milions de noms respongui en mil·lisegons.</p>
 </header>
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
   <h4>Què sabràs fer en acabar</h4>
   <ul>
-    <li>Declarar una zona directa i una d'inversa a BIND.</li>
-    <li>Escriure un fitxer de zona amb el registre <strong>SOA</strong> ben posat.</li>
-    <li>Distingir els registres A, PTR, CNAME, MX, TXT i NS.</li>
-    <li>Recordar per què el <strong>punt final</strong> canvia el significat d'un nom.</li>
-    <li>Validar la zona i recarregar-la sense aturar el servei.</li>
+    <li>Llegir un nom de domini d'esquerra a dreta i saber què és cada part.</li>
+    <li>Explicar què és una zona d'autoritat i què és una delegació.</li>
+    <li>Distingir un servidor <strong>recursiu</strong> d'un d'<strong>autoritatiu</strong>.</li>
+    <li>Seguir una resolució sencera amb <code>dig +trace</code>.</li>
+    <li>Entendre el paper del TTL i de la memòria cau.</li>
   </ul>
 </div>
 
-<!-- ============ 2 · DUES ZONES ============ -->
+<!-- ============ 2 · L'ARBRE ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Dues zones per a la mateixa xarxa</h4>
+  <h4>Una base de dades reparida entre tots</h4>
   <p>
-    Fins ara el teu servidor repetia el que deien els altres. Ara tindrà dades pròpies: serà
-    <strong>autoritatiu</strong> d'una zona teva.
+    Ningú té la llista sencera de noms d'Internet: seria impossible de mantenir. El DNS és una
+    base de dades <strong>distribuïda i jeràrquica</strong>, en forma d'arbre invertit.
+  </p>
+  <p>
+    A dalt hi ha l'<strong>arrel</strong>, que s'escriu amb un punt sol: <code>.</code>. Per sota,
+    els dominis de primer nivell o <strong>TLD</strong> (<code>.net</code>, <code>.cat</code>,
+    <code>.es</code>). Per sota, els dominis registrats, i encara més avall els subdominis.
+  </p>
+  <p>
+    Un nom es llegeix <strong>de dreta a esquerra</strong>, de més general a més concret. A
+    <code>moodle.elpuig.xeill.net</code>, el TLD és <code>.net</code>, el domini és
+    <code>xeill.net</code>, el subdomini <code>elpuig</code> i la màquina <code>moodle</code>.
+  </p>
+</div>
+
+<!-- ============ 3 · ZONES I DELEGACIÓ ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>Zones d'autoritat i delegació</h4>
+  <p>
+    Cada tros de l'arbre té un responsable. Aquest tros es diu <strong>zona d'autoritat</strong>:
+    el conjunt de noms dels quals un servidor concret té les dades bones.
+  </p>
+  <p>
+    Quan el responsable d'una zona vol que una branca la gestioni algú altre, la
+    <strong>delega</strong>: hi deixa un registre que diu «per a tot això, pregunta a aquell
+    servidor». Així els servidors arrel deleguen cada TLD, i el responsable de
+    <code>xeill.net</code> pot delegar <code>elpuig.xeill.net</code>.
+  </p>
+  <p>
+    Aquesta és la clau de tot: <strong>ningú ho sap tot, però tothom sap a qui preguntar</strong>.
+    El sistema creix sense que cap servidor s'hagi de fer més gran.
+  </p>
+</div>
+
+<!-- ============ 4 · DOS TIPUS DE SERVIDOR ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>Recursiu o autoritatiu</h4>
+  <p>
+    Es diuen tots dos «servidor DNS», però fan feines oposades. No confondre'ls és el que més
+    ajuda a entendre el servei.
   </p>
   <div class="cq-tablewrap">
     <table class="cq-table">
-      <thead><tr><th>Zona</th><th>Respon a</th><th>Es diu</th></tr></thead>
+      <thead><tr><th></th><th>Recursiu</th><th>Autoritatiu</th></tr></thead>
       <tbody>
-        <tr><td><strong>Directa</strong></td><td>«Quina IP té aquest nom?»</td><td><code>adria.internal</code></td></tr>
-        <tr><td><strong>Inversa</strong></td><td>«Quin nom té aquesta IP?»</td><td><code>1.168.192.in-addr.arpa</code></td></tr>
+        <tr><td><strong>A qui serveix</strong></td><td>Als clients de la seva xarxa</td><td>A tot Internet</td></tr>
+        <tr><td><strong>Què sap</strong></td><td>Res propi: ho va a buscar</td><td>Només la seva zona</td></tr>
+        <tr><td><strong>Té memòria cau</strong></td><td>Sí, és la seva raó de ser</td><td>No li cal</td></tr>
+        <tr><td><strong>Exemple</strong></td><td><code>9.9.9.9</code>, el del teu centre</td><td>Els que responen per <code>upc.edu</code></td></tr>
       </tbody>
     </table>
   </div>
   <p>
-    El nom de la zona inversa és la <strong>xarxa escrita al revés</strong> seguida de
-    <code>in-addr.arpa</code>. Per a <code>192.168.1.0/24</code>, els tres primers octets girats:
-    <code>1.168.192</code>. Fa estrany, però té sentit: així les adreces també es llegeixen de
-    general a concret, com els noms.
+    A les activitats el teu BIND farà <strong>totes dues coses</strong>: recursiu per als clients
+    de <code>personal1</code> i autoritatiu de la teva zona.
   </p>
 </div>
 
-<!-- ============ 3 · DECLARAR-LES ============ -->
-<div class="cq-block" data-kind="teoria">
-  <h4>Declarar les zones</h4>
-  <p>
-    Les zones es declaren a <code>named.conf.local</code>. Cada declaració diu tres coses: com es
-    diu la zona, quin paper hi fa aquest servidor i on són les dades.
-  </p>
-<pre>zone "adria.internal" {
-    type primary;
-    file "/etc/bind/zones/db.adria.internal";
-};
-
-zone "1.168.192.in-addr.arpa" {
-    type primary;
-    file "/etc/bind/zones/db.192.168.1";
-};</pre>
-  <p>
-    <code>type primary</code> vol dir que aquest servidor té l'original, escrit per tu. La
-    documentació antiga en diu <code>master</code>: és el mateix, però el nom vigent és
-    <code>primary</code>.
-  </p>
-</div>
-
-<!-- ============ 4 · EL SOA ============ -->
-<div class="cq-block" data-kind="teoria">
-  <h4>La capçalera de tota zona: el registre SOA</h4>
-  <p>
-    Tot fitxer de zona comença igual: el TTL per defecte i un registre <strong>SOA</strong>
-    (<em>Start Of Authority</em>), que declara qui mana a la zona i cada quan s'ha de revisar.
-  </p>
-  <div class="cq-tablewrap">
-    <table class="cq-table">
-      <thead><tr><th>Camp</th><th>Què vol dir</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Serial</strong></td><td>Número de versió. <strong>S'ha d'apujar a cada canvi</strong></td></tr>
-        <tr><td><strong>Refresh</strong></td><td>Cada quant el secundari pregunta si hi ha novetats</td></tr>
-        <tr><td><strong>Retry</strong></td><td>Cada quant torna a provar si ha fallat</td></tr>
-        <tr><td><strong>Expire</strong></td><td>Quan el secundari deixa de servir dades velles</td></tr>
-        <tr><td><strong>Minimum</strong></td><td>Quant es guarden les respostes negatives</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <p>
-    El serial és el camp que més maldecaps dona: si no l'apuges, el secundari
-    <strong>no s'assabenta de res</strong>. El format recomanat és
-    <code>AAAAMMDDNN</code>.
-  </p>
-</div>
-
-<!-- ============ 5 · EXEMPLE DIRECTA ============ -->
+<!-- ============ 5 · EXEMPLE ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h4>Fitxer de zona directa</h4>
-  <p>Per a <code>adria.internal</code>, amb el servidor a la <code>192.168.1.8</code>:</p>
-<pre>$TTL 600
-@   IN  SOA ns1.adria.internal. admin.adria.internal. (
-            2026080101  <span class="c">; Serial</span>
-            3600        <span class="c">; Refresh</span>
-            1800        <span class="c">; Retry</span>
-            604800      <span class="c">; Expire</span>
-            600 )       <span class="c">; Minimum</span>
-
-@       IN  NS      ns1.adria.internal.
-ns1     IN  A       192.168.1.8
-www     IN  A       192.168.1.8
-portatil IN A       192.168.1.50
-intranet IN CNAME   www.adria.internal.
-@       IN  MX  10  correu.adria.internal.
-correu  IN  A       192.168.1.9
-@       IN  TXT     "Xarxa interna de proves"</pre>
+  <h4>Una resolució, salt a salt</h4>
   <p>
-    La <code>@</code> vol dir «la zona sencera», aquí <code>adria.internal.</code>. I el correu
-    de l'administrador s'escriu amb un punt on aniria l'arrova:
-    <code>admin.adria.internal.</code> és <code>admin@adria.internal</code>.
+    Preguntes per <code>moodle.elpuig.xeill.net</code> i el recursiu no en sap res. Comença per
+    dalt i va baixant:
   </p>
-</div>
-
-<!-- ============ 6 · EL PUNT FINAL ============ -->
-<div class="cq-block" data-kind="recordatori">
-  <h4>El punt final no és decoració</h4>
-  <p>
-    Un nom acabat en punt és <strong>absolut</strong>: es fa servir tal com és. Un nom sense punt
-    és <strong>relatiu</strong>: BIND hi enganxa el nom de la zona al darrere.
-  </p>
-  <p>
-    Per això <code>www</code> dins de <code>adria.internal</code> vol dir
-    <code>www.adria.internal.</code>, però si escrius <code>www.adria.internal</code> sense punt,
-    acabes amb <code>www.adria.internal.adria.internal.</code>, que no existeix. És l'error més
-    freqüent de tots.
-  </p>
-</div>
-
-<!-- ============ 7 · REGISTRES ============ -->
-<div class="cq-block" data-kind="teoria">
-  <h4>Els tipus de registre que faràs servir</h4>
-  <div class="cq-tablewrap">
-    <table class="cq-table">
-      <thead><tr><th>Tipus</th><th>Per a què</th></tr></thead>
-      <tbody>
-        <tr><td><strong>A</strong></td><td>Nom → adreça IPv4</td></tr>
-        <tr><td><strong>AAAA</strong></td><td>Nom → adreça IPv6</td></tr>
-        <tr><td><strong>PTR</strong></td><td>Adreça → nom, a la zona inversa</td></tr>
-        <tr><td><strong>CNAME</strong></td><td>Àlies: un nom que apunta a un altre nom</td></tr>
-        <tr><td><strong>MX</strong></td><td>Qui rep el correu del domini, amb prioritat</td></tr>
-        <tr><td><strong>NS</strong></td><td>Quins servidors tenen l'autoritat de la zona</td></tr>
-        <tr><td><strong>TXT</strong></td><td>Text lliure. S'usa per a verificacions i antispam</td></tr>
-      </tbody>
-    </table>
+  <div class="dora-flow">
+    <div class="dora-step">
+      <div class="n">01</div>
+      <div class="t">ARREL</div>
+      <div class="d">«Jo no ho sé, però de <code>.net</code> se n'encarreguen aquests.»</div>
+    </div>
+    <div class="dora-arrow">→</div>
+    <div class="dora-step">
+      <div class="n">02</div>
+      <div class="t">TLD .net</div>
+      <div class="d">«De <code>xeill.net</code>, pregunta a aquells altres.»</div>
+    </div>
+    <div class="dora-arrow">→</div>
+    <div class="dora-step">
+      <div class="n">03</div>
+      <div class="t">AUTORITATIU</div>
+      <div class="d">«L'adreça de <code>moodle</code> és aquesta.»</div>
+    </div>
   </div>
+  <p>Ho pots veure tu mateix, salt per salt:</p>
+<pre>dig moodle.elpuig.xeill.net +trace</pre>
   <p>
-    Dues regles: un <strong>CNAME apunta a un nom</strong>, mai a una IP, i el
-    <strong>MX també</strong> ha d'apuntar a un nom que tingui el seu registre A.
+    Tres consultes per a una resposta. Per això <strong>la memòria cau és imprescindible</strong>:
+    la segona vegada, res d'això torna a passar.
   </p>
 </div>
 
-<!-- ============ 8 · EXEMPLE INVERSA ============ -->
-<div class="cq-block" data-kind="exemple">
-  <h4>Fitxer de zona inversa</h4>
-  <p>Les mateixes màquines, al revés. Aquí el número de l'esquerra és l'últim octet:</p>
-<pre>$TTL 600
-@   IN  SOA ns1.adria.internal. admin.adria.internal. (
-            2026080101 3600 1800 604800 600 )
-
-@       IN  NS      ns1.adria.internal.
-8       IN  PTR     ns1.adria.internal.
-9       IN  PTR     correu.adria.internal.
-50      IN  PTR     portatil.adria.internal.</pre>
+<!-- ============ 6 · TTL I CAU ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>El TTL: quant dura una resposta</h4>
   <p>
-    Els noms de la dreta van <strong>tots amb punt final</strong>: són d'una altra zona. I fixa't
-    que <code>www</code> no hi surt: la inversa dona <em>un</em> nom per adreça, i el bo és el de
-    la màquina, no el de l'àlies.
+    Cada resposta DNS ve amb un <strong>TTL</strong> (<em>Time To Live</em>), en segons. És el
+    temps que qui la rep la pot guardar abans de tornar a preguntar. El decideix
+    <strong>l'amo de la zona</strong>, no qui pregunta.
+  </p>
+  <p>Té una conseqüència pràctica que et trobaràs sempre:</p>
+  <ul>
+    <li>TTL <strong>alt</strong> (hores): menys consultes, però els canvis triguen a veure's.</li>
+    <li>TTL <strong>baix</strong> (minuts): els canvis es propaguen ràpid, però hi ha més trànsit.</li>
+  </ul>
+  <p>
+    Per això, abans d'una migració prevista, es baixa el TTL uns dies; i quan tot funciona, es
+    torna a pujar.
   </p>
 </div>
 
-<!-- ============ 9 · PAS A PAS ============ -->
+<!-- ============ 7 · CAS REAL ============ -->
+<div class="cq-block" data-kind="cas real">
+  <h4>«He canviat la IP i mig món encara veu l'antiga»</h4>
+  <p>
+    Una empresa canvia de servidor i actualitza el registre. Uns usuaris veuen la web nova
+    immediatament i altres continuen a l'antiga durant hores. No hi ha cap error: cadascú té la
+    resposta guardada amb el TTL que hi havia <em>abans</em> del canvi.
+  </p>
+  <p>
+    Mentre duri, els dos servidors han de funcionar. Apagar l'antic el mateix dia del canvi és
+    l'error clàssic, i deixa fora els usuaris que encara el tenen a la memòria cau.
+  </p>
+  <p>
+    De la mateixa manera, a classe: si canvies un registre i el client no ho veu, sovint no
+    t'has equivocat, només has d'esperar o buidar la cau.
+  </p>
+</div>
+
+<!-- ============ 8 · PAS A PAS ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h4>Crear i comprovar una zona</h4>
+  <h4>Recórrer l'arbre amb dig</h4>
   <ol class="cq-steps">
     <li>
-      <p><strong>Crea la carpeta</strong> de les teves zones:</p>
-<pre>sudo mkdir -p /etc/bind/zones</pre>
+      <p><strong>Mira qui té l'autoritat</strong> sobre un domini conegut:</p>
+<pre>dig upc.edu NS +short</pre>
     </li>
 
     <li>
-      <p><strong>Declara les dues zones</strong> a <code>named.conf.local</code> i escriu els dos fitxers, seguint els exemples d'aquesta pàgina.</p>
+      <p><strong>Pregunta directament a l'autoritatiu</strong>, saltant-te tota la cadena:</p>
+<pre>dig @&lt;un dels NS&gt; www.upc.edu +short</pre>
+      <p>La resposta arriba amb la marca <code>aa</code> (<em>authoritative answer</em>).</p>
     </li>
 
     <li>
-      <p><strong>Valida cada zona per separat.</strong> El primer argument és el nom de la zona i el segon el fitxer:</p>
-<pre>sudo named-checkzone adria.internal \
-     /etc/bind/zones/db.adria.internal</pre>
-      <p>Ha de dir <code>OK</code> i el número de serial. Fes el mateix amb la inversa.</p>
+      <p><strong>Demana-li un nom que no sigui seu</strong> i mira què passa:</p>
+<pre>dig @&lt;un dels NS&gt; www.wikipedia.org</pre>
+      <p>
+        No te'l resoldrà: un autoritatiu no fa de recursiu. Fixa't en l'estat de la capçalera
+        (<code>status</code>) i en si hi ha <code>ANSWER SECTION</code>.
+      </p>
     </li>
 
     <li>
-      <p><strong>Valida la configuració i recarrega</strong> sense aturar el servei:</p>
-<pre>sudo named-checkconf
-sudo rndc reload</pre>
+      <p><strong>Segueix la resolució sencera</strong> des de l'arrel:</p>
+<pre>dig www.upc.edu +trace</pre>
     </li>
 
     <li>
-      <p><strong>Comprova-ho amb <code>dig</code></strong>, preguntant al teu servidor:</p>
-<pre>dig @192.168.1.8 www.adria.internal +short
-dig @192.168.1.8 adria.internal MX +short
-dig @192.168.1.8 -x 192.168.1.8 +short</pre>
-      <p>La resposta ha de portar la marca <code>aa</code>: ets tu qui té l'autoritat.</p>
+      <p><strong>Observa el TTL baixant.</strong> Repeteix dues vegades amb uns segons de diferència:</p>
+<pre>dig www.upc.edu | grep -A1 "ANSWER SECTION"</pre>
+      <p>El número de la segona columna ha baixat: és el que queda de vida a la memòria cau.</p>
     </li>
   </ol>
 </div>
 
-<!-- ============ 10 · BONES PRÀCTIQUES ============ -->
+<!-- ============ 9 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
   <h4>Criteris professionals</h4>
   <ul>
-    <li><strong>Apuja el serial a cada canvi.</strong> Amb format de data, i sense excepcions.</li>
-    <li><strong><code>named-checkzone</code> abans de recarregar</strong>: una zona amb un error no es carrega i el servei es queda amb la versió antiga.</li>
-    <li><strong>Punt final</strong> a tots els noms absoluts. Repassa'ls un a un.</li>
-    <li><strong>Cada màquina, un A i el seu PTR.</strong> Molts serveis comproven la inversa.</li>
-    <li><strong>Àlies amb CNAME</strong>, no repetint el registre A: si canvia la IP, només toques un lloc.</li>
+    <li><strong>Un recursiu no s'obre a Internet.</strong> Serveix només la teva xarxa; si no, l'usaran per a atacs.</li>
+    <li><strong>Un autoritatiu no fa recursió.</strong> Respon de la seva zona i prou.</li>
+    <li><strong>Dos servidors per zona</strong> com a mínim: és el que demana el DNS des del primer dia.</li>
+    <li><strong>Baixa el TTL abans d'un canvi previst</strong> i torna'l a pujar després.</li>
+    <li><strong>Comprova sempre contra l'autoritatiu</strong> amb <code>dig @servidor</code>: la cau amaga els errors.</li>
   </ul>
 </div>
 
-<!-- ============ 11 · PROBLEMES ============ -->
+<!-- ============ 10 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
   <h4>Errors habituals</h4>
   <dl class="cq-issues">
-    <dt><code>named-checkzone</code> es queixa de <code>NS record</code> o de l'SOA</dt>
+    <dt><code>dig</code> respon <code>NXDOMAIN</code></dt>
     <dd>
-      <p><span class="lbl">Causa</span> Falta el registre NS de la zona, o el nom del SOA no té punt final.</p>
-      <p><span class="lbl">Solució</span> Compara la capçalera amb l'exemple, caràcter a caràcter.</p>
+      <p><span class="lbl">Causa</span> El nom no existeix a la zona. Sovint és una errada d'escriptura o falta el punt final.</p>
+      <p><span class="lbl">Solució</span> Comprova el nom sencer i pregunta directament a l'autoritatiu.</p>
     </dd>
 
-    <dt>El nom es resol amb el domini repetit dues vegades</dt>
+    <dt><code>SERVFAIL</code> en preguntar per un domini</dt>
     <dd>
-      <p><span class="lbl">Causa</span> Has escrit un nom absolut sense punt final.</p>
-      <p><span class="lbl">Solució</span> <code>dig @elteuservidor nom</code> i mira la resposta sencera: hi veuràs el nom duplicat.</p>
+      <p><span class="lbl">Causa</span> El servidor ho ha intentat i no se n'ha sortit: no arriba als autoritatius o falla la validació DNSSEC.</p>
+      <p><span class="lbl">Solució</span> Prova el mateix nom contra <code>9.9.9.9</code>. Si allà va, el problema és del teu servidor.</p>
     </dd>
 
-    <dt>Has editat la zona i el canvi no es veu</dt>
+    <dt>Un nom es resol des de fora i des de dins no</dt>
     <dd>
-      <p><span class="lbl">Causa</span> No has apujat el serial, o no has recarregat, o el client té la resposta a la memòria cau.</p>
-      <p><span class="lbl">Solució</span> Serial, <code>rndc reload</code> i pregunta amb <code>dig @servidor</code>, que se salta la cau del client.</p>
+      <p><span class="lbl">Causa</span> El teu servidor intern té una zona amb el mateix nom i respon ell, sense saber-ho tot.</p>
+      <p><span class="lbl">Solució</span> Compara <code>dig @elteuservidor nom</code> amb <code>dig @9.9.9.9 nom</code>.</p>
     </dd>
   </dl>
 </div>
 
-<!-- ============ 12 · RESUM ============ -->
+<!-- ============ 11 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
   <h4>Resum</h4>
   <ul>
-    <li>Cada xarxa vol <strong>dues zones</strong>: la directa i la inversa <code>in-addr.arpa</code>.</li>
-    <li>Les zones es declaren a <code>named.conf.local</code> amb <code>type primary</code>.</li>
-    <li>Tot fitxer de zona comença amb <code>$TTL</code> i un <strong>SOA</strong>; el <strong>serial s'apuja sempre</strong>.</li>
-    <li>A i PTR per a les màquines, CNAME per als àlies, MX per al correu, NS per als servidors.</li>
-    <li>El <strong>punt final</strong> distingeix un nom absolut d'un de relatiu.</li>
+    <li>El DNS és un <strong>arbre</strong>: arrel, TLD, dominis i subdominis, llegit de dreta a esquerra.</li>
+    <li>Una <strong>zona d'autoritat</strong> és el tros del qual un servidor té les dades bones.</li>
+    <li><strong>Delegar</strong> és dir «d'aquesta branca se n'encarrega aquell servidor».</li>
+    <li>El <strong>recursiu</strong> busca per als clients; l'<strong>autoritatiu</strong> respon de la seva zona.</li>
+    <li>El <strong>TTL</strong> mana quant es guarda una resposta a la memòria cau.</li>
   </ul>
 
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Comanda</th><th>Per a què serveix</th></tr></thead>
       <tbody>
-        <tr><td><code>named-checkzone &lt;zona&gt; &lt;fitxer&gt;</code></td><td>Validar un fitxer de zona</td></tr>
-        <tr><td><code>rndc reload</code></td><td>Recarregar sense aturar el servei</td></tr>
-        <tr><td><code>rndc reload &lt;zona&gt;</code></td><td>Recarregar només una zona</td></tr>
-        <tr><td><code>dig @&lt;servidor&gt; &lt;nom&gt; &lt;tipus&gt;</code></td><td>Comprovar un registre concret</td></tr>
-        <tr><td><code>dig @&lt;servidor&gt; -x &lt;adreça&gt;</code></td><td>Comprovar la resolució inversa</td></tr>
+        <tr><td><code>dig &lt;domini&gt; NS</code></td><td>Qui té l'autoritat sobre la zona</td></tr>
+        <tr><td><code>dig @&lt;servidor&gt; &lt;nom&gt;</code></td><td>Preguntar a un servidor concret</td></tr>
+        <tr><td><code>dig &lt;nom&gt; +trace</code></td><td>Seguir la resolució des de l'arrel</td></tr>
+        <tr><td><code>dig &lt;nom&gt; +short</code></td><td>Només la resposta</td></tr>
+        <tr><td><code>dig -x &lt;adreça&gt;</code></td><td>Resolució inversa</td></tr>
       </tbody>
     </table>
   </div>
 
   <p style="margin-top:16px">
-    <strong>Següent:</strong> a <em>T9 · Primari i secundari</em> la teva zona deixarà de dependre
-    d'una sola màquina.
+    <strong>Següent:</strong> a <em>T2.3 · Servidor DNS amb BIND 9</em> muntaràs el recursiu que
+    fins ara només has fet servir.
   </p>
 </div>
 
-<!-- ============ 13 · QUIZ ============ -->
+<!-- ============ 12 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
   <h4>Comprova el que has après</h4>
 
-  <div class="cq-question" data-id="t8-inversa" data-type="single">
-    <div class="statement">Com es diu la zona inversa de la xarxa <code>192.168.1.0/24</code>?</div>
-    <button class="cq-option" data-correct="false"><code>192.168.1.in-addr.arpa</code></button>
-    <button class="cq-option" data-correct="true"><code>1.168.192.in-addr.arpa</code></button>
-    <button class="cq-option" data-correct="false"><code>0.1.168.192.in-addr.arpa</code></button>
-    <button class="cq-option" data-correct="false"><code>arpa.in-addr.192.168.1</code></button>
+  <div class="cq-question" data-id="t2-2-lectura" data-type="single">
+    <div class="statement">A <code>aula3.smx.institut.cat</code>, quin és el TLD?</div>
+    <button class="cq-option" data-correct="false"><code>aula3</code></button>
+    <button class="cq-option" data-correct="false"><code>institut</code></button>
+    <button class="cq-option" data-correct="true"><code>cat</code></button>
+    <button class="cq-option" data-correct="false"><code>smx</code></button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t8-serial" data-type="single">
-    <div class="statement">Has canviat un registre però no has tocat el serial. Què passa?</div>
-    <button class="cq-option" data-correct="false">La zona no es carrega i el servei s'atura</button>
-    <button class="cq-option" data-correct="true">El servidor secundari no detecta el canvi i continua amb les dades antigues</button>
-    <button class="cq-option" data-correct="false">El TTL passa a ser zero</button>
-    <button class="cq-option" data-correct="false">No passa res, el serial és informatiu</button>
+  <div class="cq-question" data-id="t2-2-tipus" data-type="single">
+    <div class="statement">Quina és la diferència principal entre un servidor recursiu i un d'autoritatiu?</div>
+    <button class="cq-option" data-correct="false">El recursiu treballa amb UDP i l'autoritatiu amb TCP</button>
+    <button class="cq-option" data-correct="true">El recursiu busca la resposta per als clients; l'autoritatiu només respon de la seva zona</button>
+    <button class="cq-option" data-correct="false">L'autoritatiu té memòria cau i el recursiu no</button>
+    <button class="cq-option" data-correct="false">El recursiu només serveix noms inventats</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t8-punt" data-type="single">
-    <div class="statement">Dins de la zona <code>adria.internal</code>, què vol dir la línia <code>web IN A 192.168.1.20</code>?</div>
-    <button class="cq-option" data-correct="true">Que <code>web.adria.internal</code> té l'adreça <code>192.168.1.20</code></button>
-    <button class="cq-option" data-correct="false">Que <code>web</code> és un àlies de la zona</button>
-    <button class="cq-option" data-correct="false">Que és un error: falta el punt final</button>
-    <button class="cq-option" data-correct="false">Que <code>web</code> és el servidor de correu</button>
+  <div class="cq-question" data-id="t2-2-delegacio" data-type="single">
+    <div class="statement">Què vol dir que una zona està delegada?</div>
+    <button class="cq-option" data-correct="true">Que la responsabilitat d'una branca passa a un altre servidor de noms</button>
+    <button class="cq-option" data-correct="false">Que la zona s'ha copiat a un servidor secundari</button>
+    <button class="cq-option" data-correct="false">Que el domini ha caducat</button>
+    <button class="cq-option" data-correct="false">Que el servidor deixa de fer recursió</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t8-cname" data-type="single">
-    <div class="statement">Quina d'aquestes línies és incorrecta?</div>
-    <button class="cq-option" data-correct="true"><code>intranet IN CNAME 192.168.1.8</code></button>
-    <button class="cq-option" data-correct="false"><code>intranet IN CNAME www.adria.internal.</code></button>
-    <button class="cq-option" data-correct="false"><code>www IN A 192.168.1.8</code></button>
-    <button class="cq-option" data-correct="false"><code>8 IN PTR ns1.adria.internal.</code></button>
+  <div class="cq-question" data-id="t2-2-ttl" data-type="single">
+    <div class="statement">Has canviat una adreça a la teva zona i un client encara veu l'antiga. Què ho explica millor?</div>
+    <button class="cq-option" data-correct="false">El client té l'adreça a <code>/etc/hosts</code> segur</button>
+    <button class="cq-option" data-correct="true">Té la resposta antiga a la memòria cau i encara no s'ha esgotat el TTL</button>
+    <button class="cq-option" data-correct="false">El servidor autoritatiu ha deixat de respondre</button>
+    <button class="cq-option" data-correct="false">Cal reiniciar el client perquè agafi el canvi</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t8-afirmacions" data-type="multi">
+  <div class="cq-question" data-id="t2-2-afirmacions" data-type="multi">
     <div class="statement">Selecciona totes les afirmacions certes</div>
-    <button class="cq-option" data-correct="true">El registre PTR viu a la zona inversa.</button>
-    <button class="cq-option" data-correct="true"><code>named-checkzone</code> es fa servir abans de recarregar.</button>
-    <button class="cq-option" data-correct="true">El correu de l'administrador del SOA porta un punt on aniria l'arrova.</button>
-    <button class="cq-option" data-correct="false">Un CNAME pot apuntar directament a una adreça IP.</button>
-    <button class="cq-option" data-correct="false">Les zones es declaren a <code>named.conf.options</code>.</button>
+    <button class="cq-option" data-correct="true">Els noms es llegeixen de dreta a esquerra, de més general a més concret.</button>
+    <button class="cq-option" data-correct="true">Un recursiu obert a tot Internet és un problema de seguretat.</button>
+    <button class="cq-option" data-correct="false">Els servidors arrel guarden tots els noms d'Internet.</button>
+    <button class="cq-option" data-correct="true">Convé tenir dos servidors de noms per zona.</button>
+    <button class="cq-option" data-correct="false">El TTL el decideix el client que pregunta.</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 </div>
 
 <script>
+  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  (function () {
+    function editant(node) {
+      return node && node.closest && node.closest('[contenteditable="true"]');
+    }
+    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+      document.addEventListener(nom, function (e) {
+        if (!editant(e.target)) { e.preventDefault(); }
+      });
+    });
+  })();
+
   // Motor únic per a totes les preguntes single i multi.
   document.querySelectorAll('.cq-question').forEach(function (question) {
     var id = question.dataset.id;

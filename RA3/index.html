@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>A4 · DHCP per a 2000 equips — Serveis en Xarxa (0227)</title>
+<title>RA3 · Transferència de fitxers — Serveis en Xarxa (0227)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -368,145 +368,115 @@
     .cq-block pre .c, .cq-block pre .o { color: #555; }
     .cq-check-btn { display: none; }
   }
+  /* ==== Contingut no copiable ====
+     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
+     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
+     queda exclòs. */
+  .cq-header, .cq-block {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  [contenteditable="true"], [contenteditable="true"] * {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    user-select: text;
+  }
+
 /* === SINAPSI-CSS FI ======================================== */
 </style>
 </head>
 <body>
 <header class="cq-header">
-  <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · Activitat 4</div>
-  <h1>DHCP per a una empresa de 2000 equips</h1>
-  <p class="lede">Dimensionar una xarxa gran i reservar les adreces dels servidors i les impressores.</p>
+  <div class="eyebrow">CFGM SMX · Mòdul 0227</div>
+  <h1>Serveis en Xarxa</h1>
+  <p class="lede">RA3 · Instal·lació de serveis de transferència de fitxers</p>
 </header>
 
-<!-- ============ OBJECTIUS ============ -->
-<div class="cq-block" data-kind="objectius">
-  <h4>Què has de saber abans de començar</h4>
-  <p>
-    Teories <strong>T3</strong> (Kea) i <strong>T4</strong> (encaminament i NAT), i tenir feta
-    l'activitat <strong>3</strong>.
-  </p>
-  <p>
-    Amb aquesta activitat aprendràs a <strong>dissenyar</strong> l'adreçament d'una xarxa gran:
-    on col·loques el rang automàtic, on les reserves d'infraestructura i com dimensiones. La
-    tècnica és la mateixa que a l'activitat 3; el que canvia és la decisió.
-  </p>
+<div class="cq-block" data-kind="teoria">
+  <h4>Teoria</h4>
+  <p>Llegeix-les en ordre. Cada pàgina acaba amb una guia pas a pas i un test per comprovar què has entès.</p>
+  <ul class="cq-index">
+    <li><a href="teoria/t3-1-ftp-fonaments.html">
+      <span class="ref">T3.1</span>
+      <span class="ttl">Transferència de fitxers i FTP
+        <span class="sub">Canal de control, canal de dades i modes</span></span></a></li>
+    <li><a href="teoria/t3-2-vsftpd-usuaris.html">
+      <span class="ref">T3.2</span>
+      <span class="ttl">Servidor vsftpd amb usuaris locals
+        <span class="sub">Comptes, permisos i chroot</span></span></a></li>
+    <li><a href="teoria/t3-3-anonim-i-limits.html">
+      <span class="ref">T3.3</span>
+      <span class="ttl">Accés anònim i límits
+        <span class="sub">Repositori públic, velocitat i quotes</span></span></a></li>
+    <li><a href="teoria/t3-4-ftps-i-sftp.html">
+      <span class="ref">T3.4</span>
+      <span class="ttl">FTPS i SFTP: transferència xifrada
+        <span class="sub">TLS a vsftpd i SFTP amb OpenSSH</span></span></a></li>
+  </ul>
 </div>
 
-<!-- ============ ENUNCIAT ============ -->
-<div class="cq-block" data-kind="enunciat">
-  <h4>L'encàrrec</h4>
+<div class="cq-block" data-kind="activitats">
+  <h4>Activitats</h4>
   <p>
-    Una empresa amb un parc informàtic de <strong>2000 PC</strong> treballa a la xarxa
-    <strong><code>172.16.0.0/16</code></strong>. Has de muntar-hi el servidor DHCP amb Kea, amb
-    una màquina nova a isardVDI i el mateix escenari de sempre: <code>puigcastellar1</code> per
-    sortir a Internet i <code>personal1</code> per donar servei.
+    Cada activitat es fa sobre una <strong>màquina nova</strong> a isardVDI, amb les targetes
+    <code>puigcastellar1</code> i <code>personal1</code>. La xarxa interna d'aquest RA és la
+    <code>192.168.1.0/24</code>.
   </p>
-  <p>Requisits:</p>
-  <ol>
-    <li>Rang automàtic prou gran per a tots els dispositius, amb marge.</li>
-    <li>DNS de Quad9 (<code>9.9.9.9</code>) i porta d'enllaç la del propi servidor.</li>
-    <li>Reserves per als quatre equips de la taula.</li>
-    <li>El client ha de tenir Internet a través del servidor.</li>
-    <li>Demostrar que una reserva funciona de veritat. No tens els equips de la taula: hauràs de trobar la manera de provar-ho amb el client que sí que tens.</li>
-  </ol>
+  <ul class="cq-index">
+    <li><a href="activitats/a3-1-servidor-ftp.html">
+      <span class="ref">A3.1</span>
+      <span class="ttl">Servidor FTP per a l'equip
+        <span class="sub">Comptes propis i cadascú al seu directori</span></span></a></li>
+    <li><a href="activitats/a3-2-ftp-public-i-limits.html">
+      <span class="ref">A3.2</span>
+      <span class="ttl">Repositori públic i límits
+        <span class="sub">Accés anònim, velocitat i modes de connexió</span></span></a></li>
+    <li><a href="activitats/a3-3-sftp-i-xifrat.html">
+      <span class="ref">A3.3</span>
+      <span class="ttl">Tancar l'FTP en clar
+        <span class="sub">Capturar la contrasenya i migrar a FTPS i SFTP</span></span></a></li>
+  </ul>
+</div>
+
+<div class="cq-block" data-kind="ordre recomanat">
+  <h4>En quin ordre fer-ho</h4>
+  <p>La teoria i les activitats estan pensades per alternar-se, no per fer-les en dos blocs separats:</p>
   <div class="cq-tablewrap">
     <table class="cq-table">
-      <thead><tr><th>Equip</th><th>MAC</th><th>IP reservada</th></tr></thead>
+      <thead><tr><th>Primer llegeix</th><th>I després fes</th></tr></thead>
       <tbody>
-        <tr><td>Servidor de fitxers</td><td><code>00:1a:2b:3c:4d:5e</code></td><td><code>172.16.10.10</code></td></tr>
-        <tr><td>Servidor web</td><td><code>00:1a:2b:3c:4d:5f</code></td><td><code>172.16.10.11</code></td></tr>
-        <tr><td>Impressora 1</td><td><code>00:1a:2b:3c:4d:60</code></td><td><code>172.16.20.50</code></td></tr>
-        <tr><td>Impressora 2</td><td><code>00:1a:2b:3c:4d:61</code></td><td><code>172.16.20.51</code></td></tr>
+        <tr><td>T3.1 · T3.2</td><td>A3.1 — servidor FTP per a l'equip</td></tr>
+        <tr><td>T3.3</td><td>A3.2 — repositori públic i límits</td></tr>
+        <tr><td>T3.4</td><td>A3.3 — tancar l'FTP en clar</td></tr>
       </tbody>
     </table>
   </div>
 </div>
 
-<!-- ============ DISSENY ============ -->
-<div class="cq-block" data-kind="enunciat">
-  <h4>Primer el disseny, després el teclat</h4>
+<div class="cq-block" data-kind="recordatori">
+  <h4>SFTP no és FTP amb una essa</h4>
   <p>
-    Abans d'obrir cap fitxer, decideix com repartiràs la xarxa i escriu-ho al document. Una
-    <code>/16</code> té 65.534 adreces útils: t'hi cap tot, però l'has d'ordenar.
-  </p>
-  <ol>
-    <li>Quina adreça té el servidor, i per què aquesta.</li>
-    <li>Quantes adreces necessita el rang automàtic i entre quines dues adreces el col·loques.</li>
-    <li>On queda el rang respecte de les quatre reserves i de la IP del servidor.</li>
-    <li>Per què amb una <code>/24</code>, com a les activitats anteriors, aquest encàrrec no es podria fer.</li>
-  </ol>
-</div>
-
-<!-- ============ OBSERVACIÓ TÈCNICA ============ -->
-<div class="cq-block" data-kind="observació">
-  <h4>El que marca els límits és la màscara, no el punt</h4>
-  <p>
-    En una xarxa <code>/16</code>, adreces com la <code>172.16.100.0</code> o la
-    <code>172.16.107.255</code> <strong>són perfectament vàlides per a equips</strong>. Les
-    úniques que no es poden assignar són la primera de tota la xarxa
-    (<code>172.16.0.0</code>) i l'última (<code>172.16.255.255</code>).
-  </p>
-  <p>
-    Costa de veure perquè estem acostumats a les <code>/24</code>, on cada bloc acabat en
-    <code>.0</code> i <code>.255</code> sí que està reservat. Compta els bits abans de descartar
-    una adreça.
-  </p>
-</div>
-
-<!-- ============ COMPROVACIÓ ============ -->
-<div class="cq-block" data-kind="comprovació">
-  <h4>Com sabràs que ho has fet bé</h4>
-  <p>
-    Abans d'entregar, has de poder respondre <strong>sí</strong> a totes aquestes preguntes, amb
-    la sortida d'una comanda al davant:
-  </p>
-  <ul>
-    <li>El servei de Kea està actiu, amb les quatre reserves carregades sense errors.</li>
-    <li>El client rep una adreça <strong>del rang que has dissenyat</strong>.</li>
-    <li>El client té Internet i resolució de noms.</li>
-    <li>Has aconseguit que el client rebi una <strong>IP reservada</strong>, i ho veus als registres del servidor.</li>
-    <li>El teu document justifica el disseny, no només el descriu.</li>
-  </ul>
-</div>
-
-<!-- ============ PROBLEMES ============ -->
-<div class="cq-block" data-kind="problemes">
-  <h4>Si alguna cosa no va</h4>
-  <dl class="cq-issues">
-    <dt>Kea es queixa que el <em>pool</em> no és dins de la subxarxa</dt>
-    <dd>
-      <p><span class="lbl">Causa</span> Has posat <code>/24</code> en lloc de <code>/16</code>, i part del rang queda fora de la xarxa.</p>
-      <p><span class="lbl">Solució</span> Revisa la màscara a la configuració de Kea i també a la targeta.</p>
-    </dd>
-
-    <dt>El client agafa adreça d'una altra xarxa</dt>
-    <dd>
-      <p><span class="lbl">Causa</span> Conserva una concessió antiga d'una activitat anterior, o està connectat a la xarxa equivocada.</p>
-      <p><span class="lbl">Solució</span> Força la renovació al client i comprova la targeta a isardVDI.</p>
-    </dd>
-
-    <dt>El servei no arrenca després d'afegir les reserves</dt>
-    <dd>
-      <p><span class="lbl">Causa</span> Una coma després de l'última reserva, o una coma que falta entre dues.</p>
-      <p><span class="lbl">Solució</span> Valida el fitxer abans d'arrencar el servei: et dona la línia.</p>
-    </dd>
-  </dl>
-</div>
-
-<!-- ============ LLIURAMENT ============ -->
-<div class="cq-block" data-kind="lliurament">
-  <h4>Què has d'entregar</h4>
-  <p>
-    Un <strong>document tècnic</strong> on expliquis tot el que has anat fent, amb les captures
-    del resultat.
-  </p>
-  <p>
-    Respon-hi també, amb les teves paraules: <strong>per què has triat aquest rang i per què les
-    reserves han de quedar fora?</strong>
+    És l'error més repetit del tema. <strong>FTPS</strong> és FTP dins d'una capa TLS, el serveix
+    <code>vsftpd</code> i va pel port 21. <strong>SFTP</strong> és un subsistema de
+    <strong>SSH</strong>, el serveix <code>ssh</code> i va pel port 22. Ho tens explicat a la
+    <strong>T3.4</strong>.
   </p>
 </div>
 
 <script>
+  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  (function () {
+    function editant(node) {
+      return node && node.closest && node.closest('[contenteditable="true"]');
+    }
+    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+      document.addEventListener(nom, function (e) {
+        if (!editant(e.target)) { e.preventDefault(); }
+      });
+    });
+  })();
+
   // Motor únic per a totes les preguntes single i multi.
   document.querySelectorAll('.cq-question').forEach(function (question) {
     var id = question.dataset.id;

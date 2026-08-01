@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>T3 · Servidor DHCP amb Kea — Serveis en Xarxa (0227)</title>
+<title>T1.4 · Encaminament i NAT — Serveis en Xarxa (0227)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -368,361 +368,391 @@
     .cq-block pre .c, .cq-block pre .o { color: #555; }
     .cq-check-btn { display: none; }
   }
+  /* ==== Contingut no copiable ====
+     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
+     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
+     queda exclòs. */
+  .cq-header, .cq-block {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  [contenteditable="true"], [contenteditable="true"] * {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    user-select: text;
+  }
+
 /* === SINAPSI-CSS FI ======================================== */
 </style>
 </head>
 <body>
 <header class="cq-header">
-  <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · Teoria 3</div>
-  <h1>Servidor DHCP amb Kea</h1>
-  <p class="lede">Muntar, configurar i comprovar el servidor DHCP que fan servir avui les empreses.</p>
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · T1.4</div>
+  <h1>Encaminament i NAT</h1>
+  <p class="lede">Convertir el servidor en la porta d'enllaç que dona Internet als seus clients.</p>
 </header>
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
   <h4>Què sabràs fer en acabar</h4>
   <ul>
-    <li>Instal·lar i posar en marxa el servidor Kea.</li>
-    <li>Entendre cada bloc del fitxer <code>kea-dhcp4.conf</code>.</li>
-    <li>Definir un rang d'adreces i calcular-ne la mida.</li>
-    <li>Fer una reserva d'IP per adreça MAC.</li>
-    <li>Llegir els registres per veure les concessions.</li>
+    <li>Explicar per què un client amb IP correcta encara no té Internet.</li>
+    <li>Activar l'encaminament de paquets de forma permanent.</li>
+    <li>Configurar NAT amb <code>nftables</code>.</li>
+    <li>Comprovar on falla la connexió quan no funciona.</li>
   </ul>
 </div>
 
-<!-- ============ 2 · QUÈ ÉS KEA ============ -->
+<!-- ============ 2 · EL PROBLEMA ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Per què Kea i no una altra cosa</h4>
+  <h4>Tinc IP, però no tinc Internet</h4>
   <p>
-    Durant vint anys, el servidor DHCP de Linux va ser <code>isc-dhcp-server</code>. La
-    fundació que el mantenia el va donar per acabat el 2022 i el va substituir per
-    <strong>Kea</strong>, del mateix equip. És el que ve als repositoris d'Ubuntu i el que
-    trobaràs a les empreses.
+    El client ha rebut la seva configuració per DHCP i la porta d'enllaç apunta al teu servidor.
+    Fa <code>ping</code> a Internet i no passa res. DHCP ha funcionat perfectament: el que falla
+    és el pas següent.
   </p>
+  <p>Perquè aquell paquet arribi a Internet i torni, calen <strong>dues coses</strong>:</p>
+  <ul>
+    <li><strong>Encaminament</strong> — que el servidor accepti passar paquets d'una targeta a l'altra.</li>
+    <li><strong>NAT</strong> — que canviï l'adreça d'origen per la seva, perquè la resposta sàpiga tornar.</li>
+  </ul>
+  <p>Cap de les dues està activada per defecte a Linux. Les has d'activar tu.</p>
+</div>
+
+<!-- ============ 3 · ENCAMINAMENT ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>Encaminament: deixar passar els paquets</h4>
   <p>
-    Si busques per Internet, veuràs molta documentació d'<code>isc-dhcp-server</code> amb una
-    sintaxi diferent. <strong>No et serveix.</strong> Comprova sempre que el que llegeixes
-    parla de Kea.
+    Un Linux amb dues targetes de xarxa <strong>no reenvia res</strong> entre elles. Per
+    seguretat, ve desactivat de fàbrica: si no ho actives, cada targeta viu la seva vida.
   </p>
+  <p>L'interruptor és un únic valor del nucli, que pots consultar així:</p>
+<pre>cat /proc/sys/net/ipv4/ip_forward</pre>
   <p>
-    Kea es configura amb un fitxer <strong>JSON</strong>, i té un servei separat per a cada
-    feina. A nosaltres només ens cal el d'IPv4: <code>kea-dhcp4-server</code>.
+    Si respon <code>0</code>, està desactivat. Amb <code>1</code>, el servidor ja fa d'encaminador
+    (<em>router</em>) entre les seves xarxes.
   </p>
 </div>
 
-<!-- ============ 3 · ANATOMIA DEL FITXER ============ -->
+<!-- ============ 4 · NAT ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>El fitxer de configuració, bloc a bloc</h4>
+  <h4>NAT: qui signa la carta</h4>
   <p>
-    Tot viu a <code>/etc/kea/kea-dhcp4.conf</code>. Sembla llarg, però només hi ha quatre coses
-    que hagis de tocar:
+    Els clients tenen adreces privades, per exemple <code>192.168.1.50</code>. Aquestes adreces
+    <strong>no existeixen a Internet</strong>: cap servidor de fora sabria com respondre-hi.
   </p>
-  <div class="cq-tablewrap">
-    <table class="cq-table">
-      <thead><tr><th>Bloc</th><th>Què hi poses</th></tr></thead>
-      <tbody>
-        <tr><td><code>interfaces-config</code></td><td>Per quina targeta escolta el servidor</td></tr>
-        <tr><td><code>subnet</code></td><td>La xarxa que gestiona, amb màscara</td></tr>
-        <tr><td><code>pools</code></td><td>El rang d'adreces que pot repartir</td></tr>
-        <tr><td><code>option-data</code></td><td>Porta d'enllaç, DNS i nom de domini</td></tr>
-      </tbody>
-    </table>
-  </div>
   <p>
-    La resta (<code>control-socket</code>, <code>lease-database</code>) ve donada i no cal
-    tocar-la: és on Kea guarda quines adreces té concedides.
+    <strong>NAT</strong> (<em>Network Address Translation</em>) ho resol canviant l'adreça
+    d'origen del paquet per la del servidor abans d'enviar-lo, i apuntant-se qui l'havia
+    demanat. Quan arriba la resposta, la torna al client correcte.
+  </p>
+  <p>
+    És el mateix que fa el router de casa teva amb tots els mòbils i ordinadors: de portes
+    enfora, tots surten amb una única adreça. La variant que farem servir s'anomena
+    <strong><em>masquerade</em></strong>.
   </p>
 </div>
 
-<!-- ============ 4 · EXEMPLE ============ -->
+<!-- ============ 5 · L'ESCENARI ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h4>Una configuració completa i mínima</h4>
-  <p>Xarxa <code>192.168.1.0/24</code>, servidor a la <code>.1</code>, repartint de la 100 a la 200:</p>
-<pre>{
-"Dhcp4": {
-  "interfaces-config": {
-    "interfaces": [ "enp2s0" ]              <span class="c">// targeta personal1</span>
-  },
-  "control-socket": {
-    "socket-type": "unix",
-    "socket-name": "/run/kea/kea4-ctrl-socket"
-  },
-  "lease-database": { "type": "memfile", "lfc-interval": 3600 },
-
-  "valid-lifetime": 600,                    <span class="c">// durada de la concessió</span>
-  "max-valid-lifetime": 7200,
-
-  "subnet4": [
-    {
-      "id": 1,
-      "subnet": "192.168.1.0/24",
-      "pools": [ { "pool": "192.168.1.100 - 192.168.1.200" } ],
-      "option-data": [
-        { "name": "routers",             "data": "192.168.1.1" },
-        { "name": "domain-name-servers", "data": "9.9.9.9"     },
-        { "name": "domain-name",         "data": "adria.local" }
-      ]
-    }
-  ]
-}
-}</pre>
-  <p>
-    <strong>Compte amb les comes.</strong> A JSON, l'últim element d'una llista
-    <em>no</em> en porta. És l'error número u i deixa el servei sense arrencar.
-  </p>
-</div>
-
-<!-- ============ 5 · CALCULAR EL RANG ============ -->
-<div class="cq-block" data-kind="teoria">
-  <h4>Quantes adreces necessites</h4>
-  <p>
-    Les activitats et demanaran rangs per a un nombre concret d'equips. El càlcul és una resta,
-    però has de comptar bé: <strong>els dos extrems del rang hi entren</strong>.
-  </p>
-  <p>
-    De la <code>.100</code> a la <code>.200</code> hi ha <code>200 − 100 + 1 = 101</code>
-    adreces. Si en necessites exactament 99, el rang va de la <code>.100</code> a la
-    <code>.198</code>.
-  </p>
-  <p>
-    I recorda que tota xarxa té dues adreces que <strong>mai</strong> es reparteixen: la
-    <strong>primera</strong> (adreça de xarxa) i l'<strong>última</strong> (difusió). Quines són
-    depèn de la <strong>màscara</strong>, no de l'últim número:
-  </p>
+  <h4>L'escenari de les activitats</h4>
   <div class="cq-tablewrap">
     <table class="cq-table">
-      <thead><tr><th>Xarxa</th><th>Primera (xarxa)</th><th>Última (difusió)</th></tr></thead>
+      <thead><tr><th>Targeta</th><th>Xarxa</th><th>Paper</th></tr></thead>
       <tbody>
-        <tr><td><code>192.168.1.0/24</code></td><td><code>192.168.1.0</code></td><td><code>192.168.1.255</code></td></tr>
-        <tr><td><code>172.16.0.0/16</code></td><td><code>172.16.0.0</code></td><td><code>172.16.255.255</code></td></tr>
-        <tr><td><code>10.0.0.0/8</code></td><td><code>10.0.0.0</code></td><td><code>10.255.255.255</code></td></tr>
+        <tr><td><code>enp1s0</code></td><td>puigcastellar1</td><td>Sortida a Internet</td></tr>
+        <tr><td><code>enp2s0</code></td><td>personal1</td><td>Xarxa interna: DHCP i clients</td></tr>
       </tbody>
     </table>
   </div>
-  <p>
-    Fixa-t'hi en la <code>10.0.0.0/8</code>: adreces com la <code>10.0.0.255</code> o la
-    <code>10.0.1.0</code> <strong>són perfectament vàlides</strong> per a un equip. Que un número
-    acabi en 0 o en 255 no vol dir res per si sol. La del servidor tampoc es reparteix, i per això
-    va fora del rang.
-  </p>
+  <p>El recorregut d'un paquet del client fins a Internet és aquest:</p>
+  <div class="dora-flow">
+    <div class="dora-step">
+      <div class="n">01</div>
+      <div class="t">CLIENT</div>
+      <div class="d">Envia el paquet a la seva porta d'enllaç: el servidor.</div>
+    </div>
+    <div class="dora-arrow">→</div>
+    <div class="dora-step">
+      <div class="n">02</div>
+      <div class="t">FORWARD</div>
+      <div class="d">El servidor el passa de <code>enp2s0</code> a <code>enp1s0</code>.</div>
+    </div>
+    <div class="dora-arrow">→</div>
+    <div class="dora-step">
+      <div class="n">03</div>
+      <div class="t">NAT</div>
+      <div class="d">Canvia l'origen per l'adreça del servidor i el treu a fora.</div>
+    </div>
+  </div>
 </div>
 
-<!-- ============ 6 · RESERVES ============ -->
-<div class="cq-block" data-kind="teoria">
-  <h4>Reservar una IP per a un equip concret</h4>
+<!-- ============ 6 · RECORDATORI ============ -->
+<div class="cq-block" data-kind="recordatori">
+  <h4>Una regla mal escrita et tanca la porta</h4>
   <p>
-    Una <strong>reserva</strong> lliga una adreça MAC a una IP: aquell equip rebrà sempre la
-    mateixa. S'escriu dins de la subxarxa, just després de <code>option-data</code>:
-  </p>
-<pre>      "reservations": [
-        {
-          "hw-address": "00:1a:2b:3c:4d:5e",
-          "ip-address": "192.168.1.10"
-        },
-        {
-          "hw-address": "00:1a:2b:3c:4d:5f",
-          "ip-address": "192.168.1.11"
-        }
-      ]</pre>
-  <p>
-    L'adreça reservada ha d'estar <strong>dins de la subxarxa</strong> però
-    <strong>fora del <code>pool</code></strong>. Si la poses dins del rang, Kea la podria haver
-    donat abans a un altre equip.
+    Estàs escrivint un tallafoc. Si poses <code>policy drop</code> a la cadena
+    <code>input</code> sense permetre SSH, perdràs la connexió en carregar les regles. En aquesta
+    pràctica deixem <code>input</code> amb <code>policy accept</code> justament per evitar-ho:
+    filtrem el trànsit que <em>travessa</em> el servidor, no el que hi arriba.
   </p>
 </div>
 
 <!-- ============ 7 · PAS A PAS ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h4>Muntar el servidor</h4>
-  <p>
-    Punt de partida: la targeta <code>personal1</code> ja ha de tenir IP fixa (teoria T1). Sense
-    això, Kea no arrencarà.
-  </p>
+  <h4>Convertir el servidor en porta d'enllaç</h4>
 
   <ol class="cq-steps">
     <li>
-      <p><strong>Instal·la el servei d'IPv4</strong>, que és l'únic que necessites:</p>
-<pre>sudo apt update
-sudo apt install -y kea-dhcp4-server</pre>
+      <p><strong>Mira com està ara</strong> l'encaminament:</p>
+<pre>cat /proc/sys/net/ipv4/ip_forward</pre>
+      <p>Sortirà <code>0</code>.</p>
     </li>
 
     <li>
-      <p><strong>Desa una còpia</strong> de la configuració original abans de tocar res:</p>
-<pre>sudo cp /etc/kea/kea-dhcp4.conf /etc/kea/kea-dhcp4.conf.original</pre>
+      <p><strong>Activa'l de manera permanent</strong> amb un fitxer propi, que és més net que tocar el fitxer general:</p>
+<pre>echo "net.ipv4.ip_forward=1" | sudo tee /etc/sysctl.d/99-encaminament.conf
+sudo sysctl --system</pre>
+      <p>Torna a comprovar-ho: ara ha de sortir <code>1</code>. I sobreviurà a un reinici.</p>
     </li>
 
     <li>
-      <p><strong>Edita el fitxer</strong> i deixa'l com el de l'exemple, amb les teves dades:</p>
-<pre>sudo nano /etc/kea/kea-dhcp4.conf</pre>
+      <p><strong>Escriu les regles</strong> de tallafoc i NAT:</p>
+<pre>sudo nano /etc/nftables.conf</pre>
+      <p>Deixa el fitxer amb aquest contingut, canviant els noms de les targetes pels teus:</p>
+<pre>#!/usr/sbin/nft -f
+flush ruleset
+
+table inet filter {
+    chain input {
+        type filter hook input priority 0;
+        policy accept;
+    }
+    chain forward {
+        type filter hook forward priority 0;
+        policy drop;
+
+        <span class="c"># de la xarxa interna cap a Internet</span>
+        iif "enp2s0" oif "enp1s0" accept
+
+        <span class="c"># només les respostes de tornada</span>
+        iif "enp1s0" oif "enp2s0" ct state related,established accept
+    }
+    chain output {
+        type filter hook output priority 0;
+        policy accept;
+    }
+}
+
+table ip nat {
+    chain postrouting {
+        type nat hook postrouting priority 100;
+        <span class="c"># NAT a la targeta que surt a Internet</span>
+        oif "enp1s0" masquerade
+    }
+}</pre>
     </li>
 
     <li>
-      <p><strong>Comprova la sintaxi abans d'arrencar.</strong> Kea té un mode de prova que llegeix el fitxer i et diu si està bé:</p>
-<pre>sudo kea-dhcp4 -t /etc/kea/kea-dhcp4.conf</pre>
-      <p>Si hi ha una coma de més, aquí ho sabràs, amb el número de línia.</p>
+      <p><strong>Activa el servei</strong> perquè carregui les regles ara i a cada arrencada:</p>
+<pre>sudo systemctl enable --now nftables</pre>
+      <div class="cq-note">
+        <span class="lbl">Compte</span>
+        <code>enable --now</code> fa les dues coses alhora. No facis
+        <code>enable &amp; start</code> amb un sol <code>&amp;</code>: això envia la primera
+        comanda a segon pla i sembla que funciona quan no ho ha fet.
+      </div>
     </li>
 
     <li>
-      <p><strong>Arrenca i comprova</strong> que està actiu:</p>
-<pre>sudo systemctl restart kea-dhcp4-server
-sudo systemctl status kea-dhcp4-server</pre>
-      <p>Ha de sortir <code>active (running)</code> en verd.</p>
+      <p><strong>Comprova que les regles s'han carregat:</strong></p>
+<pre>sudo nft list ruleset</pre>
+      <p>Ha de sortir exactament el que has escrit. Si surt buit, hi ha un error de sintaxi al fitxer.</p>
     </li>
 
     <li>
-      <p><strong>Verifica que escolta</strong> al port 67:</p>
-<pre>sudo ss -ulnp | grep :67</pre>
-    </li>
-
-    <li>
-      <p><strong>Mira les concessions en directe</strong> mentre arrenques el client:</p>
-<pre>sudo journalctl -u kea-dhcp4-server -f</pre>
+      <p><strong>Prova-ho des del client</strong>, per capes, en aquest ordre:</p>
+<pre>ip route              <span class="c"># la porta d'enllaç és el servidor?</span>
+ping -c3 192.168.1.1  <span class="c"># arribo al servidor?</span>
+ping -c3 9.9.9.9      <span class="c"># surto a Internet?</span>
+ping -c3 www.upc.edu  <span class="c"># funciona el DNS?</span></pre>
       <p>
-        Veuràs línies <code>DHCP4_LEASE_ALLOC</code> amb la MAC i la IP concedida. La llista
-        completa de concessions la tens a
-        <code>/var/lib/kea/kea-leases4.csv</code>.
+        La gràcia és l'ordre: la primera que falli et diu exactament on és el problema. No cal
+        endevinar res.
       </p>
     </li>
   </ol>
 
   <div class="cq-note">
     <span class="lbl">Ubuntu 26.04</span>
-    Els noms de paquet, servei i fitxers són els mateixos a 24.04 i 26.04. El que pot canviar és
-    la versió de Kea i, amb ella, algun valor per defecte del fitxer que et ve instal·lat.
+    <code>nftables</code> i <code>sysctl</code> funcionen igual a 24.04 i 26.04. Comprova sempre
+    la sortida real de la teva màquina.
   </div>
 </div>
 
-<!-- ============ 8 · BONES PRÀCTIQUES ============ -->
+<!-- ============ 8 · IPTABLES ============ -->
+<div class="cq-block" data-kind="cas real">
+  <h4>Per què no fem servir iptables</h4>
+  <p>
+    Tota la documentació d'Internet parla d'<code>iptables</code>, amb comandes com
+    <code>iptables -t nat -A POSTROUTING -o enp1s0 -j MASQUERADE</code>. Encara funcionen, però
+    és una capa de compatibilitat: per sota, avui, hi ha <code>nftables</code>.
+  </p>
+  <p>
+    <code>nftables</code> és el sistema de tallafoc de Linux des de fa anys i el que trobaràs a
+    qualsevol servidor nou. Té una sintaxi unificada i les regles es desen en un fitxer que pots
+    llegir i versionar.
+  </p>
+  <p>
+    <strong>No barregis els dos.</strong> Si escrius regles amb <code>iptables</code> i les
+    consultes amb <code>nft list ruleset</code> les veuràs traduïdes, i al revés no. Tria un i
+    queda-t'hi.
+  </p>
+</div>
+
+<!-- ============ 9 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
   <h4>Criteris professionals</h4>
   <ul>
-    <li><strong>Valida sempre abans d'arrencar</strong> amb <code>kea-dhcp4 -t</code>. Estalvia la meitat dels problemes.</li>
-    <li><strong>Còpia de l'original.</strong> És la teva marxa enrere si t'hi perds.</li>
-    <li><strong>Escolta només per la targeta interna.</strong> Mai posis la targeta que va a la xarxa del centre a <code>interfaces</code>.</li>
-    <li><strong>Reserves fora del <em>pool</em></strong>, i totes juntes en una zona d'adreces baixes.</li>
-    <li><strong>Comenta la configuració</strong> amb <code>//</code>: Kea ho admet i el teu jo del mes vinent ho agrairà.</li>
+    <li><strong><code>policy drop</code> a <code>forward</code></strong> i obre només el que cal. El que no s'ha permès, no passa.</li>
+    <li><strong>Fes servir <code>ct state related,established</code></strong> per al trànsit de tornada, en lloc d'obrir el sentit contrari sencer.</li>
+    <li><strong>Configuració permanent, no de sessió.</strong> Un <code>sysctl -w</code> o un <code>nft add rule</code> desapareixen en reiniciar.</li>
+    <li><strong>Activa NAT només a la targeta externa.</strong> Un <code>masquerade</code> a la interna amaga qui és qui i complica qualsevol diagnòstic.</li>
+    <li><strong>Prova per capes</strong> (ruta → servidor → IP externa → nom) abans de tocar res.</li>
   </ul>
 </div>
 
-<!-- ============ 9 · PROBLEMES ============ -->
+<!-- ============ 10 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
   <h4>Errors habituals</h4>
   <dl class="cq-issues">
-    <dt>El servei no arrenca</dt>
+    <dt>Funcionava i després de reiniciar ja no</dt>
     <dd>
-      <p><span class="lbl">Causa</span> Error de JSON (una coma sobrant) o la targeta de <code>interfaces</code> no existeix o no té IP.</p>
-      <p><span class="lbl">Solució</span> <code>sudo kea-dhcp4 -t /etc/kea/kea-dhcp4.conf</code> et dona el motiu i la línia. Si el fitxer és correcte, mira <code>journalctl -u kea-dhcp4-server -n 30</code>.</p>
+      <p><span class="lbl">Causa</span> Ho vas activar només per a la sessió: amb <code>sysctl -w</code> o afegint regles a mà.</p>
+      <p><span class="lbl">Solució</span> El fitxer a <code>/etc/sysctl.d/</code> i les regles a <code>/etc/nftables.conf</code>, amb el servei habilitat.</p>
     </dd>
 
-    <dt>El servei està actiu però el client no rep res</dt>
+    <dt><code>nft list ruleset</code> surt buit</dt>
     <dd>
-      <p><span class="lbl">Causa</span> Escolta per la targeta equivocada, o el client està en una xarxa diferent de la del <code>subnet</code>.</p>
-      <p><span class="lbl">Solució</span> Comprova amb <code>ss -ulnp | grep :67</code> i, al servidor, <code>sudo tcpdump -i enp2s0 -n port 67</code>. Si no hi arriba el DISCOVER, el problema és de connexió, no de Kea.</p>
+      <p><span class="lbl">Causa</span> Error de sintaxi al fitxer: el <code>flush ruleset</code> s'executa i la resta falla.</p>
+      <p><span class="lbl">Solució</span> <code>sudo nft -c -f /etc/nftables.conf</code> comprova el fitxer sense aplicar-lo i et diu la línia.</p>
     </dd>
 
-    <dt>La reserva no s'aplica</dt>
+    <dt>El client arriba al servidor però no a Internet</dt>
     <dd>
-      <p><span class="lbl">Causa</span> La MAC està mal escrita, o el client encara té una concessió antiga vàlida.</p>
-      <p><span class="lbl">Solució</span> Copia la MAC de la sortida del client, no la transcriguis a mà. Al client, força la renovació amb <code>sudo networkctl renew enp1s0</code>.</p>
+      <p><span class="lbl">Causa</span> Falta l'encaminament o falta el NAT.</p>
+      <p><span class="lbl">Solució</span> Comprova <code>cat /proc/sys/net/ipv4/ip_forward</code> i que la taula <code>nat</code> apareix a <code>nft list ruleset</code>.</p>
     </dd>
 
-    <dt>El client rep IP però no té Internet</dt>
+    <dt><code>ping 9.9.9.9</code> va, però <code>ping www.upc.edu</code> no</dt>
     <dd>
-      <p><span class="lbl">Causa</span> Kea ha fet la seva feina. Falta que el servidor encamini el trànsit cap a fora.</p>
-      <p><span class="lbl">Solució</span> És el contingut de la teoria T4: IP forwarding i NAT.</p>
+      <p><span class="lbl">Causa</span> L'encaminament i el NAT funcionen. El problema és el DNS que reparteix el teu servidor DHCP.</p>
+      <p><span class="lbl">Solució</span> Revisa <code>domain-name-servers</code> al fitxer de Kea i, al client, <code>resolvectl status</code>.</p>
     </dd>
   </dl>
 </div>
 
-<!-- ============ 10 · RESUM ============ -->
+<!-- ============ 11 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
   <h4>Resum</h4>
   <ul>
-    <li><strong>Kea</strong> substitueix <code>isc-dhcp-server</code>. La documentació antiga no serveix.</li>
-    <li>Es configura en <strong>JSON</strong> a <code>/etc/kea/kea-dhcp4.conf</code>.</li>
-    <li>Quatre blocs a tocar: <code>interfaces-config</code>, <code>subnet</code>, <code>pools</code> i <code>option-data</code>.</li>
-    <li>Les <strong>reserves</strong> van dins de la subxarxa i fora del <em>pool</em>.</li>
-    <li>Al comptar adreces d'un rang, <strong>els dos extrems hi entren</strong>.</li>
+    <li>Un client amb IP correcta encara necessita <strong>encaminament</strong> i <strong>NAT</strong> per sortir a Internet.</li>
+    <li>L'encaminament s'activa amb <code>net.ipv4.ip_forward=1</code>, permanent a <code>/etc/sysctl.d/</code>.</li>
+    <li>El NAT es fa amb <code>masquerade</code> a la targeta externa, dins de <code>/etc/nftables.conf</code>.</li>
+    <li>Es fa servir <strong>nftables</strong>, no <code>iptables</code>. I mai els dos alhora.</li>
+    <li>Per diagnosticar, prova <strong>per capes</strong>: ruta, servidor, IP externa, nom.</li>
   </ul>
 
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Comanda</th><th>Per a què serveix</th></tr></thead>
       <tbody>
-        <tr><td><code>apt install kea-dhcp4-server</code></td><td>Instal·lar el servei</td></tr>
-        <tr><td><code>kea-dhcp4 -t &lt;fitxer&gt;</code></td><td>Validar la configuració</td></tr>
-        <tr><td><code>systemctl restart kea-dhcp4-server</code></td><td>Aplicar els canvis</td></tr>
-        <tr><td><code>systemctl status kea-dhcp4-server</code></td><td>Veure si està actiu o l'error</td></tr>
-        <tr><td><code>journalctl -u kea-dhcp4-server -f</code></td><td>Veure les concessions en directe</td></tr>
-        <tr><td><code>ss -ulnp | grep :67</code></td><td>Comprovar que escolta</td></tr>
-        <tr><td><code>cat /var/lib/kea/kea-leases4.csv</code></td><td>Llista de concessions</td></tr>
+        <tr><td><code>cat /proc/sys/net/ipv4/ip_forward</code></td><td>Veure si l'encaminament està actiu</td></tr>
+        <tr><td><code>sudo sysctl --system</code></td><td>Aplicar els fitxers de <code>/etc/sysctl.d/</code></td></tr>
+        <tr><td><code>sudo nft -c -f /etc/nftables.conf</code></td><td>Validar les regles sense aplicar-les</td></tr>
+        <tr><td><code>sudo systemctl enable --now nftables</code></td><td>Carregar les regles i fer-les permanents</td></tr>
+        <tr><td><code>sudo nft list ruleset</code></td><td>Veure les regles carregades</td></tr>
+        <tr><td><code>ip route</code></td><td>Comprovar la porta d'enllaç al client</td></tr>
       </tbody>
     </table>
   </div>
 
   <p style="margin-top:16px">
-    <strong>Següent:</strong> a <em>T4 · Encaminament i NAT</em> faràs que els clients del teu
-    servidor tinguin Internet.
+    <strong>Amb això tanques el RA1:</strong> ja saps configurar la xarxa, muntar un servidor
+    DHCP i donar Internet als seus clients.
   </p>
 </div>
 
-<!-- ============ 11 · QUIZ ============ -->
+<!-- ============ 12 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
   <h4>Comprova el que has après</h4>
 
-  <div class="cq-question" data-id="t3-fitxer" data-type="single">
-    <div class="statement">On es configura el servidor Kea per a IPv4?</div>
-    <button class="cq-option" data-correct="false"><code>/etc/dhcp/dhcpd.conf</code></button>
-    <button class="cq-option" data-correct="true"><code>/etc/kea/kea-dhcp4.conf</code></button>
-    <button class="cq-option" data-correct="false"><code>/etc/netplan/01-kea.yaml</code></button>
-    <button class="cq-option" data-correct="false"><code>/var/lib/kea/kea-leases4.csv</code></button>
+  <div class="cq-question" data-id="t1-4-forward" data-type="single">
+    <div class="statement">Què significa que <code>/proc/sys/net/ipv4/ip_forward</code> valgui <code>0</code>?</div>
+    <button class="cq-option" data-correct="true">El servidor no passa paquets d'una targeta a l'altra</button>
+    <button class="cq-option" data-correct="false">El servidor no té cap targeta de xarxa activa</button>
+    <button class="cq-option" data-correct="false">El NAT està desactivat</button>
+    <button class="cq-option" data-correct="false">No hi ha cap regla de tallafoc</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t3-rang" data-type="single">
-    <div class="statement">Quantes adreces reparteix el rang <code>10.0.0.50 - 10.0.0.150</code>?</div>
-    <button class="cq-option" data-correct="false">100</button>
-    <button class="cq-option" data-correct="true">101</button>
-    <button class="cq-option" data-correct="false">99</button>
-    <button class="cq-option" data-correct="false">150</button>
+  <div class="cq-question" data-id="t1-4-nat" data-type="single">
+    <div class="statement">Per a què serveix el NAT (<em>masquerade</em>)?</div>
+    <button class="cq-option" data-correct="false">Per repartir adreces IP als clients</button>
+    <button class="cq-option" data-correct="true">Per canviar l'adreça privada d'origen per la del servidor, i que la resposta pugui tornar</button>
+    <button class="cq-option" data-correct="false">Per resoldre noms de domini</button>
+    <button class="cq-option" data-correct="false">Per xifrar el trànsit cap a Internet</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t3-validar" data-type="single">
-    <div class="statement">Quina comanda comprova la configuració <em>abans</em> d'arrencar el servei?</div>
-    <button class="cq-option" data-correct="false"><code>systemctl status kea-dhcp4-server</code></button>
-    <button class="cq-option" data-correct="true"><code>kea-dhcp4 -t /etc/kea/kea-dhcp4.conf</code></button>
-    <button class="cq-option" data-correct="false"><code>netplan try</code></button>
-    <button class="cq-option" data-correct="false"><code>ss -ulnp | grep :67</code></button>
+  <div class="cq-question" data-id="t1-4-permanent" data-type="single">
+    <div class="statement">Després de reiniciar, el client torna a quedar-se sense Internet. Què ha passat?</div>
+    <button class="cq-option" data-correct="false">La concessió DHCP ha caducat</button>
+    <button class="cq-option" data-correct="true">La configuració es va fer només per a la sessió i no s'ha desat en fitxers</button>
+    <button class="cq-option" data-correct="false">El servidor ha canviat d'adreça MAC</button>
+    <button class="cq-option" data-correct="false">S'ha esgotat el rang d'adreces</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t3-opcions" data-type="single">
-    <div class="statement">Quin nom d'opció serveix per repartir la porta d'enllaç?</div>
-    <button class="cq-option" data-correct="false"><code>gateway</code></button>
-    <button class="cq-option" data-correct="true"><code>routers</code></button>
-    <button class="cq-option" data-correct="false"><code>domain-name-servers</code></button>
-    <button class="cq-option" data-correct="false"><code>default-route</code></button>
+  <div class="cq-question" data-id="t1-4-diagnostic" data-type="single">
+    <div class="statement">Al client, <code>ping 9.9.9.9</code> funciona però <code>ping www.upc.edu</code> no. Què falla?</div>
+    <button class="cq-option" data-correct="false">L'encaminament</button>
+    <button class="cq-option" data-correct="false">El NAT</button>
+    <button class="cq-option" data-correct="true">El DNS que reparteix el servidor DHCP</button>
+    <button class="cq-option" data-correct="false">La porta d'enllaç</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t3-certes" data-type="multi">
-    <div class="statement">Selecciona totes les afirmacions certes sobre Kea</div>
-    <button class="cq-option" data-correct="true">La configuració és un fitxer JSON.</button>
-    <button class="cq-option" data-correct="true">Les IP reservades han d'estar fora del <em>pool</em>.</button>
-    <button class="cq-option" data-correct="true">La targeta on escolta ha de tenir IP fixa.</button>
-    <button class="cq-option" data-correct="false">Cal posar una coma després de l'últim element d'una llista.</button>
-    <button class="cq-option" data-correct="false">La documentació d'isc-dhcp-server serveix per configurar Kea.</button>
+  <div class="cq-question" data-id="t1-4-certes" data-type="multi">
+    <div class="statement">Selecciona totes les afirmacions certes</div>
+    <button class="cq-option" data-correct="true">L'encaminament ve desactivat per defecte a Linux.</button>
+    <button class="cq-option" data-correct="true">El <em>masquerade</em> s'aplica a la targeta que surt a Internet.</button>
+    <button class="cq-option" data-correct="true">Les regles de <code>/etc/nftables.conf</code> es carreguen a cada arrencada si el servei està habilitat.</button>
+    <button class="cq-option" data-correct="false">Convé escriure les regles amb <code>iptables</code> i amb <code>nftables</code> alhora.</button>
+    <button class="cq-option" data-correct="false">Amb el DHCP ben configurat, el client ja té Internet.</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 </div>
 
 <script>
+  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  (function () {
+    function editant(node) {
+      return node && node.closest && node.closest('[contenteditable="true"]');
+    }
+    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+      document.addEventListener(nom, function (e) {
+        if (!editant(e.target)) { e.preventDefault(); }
+      });
+    });
+  })();
+
   // Motor únic per a totes les preguntes single i multi.
   document.querySelectorAll('.cq-question').forEach(function (question) {
     var id = question.dataset.id;

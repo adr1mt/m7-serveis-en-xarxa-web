@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>T0 · Repàs d'adreçament — Serveis en Xarxa (0227)</title>
+<title>T2.1 · Noms i resolució al client — Serveis en Xarxa (0227)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -368,328 +368,328 @@
     .cq-block pre .c, .cq-block pre .o { color: #555; }
     .cq-check-btn { display: none; }
   }
+  /* ==== Contingut no copiable ====
+     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
+     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
+     queda exclòs. */
+  .cq-header, .cq-block {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  [contenteditable="true"], [contenteditable="true"] * {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    user-select: text;
+  }
+
 /* === SINAPSI-CSS FI ======================================== */
 </style>
 </head>
 <body>
 <header class="cq-header">
-  <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · Teoria 0</div>
-  <h1>Repàs d'adreçament</h1>
-  <p class="lede">El mínim de xarxes que necessites tenir clar abans de començar el mòdul.</p>
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA2 · T2.1</div>
+  <h1>Noms i resolució al client</h1>
+  <p class="lede">Què passa dins del teu equip entre que escrius un nom i surt una adreça IP.</p>
 </header>
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
   <h4>Què sabràs fer en acabar</h4>
   <ul>
-    <li>Diferenciar l'adreça MAC de l'adreça IP.</li>
-    <li>Interpretar una màscara escrita en format CIDR (<code>/24</code>).</li>
-    <li>Dir quina és l'adreça de xarxa, la de difusió i quantes en queden per als equips.</li>
-    <li>Reconèixer els rangs privats.</li>
+    <li>Explicar per què les xarxes treballen amb noms i no amb adreces.</li>
+    <li>Distingir els dos mecanismes de resolució: fitxer local i DNS.</li>
+    <li>Saber en quin ordre consulta el teu equip cada mecanisme.</li>
+    <li>Fer servir <code>resolvectl</code>, <code>host</code> i <code>dig</code>.</li>
+    <li>Entendre què és la memòria cau i per què de vegades enganya.</li>
   </ul>
 </div>
 
-<!-- ============ 2 · MAC I IP ============ -->
+<!-- ============ 2 · INTRODUCCIÓ ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Dues adreces per a cada targeta</h4>
+  <h4>El problema que resol el DNS</h4>
   <p>
-    Cada targeta de xarxa té <strong>dues</strong> adreces, i fan feines diferents:
+    Al RA1 vas repartir adreces amb DHCP. Però ningú escriu
+    <code>142.250.185.3</code> al navegador: escrivim <strong>noms</strong>. Algú ha de
+    convertir el nom en adreça abans que la màquina pugui enviar cap paquet.
   </p>
+  <p>Els noms tenen dos avantatges que les adreces no tenen:</p>
   <ul>
-    <li>
-      <strong>MAC</strong> (<code>08:00:27:1f:a3:0c</code>) — ve de fàbrica i no canvia. Serveix
-      dins de la xarxa local i és la que fa servir DHCP per reconèixer cada equip.
-    </li>
-    <li>
-      <strong>IP</strong> (<code>192.168.1.50</code>) — la poses tu o te la dona un servidor.
-      Serveix per arribar a qualsevol lloc, també fora de la teva xarxa.
-    </li>
+    <li>Es recorden. <code>moodle.elpuig.xeill.net</code> contra una IP qualsevol.</li>
+    <li>Sobreviuen als canvis: si el servidor canvia d'adreça, el nom continua sent el mateix.</li>
   </ul>
   <p>
-    La comparació habitual: la MAC és el número de sèrie del teu mòbil; la IP és el número de
-    telèfon. El primer no canvia mai; el segon depèn d'on estiguis donat d'alta.
+    Aquesta conversió es diu <strong>resolució de noms</strong>, i el sistema que la fa a
+    Internet és el <strong>DNS</strong> (<em>Domain Name System</em>).
   </p>
 </div>
 
-<!-- ============ 3 · IP I MÀSCARA ============ -->
+<!-- ============ 3 · ELS DOS MECANISMES ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>La màscara parteix l'adreça en dos</h4>
+  <h4>Dos mecanismes, i un ordre</h4>
   <p>
-    Una adreça IPv4 són quatre números de 0 a 255, i sempre va acompanyada d'una
-    <strong>màscara</strong>. La màscara diu quina part de l'adreça identifica la
-    <strong>xarxa</strong> i quina identifica l'<strong>equip</strong>.
+    El teu equip pot resoldre un nom de dues maneres: mirant un <strong>fitxer local</strong> o
+    <strong>preguntant a un servidor</strong>. No en tria una a l'atzar: hi ha un ordre escrit.
   </p>
-  <p>
-    A <code>192.168.1.50/24</code>, el <code>/24</code> vol dir que els <strong>24 primers
-    bits</strong> (els tres primers números) són la xarxa. Per tant: xarxa
-    <code>192.168.1</code>, equip <code>50</code>.
-  </p>
-  <p>
-    <strong>Dos equips es poden parlar directament si comparteixen la part de xarxa.</strong> Si
-    no, el trànsit ha de passar per la porta d'enllaç. Aquesta única frase explica la meitat dels
-    problemes de xarxa que et trobaràs.
-  </p>
-</div>
-
-<!-- ============ 4 · CIDR ============ -->
-<div class="cq-block" data-kind="teoria">
-  <h4>Les màscares que faràs servir</h4>
   <div class="cq-tablewrap">
     <table class="cq-table">
-      <thead><tr><th>CIDR</th><th>Màscara</th><th>Adreces</th><th>Equips</th></tr></thead>
+      <thead><tr><th>Mecanisme</th><th>On mira</th><th>Límit</th></tr></thead>
       <tbody>
-        <tr><td><code>/24</code></td><td>255.255.255.0</td><td>256</td><td>254</td></tr>
-        <tr><td><code>/20</code></td><td>255.255.240.0</td><td>4.096</td><td>4.094</td></tr>
-        <tr><td><code>/16</code></td><td>255.255.0.0</td><td>65.536</td><td>65.534</td></tr>
-        <tr><td><code>/8</code></td><td>255.0.0.0</td><td>16.777.216</td><td>16.777.214</td></tr>
+        <tr><td><strong>Fitxer local</strong></td><td><code>/etc/hosts</code></td><td>Només el que hi has escrit tu</td></tr>
+        <tr><td><strong>mDNS</strong></td><td>Pregunta a crits a la xarxa local</td><td>Només noms acabats en <code>.local</code></td></tr>
+        <tr><td><strong>DNS</strong></td><td>Un servidor de noms</td><td>Cal tenir-ne un configurat</td></tr>
       </tbody>
     </table>
   </div>
   <p>
-    Per què sempre <strong>dos equips menys</strong> del total? Perquè de cada xarxa hi ha dues
-    adreces que no es poden donar a ningú: la <strong>primera</strong> (adreça de xarxa) i
-    l'<strong>última</strong> (difusió).
+    L'ordre el marca el fitxer <code>/etc/nsswitch.conf</code>, a la línia <code>hosts:</code>.
+    Primer el fitxer local, després la resta. Per això una línia a <code>/etc/hosts</code>
+    <strong>guanya sempre</strong> al DNS.
   </p>
 </div>
 
-<!-- ============ MÀSCARES NO RODONES ============ -->
+<!-- ============ 4 · SYSTEMD-RESOLVED ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Les màscares no acaben sempre en un punt</h4>
+  <h4>Qui pregunta de veritat: systemd-resolved</h4>
   <p>
-    El <code>/24</code>, el <code>/16</code> i el <code>/8</code> són còmodes perquè cauen just
-    entre dos números de l'adreça. Però la màscara pot ser <strong>qualsevol valor entre /0 i
-    /32</strong>, i a la pràctica en trobaràs moltes que no són rodones, com la <code>/20</code>
-    o la <code>/26</code>.
+    A Ubuntu, les aplicacions no parlen amb el servidor DNS directament. Parlen amb un servei
+    local, <strong>systemd-resolved</strong>, que escolta a l'adreça <code>127.0.0.53</code> i fa
+    de intermediari.
   </p>
+  <p>Serveix per a dues coses:</p>
+  <ul>
+    <li><strong>Memòria cau</strong>: si algú ja ha preguntat aquell nom fa poc, respon a l'instant.</li>
+    <li><strong>Un sol punt</strong>: si canvia el servidor DNS, les aplicacions no se n'assabenten.</li>
+  </ul>
   <p>
-    Partir una xarxa gran en trossos més petits és el que s'anomena <strong>subnetting</strong>.
-    Serveix per separar aules, plantes o departaments sense malgastar adreces: si una aula té 20
-    ordinadors, donar-li una <code>/24</code> sencera vol dir desaprofitar-ne 234.
+    És un <em>stub</em>: no sap resoldre pel seu compte, només reenvia al servidor DNS que li han
+    dit. I aquest servidor, en una xarxa normal, <strong>l'hi ha donat el DHCP</strong>.
   </p>
-  <div class="cq-note">
-    <span class="lbl">En aquest mòdul</span>
-    Farem servir <code>/24</code>, <code>/16</code> i <code>/8</code> per centrar-nos en els
-    serveis. Aquí només cal que sàpigues que les altres existeixen i que <strong>qui mana sempre
-    és la màscara</strong>: és ella qui decideix quina és la primera adreça i quina l'última, no
-    el fet que un número acabi en 0 o en 255.
-  </div>
 </div>
 
 <!-- ============ 5 · EXEMPLE ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h4>Desglossar la xarxa 192.168.1.0/24</h4>
-  <div class="cq-tablewrap">
-    <table class="cq-table">
-      <thead><tr><th>Adreça</th><th>Què és</th><th>Es pot fer servir?</th></tr></thead>
-      <tbody>
-        <tr><td><code>192.168.1.0</code></td><td>Adreça de xarxa</td><td>No</td></tr>
-        <tr><td><code>192.168.1.1</code></td><td>Primera assignable — sol ser la porta d'enllaç</td><td>Sí</td></tr>
-        <tr><td><code>192.168.1.2 – .254</code></td><td>Equips</td><td>Sí</td></tr>
-        <tr><td><code>192.168.1.255</code></td><td>Difusió (<em>broadcast</em>)</td><td>No</td></tr>
-      </tbody>
-    </table>
-  </div>
+  <h4>El fitxer /etc/resolv.conf ja no és el que era</h4>
   <p>
-    La de <strong>difusió</strong> és la que fa servir un client DHCP per preguntar si hi ha
-    algun servidor: un missatge que arriba a tothom de la xarxa alhora.
+    Durant anys, el servidor DNS s'escrivia a mà a <code>/etc/resolv.conf</code>. Avui aquest
+    fitxer el genera <code>systemd-resolved</code> i conté sempre el mateix:
   </p>
+<pre><span class="c"># This file is managed by man:systemd-resolved(8).</span>
+nameserver 127.0.0.53
+options edns0</pre>
+  <p>
+    Aquesta adreça no és el teu servidor DNS: és el servei local. Per veure el servidor de
+    veritat cal preguntar-l'hi:
+  </p>
+<pre>resolvectl dns
+<span class="o">Link 2 (enp1s0): 10.0.0.1</span></pre>
+  <p><strong>Editar <code>/etc/resolv.conf</code> a mà no serveix de res:</strong> es torna a generar.</p>
 </div>
 
-<!-- ============ 6 · RANGS PRIVATS ============ -->
-<div class="cq-block" data-kind="teoria">
-  <h4>Adreces privades i públiques</h4>
+<!-- ============ 6 · CAS REAL ============ -->
+<div class="cq-block" data-kind="cas real">
+  <h4>El domini .local no és teu</h4>
   <p>
-    Hi ha tres rangs reservats per a xarxes internes. <strong>No existeixen a Internet</strong>:
-    els pots fer servir a casa, a l'institut i a l'empresa sense demanar permís a ningú.
+    És molt habitual batejar la xarxa de casa o de l'aula com <code>empresa.local</code>. És una
+    mala idea: el sufix <strong><code>.local</code> està reservat</strong> per a mDNS, el
+    mecanisme que fa que les impressores es trobin soles.
   </p>
-  <div class="cq-tablewrap">
-    <table class="cq-table">
-      <thead><tr><th>Rang</th><th>En CIDR</th><th>On el veuràs</th></tr></thead>
-      <tbody>
-        <tr><td>10.0.0.0 – 10.255.255.255</td><td><code>10.0.0.0/8</code></td><td>Empreses grans</td></tr>
-        <tr><td>172.16.0.0 – 172.31.255.255</td><td><code>172.16.0.0/12</code></td><td>Xarxes mitjanes</td></tr>
-        <tr><td>192.168.0.0 – 192.168.255.255</td><td><code>192.168.0.0/16</code></td><td>Cases i oficines</td></tr>
-      </tbody>
-    </table>
-  </div>
   <p>
-    Els faràs servir tots tres durant el mòdul. Com que no surten a Internet, cal un servidor que
-    tradueixi les adreces quan els clients hi volen sortir: és el <strong>NAT</strong> de la
-    teoria T4.
+    Conseqüència pràctica: quan preguntes per un nom acabat en <code>.local</code>, el sistema el
+    pot enviar per mDNS i <strong>no arribar mai al teu servidor DNS</strong>. El símptoma és
+    típic: el client rep bé la IP i el DNS, però no resol els teus noms.
+  </p>
+  <p>
+    Per als dominis interns fes servir <code>.internal</code>, reservat oficialment per a
+    ús privat des del 2024, o un subdomini d'un domini teu.
   </p>
 </div>
 
 <!-- ============ 7 · PAS A PAS ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h4>Llegir la teva pròpia xarxa</h4>
+  <h4>Mirar com resol la teva màquina</h4>
+  <p>Amb qualsevol Ubuntu connectat a la xarxa del centre:</p>
 
   <ol class="cq-steps">
     <li>
-      <p><strong>Mira les teves adreces</strong>, la MAC i la IP alhora:</p>
-<pre>ip -c addr show</pre>
-      <p>
-        La MAC surt a <code>link/ether</code> i la IP amb la màscara a <code>inet</code>, en
-        format CIDR. Apunta-les.
-      </p>
-      <div class="cq-note">
-        <span class="lbl">Escriu menys</span>
-        <code>ip</code> accepta les ordres abreujades mentre no siguin ambigües:
-        <code>ip -c a</code> és exactament el mateix que <code>ip -c addr show</code>. Igualment,
-        <code>ip -c r</code> per a les rutes, <code>ip -c l</code> per a les targetes i
-        <code>ip -c n</code> per als veïns. Als apunts hi trobaràs la forma llarga perquè es
-        llegeix millor, però al teclat faràs servir la curta.
-      </div>
+      <p><strong>Mira quin servidor fa servir</strong> i quin domini de cerca té:</p>
+<pre>resolvectl status</pre>
+      <p>Fixa't en <code>Current DNS Server</code> i en <code>DNS Domain</code>.</p>
     </li>
 
     <li>
-      <p><strong>Mira per on surts</strong> de la teva xarxa:</p>
-<pre>ip -c route</pre>
+      <p><strong>Resol un nom</strong> i mira d'on surt la resposta:</p>
+<pre>resolvectl query www.upc.edu</pre>
       <p>
-        La línia que comença per <code>default via</code> és la porta d'enllaç. Comprova que
-        està dins de la teva mateixa xarxa: si no hi fos, no hi podries arribar.
+        La primera vegada dirà que ve de la xarxa. Repeteix-ho i dirà
+        <code>(cache)</code>: ja no ha preguntat a ningú.
       </p>
     </li>
 
     <li>
-      <p><strong>Fes els càlculs sense fer-los.</strong> Python ve instal·lat a Ubuntu i sap de xarxes:</p>
-<pre>python3 -c "import ipaddress as i; n=i.ip_network('192.168.1.0/24'); \
-print('Xarxa:', n.network_address); \
-print('Difusió:', n.broadcast_address); \
-print('Equips:', n.num_addresses - 2)"</pre>
-      <p>Canvia la xarxa per la teva i comprova que et surt el que esperaves.</p>
+      <p><strong>Consulta un servidor concret</strong>, saltant-te el servei local:</p>
+<pre>host www.upc.edu 9.9.9.9
+dig @9.9.9.9 www.upc.edu +short</pre>
     </li>
 
     <li>
-      <p><strong>Comprova qui tens a la vora</strong> amb la taula de veïns, que lliga IP i MAC:</p>
-<pre>ip -c neigh</pre>
-      <p>
-        Aquí veus les dues adreces treballant juntes: per parlar amb un veí de la teva xarxa, el
-        teu equip necessita saber-ne la MAC.
-      </p>
+      <p><strong>Demana un tipus de registre</strong> diferent de l'adreça:</p>
+<pre>dig upc.edu MX +short      <span class="c"># servidors de correu</span>
+dig upc.edu NS +short      <span class="c"># servidors de noms</span></pre>
+    </li>
+
+    <li>
+      <p><strong>Fes trampa amb <code>/etc/hosts</code></strong> per comprovar l'ordre de resolució:</p>
+<pre>echo "127.0.0.1 provaordre.test" | sudo tee -a /etc/hosts
+getent hosts provaordre.test</pre>
+      <p>Esborra la línia quan ho hagis vist. Aquesta és la manera de comprovar-ho, no de treballar.</p>
     </li>
   </ol>
+
+  <div class="cq-note">
+    <span class="lbl">Ubuntu 26.04</span>
+    Aquestes comandes són iguals a 24.04 i 26.04. Comprova sempre la sortida real de la teva
+    màquina abans de donar per bona la d'aquests apunts.
+  </div>
 </div>
 
-<!-- ============ 8 · PROBLEMES ============ -->
+<!-- ============ 8 · BONES PRÀCTIQUES ============ -->
+<div class="cq-block" data-kind="bones pràctiques">
+  <h4>Criteris professionals</h4>
+  <ul>
+    <li><strong><code>/etc/hosts</code> és per a proves</strong>, no per a administrar una xarxa. No escala i ningú se'n recorda.</li>
+    <li><strong>No editis <code>/etc/resolv.conf</code></strong>: el DNS es configura al Netplan o s'obté per DHCP.</li>
+    <li><strong>Comprova amb <code>dig @servidor</code></strong> quan sospitis de la memòria cau: així preguntes directament.</li>
+    <li><strong>Fes servir <code>.internal</code></strong> per als dominis interns, mai <code>.local</code>.</li>
+    <li><strong>Dos servidors DNS</strong> als clients, sempre que puguis: si en cau un, la xarxa continua.</li>
+  </ul>
+</div>
+
+<!-- ============ 9 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h4>Confusions habituals</h4>
+  <h4>Errors habituals</h4>
   <dl class="cq-issues">
-    <dt>Dos equips no es veuen tot i tenir IP</dt>
+    <dt><code>ping 9.9.9.9</code> va, però <code>ping www.upc.edu</code> no</dt>
     <dd>
-      <p><span class="lbl">Causa</span> Estan en xarxes diferents. Per exemple <code>192.168.1.5/24</code> i <code>192.168.2.5/24</code>: comparteixen els dos primers números, però amb <code>/24</code> en calen tres.</p>
-      <p><span class="lbl">Solució</span> Compara la part de xarxa de tots dos segons la màscara, no a ull.</p>
+      <p><span class="lbl">Causa</span> La xarxa funciona; el que falla és la resolució de noms.</p>
+      <p><span class="lbl">Solució</span> <code>resolvectl status</code>: mira si hi ha cap servidor DNS configurat i si respon amb <code>dig @aquellaIP</code>.</p>
     </dd>
 
-    <dt>Assignar la primera o l'última adreça a un equip</dt>
+    <dt>Has canviat una adreça i el nom encara apunta a l'antiga</dt>
     <dd>
-      <p><span class="lbl">Causa</span> Són la de xarxa i la de difusió. No es poden fer servir.</p>
-      <p><span class="lbl">Solució</span> A la <code>192.168.1.0/24</code>, el primer equip és la <code>.1</code> i l'últim la <code>.254</code>.</p>
+      <p><span class="lbl">Causa</span> Memòria cau. El teu equip guarda la resposta el temps que digui el TTL.</p>
+      <p><span class="lbl">Solució</span> <code>sudo resolvectl flush-caches</code>, i comprova després amb <code>dig</code> contra el servidor.</p>
     </dd>
 
-    <dt>La porta d'enllaç està fora de la xarxa</dt>
+    <dt>Un nom es resol a la teva màquina i a la del costat no</dt>
     <dd>
-      <p><span class="lbl">Causa</span> Un error de teclat, com posar <code>192.168.2.1</code> en una xarxa <code>192.168.1.0/24</code>.</p>
-      <p><span class="lbl">Solució</span> La porta d'enllaç ha de ser sempre una adreça de la teva pròpia xarxa. Comprova-ho amb <code>ip route</code>.</p>
+      <p><span class="lbl">Causa</span> Te'l resol una línia de <code>/etc/hosts</code> que només tens tu.</p>
+      <p><span class="lbl">Solució</span> <code>getent hosts nom</code> i revisa el fitxer. Si hi és, treu-la i posa el registre al servidor DNS.</p>
     </dd>
   </dl>
 </div>
 
-<!-- ============ 9 · RESUM ============ -->
+<!-- ============ 10 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
   <h4>Resum</h4>
   <ul>
-    <li>La <strong>MAC</strong> ve de fàbrica i és local; la <strong>IP</strong> es configura i serveix arreu.</li>
-    <li>La <strong>màscara</strong> parteix l'adreça en part de xarxa i part d'equip.</li>
-    <li>De cada xarxa, la <strong>primera</strong> i l'<strong>última</strong> adreça no s'assignen.</li>
-    <li>Rangs privats: <code>10.0.0.0/8</code>, <code>172.16.0.0/12</code> i <code>192.168.0.0/16</code>.</li>
-    <li>La <strong>porta d'enllaç</strong> ha d'estar dins de la teva pròpia xarxa.</li>
+    <li>Resoldre un nom és convertir-lo en adreça IP abans d'enviar res.</li>
+    <li>L'ordre el marca <code>/etc/nsswitch.conf</code>: <strong><code>/etc/hosts</code> guanya al DNS</strong>.</li>
+    <li>A Ubuntu qui pregunta és <strong>systemd-resolved</strong>, al <code>127.0.0.53</code>, amb memòria cau.</li>
+    <li><code>/etc/resolv.conf</code> és generat: no s'edita.</li>
+    <li><code>.local</code> està reservat per a mDNS; per a xarxes internes, <code>.internal</code>.</li>
   </ul>
 
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Comanda</th><th>Per a què serveix</th></tr></thead>
       <tbody>
-        <tr><td><code>ip -c addr show</code><br><code>ip -c a</code></td><td>Veure la MAC i la IP amb la màscara</td></tr>
-        <tr><td><code>ip -c route</code><br><code>ip -c r</code></td><td>Veure la porta d'enllaç</td></tr>
-        <tr><td><code>ip -c neigh</code><br><code>ip -c n</code></td><td>Veure els veïns i la seva MAC</td></tr>
-        <tr><td><code>ip -c link show</code><br><code>ip -c l</code></td><td>Veure les targetes i els seus noms</td></tr>
+        <tr><td><code>resolvectl status</code></td><td>Veure el DNS actiu i el domini de cerca</td></tr>
+        <tr><td><code>resolvectl query &lt;nom&gt;</code></td><td>Resoldre i veure si ve de la cau</td></tr>
+        <tr><td><code>resolvectl statistics</code></td><td>Encerts i errades de la memòria cau</td></tr>
+        <tr><td><code>resolvectl flush-caches</code></td><td>Buidar la memòria cau</td></tr>
+        <tr><td><code>host &lt;nom&gt; [servidor]</code></td><td>Consulta ràpida</td></tr>
+        <tr><td><code>dig @&lt;servidor&gt; &lt;nom&gt; [tipus]</code></td><td>Consulta detallada, saltant-se la cau local</td></tr>
+        <tr><td><code>getent hosts &lt;nom&gt;</code></td><td>Resoldre seguint l'ordre de <code>nsswitch</code></td></tr>
       </tbody>
     </table>
   </div>
 
   <p style="margin-top:16px">
-    <strong>Següent:</strong> a <em>T1 · Configurar la xarxa a Ubuntu Server</em> començaràs a
-    escriure tu aquesta configuració.
+    <strong>Següent:</strong> a <em>T2.2 · L'arbre del DNS</em> veuràs on va a parar la pregunta
+    quan el servidor no en sap la resposta.
   </p>
 </div>
 
-<!-- ============ 10 · QUIZ ============ -->
+<!-- ============ 11 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
   <h4>Comprova el que has après</h4>
 
-  <div class="cq-question" data-id="t0-cidr" data-type="single">
-    <div class="statement">Quina màscara correspon a <code>/24</code>?</div>
-    <button class="cq-option" data-correct="false">255.255.0.0</button>
-    <button class="cq-option" data-correct="true">255.255.255.0</button>
-    <button class="cq-option" data-correct="false">255.0.0.0</button>
-    <button class="cq-option" data-correct="false">255.255.255.255</button>
+  <div class="cq-question" data-id="t2-1-ordre" data-type="single">
+    <div class="statement">Tens un nom escrit a <code>/etc/hosts</code> amb una IP, i al DNS amb una altra. Quina fa servir el sistema?</div>
+    <button class="cq-option" data-correct="true">La de <code>/etc/hosts</code>, perquè es consulta abans</button>
+    <button class="cq-option" data-correct="false">La del DNS, perquè és l'autoritat</button>
+    <button class="cq-option" data-correct="false">La més recent de les dues</button>
+    <button class="cq-option" data-correct="false">Cap: el sistema dona error de conflicte</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t0-equips" data-type="single">
-    <div class="statement">Quants equips es poden connectar a la xarxa <code>192.168.1.0/24</code>?</div>
-    <button class="cq-option" data-correct="false">256</button>
-    <button class="cq-option" data-correct="false">255</button>
-    <button class="cq-option" data-correct="true">254</button>
-    <button class="cq-option" data-correct="false">253</button>
+  <div class="cq-question" data-id="t2-1-stub" data-type="single">
+    <div class="statement">Què és l'adreça <code>127.0.0.53</code> que surt a <code>/etc/resolv.conf</code>?</div>
+    <button class="cq-option" data-correct="false">El servidor DNS del teu proveïdor</button>
+    <button class="cq-option" data-correct="true">El servei local systemd-resolved, que fa de intermediari i memòria cau</button>
+    <button class="cq-option" data-correct="false">L'adreça de difusió de la xarxa</button>
+    <button class="cq-option" data-correct="false">Un servidor DNS públic de reserva</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t0-difusio-mascara" data-type="single">
-    <div class="statement">Quina és l'adreça de difusió de la xarxa <code>10.0.0.0/8</code>?</div>
-    <button class="cq-option" data-correct="false">10.0.0.255</button>
-    <button class="cq-option" data-correct="true">10.255.255.255</button>
-    <button class="cq-option" data-correct="false">10.0.255.255</button>
-    <button class="cq-option" data-correct="false">255.255.255.255</button>
+  <div class="cq-question" data-id="t2-1-resolvconf" data-type="single">
+    <div class="statement">Vols canviar el servidor DNS d'un Ubuntu Server. Què fas?</div>
+    <button class="cq-option" data-correct="false">Edito <code>/etc/resolv.conf</code> i hi poso la IP nova</button>
+    <button class="cq-option" data-correct="true">Ho configuro al Netplan, o deixo que ho reparteixi el DHCP</button>
+    <button class="cq-option" data-correct="false">Afegeixo el servidor a <code>/etc/hosts</code></button>
+    <button class="cq-option" data-correct="false">Reinstal·lo systemd-resolved</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t0-privada" data-type="single">
-    <div class="statement">Quina d'aquestes adreces <em>no</em> és privada?</div>
-    <button class="cq-option" data-correct="false">10.5.4.3</button>
-    <button class="cq-option" data-correct="false">172.16.0.10</button>
-    <button class="cq-option" data-correct="false">192.168.30.1</button>
-    <button class="cq-option" data-correct="true">9.9.9.9</button>
+  <div class="cq-question" data-id="t2-1-local" data-type="single">
+    <div class="statement">Per què no convé batejar la xarxa interna com <code>empresa.local</code>?</div>
+    <button class="cq-option" data-correct="false">Perquè els noms curts no es poden resoldre</button>
+    <button class="cq-option" data-correct="true">Perquè <code>.local</code> està reservat per a mDNS i la consulta pot no arribar al teu DNS</button>
+    <button class="cq-option" data-correct="false">Perquè BIND no admet dominis inventats</button>
+    <button class="cq-option" data-correct="false">Perquè cal pagar per registrar-lo</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t0-mateixa-xarxa" data-type="single">
-    <div class="statement">Els equips <code>192.168.1.10/24</code> i <code>192.168.2.10/24</code> es poden parlar directament?</div>
-    <button class="cq-option" data-correct="false">Sí, comparteixen els dos primers números</button>
-    <button class="cq-option" data-correct="true">No, amb <code>/24</code> la part de xarxa són els tres primers i no coincideix</button>
-    <button class="cq-option" data-correct="false">Sí, perquè totes dues són privades</button>
-    <button class="cq-option" data-correct="false">Només si tenen la mateixa MAC</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
-  </div>
-
-  <div class="cq-question" data-id="t0-certes" data-type="multi">
+  <div class="cq-question" data-id="t2-1-eines" data-type="multi">
     <div class="statement">Selecciona totes les afirmacions certes</div>
-    <button class="cq-option" data-correct="true">L'adreça MAC ve de fàbrica amb la targeta.</button>
-    <button class="cq-option" data-correct="true">L'última adreça d'una xarxa és la de difusió i no s'assigna.</button>
-    <button class="cq-option" data-correct="true">La porta d'enllaç ha d'estar dins de la mateixa xarxa que l'equip.</button>
-    <button class="cq-option" data-correct="false">Les adreces privades es poden fer servir a Internet.</button>
-    <button class="cq-option" data-correct="false">Una adreça IP funciona sense necessitat de màscara.</button>
+    <button class="cq-option" data-correct="true"><code>dig @9.9.9.9 nom</code> pregunta directament a aquell servidor.</button>
+    <button class="cq-option" data-correct="true">La memòria cau pot fer que vegis una adreça antiga.</button>
+    <button class="cq-option" data-correct="false">systemd-resolved pot resoldre sol, sense cap servidor DNS.</button>
+    <button class="cq-option" data-correct="true">El servidor DNS del client sol arribar per DHCP.</button>
+    <button class="cq-option" data-correct="false"><code>/etc/hosts</code> és la manera recomanada de gestionar els noms d'una empresa.</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 </div>
 
 <script>
+  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  (function () {
+    function editant(node) {
+      return node && node.closest && node.closest('[contenteditable="true"]');
+    }
+    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+      document.addEventListener(nom, function (e) {
+        if (!editant(e.target)) { e.preventDefault(); }
+      });
+    });
+  })();
+
   // Motor únic per a totes les preguntes single i multi.
   document.querySelectorAll('.cq-question').forEach(function (question) {
     var id = question.dataset.id;

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>T4 · Encaminament i NAT — Serveis en Xarxa (0227)</title>
+<title>T2.5 · Primari i secundari — Serveis en Xarxa (0227)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -368,364 +368,333 @@
     .cq-block pre .c, .cq-block pre .o { color: #555; }
     .cq-check-btn { display: none; }
   }
+  /* ==== Contingut no copiable ====
+     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
+     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
+     queda exclòs. */
+  .cq-header, .cq-block {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  [contenteditable="true"], [contenteditable="true"] * {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    user-select: text;
+  }
+
 /* === SINAPSI-CSS FI ======================================== */
 </style>
 </head>
 <body>
 <header class="cq-header">
-  <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · Teoria 4</div>
-  <h1>Encaminament i NAT</h1>
-  <p class="lede">Convertir el servidor en la porta d'enllaç que dona Internet als seus clients.</p>
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA2 · T2.5</div>
+  <h1>Primari i secundari</h1>
+  <p class="lede">Que la teva zona no depengui d'una sola màquina: transferències de zona.</p>
 </header>
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
   <h4>Què sabràs fer en acabar</h4>
   <ul>
-    <li>Explicar per què un client amb IP correcta encara no té Internet.</li>
-    <li>Activar l'encaminament de paquets de forma permanent.</li>
-    <li>Configurar NAT amb <code>nftables</code>.</li>
-    <li>Comprovar on falla la connexió quan no funciona.</li>
+    <li>Explicar per què tota zona vol dos servidors com a mínim.</li>
+    <li>Configurar un servidor <strong>secundari</strong> que es descarregui la zona.</li>
+    <li>Autoritzar la transferència amb <code>allow-transfer</code>.</li>
+    <li>Entendre el paper del <strong>serial</strong> i de la notificació.</li>
+    <li>Comprovar una transferència amb <code>dig AXFR</code>.</li>
   </ul>
 </div>
 
-<!-- ============ 2 · EL PROBLEMA ============ -->
+<!-- ============ 2 · PER QUÈ ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Tinc IP, però no tinc Internet</h4>
+  <h4>Un sol servidor de noms és un sol punt de fallada</h4>
   <p>
-    El client ha rebut la seva configuració per DHCP i la porta d'enllaç apunta al teu servidor.
-    Fa <code>ping</code> a Internet i no passa res. DHCP ha funcionat perfectament: el que falla
-    és el pas següent.
+    Si la teva zona la serveix una màquina i aquella màquina cau, els seus noms deixen d'existir
+    per a tothom. No és que vagi lent: simplement no hi ha resposta.
   </p>
-  <p>Perquè aquell paquet arribi a Internet i torni, calen <strong>dues coses</strong>:</p>
-  <ul>
-    <li><strong>Encaminament</strong> — que el servidor accepti passar paquets d'una targeta a l'altra.</li>
-    <li><strong>NAT</strong> — que canviï l'adreça d'origen per la seva, perquè la resposta sàpiga tornar.</li>
-  </ul>
-  <p>Cap de les dues està activada per defecte a Linux. Les has d'activar tu.</p>
-</div>
-
-<!-- ============ 3 · ENCAMINAMENT ============ -->
-<div class="cq-block" data-kind="teoria">
-  <h4>Encaminament: deixar passar els paquets</h4>
   <p>
-    Un Linux amb dues targetes de xarxa <strong>no reenvia res</strong> entre elles. Per
-    seguretat, ve desactivat de fàbrica: si no ho actives, cada targeta viu la seva vida.
+    Per això el DNS està pensat des del primer dia perquè una zona la serveixin
+    <strong>diversos servidors</strong>. Un té l'original i la resta en tenen una còpia que
+    mantenen sola.
   </p>
-  <p>L'interruptor és un únic valor del nucli, que pots consultar així:</p>
-<pre>cat /proc/sys/net/ipv4/ip_forward</pre>
   <p>
-    Si respon <code>0</code>, està desactivat. Amb <code>1</code>, el servidor ja fa d'encaminador
-    (<em>router</em>) entre les seves xarxes.
+    El truc és que <strong>tots responen igual d'autoritativament</strong>. Al client li és
+    indiferent a quin pregunta: no hi ha cap servidor «de segona».
   </p>
 </div>
 
-<!-- ============ 4 · NAT ============ -->
+<!-- ============ 3 · ELS DOS PAPERS ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>NAT: qui signa la carta</h4>
-  <p>
-    Els clients tenen adreces privades, per exemple <code>192.168.1.50</code>. Aquestes adreces
-    <strong>no existeixen a Internet</strong>: cap servidor de fora sabria com respondre-hi.
-  </p>
-  <p>
-    <strong>NAT</strong> (<em>Network Address Translation</em>) ho resol canviant l'adreça
-    d'origen del paquet per la del servidor abans d'enviar-lo, i apuntant-se qui l'havia
-    demanat. Quan arriba la resposta, la torna al client correcte.
-  </p>
-  <p>
-    És el mateix que fa el router de casa teva amb tots els mòbils i ordinadors: de portes
-    enfora, tots surten amb una única adreça. La variant que farem servir s'anomena
-    <strong><em>masquerade</em></strong>.
-  </p>
-</div>
-
-<!-- ============ 5 · L'ESCENARI ============ -->
-<div class="cq-block" data-kind="exemple">
-  <h4>L'escenari de les activitats</h4>
+  <h4>Qui fa què</h4>
   <div class="cq-tablewrap">
     <table class="cq-table">
-      <thead><tr><th>Targeta</th><th>Xarxa</th><th>Paper</th></tr></thead>
+      <thead><tr><th></th><th>Primari</th><th>Secundari</th></tr></thead>
       <tbody>
-        <tr><td><code>enp1s0</code></td><td>puigcastellar1</td><td>Sortida a Internet</td></tr>
-        <tr><td><code>enp2s0</code></td><td>personal1</td><td>Xarxa interna: DHCP i clients</td></tr>
+        <tr><td><strong>El fitxer de zona</strong></td><td>L'escrius tu</td><td>Se'l descarrega sol</td></tr>
+        <tr><td><strong>On es guarda</strong></td><td><code>/etc/bind/zones/</code></td><td><code>/var/cache/bind/</code></td></tr>
+        <tr><td><strong>Es pot editar</strong></td><td>Sí, és l'original</td><td>Mai: es perdria a la següent còpia</td></tr>
+        <tr><td><strong>Declaració</strong></td><td><code>type primary</code></td><td><code>type secondary</code> + <code>primaries</code></td></tr>
       </tbody>
     </table>
   </div>
-  <p>El recorregut d'un paquet del client fins a Internet és aquest:</p>
+  <p>
+    Els noms antics són <em>master</em> i <em>slave</em>. Els trobaràs a molta documentació i
+    BIND encara els accepta, però el vocabulari vigent és <strong>primary</strong> i
+    <strong>secondary</strong>.
+  </p>
+</div>
+
+<!-- ============ 4 · LA TRANSFERÈNCIA ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>Com viatja la zona</h4>
+  <p>
+    La còpia es diu <strong>transferència de zona</strong> i, a diferència de les consultes
+    normals, va per <strong>TCP</strong>, també al port 53: pot ser molta informació de cop.
+  </p>
   <div class="dora-flow">
     <div class="dora-step">
       <div class="n">01</div>
-      <div class="t">CLIENT</div>
-      <div class="d">Envia el paquet a la seva porta d'enllaç: el servidor.</div>
+      <div class="t">NOTIFY</div>
+      <div class="d">El primari avisa: «he canviat alguna cosa».</div>
     </div>
     <div class="dora-arrow">→</div>
     <div class="dora-step">
       <div class="n">02</div>
-      <div class="t">FORWARD</div>
-      <div class="d">El servidor el passa de <code>enp2s0</code> a <code>enp1s0</code>.</div>
+      <div class="t">SOA</div>
+      <div class="d">El secundari li demana el serial i el compara amb el seu.</div>
     </div>
     <div class="dora-arrow">→</div>
     <div class="dora-step">
       <div class="n">03</div>
-      <div class="t">NAT</div>
-      <div class="d">Canvia l'origen per l'adreça del servidor i el treu a fora.</div>
+      <div class="t">AXFR</div>
+      <div class="d">Si és més alt, es descarrega la zona sencera.</div>
     </div>
   </div>
+  <p>
+    Si ningú avisa, el secundari pregunta pel seu compte cada <em>refresh</em> segons. I si el
+    serial no ha pujat, <strong>no es descarrega res</strong>: aquesta és la raó de ser del camp.
+  </p>
 </div>
 
-<!-- ============ 6 · RECORDATORI ============ -->
-<div class="cq-block" data-kind="recordatori">
-  <h4>Una regla mal escrita et tanca la porta</h4>
+<!-- ============ 5 · EXEMPLE ============ -->
+<div class="cq-block" data-kind="exemple">
+  <h4>Les dues declaracions</h4>
+  <p>Al <strong>primari</strong>, s'autoritza qui es pot endur la zona i a qui s'avisa:</p>
+<pre>zone "adria.internal" {
+    type primary;
+    file "/etc/bind/zones/db.adria.internal";
+    allow-transfer { 192.168.1.9; };
+    also-notify { 192.168.1.9; };
+};</pre>
+  <p>Al <strong>secundari</strong>, d'on ve la zona i on la desa:</p>
+<pre>zone "adria.internal" {
+    type secondary;
+    file "/var/cache/bind/db.adria.internal";
+    primaries { 192.168.1.8; };
+};</pre>
   <p>
-    Estàs escrivint un tallafoc. Si poses <code>policy drop</code> a la cadena
-    <code>input</code> sense permetre SSH, perdràs la connexió en carregar les regles. En aquesta
-    pràctica deixem <code>input</code> amb <code>policy accept</code> justament per evitar-ho:
-    filtrem el trànsit que <em>travessa</em> el servidor, no el que hi arriba.
+    A la zona hi ha d'haver un registre <strong>NS per a cada servidor</strong>, primari i
+    secundari: si no, per a la resta del món el secundari no existeix.
+  </p>
+</div>
+
+<!-- ============ 6 · SEGURETAT ============ -->
+<div class="cq-block" data-kind="cas real">
+  <h4>Una transferència oberta és el mapa de la teva xarxa</h4>
+  <p>
+    Una zona conté totes les màquines amb nom i adreça. Si qualsevol se la pot descarregar, li
+    estàs regalant l'inventari sencer: servidors, impressores, còpies de seguretat i com es diu
+    cada cosa.
+  </p>
+  <p>
+    Per defecte BIND ja no permet transferències a tothom, però encara es troben servidors mal
+    configurats on <code>dig AXFR</code> ho descarrega tot. És una de les primeres coses que prova
+    qui audita una xarxa.
+  </p>
+  <p>
+    La regla és simple: <code>allow-transfer</code> amb les IP dels teus secundaris, i cap més. En
+    entorns seriosos, a més, es signa amb una clau compartida (<strong>TSIG</strong>).
   </p>
 </div>
 
 <!-- ============ 7 · PAS A PAS ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h4>Convertir el servidor en porta d'enllaç</h4>
+  <h4>Muntar un secundari</h4>
+  <p>Amb dues màquines a la mateixa xarxa: la teva com a primari i una altra com a secundari.</p>
 
   <ol class="cq-steps">
     <li>
-      <p><strong>Mira com està ara</strong> l'encaminament:</p>
-<pre>cat /proc/sys/net/ipv4/ip_forward</pre>
-      <p>Sortirà <code>0</code>.</p>
+      <p><strong>Al primari</strong>, afegeix <code>allow-transfer</code> i <code>also-notify</code> a la zona, apuja el <strong>serial</strong> i recarrega:</p>
+<pre>sudo named-checkconf
+sudo rndc reload</pre>
     </li>
 
     <li>
-      <p><strong>Activa'l de manera permanent</strong> amb un fitxer propi, que és més net que tocar el fitxer general:</p>
-<pre>echo "net.ipv4.ip_forward=1" | sudo tee /etc/sysctl.d/99-encaminament.conf
-sudo sysctl --system</pre>
-      <p>Torna a comprovar-ho: ara ha de sortir <code>1</code>. I sobreviurà a un reinici.</p>
-    </li>
-
-    <li>
-      <p><strong>Escriu les regles</strong> de tallafoc i NAT:</p>
-<pre>sudo nano /etc/nftables.conf</pre>
-      <p>Deixa el fitxer amb aquest contingut, canviant els noms de les targetes pels teus:</p>
-<pre>#!/usr/sbin/nft -f
-flush ruleset
-
-table inet filter {
-    chain input {
-        type filter hook input priority 0;
-        policy accept;
-    }
-    chain forward {
-        type filter hook forward priority 0;
-        policy drop;
-
-        <span class="c"># de la xarxa interna cap a Internet</span>
-        iif "enp2s0" oif "enp1s0" accept
-
-        <span class="c"># només les respostes de tornada</span>
-        iif "enp1s0" oif "enp2s0" ct state related,established accept
-    }
-    chain output {
-        type filter hook output priority 0;
-        policy accept;
-    }
-}
-
-table ip nat {
-    chain postrouting {
-        type nat hook postrouting priority 100;
-        <span class="c"># NAT a la targeta que surt a Internet</span>
-        oif "enp1s0" masquerade
-    }
-}</pre>
-    </li>
-
-    <li>
-      <p><strong>Activa el servei</strong> perquè carregui les regles ara i a cada arrencada:</p>
-<pre>sudo systemctl enable --now nftables</pre>
-      <div class="cq-note">
-        <span class="lbl">Compte</span>
-        <code>enable --now</code> fa les dues coses alhora. No facis
-        <code>enable &amp; start</code> amb un sol <code>&amp;</code>: això envia la primera
-        comanda a segon pla i sembla que funciona quan no ho ha fet.
-      </div>
-    </li>
-
-    <li>
-      <p><strong>Comprova que les regles s'han carregat:</strong></p>
-<pre>sudo nft list ruleset</pre>
-      <p>Ha de sortir exactament el que has escrit. Si surt buit, hi ha un error de sintaxi al fitxer.</p>
-    </li>
-
-    <li>
-      <p><strong>Prova-ho des del client</strong>, per capes, en aquest ordre:</p>
-<pre>ip route              <span class="c"># la porta d'enllaç és el servidor?</span>
-ping -c3 192.168.1.1  <span class="c"># arribo al servidor?</span>
-ping -c3 9.9.9.9      <span class="c"># surto a Internet?</span>
-ping -c3 www.upc.edu  <span class="c"># funciona el DNS?</span></pre>
+      <p><strong>Comprova des del secundari</strong> que el primari el deixa passar:</p>
+<pre>dig @192.168.1.8 adria.internal AXFR</pre>
       <p>
-        La gràcia és l'ordre: la primera que falli et diu exactament on és el problema. No cal
-        endevinar res.
+        Si surt la zona sencera, endavant. Si surt <code>Transfer failed</code>, revisa
+        l'<code>allow-transfer</code> abans de continuar.
+      </p>
+    </li>
+
+    <li>
+      <p><strong>Al secundari</strong>, instal·la BIND i declara la zona amb <code>type secondary</code>, sense escriure cap fitxer de zona.</p>
+    </li>
+
+    <li>
+      <p><strong>Recarrega i mira els registres</strong>: hi has de veure la transferència:</p>
+<pre>sudo rndc reload
+sudo journalctl -u named -n 20 | grep -i transfer</pre>
+    </li>
+
+    <li>
+      <p><strong>Comprova que el fitxer ha aparegut sol</strong> i que el secundari respon:</p>
+<pre>ls -l /var/cache/bind/
+dig @192.168.1.9 www.adria.internal +short</pre>
+      <p>
+        Ara fes una prova de veritat: canvia un registre al primari, apuja el serial, recarrega i
+        torna a preguntar al secundari.
       </p>
     </li>
   </ol>
-
-  <div class="cq-note">
-    <span class="lbl">Ubuntu 26.04</span>
-    <code>nftables</code> i <code>sysctl</code> funcionen igual a 24.04 i 26.04. Comprova sempre
-    la sortida real de la teva màquina.
-  </div>
 </div>
 
-<!-- ============ 8 · IPTABLES ============ -->
-<div class="cq-block" data-kind="cas real">
-  <h4>Per què no fem servir iptables</h4>
-  <p>
-    Tota la documentació d'Internet parla d'<code>iptables</code>, amb comandes com
-    <code>iptables -t nat -A POSTROUTING -o enp1s0 -j MASQUERADE</code>. Encara funcionen, però
-    és una capa de compatibilitat: per sota, avui, hi ha <code>nftables</code>.
-  </p>
-  <p>
-    <code>nftables</code> és el sistema de tallafoc de Linux des de fa anys i el que trobaràs a
-    qualsevol servidor nou. Té una sintaxi unificada i les regles es desen en un fitxer que pots
-    llegir i versionar.
-  </p>
-  <p>
-    <strong>No barregis els dos.</strong> Si escrius regles amb <code>iptables</code> i les
-    consultes amb <code>nft list ruleset</code> les veuràs traduïdes, i al revés no. Tria un i
-    queda-t'hi.
-  </p>
-</div>
-
-<!-- ============ 9 · BONES PRÀCTIQUES ============ -->
+<!-- ============ 8 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
   <h4>Criteris professionals</h4>
   <ul>
-    <li><strong><code>policy drop</code> a <code>forward</code></strong> i obre només el que cal. El que no s'ha permès, no passa.</li>
-    <li><strong>Fes servir <code>ct state related,established</code></strong> per al trànsit de tornada, en lloc d'obrir el sentit contrari sencer.</li>
-    <li><strong>Configuració permanent, no de sessió.</strong> Un <code>sysctl -w</code> o un <code>nft add rule</code> desapareixen en reiniciar.</li>
-    <li><strong>Activa NAT només a la targeta externa.</strong> Un <code>masquerade</code> a la interna amaga qui és qui i complica qualsevol diagnòstic.</li>
-    <li><strong>Prova per capes</strong> (ruta → servidor → IP externa → nom) abans de tocar res.</li>
+    <li><strong>Els dos servidors, en llocs diferents.</strong> Dos servidors al mateix armari cauen alhora.</li>
+    <li><strong><code>allow-transfer</code> tancat</strong> a la llista de secundaris.</li>
+    <li><strong>Un registre NS per servidor</strong> dins de la zona.</li>
+    <li><strong>No editis mai el fitxer del secundari</strong>: es reescriu sol.</li>
+    <li><strong>Repartiu els dos servidors als clients</strong>, perquè la caiguda d'un no es noti.</li>
   </ul>
 </div>
 
-<!-- ============ 10 · PROBLEMES ============ -->
+<!-- ============ 9 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
   <h4>Errors habituals</h4>
   <dl class="cq-issues">
-    <dt>Funcionava i després de reiniciar ja no</dt>
+    <dt><code>Transfer failed</code> als registres del secundari</dt>
     <dd>
-      <p><span class="lbl">Causa</span> Ho vas activar només per a la sessió: amb <code>sysctl -w</code> o afegint regles a mà.</p>
-      <p><span class="lbl">Solució</span> El fitxer a <code>/etc/sysctl.d/</code> i les regles a <code>/etc/nftables.conf</code>, amb el servei habilitat.</p>
+      <p><span class="lbl">Causa</span> El primari no l'autoritza, o no hi ha connexió pel port 53 <strong>TCP</strong>.</p>
+      <p><span class="lbl">Solució</span> Prova <code>dig @primari zona AXFR</code> des del secundari: si falla també, és l'<code>allow-transfer</code>.</p>
     </dd>
 
-    <dt><code>nft list ruleset</code> surt buit</dt>
+    <dt>El secundari serveix dades antigues</dt>
     <dd>
-      <p><span class="lbl">Causa</span> Error de sintaxi al fitxer: el <code>flush ruleset</code> s'executa i la resta falla.</p>
-      <p><span class="lbl">Solució</span> <code>sudo nft -c -f /etc/nftables.conf</code> comprova el fitxer sense aplicar-lo i et diu la línia.</p>
+      <p><span class="lbl">Causa</span> El serial del primari no ha pujat després del canvi.</p>
+      <p><span class="lbl">Solució</span> Compara els dos serials: <code>dig @primari zona SOA +short</code> i el mateix contra el secundari.</p>
     </dd>
 
-    <dt>El client arriba al servidor però no a Internet</dt>
+    <dt>El secundari no desa el fitxer</dt>
     <dd>
-      <p><span class="lbl">Causa</span> Falta l'encaminament o falta el NAT.</p>
-      <p><span class="lbl">Solució</span> Comprova <code>cat /proc/sys/net/ipv4/ip_forward</code> i que la taula <code>nat</code> apareix a <code>nft list ruleset</code>.</p>
-    </dd>
-
-    <dt><code>ping 9.9.9.9</code> va, però <code>ping www.upc.edu</code> no</dt>
-    <dd>
-      <p><span class="lbl">Causa</span> L'encaminament i el NAT funcionen. El problema és el DNS que reparteix el teu servidor DHCP.</p>
-      <p><span class="lbl">Solució</span> Revisa <code>domain-name-servers</code> al fitxer de Kea i, al client, <code>resolvectl status</code>.</p>
+      <p><span class="lbl">Causa</span> El camí no és escrivible per al servei. Les zones secundàries van a <code>/var/cache/bind/</code>.</p>
+      <p><span class="lbl">Solució</span> Canvia el <code>file</code> i mira l'error exacte a <code>journalctl -u named</code>.</p>
     </dd>
   </dl>
 </div>
 
-<!-- ============ 11 · RESUM ============ -->
+<!-- ============ 10 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
   <h4>Resum</h4>
   <ul>
-    <li>Un client amb IP correcta encara necessita <strong>encaminament</strong> i <strong>NAT</strong> per sortir a Internet.</li>
-    <li>L'encaminament s'activa amb <code>net.ipv4.ip_forward=1</code>, permanent a <code>/etc/sysctl.d/</code>.</li>
-    <li>El NAT es fa amb <code>masquerade</code> a la targeta externa, dins de <code>/etc/nftables.conf</code>.</li>
-    <li>Es fa servir <strong>nftables</strong>, no <code>iptables</code>. I mai els dos alhora.</li>
-    <li>Per diagnosticar, prova <strong>per capes</strong>: ruta, servidor, IP externa, nom.</li>
+    <li>Tota zona vol <strong>dos servidors</strong>; tots dos responen com a autoritatius.</li>
+    <li>El <strong>primari</strong> té l'original; el <strong>secundari</strong> se'l descarrega.</li>
+    <li>La transferència va per <strong>TCP</strong> al port 53 i s'anomena <strong>AXFR</strong>.</li>
+    <li>El <strong>serial</strong> és el que dispara la còpia; sense apujar-lo, no passa res.</li>
+    <li><code>allow-transfer</code> tancat: una zona oberta és el mapa de la xarxa.</li>
   </ul>
 
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Comanda</th><th>Per a què serveix</th></tr></thead>
       <tbody>
-        <tr><td><code>cat /proc/sys/net/ipv4/ip_forward</code></td><td>Veure si l'encaminament està actiu</td></tr>
-        <tr><td><code>sudo sysctl --system</code></td><td>Aplicar els fitxers de <code>/etc/sysctl.d/</code></td></tr>
-        <tr><td><code>sudo nft -c -f /etc/nftables.conf</code></td><td>Validar les regles sense aplicar-les</td></tr>
-        <tr><td><code>sudo systemctl enable --now nftables</code></td><td>Carregar les regles i fer-les permanents</td></tr>
-        <tr><td><code>sudo nft list ruleset</code></td><td>Veure les regles carregades</td></tr>
-        <tr><td><code>ip route</code></td><td>Comprovar la porta d'enllaç al client</td></tr>
+        <tr><td><code>dig @&lt;primari&gt; &lt;zona&gt; AXFR</code></td><td>Provar la transferència a mà</td></tr>
+        <tr><td><code>dig @&lt;servidor&gt; &lt;zona&gt; SOA +short</code></td><td>Comparar serials</td></tr>
+        <tr><td><code>rndc reload</code></td><td>Recarregar el primari després d'un canvi</td></tr>
+        <tr><td><code>rndc retransfer &lt;zona&gt;</code></td><td>Forçar la descàrrega al secundari</td></tr>
+        <tr><td><code>journalctl -u named | grep transfer</code></td><td>Veure si la còpia s'ha fet</td></tr>
       </tbody>
     </table>
   </div>
 
   <p style="margin-top:16px">
-    <strong>Amb això tanques el RA1:</strong> ja saps configurar la xarxa, muntar un servidor
-    DHCP i donar Internet als seus clients.
+    <strong>Següent:</strong> les activitats. Muntaràs el resolutor, la teva zona, la integració
+    amb el DHCP i, per parelles, la transferència entre dos servidors.
   </p>
 </div>
 
-<!-- ============ 12 · QUIZ ============ -->
+<!-- ============ 11 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
   <h4>Comprova el que has après</h4>
 
-  <div class="cq-question" data-id="t4-forward" data-type="single">
-    <div class="statement">Què significa que <code>/proc/sys/net/ipv4/ip_forward</code> valgui <code>0</code>?</div>
-    <button class="cq-option" data-correct="true">El servidor no passa paquets d'una targeta a l'altra</button>
-    <button class="cq-option" data-correct="false">El servidor no té cap targeta de xarxa activa</button>
-    <button class="cq-option" data-correct="false">El NAT està desactivat</button>
-    <button class="cq-option" data-correct="false">No hi ha cap regla de tallafoc</button>
+  <div class="cq-question" data-id="t2-5-transport" data-type="single">
+    <div class="statement">Per quin protocol de transport viatja una transferència de zona?</div>
+    <button class="cq-option" data-correct="false">UDP, port 53</button>
+    <button class="cq-option" data-correct="true">TCP, port 53</button>
+    <button class="cq-option" data-correct="false">TCP, port 853</button>
+    <button class="cq-option" data-correct="false">UDP, port 67</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t4-nat" data-type="single">
-    <div class="statement">Per a què serveix el NAT (<em>masquerade</em>)?</div>
-    <button class="cq-option" data-correct="false">Per repartir adreces IP als clients</button>
-    <button class="cq-option" data-correct="true">Per canviar l'adreça privada d'origen per la del servidor, i que la resposta pugui tornar</button>
-    <button class="cq-option" data-correct="false">Per resoldre noms de domini</button>
-    <button class="cq-option" data-correct="false">Per xifrar el trànsit cap a Internet</button>
+  <div class="cq-question" data-id="t2-5-serial" data-type="single">
+    <div class="statement">Què fa que el secundari es descarregui la zona altra vegada?</div>
+    <button class="cq-option" data-correct="false">Que hagi passat el TTL</button>
+    <button class="cq-option" data-correct="true">Que el serial del primari sigui més alt que el seu</button>
+    <button class="cq-option" data-correct="false">Que es reiniciï el servei del primari</button>
+    <button class="cq-option" data-correct="false">Que el client li ho demani</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t4-permanent" data-type="single">
-    <div class="statement">Després de reiniciar, el client torna a quedar-se sense Internet. Què ha passat?</div>
-    <button class="cq-option" data-correct="false">La concessió DHCP ha caducat</button>
-    <button class="cq-option" data-correct="true">La configuració es va fer només per a la sessió i no s'ha desat en fitxers</button>
-    <button class="cq-option" data-correct="false">El servidor ha canviat d'adreça MAC</button>
-    <button class="cq-option" data-correct="false">S'ha esgotat el rang d'adreces</button>
+  <div class="cq-question" data-id="t2-5-fitxer" data-type="single">
+    <div class="statement">Al servidor secundari, qui escriu el fitxer de zona?</div>
+    <button class="cq-option" data-correct="false">L'administrador, copiant-lo del primari</button>
+    <button class="cq-option" data-correct="true">El propi BIND, en fer la transferència</button>
+    <button class="cq-option" data-correct="false">El servei DHCP</button>
+    <button class="cq-option" data-correct="false">No hi ha fitxer: tot es guarda a memòria</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t4-diagnostic" data-type="single">
-    <div class="statement">Al client, <code>ping 9.9.9.9</code> funciona però <code>ping www.upc.edu</code> no. Què falla?</div>
-    <button class="cq-option" data-correct="false">L'encaminament</button>
-    <button class="cq-option" data-correct="false">El NAT</button>
-    <button class="cq-option" data-correct="true">El DNS que reparteix el servidor DHCP</button>
-    <button class="cq-option" data-correct="false">La porta d'enllaç</button>
+  <div class="cq-question" data-id="t2-5-seguretat" data-type="single">
+    <div class="statement">Per què s'ha de limitar <code>allow-transfer</code>?</div>
+    <button class="cq-option" data-correct="false">Perquè les transferències consumeixen molta memòria</button>
+    <button class="cq-option" data-correct="true">Perquè qui es descarrega la zona obté l'inventari sencer de la xarxa</button>
+    <button class="cq-option" data-correct="false">Perquè si no, el secundari no es descarrega res</button>
+    <button class="cq-option" data-correct="false">Perquè el port 53 TCP està tancat per defecte</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t4-certes" data-type="multi">
+  <div class="cq-question" data-id="t2-5-afirmacions" data-type="multi">
     <div class="statement">Selecciona totes les afirmacions certes</div>
-    <button class="cq-option" data-correct="true">L'encaminament ve desactivat per defecte a Linux.</button>
-    <button class="cq-option" data-correct="true">El <em>masquerade</em> s'aplica a la targeta que surt a Internet.</button>
-    <button class="cq-option" data-correct="true">Les regles de <code>/etc/nftables.conf</code> es carreguen a cada arrencada si el servei està habilitat.</button>
-    <button class="cq-option" data-correct="false">Convé escriure les regles amb <code>iptables</code> i amb <code>nftables</code> alhora.</button>
-    <button class="cq-option" data-correct="false">Amb el DHCP ben configurat, el client ja té Internet.</button>
+    <button class="cq-option" data-correct="true">El secundari respon amb la mateixa autoritat que el primari.</button>
+    <button class="cq-option" data-correct="true">A la zona hi ha d'haver un registre NS per a cada servidor.</button>
+    <button class="cq-option" data-correct="true">El fitxer del secundari no s'ha d'editar a mà.</button>
+    <button class="cq-option" data-correct="false">El secundari només serveix quan el primari està aturat.</button>
+    <button class="cq-option" data-correct="false">La transferència es fa amb el mateix mecanisme que una consulta normal.</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 </div>
 
 <script>
+  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  (function () {
+    function editant(node) {
+      return node && node.closest && node.closest('[contenteditable="true"]');
+    }
+    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+      document.addEventListener(nom, function (e) {
+        if (!editant(e.target)) { e.preventDefault(); }
+      });
+    });
+  })();
+
   // Motor únic per a totes les preguntes single i multi.
   document.querySelectorAll('.cq-question').forEach(function (question) {
     var id = question.dataset.id;

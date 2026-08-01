@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>A6 · Servidor DNS amb BIND 9 — Serveis en Xarxa (0227)</title>
+<title>A2.1 · El client davant dels noms — Serveis en Xarxa (0227)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -368,132 +368,137 @@
     .cq-block pre .c, .cq-block pre .o { color: #555; }
     .cq-check-btn { display: none; }
   }
+  /* ==== Contingut no copiable ====
+     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
+     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
+     queda exclòs. */
+  .cq-header, .cq-block {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  [contenteditable="true"], [contenteditable="true"] * {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    user-select: text;
+  }
+
 /* === SINAPSI-CSS FI ======================================== */
 </style>
 </head>
 <body>
 <header class="cq-header">
-  <div class="eyebrow">0227 · Serveis en Xarxa · RA2 · Activitat 6</div>
-  <h1>Servidor DNS amb BIND 9</h1>
-  <p class="lede">El teu resolutor i la teva zona, servint noms a la xarxa personal1.</p>
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA2 · A2.1</div>
+  <h1>El client davant dels noms</h1>
+  <p class="lede">Investigar com resol la teva màquina abans de muntar cap servidor.</p>
 </header>
 
 <!-- ============ OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
   <h4>Què has de saber abans de començar</h4>
   <p>
-    Teories <strong>T7</strong> (BIND) i <strong>T8</strong> (zones i registres). Del RA1
-    necessitaràs el Netplan de la <strong>T1</strong>.
+    Teoria <strong>T2.1</strong> (noms i resolució al client) i <strong>T2.2</strong> (l'arbre del
+    DNS).
   </p>
   <p>
-    Amb aquesta activitat aprendràs a muntar un servidor DNS que fa les dues feines alhora:
-    resolutor amb memòria cau per als teus clients i autoritatiu de la teva pròpia zona, amb
-    resolució directa i inversa.
+    Amb aquesta activitat aprendràs a fer de detectiu amb la resolució de noms: descobriràs quin
+    servidor fa servir la teva màquina, com respon i com es comporten els servidors públics
+    d'Internet.
   </p>
 </div>
 
 <!-- ============ ESCENARI ============ -->
 <div class="cq-block" data-kind="escenari">
   <h4>Amb què treballaràs</h4>
-  <div class="cq-tablewrap">
-    <table class="cq-table">
-      <thead><tr><th>Màquina</th><th>Targetes</th><th>Adreça</th></tr></thead>
-      <tbody>
-        <tr><td>Ubuntu <strong>Server</strong></td><td>puigcastellar1 + personal1</td><td><code>192.168.1.8/24</code> a personal1</td></tr>
-        <tr><td>Ubuntu <strong>Desktop</strong></td><td>només personal1</td><td><code>192.168.1.100/24</code>, fixa</td></tr>
-      </tbody>
-    </table>
-  </div>
   <p>
-    Comença amb una <strong>màquina nova</strong> a isardVDI. En aquesta activitat el client
-    encara es configura a mà: repartir-li el DNS automàticament és feina de l'activitat 7.
+    Una màquina virtual <strong>Ubuntu nova</strong> a isardVDI amb la targeta
+    <code>puigcastellar1</code>, que rep la configuració del DHCP del centre. Aquí no muntes cap
+    servei: només observes i documentes.
+  </p>
+  <p>
+    Totes les respostes s'han d'acompanyar de la <strong>sortida de la comanda</strong> que les
+    justifica. Una resposta sense la seva captura no compta.
   </p>
 </div>
 
-<!-- ============ ENUNCIAT ============ -->
+<!-- ============ ENUNCIAT 1 ============ -->
 <div class="cq-block" data-kind="enunciat">
-  <h4>Què has de fer</h4>
+  <h4>1 · Com està configurada la teva màquina</h4>
   <ol>
-    <li>Preparar el servidor: <em>hostname</em> amb el teu nom i <code>192.168.1.8/24</code> a <code>personal1</code>.</li>
-    <li>Instal·lar BIND i configurar-lo com a <strong>resolutor amb memòria cau</strong>, que només atengui la teva xarxa.</li>
-    <li>Crear la teva <strong>zona directa</strong> <code>elteunom.internal</code> i la <strong>zona inversa</strong> corresponent.</li>
-    <li>Omplir-les amb els registres de la taula de sota, amb els seus PTR.</li>
-    <li>Configurar el client perquè faci servir el teu servidor i comprovar-ho tot des d'allà.</li>
+    <li>Quin servidor DNS fa servir i <strong>d'on l'ha tret</strong>? Quin és el domini de cerca?</li>
+    <li>Què hi ha a <code>/etc/resolv.conf</code>? Per què hi surt aquella adreça i no la del servidor?</li>
+    <li>Quin procés escolta al port 53 de la teva màquina? Comprova-ho.</li>
+    <li>Quin percentatge d'encerts té la memòria cau ara mateix? Fes unes quantes consultes i torna-ho a mirar.</li>
+    <li>Quina línia de <code>/etc/nsswitch.conf</code> decideix l'ordre de resolució, i què vol dir?</li>
   </ol>
-  <div class="cq-tablewrap">
-    <table class="cq-table">
-      <thead><tr><th>Nom</th><th>Tipus</th><th>Valor</th></tr></thead>
-      <tbody>
-        <tr><td><code>ns1</code></td><td>A</td><td>La IP del servidor</td></tr>
-        <tr><td><code>www</code></td><td>A</td><td>La IP del servidor</td></tr>
-        <tr><td><code>correu</code></td><td>A</td><td><code>192.168.1.9</code></td></tr>
-        <tr><td><code>intranet</code></td><td>CNAME</td><td>Àlies de <code>www</code></td></tr>
-        <tr><td>La zona</td><td>MX</td><td><code>correu</code>, prioritat 10</td></tr>
-      </tbody>
-    </table>
-  </div>
+</div>
+
+<!-- ============ ENUNCIAT 2 ============ -->
+<div class="cq-block" data-kind="enunciat">
+  <h4>2 · Les eines de consulta</h4>
+  <ol>
+    <li>Resol <code>es.wikipedia.org</code> amb <code>host</code>, primer amb el DNS del centre i després amb <code>1.1.1.1</code>. Hi ha diferències?</li>
+    <li>Amb <code>dig</code>: com s'especifica el servidor? I que la consulta vagi per TCP? I que et doni qualsevol tipus de registre?</li>
+    <li>Esbrina quins servidors DNS són responsables de <code>xeill.net</code>, <code>wikipedia.org</code> i <code>fsf.org</code>.</li>
+    <li>Pregunta a un d'aquests servidors per un nom que <strong>no</strong> sigui de la seva zona. Respon? Què vol dir això?</li>
+    <li>Resol el domini <code>xn--j1ay.xn--p1ai</code> i mira com el mostra el navegador. Què és el <em>punycode</em>?</li>
+  </ol>
+</div>
+
+<!-- ============ ENUNCIAT 3 ============ -->
+<div class="cq-block" data-kind="enunciat">
+  <h4>3 · Els servidors públics</h4>
+  <ol>
+    <li>Consulta el mateix nom a <code>1.1.1.1</code>, <code>9.9.9.9</code> i <code>8.8.8.8</code> i compara el <code>Query time</code>. Repeteix-ho i explica per què canvia.</li>
+    <li>On és físicament cadascun? Pots fer servir <a href="https://geoiptool.com/es">geoiptool</a>.</li>
+    <li>Fes una llista de tres resolutors públics: qui els manté i amb quin interès.</li>
+    <li>On es pot obtenir la llista oficial dels <strong>servidors arrel</strong>?</li>
+    <li>Segueix la resolució de <code>moodle.elpuig.xeill.net</code> des de l'arrel i explica els salts que fa.</li>
+  </ol>
 </div>
 
 <!-- ============ ON BUSCAR ============ -->
 <div class="cq-block" data-kind="enunciat">
   <h4>D'on has de treure cada cosa</h4>
-  <p>Tot el procediment ja l'has vist a la teoria. Aquí tens on és cada part:</p>
+  <p>Les comandes no te les donem fetes; sí que et diem on trobar-les:</p>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Què has de fer</th><th>On ho tens</th></tr></thead>
       <tbody>
-        <tr><td>Posada a punt i Netplan</td><td>Teoria <strong>T1</strong> i activitat <strong>1</strong></td></tr>
-        <tr><td>Instal·lació, ACL, forwarders i <code>listen-on</code></td><td>Teoria <strong>T7</strong></td></tr>
-        <tr><td>Declaració de zones i fitxers de zona</td><td>Teoria <strong>T8</strong></td></tr>
-        <tr><td>Validació i recàrrega</td><td>Teories <strong>T7</strong> i <strong>T8</strong></td></tr>
-        <tr><td>DNS al client per Netplan</td><td><code>nameservers:</code>, amb <code>search</code> i <code>addresses</code></td></tr>
+        <tr><td>Estat, cau i consultes del client</td><td>Teoria <strong>T2.1</strong>, taula del resum</td></tr>
+        <tr><td>Opcions de <code>dig</code></td><td><code>man dig</code></td></tr>
+        <tr><td>Qui escolta a un port</td><td><code>ss --help</code>, del RA1</td></tr>
+        <tr><td>Seguir la resolució des de l'arrel</td><td>Teoria <strong>T2.2</strong></td></tr>
+        <tr><td>Servidors arrel</td><td><a href="https://root-servers.org">root-servers.org</a></td></tr>
       </tbody>
     </table>
   </div>
 </div>
 
-<!-- ============ RECORDATORI ============ -->
-<div class="cq-block" data-kind="recordatori">
-  <h4>Només per personal1, i el domini acabat en .internal</h4>
-  <p>
-    El servidor ha d'escoltar <strong>només</strong> per <code>personal1</code>: si escoltes per
-    <code>puigcastellar1</code> obres un resolutor a la xarxa del centre.
-  </p>
-  <p>
-    I bateja el domini com <code>elteunom.internal</code>, mai <code>.local</code>: el sufix
-    <code>.local</code> està reservat per a mDNS i el client pot no arribar mai a preguntar-te
-    (ho tens explicat a la T5).
-  </p>
-</div>
-
 <!-- ============ OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h4>Dues decisions que has de prendre tu</h4>
+  <h4>Compte amb la memòria cau quan comparis temps</h4>
   <p>
-    <strong>Els fitxers de zona, on.</strong> Crea'ls a <code>/etc/bind/zones/</code>: és la teva
-    configuració i ha d'estar amb la resta. La carpeta <code>/var/cache/bind/</code> es reserva
-    per al que escriu BIND tot sol, que a l'activitat 8 seran les zones secundàries.
+    Si consultes dues vegades el mateix nom, la segona anirà molt més ràpid perquè la resposta ja
+    és a la memòria cau, i no estaràs comparant servidors sinó cau contra xarxa.
   </p>
   <p>
-    <strong>El client.</strong> Perquè pugui escriure <code>ping www</code> a seques i funcioni,
-    al Netplan del client no n'hi ha prou amb el servidor: també li has de dir quin és el domini
-    de cerca.
+    Per comparar de veritat, pregunta directament a cada servidor amb <code>dig @adreça</code>,
+    fes servir un nom diferent a cada prova o buida la cau entre consulta i consulta. Explica al
+    document quina d'aquestes tres coses has fet.
   </p>
 </div>
 
 <!-- ============ COMPROVACIÓ ============ -->
 <div class="cq-block" data-kind="comprovació">
   <h4>Com sabràs que ho has fet bé</h4>
-  <p>
-    Abans d'entregar, has de poder respondre <strong>sí</strong> a totes aquestes preguntes, amb
-    la sortida d'una comanda al davant:
-  </p>
+  <p>Abans d'entregar, repassa que el document compleixi això:</p>
   <ul>
-    <li><code>named-checkconf</code> i <code>named-checkzone</code> no es queixen de res.</li>
-    <li>El servei escolta al port 53 per la IP de <code>personal1</code>.</li>
-    <li>Des del client, <code>www.elteunom.internal</code> i l'àlies <code>intranet</code> es resolen, amb la marca <code>aa</code>.</li>
-    <li>La <strong>resolució inversa</strong> de les teves adreces retorna el nom correcte.</li>
-    <li>El client resol també noms d'Internet, i la segona consulta al mateix nom és més ràpida.</li>
+    <li>Cada resposta va acompanyada de la comanda i de la seva sortida.</li>
+    <li>Has distingit el servei local <code>127.0.0.53</code> del servidor DNS de veritat.</li>
+    <li>Has trobat almenys un servidor que <strong>no</strong> et resol noms de fora de la seva zona, i saps per què.</li>
+    <li>Els temps de resposta que compares són comparables entre ells.</li>
+    <li>Expliques els salts de la resolució, no només enganxes la sortida.</li>
   </ul>
 </div>
 
@@ -501,28 +506,22 @@
 <div class="cq-block" data-kind="problemes">
   <h4>Si alguna cosa no va</h4>
   <dl class="cq-issues">
-    <dt>El servei no arrenca</dt>
+    <dt><code>dig</code> o <code>host</code> no existeixen</dt>
     <dd>
-      <p><span class="lbl">Causa</span> Falta un punt i coma o una clau, o el fitxer de zona té un error.</p>
-      <p><span class="lbl">Solució</span> <code>named-checkconf</code> primer, <code>named-checkzone</code> després, i <code>journalctl -u named</code> si encara no queda clar.</p>
+      <p><span class="lbl">Causa</span> Falta el paquet d'eines de consulta.</p>
+      <p><span class="lbl">Solució</span> Instal·la <code>dnsutils</code>.</p>
     </dd>
 
-    <dt>El client rep <code>REFUSED</code></dt>
+    <dt>Totes les consultes triguen el mateix, vinguin d'on vinguin</dt>
     <dd>
-      <p><span class="lbl">Causa</span> No és dins de l'ACL, o el servidor no escolta per aquella adreça.</p>
-      <p><span class="lbl">Solució</span> Revisa <code>allow-query</code> i <code>listen-on</code>, i comprova amb <code>ss</code> per on escolta de veritat.</p>
+      <p><span class="lbl">Causa</span> Estàs preguntant sempre al servei local, que respon de la cau.</p>
+      <p><span class="lbl">Solució</span> Fes servir <code>dig @adreça</code> per anar directe al servidor.</p>
     </dd>
 
-    <dt>El nom es resol amb el domini repetit</dt>
+    <dt>Un servidor públic no et respon</dt>
     <dd>
-      <p><span class="lbl">Causa</span> Un nom absolut escrit sense punt final al fitxer de zona.</p>
-      <p><span class="lbl">Solució</span> Repassa tots els noms de la dreta: o són relatius i curts, o acaben en punt.</p>
-    </dd>
-
-    <dt>El client resol els teus noms però no surt a Internet</dt>
-    <dd>
-      <p><span class="lbl">Causa</span> És normal en aquesta activitat: encara no has activat l'encaminament ni el NAT.</p>
-      <p><span class="lbl">Solució</span> Comprova que sí que resol noms externs. La sortida a Internet és de l'activitat 7.</p>
+      <p><span class="lbl">Causa</span> La xarxa del centre pot filtrar el port 53 cap a fora.</p>
+      <p><span class="lbl">Solució</span> Documenta-ho: també és un resultat. Prova amb un altre servidor i digues què has observat.</p>
     </dd>
   </dl>
 </div>
@@ -531,16 +530,28 @@
 <div class="cq-block" data-kind="lliurament">
   <h4>Què has d'entregar</h4>
   <p>
-    Un <strong>document tècnic</strong> on expliquis tot el que has anat fent, amb els teus
-    fitxers de configuració i les captures del resultat.
+    Un <strong>document tècnic</strong> on expliquis tot el que has anat fent, amb les captures
+    del resultat.
   </p>
   <p>
-    Respon-hi també, amb les teves paraules: <strong>el teu servidor és recursiu, autoritatiu o
-    totes dues coses? Justifica-ho amb la teva configuració.</strong>
+    Respon-hi també, amb les teves paraules: <strong>quina diferència hi ha entre el servidor que
+    surt a <code>/etc/resolv.conf</code> i el que et resol els noms de veritat?</strong>
   </p>
 </div>
 
 <script>
+  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  (function () {
+    function editant(node) {
+      return node && node.closest && node.closest('[contenteditable="true"]');
+    }
+    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+      document.addEventListener(nom, function (e) {
+        if (!editant(e.target)) { e.preventDefault(); }
+      });
+    });
+  })();
+
   // Motor únic per a totes les preguntes single i multi.
   document.querySelectorAll('.cq-question').forEach(function (question) {
     var id = question.dataset.id;

@@ -368,6 +368,21 @@
     .cq-block pre .c, .cq-block pre .o { color: #555; }
     .cq-check-btn { display: none; }
   }
+  /* ==== Contingut no copiable ====
+     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
+     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
+     queda exclòs. */
+  .cq-header, .cq-block {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  [contenteditable="true"], [contenteditable="true"] * {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    user-select: text;
+  }
+
 /* === SINAPSI-CSS FI ======================================== */
 </style>
 </head>
@@ -382,24 +397,24 @@
   <h4>Teoria</h4>
   <p>Llegeix-les en ordre. Cada pàgina acaba amb una guia pas a pas i un test per comprovar què has entès.</p>
   <ul class="cq-index">
-    <li><a href="teoria/t5-noms-i-resolucio.html">
-      <span class="ref">T5</span>
+    <li><a href="teoria/t2-1-noms-i-resolucio.html">
+      <span class="ref">T2.1</span>
       <span class="ttl">Noms i resolució al client
         <span class="sub">De /etc/hosts a systemd-resolved</span></span></a></li>
-    <li><a href="teoria/t6-arbre-dns.html">
-      <span class="ref">T6</span>
+    <li><a href="teoria/t2-2-arbre-dns.html">
+      <span class="ref">T2.2</span>
       <span class="ttl">L'arbre del DNS
         <span class="sub">Jerarquia, zones, delegació i TTL</span></span></a></li>
-    <li><a href="teoria/t7-servidor-bind.html">
-      <span class="ref">T7</span>
+    <li><a href="teoria/t2-3-servidor-bind.html">
+      <span class="ref">T2.3</span>
       <span class="ttl">Servidor DNS amb BIND 9
         <span class="sub">Resolutor amb memòria cau per a la LAN</span></span></a></li>
-    <li><a href="teoria/t8-zones-i-registres.html">
-      <span class="ref">T8</span>
+    <li><a href="teoria/t2-4-zones-i-registres.html">
+      <span class="ref">T2.4</span>
       <span class="ttl">Zones i registres
         <span class="sub">Zona directa, inversa i tipus de registre</span></span></a></li>
-    <li><a href="teoria/t9-primari-secundari.html">
-      <span class="ref">T9</span>
+    <li><a href="teoria/t2-5-primari-secundari.html">
+      <span class="ref">T2.5</span>
       <span class="ttl">Primari i secundari
         <span class="sub">Transferències de zona i redundància</span></span></a></li>
   </ul>
@@ -413,20 +428,20 @@
     <code>192.168.1.0/24</code>.
   </p>
   <ul class="cq-index">
-    <li><a href="activitats/a5-client-dns.html">
-      <span class="ref">A5</span>
+    <li><a href="activitats/a2-1-client-dns.html">
+      <span class="ref">A2.1</span>
       <span class="ttl">El client davant dels noms
         <span class="sub">Investigar com resol la teva màquina</span></span></a></li>
-    <li><a href="activitats/a6-servidor-bind.html">
-      <span class="ref">A6</span>
+    <li><a href="activitats/a2-2-servidor-bind.html">
+      <span class="ref">A2.2</span>
       <span class="ttl">Servidor DNS amb BIND 9
         <span class="sub">Resolutor i zona pròpia, directa i inversa</span></span></a></li>
-    <li><a href="activitats/a7-kea-i-bind.html">
-      <span class="ref">A7</span>
+    <li><a href="activitats/a2-3-kea-i-bind.html">
+      <span class="ref">A2.3</span>
       <span class="ttl">DHCP i DNS treballant junts
         <span class="sub">Kea reparteix el teu DNS i el client navega</span></span></a></li>
-    <li><a href="activitats/a8-zona-secundaria.html">
-      <span class="ref">A8</span>
+    <li><a href="activitats/a2-4-zona-secundaria.html">
+      <span class="ref">A2.4</span>
       <span class="ttl">Zona secundària per parelles
         <span class="sub">Transferència de zona entre dos servidors</span></span></a></li>
   </ul>
@@ -439,10 +454,10 @@
     <table class="cq-table">
       <thead><tr><th>Primer llegeix</th><th>I després fes</th></tr></thead>
       <tbody>
-        <tr><td>T5 · T6</td><td>A5 — el client davant dels noms</td></tr>
-        <tr><td>T7 · T8</td><td>A6 — servidor DNS amb BIND</td></tr>
-        <tr><td>—</td><td>A7 — DHCP i DNS junts</td></tr>
-        <tr><td>T9</td><td>A8 — zona secundària, per parelles</td></tr>
+        <tr><td>T2.1 · T2.2</td><td>A2.1 — el client davant dels noms</td></tr>
+        <tr><td>T2.3 · T2.4</td><td>A2.2 — servidor DNS amb BIND</td></tr>
+        <tr><td>—</td><td>A2.3 — DHCP i DNS junts</td></tr>
+        <tr><td>T2.5</td><td>A2.4 — zona secundària, per parelles</td></tr>
       </tbody>
     </table>
   </div>
@@ -453,11 +468,23 @@
   <p>
     A tot el RA2 els dominis interns es diuen <code>elteunom.internal</code>. Evita
     <code>.local</code>: està reservat per a mDNS i fa que els clients no arribin a preguntar al
-    teu servidor. Ho tens explicat a la <strong>T5</strong>.
+    teu servidor. Ho tens explicat a la <strong>T2.1</strong>.
   </p>
 </div>
 
 <script>
+  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  (function () {
+    function editant(node) {
+      return node && node.closest && node.closest('[contenteditable="true"]');
+    }
+    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+      document.addEventListener(nom, function (e) {
+        if (!editant(e.target)) { e.preventDefault(); }
+      });
+    });
+  })();
+
   // Motor únic per a totes les preguntes single i multi.
   document.querySelectorAll('.cq-question').forEach(function (question) {
     var id = question.dataset.id;

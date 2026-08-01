@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>T5 · Noms i resolució al client — Serveis en Xarxa (0227)</title>
+<title>T3.2 · Servidor vsftpd amb usuaris locals — Serveis en Xarxa (0227)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -368,301 +368,373 @@
     .cq-block pre .c, .cq-block pre .o { color: #555; }
     .cq-check-btn { display: none; }
   }
+  /* ==== Contingut no copiable ====
+     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
+     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
+     queda exclòs. */
+  .cq-header, .cq-block {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  [contenteditable="true"], [contenteditable="true"] * {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    user-select: text;
+  }
+
 /* === SINAPSI-CSS FI ======================================== */
 </style>
 </head>
 <body>
 <header class="cq-header">
-  <div class="eyebrow">0227 · Serveis en Xarxa · RA2 · Teoria 5</div>
-  <h1>Noms i resolució al client</h1>
-  <p class="lede">Què passa dins del teu equip entre que escrius un nom i surt una adreça IP.</p>
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA3 · T3.2</div>
+  <h1>Servidor vsftpd amb usuaris locals</h1>
+  <p class="lede">Comptes del sistema, permisos d'escriptura i cada usuari tancat al seu directori.</p>
 </header>
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
   <h4>Què sabràs fer en acabar</h4>
   <ul>
-    <li>Explicar per què les xarxes treballen amb noms i no amb adreces.</li>
-    <li>Distingir els dos mecanismes de resolució: fitxer local i DNS.</li>
-    <li>Saber en quin ordre consulta el teu equip cada mecanisme.</li>
-    <li>Fer servir <code>resolvectl</code>, <code>host</code> i <code>dig</code>.</li>
-    <li>Entendre què és la memòria cau i per què de vegades enganya.</li>
+    <li>Configurar <strong>vsftpd</strong> per a usuaris del sistema, amb permís d'escriptura.</li>
+    <li>Crear usuaris i grups pensats per a accés remot.</li>
+    <li>Tancar cada usuari al seu directori amb <strong>chroot</strong>.</li>
+    <li>Decidir <em>qui</em> pot entrar amb una llista blanca.</li>
+    <li>Comprovar el servei i llegir-ne el registre.</li>
   </ul>
 </div>
 
-<!-- ============ 2 · INTRODUCCIÓ ============ -->
+<!-- ============ 2 · UN SOL FITXER ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>El problema que resol el DNS</h4>
+  <h4>Un paquet, un servei, un fitxer</h4>
   <p>
-    Al RA1 vas repartir adreces amb DHCP. Però ningú escriu
-    <code>142.250.185.3</code> al navegador: escrivim <strong>noms</strong>. Algú ha de
-    convertir el nom en adreça abans que la màquina pugui enviar cap paquet.
-  </p>
-  <p>Els noms tenen dos avantatges que les adreces no tenen:</p>
-  <ul>
-    <li>Es recorden. <code>moodle.elpuig.xeill.net</code> contra una IP qualsevol.</li>
-    <li>Sobreviuen als canvis: si el servidor canvia d'adreça, el nom continua sent el mateix.</li>
-  </ul>
-  <p>
-    Aquesta conversió es diu <strong>resolució de noms</strong>, i el sistema que la fa a
-    Internet és el <strong>DNS</strong> (<em>Domain Name System</em>).
-  </p>
-</div>
-
-<!-- ============ 3 · ELS DOS MECANISMES ============ -->
-<div class="cq-block" data-kind="teoria">
-  <h4>Dos mecanismes, i un ordre</h4>
-  <p>
-    El teu equip pot resoldre un nom de dues maneres: mirant un <strong>fitxer local</strong> o
-    <strong>preguntant a un servidor</strong>. No en tria una a l'atzar: hi ha un ordre escrit.
+    <strong>vsftpd</strong> (<em>Very Secure FTP Daemon</em>) és el servidor FTP estàndard a
+    Debian i Ubuntu des de fa vint anys, i el que fan servir servidors públics grans. Tota la
+    configuració viu en un únic fitxer.
   </p>
   <div class="cq-tablewrap">
     <table class="cq-table">
-      <thead><tr><th>Mecanisme</th><th>On mira</th><th>Límit</th></tr></thead>
+      <thead><tr><th>On</th><th>Què hi ha</th></tr></thead>
       <tbody>
-        <tr><td><strong>Fitxer local</strong></td><td><code>/etc/hosts</code></td><td>Només el que hi has escrit tu</td></tr>
-        <tr><td><strong>mDNS</strong></td><td>Pregunta a crits a la xarxa local</td><td>Només noms acabats en <code>.local</code></td></tr>
-        <tr><td><strong>DNS</strong></td><td>Un servidor de noms</td><td>Cal tenir-ne un configurat</td></tr>
+        <tr><td><code>/etc/vsftpd.conf</code></td><td>Tota la configuració, una directiva per línia</td></tr>
+        <tr><td><code>/etc/ftpusers</code></td><td>Comptes que tenen l'FTP prohibit</td></tr>
+        <tr><td><code>/etc/vsftpd.userlist</code></td><td>La llista que crearàs tu</td></tr>
+        <tr><td><code>/var/log/vsftpd.log</code></td><td>Registre de connexions i transferències</td></tr>
       </tbody>
     </table>
   </div>
   <p>
-    L'ordre el marca el fitxer <code>/etc/nsswitch.conf</code>, a la línia <code>hosts:</code>.
-    Primer el fitxer local, després la resta. Per això una línia a <code>/etc/hosts</code>
-    <strong>guanya sempre</strong> al DNS.
+    El format és estricte: <code>directiva=valor</code>, sense espais al voltant de l'igual. Un
+    espai de més i el servei no arrenca.
   </p>
 </div>
 
-<!-- ============ 4 · SYSTEMD-RESOLVED ============ -->
+<!-- ============ 3 · LES DIRECTIVES ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Qui pregunta de veritat: systemd-resolved</h4>
+  <h4>Les directives que has de decidir</h4>
   <p>
-    A Ubuntu, les aplicacions no parlen amb el servidor DNS directament. Parlen amb un servei
-    local, <strong>systemd-resolved</strong>, que escolta a l'adreça <code>127.0.0.53</code> i fa
-    de intermediari.
+    De sèrie, vsftpd deixa entrar els usuaris del sistema però <strong>no</strong> els deixa
+    escriure ni els tanca enlloc. Aquestes són les que has de tocar:
   </p>
-  <p>Serveix per a dues coses:</p>
-  <ul>
-    <li><strong>Memòria cau</strong>: si algú ja ha preguntat aquell nom fa poc, respon a l'instant.</li>
-    <li><strong>Un sol punt</strong>: si canvia el servidor DNS, les aplicacions no se n'assabenten.</li>
-  </ul>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Directiva</th><th>Què decideix</th></tr></thead>
+      <tbody>
+        <tr><td><code>local_enable</code></td><td>Si els usuaris del sistema poden entrar</td></tr>
+        <tr><td><code>write_enable</code></td><td>Si poden pujar, esborrar o crear carpetes</td></tr>
+        <tr><td><code>local_umask</code></td><td>Amb quins permisos arriben els fitxers pujats</td></tr>
+        <tr><td><code>chroot_local_user</code></td><td>Si queden tancats al seu directori</td></tr>
+        <tr><td><code>userlist_enable</code></td><td>Si es consulta una llista d'usuaris</td></tr>
+      </tbody>
+    </table>
+  </div>
   <p>
-    És un <em>stub</em>: no sap resoldre pel seu compte, només reenvia al servidor DNS que li han
-    dit. I aquest servidor, en una xarxa normal, <strong>l'hi ha donat el DHCP</strong>.
+    <code>local_umask=022</code> deixa els fitxers llegibles per tothom;
+    <code>077</code>, el valor de sèrie, només per al propietari.
+  </p>
+</div>
+
+<!-- ============ 4 · CHROOT ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>Enjaular l'usuari: chroot</h4>
+  <p>
+    Sense <code>chroot_local_user</code>, qui entra per FTP es pot moure per <strong>tot el
+    sistema de fitxers</strong>: pot baixar-se <code>/etc/passwd</code> o llegir els directoris
+    dels companys. Té els permisos del seu compte, i això és massa.
+  </p>
+  <p>
+    Un <strong>chroot</strong> canvia quin directori és l'arrel per a aquella sessió. L'usuari veu
+    el seu directori personal com si fos <code>/</code> i no en pot sortir: el
+    <code>cd ..</code> no el porta enlloc.
+  </p>
+  <p>
+    És la diferència entre un compte de servei i un compte de sistema. Un usuari d'FTP no ha de
+    poder passejar per la màquina.
   </p>
 </div>
 
 <!-- ============ 5 · EXEMPLE ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h4>El fitxer /etc/resolv.conf ja no és el que era</h4>
+  <h4>Configuració per a usuaris locals enjaulats</h4>
+  <p>Aquestes són les línies que canvies o afegeixes a <code>/etc/vsftpd.conf</code>:</p>
+<pre><span class="c"># Qui entra</span>
+anonymous_enable=NO
+local_enable=YES
+
+<span class="c"># Què pot fer</span>
+write_enable=YES
+local_umask=022
+
+<span class="c"># On queda tancat</span>
+chroot_local_user=YES
+local_root=/home/$USER/fitxers
+user_sub_token=$USER
+
+<span class="c"># Llista blanca: només aquests usuaris</span>
+userlist_enable=YES
+userlist_file=/etc/vsftpd.userlist
+userlist_deny=NO</pre>
   <p>
-    Durant anys, el servidor DNS s'escrivia a mà a <code>/etc/resolv.conf</code>. Avui aquest
-    fitxer el genera <code>systemd-resolved</code> i conté sempre el mateix:
+    Amb <code>user_sub_token</code>, el <code>$USER</code> de <code>local_root</code> se substitueix
+    pel nom de qui entra: cadascú aterra a la seva carpeta <code>fitxers</code>.
   </p>
-<pre><span class="c"># This file is managed by man:systemd-resolved(8).</span>
-nameserver 127.0.0.53
-options edns0</pre>
-  <p>
-    Aquesta adreça no és el teu servidor DNS: és el servei local. Per veure el servidor de
-    veritat cal preguntar-l'hi:
-  </p>
-<pre>resolvectl dns
-<span class="o">Link 2 (enp1s0): 10.0.0.1</span></pre>
-  <p><strong>Editar <code>/etc/resolv.conf</code> a mà no serveix de res:</strong> es torna a generar.</p>
 </div>
 
-<!-- ============ 6 · CAS REAL ============ -->
+<!-- ============ 6 · LA TRAMPA DEL CHROOT ============ -->
+<div class="cq-block" data-kind="observació">
+  <h4>L'arrel del chroot no pot ser escrivible</h4>
+  <p>
+    Si actives el chroot sobre el directori personal i aquest és escrivible per l'usuari, vsftpd
+    es planta amb <code>500 OOPS: vsftpd: refusing to run with writable root inside chroot()</code>.
+    No és un error teu: és una protecció.
+  </p>
+  <p>Tens dues sortides, i no valen el mateix:</p>
+  <ul>
+    <li><strong>La bona:</strong> l'arrel del chroot és de <code>root</code> i no s'hi pot escriure; a dins hi ha una carpeta <code>fitxers</code> que sí que és de l'usuari.</li>
+    <li><strong>La ràpida:</strong> afegir <code>allow_writeable_chroot=YES</code>. Funciona, però renuncies a la protecció.</li>
+  </ul>
+</div>
+
+<!-- ============ 7 · CAS REAL ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h4>El domini .local no és teu</h4>
+  <h4>El compte compartit de la petita empresa</h4>
   <p>
-    És molt habitual batejar la xarxa de casa o de l'aula com <code>empresa.local</code>. És una
-    mala idea: el sufix <strong><code>.local</code> està reservat</strong> per a mDNS, el
-    mecanisme que fa que les impressores es trobin soles.
+    Un muntatge que es veu molt: un sol compte d'FTP, la contrasenya apuntada en un correu antic,
+    i tothom hi entra. Proveïdors, clients i l'informàtic que va marxar fa dos anys.
   </p>
   <p>
-    Conseqüència pràctica: quan preguntes per un nom acabat en <code>.local</code>, el sistema el
-    pot enviar per mDNS i <strong>no arribar mai al teu servidor DNS</strong>. El símptoma és
-    típic: el client rep bé la IP i el DNS, però no resol els teus noms.
+    El dia que apareix un fitxer esborrat no hi ha manera de saber qui ha estat: el registre diu
+    sempre el mateix nom. I quan algú deixa l'empresa, o es canvia la contrasenya a tothom o no es
+    canvia a ningú.
   </p>
   <p>
-    Per als dominis interns fes servir <code>.internal</code>, reservat oficialment per a
-    ús privat des del 2024, o un subdomini d'un domini teu.
+    Un compte per persona no és burocràcia: és l'única cosa que fa que el registre serveixi per a
+    alguna cosa i que donar de baixa un usuari sigui una ordre i prou.
   </p>
 </div>
 
-<!-- ============ 7 · PAS A PAS ============ -->
+<!-- ============ 8 · PAS A PAS ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h4>Mirar com resol la teva màquina</h4>
-  <p>Amb qualsevol Ubuntu connectat a la xarxa del centre:</p>
+  <h4>Muntar el servidor amb usuaris enjaulats</h4>
 
   <ol class="cq-steps">
     <li>
-      <p><strong>Mira quin servidor fa servir</strong> i quin domini de cerca té:</p>
-<pre>resolvectl status</pre>
-      <p>Fixa't en <code>Current DNS Server</code> i en <code>DNS Domain</code>.</p>
+      <p><strong>Instal·la i desa una còpia</strong> del fitxer original:</p>
+<pre>sudo apt install -y vsftpd
+sudo cp /etc/vsftpd.conf /etc/vsftpd.conf.original</pre>
     </li>
 
     <li>
-      <p><strong>Resol un nom</strong> i mira d'on surt la resposta:</p>
-<pre>resolvectl query www.upc.edu</pre>
-      <p>
-        La primera vegada dirà que ve de la xarxa. Repeteix-ho i dirà
-        <code>(cache)</code>: ja no ha preguntat a ningú.
-      </p>
+      <p><strong>Crea el grup i l'usuari.</strong> El compte necessita una <em>shell</em> vàlida,
+      o no podrà autenticar-se:</p>
+<pre>sudo groupadd ftpusers
+sudo useradd -m -g ftpusers -s /bin/bash alumne1
+sudo passwd alumne1</pre>
     </li>
 
     <li>
-      <p><strong>Consulta un servidor concret</strong>, saltant-te el servei local:</p>
-<pre>host www.upc.edu 9.9.9.9
-dig @9.9.9.9 www.upc.edu +short</pre>
+      <p><strong>Prepara el directori</strong>: arrel de <code>root</code>, i a dins la carpeta on
+      sí que podrà escriure:</p>
+<pre>sudo chown root:root /home/alumne1
+sudo chmod 755 /home/alumne1
+sudo mkdir /home/alumne1/fitxers
+sudo chown alumne1:ftpusers /home/alumne1/fitxers</pre>
     </li>
 
     <li>
-      <p><strong>Demana un tipus de registre</strong> diferent de l'adreça:</p>
-<pre>dig upc.edu MX +short      <span class="c"># servidors de correu</span>
-dig upc.edu NS +short      <span class="c"># servidors de noms</span></pre>
+      <p><strong>Escriu la configuració</strong> amb l'exemple d'aquesta pàgina:</p>
+<pre>sudo nano /etc/vsftpd.conf</pre>
     </li>
 
     <li>
-      <p><strong>Fes trampa amb <code>/etc/hosts</code></strong> per comprovar l'ordre de resolució:</p>
-<pre>echo "127.0.0.1 provaordre.test" | sudo tee -a /etc/hosts
-getent hosts provaordre.test</pre>
-      <p>Esborra la línia quan ho hagis vist. Aquesta és la manera de comprovar-ho, no de treballar.</p>
+      <p><strong>Crea la llista blanca</strong>, un nom d'usuari per línia:</p>
+<pre>echo "alumne1" | sudo tee /etc/vsftpd.userlist</pre>
+    </li>
+
+    <li>
+      <p><strong>Reinicia i comprova</strong> que ha arrencat:</p>
+<pre>sudo systemctl restart vsftpd
+systemctl status vsftpd</pre>
+    </li>
+
+    <li>
+      <p><strong>Prova-ho des del client</strong>, i mira que el <code>cd ..</code> no el tregui
+      d'on és:</p>
+<pre>ftp 192.168.1.8</pre>
+      <p>Un cop dins: <code>put</code> ha de funcionar i <code>pwd</code> ha de dir <code>/</code>.</p>
     </li>
   </ol>
 
   <div class="cq-note">
-    <span class="lbl">Ubuntu 26.04</span>
-    Aquestes comandes són iguals a 24.04 i 26.04. Comprova sempre la sortida real de la teva
-    màquina abans de donar per bona la d'aquests apunts.
+    <span class="lbl">Ubuntu 24.04 i 26.04</span>
+    Si vols que l'usuari no pugui obrir sessió a la màquina, li pots posar
+    <code>-s /usr/sbin/nologin</code>, però aleshores has d'afegir aquesta línia a
+    <code>/etc/shells</code>: vsftpd comprova la <em>shell</em> a través de PAM.
   </div>
 </div>
 
-<!-- ============ 8 · BONES PRÀCTIQUES ============ -->
+<!-- ============ 9 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
   <h4>Criteris professionals</h4>
   <ul>
-    <li><strong><code>/etc/hosts</code> és per a proves</strong>, no per a administrar una xarxa. No escala i ningú se'n recorda.</li>
-    <li><strong>No editis <code>/etc/resolv.conf</code></strong>: el DNS es configura al Netplan o s'obté per DHCP.</li>
-    <li><strong>Comprova amb <code>dig @servidor</code></strong> quan sospitis de la memòria cau: així preguntes directament.</li>
-    <li><strong>Fes servir <code>.internal</code></strong> per als dominis interns, mai <code>.local</code>.</li>
-    <li><strong>Dos servidors DNS</strong> als clients, sempre que puguis: si en cau un, la xarxa continua.</li>
+    <li><strong>Un compte per persona</strong>, mai un compte compartit.</li>
+    <li><strong>Un grup dedicat</strong> (<code>ftpusers</code>) per aplicar permisos d'una sola vegada.</li>
+    <li><strong>Llista blanca</strong> amb <code>userlist_deny=NO</code>: qui no hi és, no entra.</li>
+    <li><strong>Chroot sempre</strong>, i amb l'arrel no escrivible.</li>
+    <li><strong>Còpia del fitxer original</strong> abans de la primera edició.</li>
   </ul>
 </div>
 
-<!-- ============ 9 · PROBLEMES ============ -->
+<!-- ============ 10 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
   <h4>Errors habituals</h4>
   <dl class="cq-issues">
-    <dt><code>ping 9.9.9.9</code> va, però <code>ping www.upc.edu</code> no</dt>
+    <dt><code>500 OOPS: refusing to run with writable root inside chroot()</code></dt>
     <dd>
-      <p><span class="lbl">Causa</span> La xarxa funciona; el que falla és la resolució de noms.</p>
-      <p><span class="lbl">Solució</span> <code>resolvectl status</code>: mira si hi ha cap servidor DNS configurat i si respon amb <code>dig @aquellaIP</code>.</p>
+      <p><span class="lbl">Causa</span> El directori on aterra l'usuari és seu i hi pot escriure.</p>
+      <p><span class="lbl">Solució</span> Fes que l'arrel sigui de <code>root</code> i sense permís d'escriptura, amb una subcarpeta seva a dins.</p>
     </dd>
 
-    <dt>Has canviat una adreça i el nom encara apunta a l'antiga</dt>
+    <dt><code>530 Login incorrect</code> amb la contrasenya bona</dt>
     <dd>
-      <p><span class="lbl">Causa</span> Memòria cau. El teu equip guarda la resposta el temps que digui el TTL.</p>
-      <p><span class="lbl">Solució</span> <code>sudo resolvectl flush-caches</code>, i comprova després amb <code>dig</code> contra el servidor.</p>
+      <p><span class="lbl">Causa</span> L'usuari no és a <code>/etc/vsftpd.userlist</code>, o té una <em>shell</em> que no és a <code>/etc/shells</code>.</p>
+      <p><span class="lbl">Solució</span> Revisa la llista i la <em>shell</em> del compte amb <code>getent passwd alumne1</code>.</p>
     </dd>
 
-    <dt>Un nom es resol a la teva màquina i a la del costat no</dt>
+    <dt><code>550 Permission denied</code> en pujar</dt>
     <dd>
-      <p><span class="lbl">Causa</span> Te'l resol una línia de <code>/etc/hosts</code> que només tens tu.</p>
-      <p><span class="lbl">Solució</span> <code>getent hosts nom</code> i revisa el fitxer. Si hi és, treu-la i posa el registre al servidor DNS.</p>
+      <p><span class="lbl">Causa</span> Falta <code>write_enable=YES</code>, o la carpeta de destinació no és de l'usuari.</p>
+      <p><span class="lbl">Solució</span> Comprova la directiva i després <code>ls -ld</code> de la carpeta.</p>
+    </dd>
+
+    <dt>El servei no arrenca després d'editar</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Un espai al voltant de l'<code>=</code>, o una directiva mal escrita.</p>
+      <p><span class="lbl">Solució</span> <code>journalctl -u vsftpd -n 20</code> et diu la línia.</p>
     </dd>
   </dl>
 </div>
 
-<!-- ============ 10 · RESUM ============ -->
+<!-- ============ 11 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
   <h4>Resum</h4>
   <ul>
-    <li>Resoldre un nom és convertir-lo en adreça IP abans d'enviar res.</li>
-    <li>L'ordre el marca <code>/etc/nsswitch.conf</code>: <strong><code>/etc/hosts</code> guanya al DNS</strong>.</li>
-    <li>A Ubuntu qui pregunta és <strong>systemd-resolved</strong>, al <code>127.0.0.53</code>, amb memòria cau.</li>
-    <li><code>/etc/resolv.conf</code> és generat: no s'edita.</li>
-    <li><code>.local</code> està reservat per a mDNS; per a xarxes internes, <code>.internal</code>.</li>
+    <li>Tota la configuració és a <strong><code>/etc/vsftpd.conf</code></strong>, en format <code>directiva=valor</code>.</li>
+    <li>De sèrie els usuaris entren però <strong>no escriuen</strong>: cal <code>write_enable=YES</code>.</li>
+    <li><strong><code>chroot_local_user=YES</code></strong> tanca cada usuari al seu directori.</li>
+    <li>L'arrel del chroot <strong>no pot ser escrivible</strong>: la carpeta escrivible va a dins.</li>
+    <li>La llista blanca són tres directives: <code>userlist_enable</code>, <code>userlist_file</code> i <code>userlist_deny=NO</code>.</li>
   </ul>
 
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Comanda</th><th>Per a què serveix</th></tr></thead>
       <tbody>
-        <tr><td><code>resolvectl status</code></td><td>Veure el DNS actiu i el domini de cerca</td></tr>
-        <tr><td><code>resolvectl query &lt;nom&gt;</code></td><td>Resoldre i veure si ve de la cau</td></tr>
-        <tr><td><code>resolvectl statistics</code></td><td>Encerts i errades de la memòria cau</td></tr>
-        <tr><td><code>resolvectl flush-caches</code></td><td>Buidar la memòria cau</td></tr>
-        <tr><td><code>host &lt;nom&gt; [servidor]</code></td><td>Consulta ràpida</td></tr>
-        <tr><td><code>dig @&lt;servidor&gt; &lt;nom&gt; [tipus]</code></td><td>Consulta detallada, saltant-se la cau local</td></tr>
-        <tr><td><code>getent hosts &lt;nom&gt;</code></td><td>Resoldre seguint l'ordre de <code>nsswitch</code></td></tr>
+        <tr><td><code>systemctl restart vsftpd</code></td><td>Aplicar els canvis</td></tr>
+        <tr><td><code>journalctl -u vsftpd -n 20</code></td><td>Veure per què no arrenca</td></tr>
+        <tr><td><code>getent passwd alumne1</code></td><td>Comprovar directori i <em>shell</em></td></tr>
+        <tr><td><code>ls -ld /home/alumne1</code></td><td>Comprovar propietari i permisos</td></tr>
+        <tr><td><code>tail -f /var/log/vsftpd.log</code></td><td>Seguir les connexions en directe</td></tr>
       </tbody>
     </table>
   </div>
 
   <p style="margin-top:16px">
-    <strong>Següent:</strong> a <em>T6 · L'arbre del DNS</em> veuràs on va a parar la pregunta
-    quan el servidor no en sap la resposta.
+    <strong>Següent:</strong> a <em>T3.3 · Accés anònim i límits</em> obriràs una part del servidor
+    a qui no té compte, i posaràs fre al que poden fer.
   </p>
 </div>
 
-<!-- ============ 11 · QUIZ ============ -->
+<!-- ============ 12 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
   <h4>Comprova el que has après</h4>
 
-  <div class="cq-question" data-id="t5-ordre" data-type="single">
-    <div class="statement">Tens un nom escrit a <code>/etc/hosts</code> amb una IP, i al DNS amb una altra. Quina fa servir el sistema?</div>
-    <button class="cq-option" data-correct="true">La de <code>/etc/hosts</code>, perquè es consulta abans</button>
-    <button class="cq-option" data-correct="false">La del DNS, perquè és l'autoritat</button>
-    <button class="cq-option" data-correct="false">La més recent de les dues</button>
-    <button class="cq-option" data-correct="false">Cap: el sistema dona error de conflicte</button>
+  <div class="cq-question" data-id="t3-2-fitxer" data-type="single">
+    <div class="statement">On es configura vsftpd?</div>
+    <button class="cq-option" data-correct="false"><code>/etc/vsftpd/vsftpd.d/</code></button>
+    <button class="cq-option" data-correct="true"><code>/etc/vsftpd.conf</code></button>
+    <button class="cq-option" data-correct="false"><code>/etc/ftpusers</code></button>
+    <button class="cq-option" data-correct="false"><code>/var/log/vsftpd.log</code></button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t5-stub" data-type="single">
-    <div class="statement">Què és l'adreça <code>127.0.0.53</code> que surt a <code>/etc/resolv.conf</code>?</div>
-    <button class="cq-option" data-correct="false">El servidor DNS del teu proveïdor</button>
-    <button class="cq-option" data-correct="true">El servei local systemd-resolved, que fa de intermediari i memòria cau</button>
-    <button class="cq-option" data-correct="false">L'adreça de difusió de la xarxa</button>
-    <button class="cq-option" data-correct="false">Un servidor DNS públic de reserva</button>
+  <div class="cq-question" data-id="t3-2-chroot" data-type="single">
+    <div class="statement">Què aconsegueixes amb <code>chroot_local_user=YES</code>?</div>
+    <button class="cq-option" data-correct="false">Que els usuaris puguin pujar fitxers</button>
+    <button class="cq-option" data-correct="true">Que cada usuari vegi el seu directori com si fos l'arrel i no en pugui sortir</button>
+    <button class="cq-option" data-correct="false">Que la connexió es xifri</button>
+    <button class="cq-option" data-correct="false">Que només entrin els usuaris de la llista</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t5-resolvconf" data-type="single">
-    <div class="statement">Vols canviar el servidor DNS d'un Ubuntu Server. Què fas?</div>
-    <button class="cq-option" data-correct="false">Edito <code>/etc/resolv.conf</code> i hi poso la IP nova</button>
-    <button class="cq-option" data-correct="true">Ho configuro al Netplan, o deixo que ho reparteixi el DHCP</button>
-    <button class="cq-option" data-correct="false">Afegeixo el servidor a <code>/etc/hosts</code></button>
-    <button class="cq-option" data-correct="false">Reinstal·lo systemd-resolved</button>
+  <div class="cq-question" data-id="t3-2-oops" data-type="single">
+    <div class="statement">Surt <code>500 OOPS: refusing to run with writable root inside chroot()</code>. Quina és la solució recomanable?</div>
+    <button class="cq-option" data-correct="false">Desactivar el chroot</button>
+    <button class="cq-option" data-correct="true">Deixar l'arrel en mans de <code>root</code> i crear-hi a dins una carpeta escrivible per l'usuari</button>
+    <button class="cq-option" data-correct="false">Donar permisos 777 al directori personal</button>
+    <button class="cq-option" data-correct="false">Fer servir el compte <code>root</code> per connectar</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t5-local" data-type="single">
-    <div class="statement">Per què no convé batejar la xarxa interna com <code>empresa.local</code>?</div>
-    <button class="cq-option" data-correct="false">Perquè els noms curts no es poden resoldre</button>
-    <button class="cq-option" data-correct="true">Perquè <code>.local</code> està reservat per a mDNS i la consulta pot no arribar al teu DNS</button>
-    <button class="cq-option" data-correct="false">Perquè BIND no admet dominis inventats</button>
-    <button class="cq-option" data-correct="false">Perquè cal pagar per registrar-lo</button>
+  <div class="cq-question" data-id="t3-2-userlist" data-type="single">
+    <div class="statement">Vols que només entrin els usuaris d'una llista. Què hi poses?</div>
+    <button class="cq-option" data-correct="false"><code>userlist_enable=NO</code></button>
+    <button class="cq-option" data-correct="true"><code>userlist_enable=YES</code> i <code>userlist_deny=NO</code></button>
+    <button class="cq-option" data-correct="false"><code>userlist_deny=YES</code></button>
+    <button class="cq-option" data-correct="false">Els noms a <code>/etc/ftpusers</code></button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t5-eines" data-type="multi">
+  <div class="cq-question" data-id="t3-2-afirmacions" data-type="multi">
     <div class="statement">Selecciona totes les afirmacions certes</div>
-    <button class="cq-option" data-correct="true"><code>dig @9.9.9.9 nom</code> pregunta directament a aquell servidor.</button>
-    <button class="cq-option" data-correct="true">La memòria cau pot fer que vegis una adreça antiga.</button>
-    <button class="cq-option" data-correct="false">systemd-resolved pot resoldre sol, sense cap servidor DNS.</button>
-    <button class="cq-option" data-correct="true">El servidor DNS del client sol arribar per DHCP.</button>
-    <button class="cq-option" data-correct="false"><code>/etc/hosts</code> és la manera recomanada de gestionar els noms d'una empresa.</button>
+    <button class="cq-option" data-correct="true">Sense <code>write_enable=YES</code> ningú no pot pujar fitxers.</button>
+    <button class="cq-option" data-correct="true"><code>/etc/ftpusers</code> conté comptes que tenen l'FTP prohibit.</button>
+    <button class="cq-option" data-correct="true">Convé un compte per persona i un grup dedicat.</button>
+    <button class="cq-option" data-correct="false">Un espai al voltant de l'<code>=</code> és indiferent.</button>
+    <button class="cq-option" data-correct="false">El chroot xifra la sessió.</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 </div>
 
 <script>
+  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  (function () {
+    function editant(node) {
+      return node && node.closest && node.closest('[contenteditable="true"]');
+    }
+    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+      document.addEventListener(nom, function (e) {
+        if (!editant(e.target)) { e.preventDefault(); }
+      });
+    });
+  })();
+
   // Motor únic per a totes les preguntes single i multi.
   document.querySelectorAll('.cq-question').forEach(function (question) {
     var id = question.dataset.id;
