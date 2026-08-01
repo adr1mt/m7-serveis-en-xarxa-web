@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A1 · Posada a punt del servidor — Serveis en Xarxa (0227)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* === SINAPSI-CSS INICI =======================================
+   0227 · Serveis en Xarxa — Identitat visual del mòdul
+   Blau estructural · taronja per als avisos · paper clar
+   per a la lectura · codi en fosc.
+   Aquest bloc és IDÈNTIC a totes les pàgines del mòdul.
+   No l'editis en una sola pàgina: edita'l a totes o extreu-lo
+   a un full compartit (_identitat/sinapsi.css).
+   ============================================================ */
+  :root {
+    --paper:        #FBFCFD;
+    --card:         #FFFFFF;
+    --ink:          #131A22;
+    --muted:        #5C6875;
+    --rule:         #E3E7EC;
+    --accent:       #1D4E89;
+    --accent-hover: #26639F;
+    --accent-soft:  #EFF5FB;
+    --accent-line:  #DCE7F3;
+    --warn:         #C2410C;
+    --warn-soft:    #FEF6EF;
+    --warn-line:    #F0CBAE;
+    --code-bg:      #16202E;
+    --code-ink:     #E2E9F1;
+    --ok:           #0E7A4B;
+    --ok-soft:      #F0FAF4;
+    --ok-line:      #C6E7D6;
+    --ko:           #B4232B;
+    --ko-soft:      #FEF4F4;
+    --ko-line:      #F2CFCF;
+    --font-display: "Ubuntu", -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-body:    "Source Sans 3", -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-mono:    "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+  }
+
+  body {
+    margin: 0;
+    padding: 40px 16px 72px;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ==== Capçalera de la pàgina ==== */
+  .cq-header {
+    max-width: 660px;
+    margin: 0 auto 26px;
+  }
+  .cq-header .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .cq-header h1 {
+    margin: 6px 0 4px;
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -.02em;
+    line-height: 1.15;
+  }
+  .cq-header .lede {
+    margin: 0;
+    color: var(--muted);
+    font-size: 1.05rem;
+  }
+
+  /* ==== Bloc de contingut: patró únic per a tots els tipus ==== */
+  .cq-block {
+    max-width: 660px;
+    margin: 0 auto 20px;
+    padding: 26px 30px 28px;
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    position: relative;
+  }
+
+  /* Etiqueta de secció: petita, monoespaiada, com la capçalera
+     d'una fitxa tècnica. El text surt de l'atribut data-kind. */
+  .cq-block::before {
+    content: attr(data-kind);
+    position: absolute;
+    top: -8px;
+    left: 26px;
+    padding: 1px 9px;
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 20px;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .cq-block h4 {
+    margin: 4px 0 14px;
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -.01em;
+    line-height: 1.3;
+    color: var(--ink);
+  }
+  .cq-block p { margin: 0 0 14px; }
+  .cq-block p:last-child { margin-bottom: 0; }
+  .cq-block em { font-style: italic; color: var(--muted); }
+  .cq-block strong { font-weight: 600; }
+  .cq-block ul, .cq-block ol { margin: 0 0 14px; padding-left: 22px; }
+  .cq-block li { margin-bottom: 6px; }
+  .cq-block li:last-child { margin-bottom: 0; }
+  .cq-block a { color: var(--accent); }
+
+  .cq-block code {
+    font-family: var(--font-mono);
+    font-size: .84em;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    border-radius: 4px;
+    padding: 1px 5px;
+    color: var(--accent);
+  }
+  .cq-block pre {
+    margin: 14px 0 18px;
+    padding: 16px 18px;
+    background: var(--code-bg);
+    color: var(--code-ink);
+    border-radius: 8px;
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: .82rem;
+    line-height: 1.6;
+  }
+  .cq-block pre code { all: unset; font: inherit; }
+  .cq-block pre .c { color: #7E93AB; }   /* comentari dins del codi */
+  .cq-block pre .o { color: #8FD0A5; }   /* sortida esperada */
+
+  /* ---- Variants de color per tipus de bloc ---- */
+  .cq-block[data-kind="objectius"],
+  .cq-block[data-kind="pas a pas"],
+  .cq-block[data-kind="lliurament"],
+  .cq-block[data-kind="resum"] { border-color: var(--accent-line); }
+  .cq-block[data-kind="objectius"]::before,
+  .cq-block[data-kind="pas a pas"]::before,
+  .cq-block[data-kind="lliurament"]::before,
+  .cq-block[data-kind="resum"]::before { border-color: var(--accent-line); color: var(--accent); }
+  .cq-block[data-kind="objectius"] h4,
+  .cq-block[data-kind="pas a pas"] h4,
+  .cq-block[data-kind="lliurament"] h4,
+  .cq-block[data-kind="resum"] h4 { color: var(--accent); }
+
+  .cq-block[data-kind="recordatori"] { background: var(--warn-soft); border-color: #F5DCC8; }
+  .cq-block[data-kind="recordatori"]::before { background: var(--warn-soft); border-color: var(--warn-line); color: var(--warn); }
+  .cq-block[data-kind="recordatori"] h4 { color: var(--warn); }
+
+  .cq-block[data-kind="bones pràctiques"] { background: var(--ok-soft); border-color: var(--ok-line); }
+  .cq-block[data-kind="bones pràctiques"]::before { background: var(--ok-soft); border-color: var(--ok-line); color: var(--ok); }
+  .cq-block[data-kind="bones pràctiques"] h4 { color: var(--ok); }
+
+  .cq-block[data-kind="problemes"] { background: var(--ko-soft); border-color: var(--ko-line); }
+  .cq-block[data-kind="problemes"]::before { background: var(--ko-soft); border-color: var(--ko-line); color: var(--ko); }
+  .cq-block[data-kind="problemes"] h4 { color: var(--ko); }
+
+  /* ==== Diagrama de passos en flux (DORA i similars) ==== */
+  .dora-flow {
+    display: flex;
+    align-items: stretch;
+    gap: 6px;
+    margin: 20px 0 22px;
+    flex-wrap: wrap;
+  }
+  .dora-step {
+    flex: 1 1 130px;
+    padding: 14px 12px 12px;
+    border: 1px solid var(--rule);
+    border-top: 2px solid var(--accent);
+    border-radius: 6px;
+    background: var(--paper);
+  }
+  .dora-step .n {
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: .08em;
+  }
+  .dora-step .t {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: .9rem;
+    letter-spacing: .02em;
+    margin: 2px 0 5px;
+  }
+  .dora-step .d { font-size: .8rem; line-height: 1.45; color: var(--muted); }
+  .dora-arrow { align-self: center; color: #B3C2D2; font-size: 1rem; }
+  @media (max-width: 620px) {
+    .dora-arrow { display: none; }
+    .dora-step { flex-basis: 100%; }
+  }
+
+  /* ==== Passos numerats de les guies pas a pas ==== */
+  .cq-steps { counter-reset: step; margin: 4px 0 0; padding: 0; list-style: none; }
+  .cq-steps > li {
+    counter-increment: step;
+    position: relative;
+    padding: 0 0 4px 34px;
+    margin-bottom: 18px;
+  }
+  .cq-steps > li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0; top: 1px;
+    width: 22px; height: 22px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    border-radius: 50%;
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    font-weight: 500;
+    color: var(--accent);
+  }
+  .cq-steps > li > :first-child { margin-top: 0; }
+
+  /* ==== Problemes: símptoma → causa → solució ==== */
+  .cq-issues { margin: 4px 0 0; }
+  .cq-issues dt {
+    font-weight: 600;
+    margin-top: 16px;
+    color: var(--ko);
+  }
+  .cq-issues dt:first-child { margin-top: 0; }
+  .cq-issues dd { margin: 4px 0 0 0; }
+  .cq-issues dd .lbl {
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-right: 6px;
+  }
+
+  /* ==== Taula de referència ==== */
+  .cq-tablewrap { overflow-x: auto; margin: 14px 0 4px; }
+  .cq-table { border-collapse: collapse; width: 100%; font-size: .9rem; }
+  .cq-table th, .cq-table td {
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+  }
+  .cq-table th {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: .78rem;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom-color: var(--accent-line);
+    white-space: nowrap;
+  }
+  .cq-table td:first-child { white-space: nowrap; }
+  .cq-table tr:last-child td { border-bottom: none; }
+
+  /* ==== Nota de versió (Ubuntu 24.04 vs 26.04) ==== */
+  .cq-note {
+    margin: 14px 0 4px;
+    padding: 10px 14px;
+    border-left: 3px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 0 6px 6px 0;
+    font-size: .9rem;
+  }
+  .cq-note .lbl {
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 2px;
+  }
+
+
+  /* ==== Índex del mòdul (portada) ==== */
+  .cq-index { display: grid; gap: 10px; margin: 4px 0 0; padding: 0; list-style: none; }
+  .cq-index a {
+    display: flex; align-items: baseline; gap: 12px;
+    padding: 13px 16px;
+    border: 1px solid var(--rule); border-radius: 8px;
+    background: var(--paper); color: var(--ink); text-decoration: none;
+    transition: border-color .12s ease, background .12s ease;
+  }
+  .cq-index a:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .cq-index .ref {
+    font-family: var(--font-mono); font-size: .74rem; font-weight: 500;
+    color: var(--accent); letter-spacing: .06em; flex: 0 0 auto;
+  }
+  .cq-index .ttl { font-family: var(--font-display); font-weight: 700; font-size: .98rem; }
+  .cq-index .sub { display: block; font-size: .84rem; color: var(--muted); font-weight: 400; font-family: var(--font-body); margin-top: 1px; }
+
+  /* ==== Quiz ==== */
+  .cq-question { margin: 22px 0 0; }
+  .cq-question + .cq-question { padding-top: 22px; border-top: 1px solid var(--rule); }
+  .cq-question .statement { font-weight: 600; margin-bottom: 10px; }
+  .cq-option {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 10px 14px;
+    margin: 7px 0;
+    border: 1px solid var(--rule);
+    border-radius: 7px;
+    background: var(--card);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: .95rem;
+    color: var(--ink);
+    transition: border-color .12s ease, background .12s ease;
+  }
+  .cq-option:hover:not(:disabled) { border-color: #B3C2D2; }
+  .cq-option:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .cq-option.cq-selected { border-color: var(--accent); background: var(--accent-soft); }
+  .cq-option.cq-correct { border-color: var(--ok); background: var(--ok-soft); color: var(--ok); }
+  .cq-option.cq-incorrect { border-color: var(--ko); background: var(--ko-soft); color: var(--ko); }
+  .cq-check-btn {
+    margin-top: 10px;
+    padding: 9px 20px;
+    border: none;
+    border-radius: 7px;
+    background: var(--accent);
+    color: #FFFFFF;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: .88rem;
+    cursor: pointer;
+  }
+  .cq-check-btn:hover:not(:disabled) { background: var(--accent-hover); }
+  .cq-check-btn:disabled { background: #B3C2D2; cursor: default; }
+  .cq-feedback { margin-top: 10px; font-size: .88rem; font-weight: 600; }
+  .cq-feedback.ok { color: var(--ok); }
+  .cq-feedback.ko { color: var(--ko); }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+  /* ==== Impressió: els alumnes imprimeixen la teoria ==== */
+  @media print {
+    body { background: #FFF; padding: 0; font-size: 11pt; }
+    .cq-block { border-color: #CCC; page-break-inside: avoid; margin-bottom: 12px; }
+    .cq-block pre { background: #F4F4F4; color: #000; border: 1px solid #DDD; }
+    .cq-block pre .c, .cq-block pre .o { color: #555; }
+    .cq-check-btn { display: none; }
+  }
+/* === SINAPSI-CSS FI ======================================== */
+</style>
+</head>
+<body>
+<header class="cq-header">
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · Activitat 1</div>
+  <h1>Posada a punt del servidor</h1>
+  <p class="lede">Deixar la màquina llesta: nom, hora, actualitzacions i les dues targetes de xarxa.</p>
+</header>
+
+<!-- ============ OBJECTIUS ============ -->
+<div class="cq-block" data-kind="objectius">
+  <h4>Què has de saber abans de començar</h4>
+  <p>
+    Teoria <strong>T0</strong> (adreçament) i <strong>T1</strong> (Netplan).
+  </p>
+  <p>
+    Amb aquesta activitat aprendràs a posar a punt un servidor acabat d'instal·lar: nom, hora,
+    actualitzacions i configuració de les dues targetes de xarxa.
+  </p>
+</div>
+
+<!-- ============ ESCENARI ============ -->
+<div class="cq-block" data-kind="escenari">
+  <h4>Amb què treballaràs</h4>
+  <p>
+    Una màquina virtual <strong>Ubuntu Server nova</strong> a <strong>isardVDI</strong> amb dues
+    targetes de xarxa:
+  </p>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Targeta</th><th>Nom típic</th><th>Paper</th></tr></thead>
+      <tbody>
+        <tr><td><code>puigcastellar1</code></td><td><code>enp1s0</code></td><td>Xarxa del centre, amb Internet</td></tr>
+        <tr><td><code>personal1</code></td><td><code>enp2s0</code></td><td>Xarxa interna teva, per als teus clients</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    Els noms típics són orientatius: comprova sempre com es diuen a la teva màquina abans
+    d'escriure res. Connecta-t'hi per <strong>SSH</strong> des del teu equip.
+  </p>
+</div>
+
+<!-- ============ ENUNCIAT ============ -->
+<div class="cq-block" data-kind="enunciat">
+  <h4>Què has de fer</h4>
+  <p>
+    Acabes de rebre un servidor recent instal·lat i l'has de deixar en condicions per posar-hi
+    serveis a sobre. Ha de quedar així:
+  </p>
+  <ol>
+    <li>Tots els paquets del sistema <strong>actualitzats</strong>.</li>
+    <li>El nom de l'equip (<em>hostname</em>) canviat pel <strong>teu nom propi</strong>, en minúscules i sense accents.</li>
+    <li>La <strong>zona horària</strong> correcta per a on som.</li>
+    <li>Les <strong>actualitzacions automàtiques desactivades</strong>, com correspon a un servidor.</li>
+    <li>Netplan configurat: <code>puigcastellar1</code> automàtica i <code>personal1</code> fixa amb <code>192.168.1.1/24</code> i el DNS de <strong>Quad9</strong>.</li>
+  </ol>
+</div>
+
+<!-- ============ ON BUSCAR ============ -->
+<div class="cq-block" data-kind="enunciat">
+  <h4>D'on has de treure cada cosa</h4>
+  <p>Les comandes no te les donem fetes; sí que et diem on trobar-les:</p>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Què has de fer</th><th>On ho tens</th></tr></thead>
+      <tbody>
+        <tr><td>Actualitzar el sistema</td><td><code>apt</code>, del mòdul de sistemes operatius</td></tr>
+        <tr><td>Nom de l'equip</td><td><code>hostnamectl --help</code></td></tr>
+        <tr><td>Zona horària</td><td><code>timedatectl --help</code></td></tr>
+        <tr><td>Actualitzacions automàtiques</td><td>El fitxer <code>/etc/apt/apt.conf.d/20auto-upgrades</code></td></tr>
+        <tr><td>Configuració de xarxa</td><td>Teoria <strong>T1</strong> i els <a href="https://netplan.readthedocs.io/en/stable/examples/">exemples oficials de Netplan</a></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ============ RECORDATORI ============ -->
+<div class="cq-block" data-kind="recordatori">
+  <h4>Estàs treballant per SSH</h4>
+  <p>
+    Un error a la configuració de xarxa et pot deixar fora de la màquina. Aplica els canvis
+    <strong>de la manera segura que has vist a T1</strong>, no de la ràpida: si perds la
+    connexió, la configuració es desfà sola al cap de dos minuts. Si tot i així et quedes fora,
+    entra per la consola de la VM a isardVDI.
+  </p>
+</div>
+
+<!-- ============ OBSERVACIÓ TÈCNICA ============ -->
+<div class="cq-block" data-kind="observació">
+  <h4>Un detall on gairebé tothom ensopega</h4>
+  <p>
+    A <code>personal1</code> <strong>no hi has de posar cap porta d'enllaç</strong>, encara que
+    aquesta màquina n'hagi de fer de porta d'enllaç per als seus clients. Són dues coses
+    diferents i val la pena que ho tinguis clar abans d'escriure el fitxer.
+  </p>
+  <p>
+    Un equip només té <strong>una ruta per defecte</strong>, i aquí ja la dona el DHCP del centre
+    per <code>puigcastellar1</code>, que és per on hi ha Internet. Si hi afegeixes una segona
+    ruta per defecte apuntant a la seva pròpia IP, el servidor perdrà la sortida.
+  </p>
+  <p>
+    Que els <strong>clients</strong> facin servir la <code>192.168.1.1</code> com a porta
+    d'enllaç no s'escriu aquí, sinó a l'opció <code>routers</code> del servidor DHCP. Això és de
+    les activitats 3 i 4.
+  </p>
+</div>
+
+<!-- ============ COMPROVACIÓ ============ -->
+<div class="cq-block" data-kind="comprovació">
+  <h4>Com sabràs que ho has fet bé</h4>
+  <p>
+    Abans d'entregar, has de poder respondre <strong>sí</strong> a totes aquestes preguntes, amb
+    la sortida d'una comanda al davant. Si alguna falla, encara no has acabat.
+  </p>
+  <ul>
+    <li>El <em>prompt</em> mostra el teu <em>hostname</em> nou en tornar a entrar per SSH.</li>
+    <li>El rellotge del sistema dona l'hora d'aquí, amb la zona horària correcta.</li>
+    <li><code>enp2s0</code> té la <code>192.168.1.1/24</code> i <code>enp1s0</code> una adreça del centre.</li>
+    <li>Hi ha <strong>una sola</strong> ruta <code>default</code>, i és la de <code>puigcastellar1</code>.</li>
+    <li>Una consulta de nom de domini es resol correctament.</li>
+  </ul>
+</div>
+
+<!-- ============ PROBLEMES ============ -->
+<div class="cq-block" data-kind="problemes">
+  <h4>Si alguna cosa no va</h4>
+  <dl class="cq-issues">
+    <dt>Error de sintaxi en aplicar el Netplan</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Indentació. Un tabulador que se t'ha colat en copiar i enganxar.</p>
+      <p><span class="lbl">Solució</span> Al <code>nano</code>, esborra els espais del davant de la línia i torna'ls a escriure a mà.</p>
+    </dd>
+
+    <dt><code>enp2s0</code> no té la IP que li has posat</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Falta desactivar-hi el DHCP, o el nom de la targeta no és el que has escrit.</p>
+      <p><span class="lbl">Solució</span> Compara el nom amb la sortida de <code>ip -c link show</code> i repassa T1.</p>
+    </dd>
+
+    <dt>Has perdut la connexió SSH</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Has tocat la targeta per on estaves connectat.</p>
+      <p><span class="lbl">Solució</span> Si has aplicat els canvis de la manera segura, espera 120 segons. Si no, entra per la consola de la VM a isardVDI.</p>
+    </dd>
+  </dl>
+</div>
+
+<!-- ============ LLIURAMENT ============ -->
+<div class="cq-block" data-kind="lliurament">
+  <h4>Què has d'entregar</h4>
+  <p>
+    Un <strong>document tècnic</strong> on expliquis tot el que has anat fent, amb les captures
+    del resultat.
+  </p>
+  <p>
+    Respon-hi també, amb les teves paraules: <strong>per què a <code>personal1</code> no hi has
+    posat porta d'enllaç?</strong>
+  </p>
+</div>
+
+<script>
+  // Motor únic per a totes les preguntes single i multi.
+  document.querySelectorAll('.cq-question').forEach(function (question) {
+    var id = question.dataset.id;
+    if (!id) {
+      throw new Error('Falta data-id a una pregunta del quiz.');
+    }
+    var type = question.dataset.type;
+    if (type !== 'single' && type !== 'multi') {
+      throw new Error('data-type invàlid ("' + type + '") a la pregunta "' + id + '".');
+    }
+
+    var options = question.querySelectorAll('.cq-option');
+    var checkBtn = question.querySelector('.cq-check-btn');
+    var feedback = question.querySelector('.cq-feedback');
+
+    options.forEach(function (opt) {
+      opt.addEventListener('click', function () {
+        if (type === 'single') {
+          options.forEach(function (o) { o.classList.remove('cq-selected'); });
+          opt.classList.add('cq-selected');
+        } else {
+          opt.classList.toggle('cq-selected');
+        }
+      });
+    });
+
+    checkBtn.addEventListener('click', function () {
+      var allCorrect = true;
+      options.forEach(function (opt) {
+        var isCorrect = opt.dataset.correct === 'true';
+        var isSelected = opt.classList.contains('cq-selected');
+        opt.classList.remove('cq-selected');
+        if (isCorrect) {
+          opt.classList.add('cq-correct');
+        } else if (isSelected) {
+          opt.classList.add('cq-incorrect');
+        }
+        opt.disabled = true;
+        if (isCorrect !== isSelected) {
+          allCorrect = false;
+        }
+      });
+      feedback.textContent = allCorrect ? 'Correcte!' : 'Incorrecte, revisa les respostes marcades.';
+      feedback.className = 'cq-feedback ' + (allCorrect ? 'ok' : 'ko');
+      checkBtn.disabled = true;
+    });
+  });
+</script>
+
+</body>
+</html>

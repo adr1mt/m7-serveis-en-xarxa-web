@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>T4 · Encaminament i NAT — Serveis en Xarxa (0227)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* === SINAPSI-CSS INICI =======================================
+   0227 · Serveis en Xarxa — Identitat visual del mòdul
+   Blau estructural · taronja per als avisos · paper clar
+   per a la lectura · codi en fosc.
+   Aquest bloc és IDÈNTIC a totes les pàgines del mòdul.
+   No l'editis en una sola pàgina: edita'l a totes o extreu-lo
+   a un full compartit (_identitat/sinapsi.css).
+   ============================================================ */
+  :root {
+    --paper:        #FBFCFD;
+    --card:         #FFFFFF;
+    --ink:          #131A22;
+    --muted:        #5C6875;
+    --rule:         #E3E7EC;
+    --accent:       #1D4E89;
+    --accent-hover: #26639F;
+    --accent-soft:  #EFF5FB;
+    --accent-line:  #DCE7F3;
+    --warn:         #C2410C;
+    --warn-soft:    #FEF6EF;
+    --warn-line:    #F0CBAE;
+    --code-bg:      #16202E;
+    --code-ink:     #E2E9F1;
+    --ok:           #0E7A4B;
+    --ok-soft:      #F0FAF4;
+    --ok-line:      #C6E7D6;
+    --ko:           #B4232B;
+    --ko-soft:      #FEF4F4;
+    --ko-line:      #F2CFCF;
+    --font-display: "Ubuntu", -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-body:    "Source Sans 3", -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-mono:    "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+  }
+
+  body {
+    margin: 0;
+    padding: 40px 16px 72px;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ==== Capçalera de la pàgina ==== */
+  .cq-header {
+    max-width: 660px;
+    margin: 0 auto 26px;
+  }
+  .cq-header .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .cq-header h1 {
+    margin: 6px 0 4px;
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -.02em;
+    line-height: 1.15;
+  }
+  .cq-header .lede {
+    margin: 0;
+    color: var(--muted);
+    font-size: 1.05rem;
+  }
+
+  /* ==== Bloc de contingut: patró únic per a tots els tipus ==== */
+  .cq-block {
+    max-width: 660px;
+    margin: 0 auto 20px;
+    padding: 26px 30px 28px;
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    position: relative;
+  }
+
+  /* Etiqueta de secció: petita, monoespaiada, com la capçalera
+     d'una fitxa tècnica. El text surt de l'atribut data-kind. */
+  .cq-block::before {
+    content: attr(data-kind);
+    position: absolute;
+    top: -8px;
+    left: 26px;
+    padding: 1px 9px;
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 20px;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .cq-block h4 {
+    margin: 4px 0 14px;
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -.01em;
+    line-height: 1.3;
+    color: var(--ink);
+  }
+  .cq-block p { margin: 0 0 14px; }
+  .cq-block p:last-child { margin-bottom: 0; }
+  .cq-block em { font-style: italic; color: var(--muted); }
+  .cq-block strong { font-weight: 600; }
+  .cq-block ul, .cq-block ol { margin: 0 0 14px; padding-left: 22px; }
+  .cq-block li { margin-bottom: 6px; }
+  .cq-block li:last-child { margin-bottom: 0; }
+  .cq-block a { color: var(--accent); }
+
+  .cq-block code {
+    font-family: var(--font-mono);
+    font-size: .84em;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    border-radius: 4px;
+    padding: 1px 5px;
+    color: var(--accent);
+  }
+  .cq-block pre {
+    margin: 14px 0 18px;
+    padding: 16px 18px;
+    background: var(--code-bg);
+    color: var(--code-ink);
+    border-radius: 8px;
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: .82rem;
+    line-height: 1.6;
+  }
+  .cq-block pre code { all: unset; font: inherit; }
+  .cq-block pre .c { color: #7E93AB; }   /* comentari dins del codi */
+  .cq-block pre .o { color: #8FD0A5; }   /* sortida esperada */
+
+  /* ---- Variants de color per tipus de bloc ---- */
+  .cq-block[data-kind="objectius"],
+  .cq-block[data-kind="pas a pas"],
+  .cq-block[data-kind="lliurament"],
+  .cq-block[data-kind="resum"] { border-color: var(--accent-line); }
+  .cq-block[data-kind="objectius"]::before,
+  .cq-block[data-kind="pas a pas"]::before,
+  .cq-block[data-kind="lliurament"]::before,
+  .cq-block[data-kind="resum"]::before { border-color: var(--accent-line); color: var(--accent); }
+  .cq-block[data-kind="objectius"] h4,
+  .cq-block[data-kind="pas a pas"] h4,
+  .cq-block[data-kind="lliurament"] h4,
+  .cq-block[data-kind="resum"] h4 { color: var(--accent); }
+
+  .cq-block[data-kind="recordatori"] { background: var(--warn-soft); border-color: #F5DCC8; }
+  .cq-block[data-kind="recordatori"]::before { background: var(--warn-soft); border-color: var(--warn-line); color: var(--warn); }
+  .cq-block[data-kind="recordatori"] h4 { color: var(--warn); }
+
+  .cq-block[data-kind="bones pràctiques"] { background: var(--ok-soft); border-color: var(--ok-line); }
+  .cq-block[data-kind="bones pràctiques"]::before { background: var(--ok-soft); border-color: var(--ok-line); color: var(--ok); }
+  .cq-block[data-kind="bones pràctiques"] h4 { color: var(--ok); }
+
+  .cq-block[data-kind="problemes"] { background: var(--ko-soft); border-color: var(--ko-line); }
+  .cq-block[data-kind="problemes"]::before { background: var(--ko-soft); border-color: var(--ko-line); color: var(--ko); }
+  .cq-block[data-kind="problemes"] h4 { color: var(--ko); }
+
+  /* ==== Diagrama de passos en flux (DORA i similars) ==== */
+  .dora-flow {
+    display: flex;
+    align-items: stretch;
+    gap: 6px;
+    margin: 20px 0 22px;
+    flex-wrap: wrap;
+  }
+  .dora-step {
+    flex: 1 1 130px;
+    padding: 14px 12px 12px;
+    border: 1px solid var(--rule);
+    border-top: 2px solid var(--accent);
+    border-radius: 6px;
+    background: var(--paper);
+  }
+  .dora-step .n {
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: .08em;
+  }
+  .dora-step .t {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: .9rem;
+    letter-spacing: .02em;
+    margin: 2px 0 5px;
+  }
+  .dora-step .d { font-size: .8rem; line-height: 1.45; color: var(--muted); }
+  .dora-arrow { align-self: center; color: #B3C2D2; font-size: 1rem; }
+  @media (max-width: 620px) {
+    .dora-arrow { display: none; }
+    .dora-step { flex-basis: 100%; }
+  }
+
+  /* ==== Passos numerats de les guies pas a pas ==== */
+  .cq-steps { counter-reset: step; margin: 4px 0 0; padding: 0; list-style: none; }
+  .cq-steps > li {
+    counter-increment: step;
+    position: relative;
+    padding: 0 0 4px 34px;
+    margin-bottom: 18px;
+  }
+  .cq-steps > li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0; top: 1px;
+    width: 22px; height: 22px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    border-radius: 50%;
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    font-weight: 500;
+    color: var(--accent);
+  }
+  .cq-steps > li > :first-child { margin-top: 0; }
+
+  /* ==== Problemes: símptoma → causa → solució ==== */
+  .cq-issues { margin: 4px 0 0; }
+  .cq-issues dt {
+    font-weight: 600;
+    margin-top: 16px;
+    color: var(--ko);
+  }
+  .cq-issues dt:first-child { margin-top: 0; }
+  .cq-issues dd { margin: 4px 0 0 0; }
+  .cq-issues dd .lbl {
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-right: 6px;
+  }
+
+  /* ==== Taula de referència ==== */
+  .cq-tablewrap { overflow-x: auto; margin: 14px 0 4px; }
+  .cq-table { border-collapse: collapse; width: 100%; font-size: .9rem; }
+  .cq-table th, .cq-table td {
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+  }
+  .cq-table th {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: .78rem;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom-color: var(--accent-line);
+    white-space: nowrap;
+  }
+  .cq-table td:first-child { white-space: nowrap; }
+  .cq-table tr:last-child td { border-bottom: none; }
+
+  /* ==== Nota de versió (Ubuntu 24.04 vs 26.04) ==== */
+  .cq-note {
+    margin: 14px 0 4px;
+    padding: 10px 14px;
+    border-left: 3px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 0 6px 6px 0;
+    font-size: .9rem;
+  }
+  .cq-note .lbl {
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 2px;
+  }
+
+
+  /* ==== Índex del mòdul (portada) ==== */
+  .cq-index { display: grid; gap: 10px; margin: 4px 0 0; padding: 0; list-style: none; }
+  .cq-index a {
+    display: flex; align-items: baseline; gap: 12px;
+    padding: 13px 16px;
+    border: 1px solid var(--rule); border-radius: 8px;
+    background: var(--paper); color: var(--ink); text-decoration: none;
+    transition: border-color .12s ease, background .12s ease;
+  }
+  .cq-index a:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .cq-index .ref {
+    font-family: var(--font-mono); font-size: .74rem; font-weight: 500;
+    color: var(--accent); letter-spacing: .06em; flex: 0 0 auto;
+  }
+  .cq-index .ttl { font-family: var(--font-display); font-weight: 700; font-size: .98rem; }
+  .cq-index .sub { display: block; font-size: .84rem; color: var(--muted); font-weight: 400; font-family: var(--font-body); margin-top: 1px; }
+
+  /* ==== Quiz ==== */
+  .cq-question { margin: 22px 0 0; }
+  .cq-question + .cq-question { padding-top: 22px; border-top: 1px solid var(--rule); }
+  .cq-question .statement { font-weight: 600; margin-bottom: 10px; }
+  .cq-option {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 10px 14px;
+    margin: 7px 0;
+    border: 1px solid var(--rule);
+    border-radius: 7px;
+    background: var(--card);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: .95rem;
+    color: var(--ink);
+    transition: border-color .12s ease, background .12s ease;
+  }
+  .cq-option:hover:not(:disabled) { border-color: #B3C2D2; }
+  .cq-option:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .cq-option.cq-selected { border-color: var(--accent); background: var(--accent-soft); }
+  .cq-option.cq-correct { border-color: var(--ok); background: var(--ok-soft); color: var(--ok); }
+  .cq-option.cq-incorrect { border-color: var(--ko); background: var(--ko-soft); color: var(--ko); }
+  .cq-check-btn {
+    margin-top: 10px;
+    padding: 9px 20px;
+    border: none;
+    border-radius: 7px;
+    background: var(--accent);
+    color: #FFFFFF;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: .88rem;
+    cursor: pointer;
+  }
+  .cq-check-btn:hover:not(:disabled) { background: var(--accent-hover); }
+  .cq-check-btn:disabled { background: #B3C2D2; cursor: default; }
+  .cq-feedback { margin-top: 10px; font-size: .88rem; font-weight: 600; }
+  .cq-feedback.ok { color: var(--ok); }
+  .cq-feedback.ko { color: var(--ko); }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+  /* ==== Impressió: els alumnes imprimeixen la teoria ==== */
+  @media print {
+    body { background: #FFF; padding: 0; font-size: 11pt; }
+    .cq-block { border-color: #CCC; page-break-inside: avoid; margin-bottom: 12px; }
+    .cq-block pre { background: #F4F4F4; color: #000; border: 1px solid #DDD; }
+    .cq-block pre .c, .cq-block pre .o { color: #555; }
+    .cq-check-btn { display: none; }
+  }
+/* === SINAPSI-CSS FI ======================================== */
+</style>
+</head>
+<body>
+<header class="cq-header">
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · Teoria 4</div>
+  <h1>Encaminament i NAT</h1>
+  <p class="lede">Convertir el servidor en la porta d'enllaç que dona Internet als seus clients.</p>
+</header>
+
+<!-- ============ 1 · OBJECTIUS ============ -->
+<div class="cq-block" data-kind="objectius">
+  <h4>Què sabràs fer en acabar</h4>
+  <ul>
+    <li>Explicar per què un client amb IP correcta encara no té Internet.</li>
+    <li>Activar l'encaminament de paquets de forma permanent.</li>
+    <li>Configurar NAT amb <code>nftables</code>.</li>
+    <li>Comprovar on falla la connexió quan no funciona.</li>
+  </ul>
+</div>
+
+<!-- ============ 2 · EL PROBLEMA ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>Tinc IP, però no tinc Internet</h4>
+  <p>
+    El client ha rebut la seva configuració per DHCP i la porta d'enllaç apunta al teu servidor.
+    Fa <code>ping</code> a Internet i no passa res. DHCP ha funcionat perfectament: el que falla
+    és el pas següent.
+  </p>
+  <p>Perquè aquell paquet arribi a Internet i torni, calen <strong>dues coses</strong>:</p>
+  <ul>
+    <li><strong>Encaminament</strong> — que el servidor accepti passar paquets d'una targeta a l'altra.</li>
+    <li><strong>NAT</strong> — que canviï l'adreça d'origen per la seva, perquè la resposta sàpiga tornar.</li>
+  </ul>
+  <p>Cap de les dues està activada per defecte a Linux. Les has d'activar tu.</p>
+</div>
+
+<!-- ============ 3 · ENCAMINAMENT ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>Encaminament: deixar passar els paquets</h4>
+  <p>
+    Un Linux amb dues targetes de xarxa <strong>no reenvia res</strong> entre elles. Per
+    seguretat, ve desactivat de fàbrica: si no ho actives, cada targeta viu la seva vida.
+  </p>
+  <p>L'interruptor és un únic valor del nucli, que pots consultar així:</p>
+<pre>cat /proc/sys/net/ipv4/ip_forward</pre>
+  <p>
+    Si respon <code>0</code>, està desactivat. Amb <code>1</code>, el servidor ja fa d'encaminador
+    (<em>router</em>) entre les seves xarxes.
+  </p>
+</div>
+
+<!-- ============ 4 · NAT ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>NAT: qui signa la carta</h4>
+  <p>
+    Els clients tenen adreces privades, per exemple <code>192.168.1.50</code>. Aquestes adreces
+    <strong>no existeixen a Internet</strong>: cap servidor de fora sabria com respondre-hi.
+  </p>
+  <p>
+    <strong>NAT</strong> (<em>Network Address Translation</em>) ho resol canviant l'adreça
+    d'origen del paquet per la del servidor abans d'enviar-lo, i apuntant-se qui l'havia
+    demanat. Quan arriba la resposta, la torna al client correcte.
+  </p>
+  <p>
+    És el mateix que fa el router de casa teva amb tots els mòbils i ordinadors: de portes
+    enfora, tots surten amb una única adreça. La variant que farem servir s'anomena
+    <strong><em>masquerade</em></strong>.
+  </p>
+</div>
+
+<!-- ============ 5 · L'ESCENARI ============ -->
+<div class="cq-block" data-kind="exemple">
+  <h4>L'escenari de les activitats</h4>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Targeta</th><th>Xarxa</th><th>Paper</th></tr></thead>
+      <tbody>
+        <tr><td><code>enp1s0</code></td><td>puigcastellar1</td><td>Sortida a Internet</td></tr>
+        <tr><td><code>enp2s0</code></td><td>personal1</td><td>Xarxa interna: DHCP i clients</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>El recorregut d'un paquet del client fins a Internet és aquest:</p>
+  <div class="dora-flow">
+    <div class="dora-step">
+      <div class="n">01</div>
+      <div class="t">CLIENT</div>
+      <div class="d">Envia el paquet a la seva porta d'enllaç: el servidor.</div>
+    </div>
+    <div class="dora-arrow">→</div>
+    <div class="dora-step">
+      <div class="n">02</div>
+      <div class="t">FORWARD</div>
+      <div class="d">El servidor el passa de <code>enp2s0</code> a <code>enp1s0</code>.</div>
+    </div>
+    <div class="dora-arrow">→</div>
+    <div class="dora-step">
+      <div class="n">03</div>
+      <div class="t">NAT</div>
+      <div class="d">Canvia l'origen per l'adreça del servidor i el treu a fora.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 6 · RECORDATORI ============ -->
+<div class="cq-block" data-kind="recordatori">
+  <h4>Una regla mal escrita et tanca la porta</h4>
+  <p>
+    Estàs escrivint un tallafoc. Si poses <code>policy drop</code> a la cadena
+    <code>input</code> sense permetre SSH, perdràs la connexió en carregar les regles. En aquesta
+    pràctica deixem <code>input</code> amb <code>policy accept</code> justament per evitar-ho:
+    filtrem el trànsit que <em>travessa</em> el servidor, no el que hi arriba.
+  </p>
+</div>
+
+<!-- ============ 7 · PAS A PAS ============ -->
+<div class="cq-block" data-kind="pas a pas">
+  <h4>Convertir el servidor en porta d'enllaç</h4>
+
+  <ol class="cq-steps">
+    <li>
+      <p><strong>Mira com està ara</strong> l'encaminament:</p>
+<pre>cat /proc/sys/net/ipv4/ip_forward</pre>
+      <p>Sortirà <code>0</code>.</p>
+    </li>
+
+    <li>
+      <p><strong>Activa'l de manera permanent</strong> amb un fitxer propi, que és més net que tocar el fitxer general:</p>
+<pre>echo "net.ipv4.ip_forward=1" | sudo tee /etc/sysctl.d/99-encaminament.conf
+sudo sysctl --system</pre>
+      <p>Torna a comprovar-ho: ara ha de sortir <code>1</code>. I sobreviurà a un reinici.</p>
+    </li>
+
+    <li>
+      <p><strong>Escriu les regles</strong> de tallafoc i NAT:</p>
+<pre>sudo nano /etc/nftables.conf</pre>
+      <p>Deixa el fitxer amb aquest contingut, canviant els noms de les targetes pels teus:</p>
+<pre>#!/usr/sbin/nft -f
+flush ruleset
+
+table inet filter {
+    chain input {
+        type filter hook input priority 0;
+        policy accept;
+    }
+    chain forward {
+        type filter hook forward priority 0;
+        policy drop;
+
+        <span class="c"># de la xarxa interna cap a Internet</span>
+        iif "enp2s0" oif "enp1s0" accept
+
+        <span class="c"># només les respostes de tornada</span>
+        iif "enp1s0" oif "enp2s0" ct state related,established accept
+    }
+    chain output {
+        type filter hook output priority 0;
+        policy accept;
+    }
+}
+
+table ip nat {
+    chain postrouting {
+        type nat hook postrouting priority 100;
+        <span class="c"># NAT a la targeta que surt a Internet</span>
+        oif "enp1s0" masquerade
+    }
+}</pre>
+    </li>
+
+    <li>
+      <p><strong>Activa el servei</strong> perquè carregui les regles ara i a cada arrencada:</p>
+<pre>sudo systemctl enable --now nftables</pre>
+      <div class="cq-note">
+        <span class="lbl">Compte</span>
+        <code>enable --now</code> fa les dues coses alhora. No facis
+        <code>enable &amp; start</code> amb un sol <code>&amp;</code>: això envia la primera
+        comanda a segon pla i sembla que funciona quan no ho ha fet.
+      </div>
+    </li>
+
+    <li>
+      <p><strong>Comprova que les regles s'han carregat:</strong></p>
+<pre>sudo nft list ruleset</pre>
+      <p>Ha de sortir exactament el que has escrit. Si surt buit, hi ha un error de sintaxi al fitxer.</p>
+    </li>
+
+    <li>
+      <p><strong>Prova-ho des del client</strong>, per capes, en aquest ordre:</p>
+<pre>ip route              <span class="c"># la porta d'enllaç és el servidor?</span>
+ping -c3 192.168.1.1  <span class="c"># arribo al servidor?</span>
+ping -c3 9.9.9.9      <span class="c"># surto a Internet?</span>
+ping -c3 www.upc.edu  <span class="c"># funciona el DNS?</span></pre>
+      <p>
+        La gràcia és l'ordre: la primera que falli et diu exactament on és el problema. No cal
+        endevinar res.
+      </p>
+    </li>
+  </ol>
+
+  <div class="cq-note">
+    <span class="lbl">Ubuntu 26.04</span>
+    <code>nftables</code> i <code>sysctl</code> funcionen igual a 24.04 i 26.04. Comprova sempre
+    la sortida real de la teva màquina.
+  </div>
+</div>
+
+<!-- ============ 8 · IPTABLES ============ -->
+<div class="cq-block" data-kind="cas real">
+  <h4>Per què no fem servir iptables</h4>
+  <p>
+    Tota la documentació d'Internet parla d'<code>iptables</code>, amb comandes com
+    <code>iptables -t nat -A POSTROUTING -o enp1s0 -j MASQUERADE</code>. Encara funcionen, però
+    és una capa de compatibilitat: per sota, avui, hi ha <code>nftables</code>.
+  </p>
+  <p>
+    <code>nftables</code> és el sistema de tallafoc de Linux des de fa anys i el que trobaràs a
+    qualsevol servidor nou. Té una sintaxi unificada i les regles es desen en un fitxer que pots
+    llegir i versionar.
+  </p>
+  <p>
+    <strong>No barregis els dos.</strong> Si escrius regles amb <code>iptables</code> i les
+    consultes amb <code>nft list ruleset</code> les veuràs traduïdes, i al revés no. Tria un i
+    queda-t'hi.
+  </p>
+</div>
+
+<!-- ============ 9 · BONES PRÀCTIQUES ============ -->
+<div class="cq-block" data-kind="bones pràctiques">
+  <h4>Criteris professionals</h4>
+  <ul>
+    <li><strong><code>policy drop</code> a <code>forward</code></strong> i obre només el que cal. El que no s'ha permès, no passa.</li>
+    <li><strong>Fes servir <code>ct state related,established</code></strong> per al trànsit de tornada, en lloc d'obrir el sentit contrari sencer.</li>
+    <li><strong>Configuració permanent, no de sessió.</strong> Un <code>sysctl -w</code> o un <code>nft add rule</code> desapareixen en reiniciar.</li>
+    <li><strong>Activa NAT només a la targeta externa.</strong> Un <code>masquerade</code> a la interna amaga qui és qui i complica qualsevol diagnòstic.</li>
+    <li><strong>Prova per capes</strong> (ruta → servidor → IP externa → nom) abans de tocar res.</li>
+  </ul>
+</div>
+
+<!-- ============ 10 · PROBLEMES ============ -->
+<div class="cq-block" data-kind="problemes">
+  <h4>Errors habituals</h4>
+  <dl class="cq-issues">
+    <dt>Funcionava i després de reiniciar ja no</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Ho vas activar només per a la sessió: amb <code>sysctl -w</code> o afegint regles a mà.</p>
+      <p><span class="lbl">Solució</span> El fitxer a <code>/etc/sysctl.d/</code> i les regles a <code>/etc/nftables.conf</code>, amb el servei habilitat.</p>
+    </dd>
+
+    <dt><code>nft list ruleset</code> surt buit</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Error de sintaxi al fitxer: el <code>flush ruleset</code> s'executa i la resta falla.</p>
+      <p><span class="lbl">Solució</span> <code>sudo nft -c -f /etc/nftables.conf</code> comprova el fitxer sense aplicar-lo i et diu la línia.</p>
+    </dd>
+
+    <dt>El client arriba al servidor però no a Internet</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Falta l'encaminament o falta el NAT.</p>
+      <p><span class="lbl">Solució</span> Comprova <code>cat /proc/sys/net/ipv4/ip_forward</code> i que la taula <code>nat</code> apareix a <code>nft list ruleset</code>.</p>
+    </dd>
+
+    <dt><code>ping 9.9.9.9</code> va, però <code>ping www.upc.edu</code> no</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> L'encaminament i el NAT funcionen. El problema és el DNS que reparteix el teu servidor DHCP.</p>
+      <p><span class="lbl">Solució</span> Revisa <code>domain-name-servers</code> al fitxer de Kea i, al client, <code>resolvectl status</code>.</p>
+    </dd>
+  </dl>
+</div>
+
+<!-- ============ 11 · RESUM ============ -->
+<div class="cq-block" data-kind="resum">
+  <h4>Resum</h4>
+  <ul>
+    <li>Un client amb IP correcta encara necessita <strong>encaminament</strong> i <strong>NAT</strong> per sortir a Internet.</li>
+    <li>L'encaminament s'activa amb <code>net.ipv4.ip_forward=1</code>, permanent a <code>/etc/sysctl.d/</code>.</li>
+    <li>El NAT es fa amb <code>masquerade</code> a la targeta externa, dins de <code>/etc/nftables.conf</code>.</li>
+    <li>Es fa servir <strong>nftables</strong>, no <code>iptables</code>. I mai els dos alhora.</li>
+    <li>Per diagnosticar, prova <strong>per capes</strong>: ruta, servidor, IP externa, nom.</li>
+  </ul>
+
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Comanda</th><th>Per a què serveix</th></tr></thead>
+      <tbody>
+        <tr><td><code>cat /proc/sys/net/ipv4/ip_forward</code></td><td>Veure si l'encaminament està actiu</td></tr>
+        <tr><td><code>sudo sysctl --system</code></td><td>Aplicar els fitxers de <code>/etc/sysctl.d/</code></td></tr>
+        <tr><td><code>sudo nft -c -f /etc/nftables.conf</code></td><td>Validar les regles sense aplicar-les</td></tr>
+        <tr><td><code>sudo systemctl enable --now nftables</code></td><td>Carregar les regles i fer-les permanents</td></tr>
+        <tr><td><code>sudo nft list ruleset</code></td><td>Veure les regles carregades</td></tr>
+        <tr><td><code>ip route</code></td><td>Comprovar la porta d'enllaç al client</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p style="margin-top:16px">
+    <strong>Amb això tanques el RA1:</strong> ja saps configurar la xarxa, muntar un servidor
+    DHCP i donar Internet als seus clients.
+  </p>
+</div>
+
+<!-- ============ 12 · QUIZ ============ -->
+<div class="cq-block" data-kind="quiz">
+  <h4>Comprova el que has après</h4>
+
+  <div class="cq-question" data-id="t4-forward" data-type="single">
+    <div class="statement">Què significa que <code>/proc/sys/net/ipv4/ip_forward</code> valgui <code>0</code>?</div>
+    <button class="cq-option" data-correct="true">El servidor no passa paquets d'una targeta a l'altra</button>
+    <button class="cq-option" data-correct="false">El servidor no té cap targeta de xarxa activa</button>
+    <button class="cq-option" data-correct="false">El NAT està desactivat</button>
+    <button class="cq-option" data-correct="false">No hi ha cap regla de tallafoc</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+
+  <div class="cq-question" data-id="t4-nat" data-type="single">
+    <div class="statement">Per a què serveix el NAT (<em>masquerade</em>)?</div>
+    <button class="cq-option" data-correct="false">Per repartir adreces IP als clients</button>
+    <button class="cq-option" data-correct="true">Per canviar l'adreça privada d'origen per la del servidor, i que la resposta pugui tornar</button>
+    <button class="cq-option" data-correct="false">Per resoldre noms de domini</button>
+    <button class="cq-option" data-correct="false">Per xifrar el trànsit cap a Internet</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+
+  <div class="cq-question" data-id="t4-permanent" data-type="single">
+    <div class="statement">Després de reiniciar, el client torna a quedar-se sense Internet. Què ha passat?</div>
+    <button class="cq-option" data-correct="false">La concessió DHCP ha caducat</button>
+    <button class="cq-option" data-correct="true">La configuració es va fer només per a la sessió i no s'ha desat en fitxers</button>
+    <button class="cq-option" data-correct="false">El servidor ha canviat d'adreça MAC</button>
+    <button class="cq-option" data-correct="false">S'ha esgotat el rang d'adreces</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+
+  <div class="cq-question" data-id="t4-diagnostic" data-type="single">
+    <div class="statement">Al client, <code>ping 9.9.9.9</code> funciona però <code>ping www.upc.edu</code> no. Què falla?</div>
+    <button class="cq-option" data-correct="false">L'encaminament</button>
+    <button class="cq-option" data-correct="false">El NAT</button>
+    <button class="cq-option" data-correct="true">El DNS que reparteix el servidor DHCP</button>
+    <button class="cq-option" data-correct="false">La porta d'enllaç</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+
+  <div class="cq-question" data-id="t4-certes" data-type="multi">
+    <div class="statement">Selecciona totes les afirmacions certes</div>
+    <button class="cq-option" data-correct="true">L'encaminament ve desactivat per defecte a Linux.</button>
+    <button class="cq-option" data-correct="true">El <em>masquerade</em> s'aplica a la targeta que surt a Internet.</button>
+    <button class="cq-option" data-correct="true">Les regles de <code>/etc/nftables.conf</code> es carreguen a cada arrencada si el servei està habilitat.</button>
+    <button class="cq-option" data-correct="false">Convé escriure les regles amb <code>iptables</code> i amb <code>nftables</code> alhora.</button>
+    <button class="cq-option" data-correct="false">Amb el DHCP ben configurat, el client ja té Internet.</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+</div>
+
+<script>
+  // Motor únic per a totes les preguntes single i multi.
+  document.querySelectorAll('.cq-question').forEach(function (question) {
+    var id = question.dataset.id;
+    if (!id) {
+      throw new Error('Falta data-id a una pregunta del quiz.');
+    }
+    var type = question.dataset.type;
+    if (type !== 'single' && type !== 'multi') {
+      throw new Error('data-type invàlid ("' + type + '") a la pregunta "' + id + '".');
+    }
+
+    var options = question.querySelectorAll('.cq-option');
+    var checkBtn = question.querySelector('.cq-check-btn');
+    var feedback = question.querySelector('.cq-feedback');
+
+    options.forEach(function (opt) {
+      opt.addEventListener('click', function () {
+        if (type === 'single') {
+          options.forEach(function (o) { o.classList.remove('cq-selected'); });
+          opt.classList.add('cq-selected');
+        } else {
+          opt.classList.toggle('cq-selected');
+        }
+      });
+    });
+
+    checkBtn.addEventListener('click', function () {
+      var allCorrect = true;
+      options.forEach(function (opt) {
+        var isCorrect = opt.dataset.correct === 'true';
+        var isSelected = opt.classList.contains('cq-selected');
+        opt.classList.remove('cq-selected');
+        if (isCorrect) {
+          opt.classList.add('cq-correct');
+        } else if (isSelected) {
+          opt.classList.add('cq-incorrect');
+        }
+        opt.disabled = true;
+        if (isCorrect !== isSelected) {
+          allCorrect = false;
+        }
+      });
+      feedback.textContent = allCorrect ? 'Correcte!' : 'Incorrecte, revisa les respostes marcades.';
+      feedback.className = 'cq-feedback ' + (allCorrect ? 'ok' : 'ko');
+      checkBtn.disabled = true;
+    });
+  });
+</script>
+
+</body>
+</html>

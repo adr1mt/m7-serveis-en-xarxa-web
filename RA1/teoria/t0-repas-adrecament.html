@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>T0 · Repàs d'adreçament — Serveis en Xarxa (0227)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* === SINAPSI-CSS INICI =======================================
+   0227 · Serveis en Xarxa — Identitat visual del mòdul
+   Blau estructural · taronja per als avisos · paper clar
+   per a la lectura · codi en fosc.
+   Aquest bloc és IDÈNTIC a totes les pàgines del mòdul.
+   No l'editis en una sola pàgina: edita'l a totes o extreu-lo
+   a un full compartit (_identitat/sinapsi.css).
+   ============================================================ */
+  :root {
+    --paper:        #FBFCFD;
+    --card:         #FFFFFF;
+    --ink:          #131A22;
+    --muted:        #5C6875;
+    --rule:         #E3E7EC;
+    --accent:       #1D4E89;
+    --accent-hover: #26639F;
+    --accent-soft:  #EFF5FB;
+    --accent-line:  #DCE7F3;
+    --warn:         #C2410C;
+    --warn-soft:    #FEF6EF;
+    --warn-line:    #F0CBAE;
+    --code-bg:      #16202E;
+    --code-ink:     #E2E9F1;
+    --ok:           #0E7A4B;
+    --ok-soft:      #F0FAF4;
+    --ok-line:      #C6E7D6;
+    --ko:           #B4232B;
+    --ko-soft:      #FEF4F4;
+    --ko-line:      #F2CFCF;
+    --font-display: "Ubuntu", -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-body:    "Source Sans 3", -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-mono:    "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+  }
+
+  body {
+    margin: 0;
+    padding: 40px 16px 72px;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ==== Capçalera de la pàgina ==== */
+  .cq-header {
+    max-width: 660px;
+    margin: 0 auto 26px;
+  }
+  .cq-header .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .cq-header h1 {
+    margin: 6px 0 4px;
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -.02em;
+    line-height: 1.15;
+  }
+  .cq-header .lede {
+    margin: 0;
+    color: var(--muted);
+    font-size: 1.05rem;
+  }
+
+  /* ==== Bloc de contingut: patró únic per a tots els tipus ==== */
+  .cq-block {
+    max-width: 660px;
+    margin: 0 auto 20px;
+    padding: 26px 30px 28px;
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    position: relative;
+  }
+
+  /* Etiqueta de secció: petita, monoespaiada, com la capçalera
+     d'una fitxa tècnica. El text surt de l'atribut data-kind. */
+  .cq-block::before {
+    content: attr(data-kind);
+    position: absolute;
+    top: -8px;
+    left: 26px;
+    padding: 1px 9px;
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 20px;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .cq-block h4 {
+    margin: 4px 0 14px;
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -.01em;
+    line-height: 1.3;
+    color: var(--ink);
+  }
+  .cq-block p { margin: 0 0 14px; }
+  .cq-block p:last-child { margin-bottom: 0; }
+  .cq-block em { font-style: italic; color: var(--muted); }
+  .cq-block strong { font-weight: 600; }
+  .cq-block ul, .cq-block ol { margin: 0 0 14px; padding-left: 22px; }
+  .cq-block li { margin-bottom: 6px; }
+  .cq-block li:last-child { margin-bottom: 0; }
+  .cq-block a { color: var(--accent); }
+
+  .cq-block code {
+    font-family: var(--font-mono);
+    font-size: .84em;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    border-radius: 4px;
+    padding: 1px 5px;
+    color: var(--accent);
+  }
+  .cq-block pre {
+    margin: 14px 0 18px;
+    padding: 16px 18px;
+    background: var(--code-bg);
+    color: var(--code-ink);
+    border-radius: 8px;
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: .82rem;
+    line-height: 1.6;
+  }
+  .cq-block pre code { all: unset; font: inherit; }
+  .cq-block pre .c { color: #7E93AB; }   /* comentari dins del codi */
+  .cq-block pre .o { color: #8FD0A5; }   /* sortida esperada */
+
+  /* ---- Variants de color per tipus de bloc ---- */
+  .cq-block[data-kind="objectius"],
+  .cq-block[data-kind="pas a pas"],
+  .cq-block[data-kind="lliurament"],
+  .cq-block[data-kind="resum"] { border-color: var(--accent-line); }
+  .cq-block[data-kind="objectius"]::before,
+  .cq-block[data-kind="pas a pas"]::before,
+  .cq-block[data-kind="lliurament"]::before,
+  .cq-block[data-kind="resum"]::before { border-color: var(--accent-line); color: var(--accent); }
+  .cq-block[data-kind="objectius"] h4,
+  .cq-block[data-kind="pas a pas"] h4,
+  .cq-block[data-kind="lliurament"] h4,
+  .cq-block[data-kind="resum"] h4 { color: var(--accent); }
+
+  .cq-block[data-kind="recordatori"] { background: var(--warn-soft); border-color: #F5DCC8; }
+  .cq-block[data-kind="recordatori"]::before { background: var(--warn-soft); border-color: var(--warn-line); color: var(--warn); }
+  .cq-block[data-kind="recordatori"] h4 { color: var(--warn); }
+
+  .cq-block[data-kind="bones pràctiques"] { background: var(--ok-soft); border-color: var(--ok-line); }
+  .cq-block[data-kind="bones pràctiques"]::before { background: var(--ok-soft); border-color: var(--ok-line); color: var(--ok); }
+  .cq-block[data-kind="bones pràctiques"] h4 { color: var(--ok); }
+
+  .cq-block[data-kind="problemes"] { background: var(--ko-soft); border-color: var(--ko-line); }
+  .cq-block[data-kind="problemes"]::before { background: var(--ko-soft); border-color: var(--ko-line); color: var(--ko); }
+  .cq-block[data-kind="problemes"] h4 { color: var(--ko); }
+
+  /* ==== Diagrama de passos en flux (DORA i similars) ==== */
+  .dora-flow {
+    display: flex;
+    align-items: stretch;
+    gap: 6px;
+    margin: 20px 0 22px;
+    flex-wrap: wrap;
+  }
+  .dora-step {
+    flex: 1 1 130px;
+    padding: 14px 12px 12px;
+    border: 1px solid var(--rule);
+    border-top: 2px solid var(--accent);
+    border-radius: 6px;
+    background: var(--paper);
+  }
+  .dora-step .n {
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: .08em;
+  }
+  .dora-step .t {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: .9rem;
+    letter-spacing: .02em;
+    margin: 2px 0 5px;
+  }
+  .dora-step .d { font-size: .8rem; line-height: 1.45; color: var(--muted); }
+  .dora-arrow { align-self: center; color: #B3C2D2; font-size: 1rem; }
+  @media (max-width: 620px) {
+    .dora-arrow { display: none; }
+    .dora-step { flex-basis: 100%; }
+  }
+
+  /* ==== Passos numerats de les guies pas a pas ==== */
+  .cq-steps { counter-reset: step; margin: 4px 0 0; padding: 0; list-style: none; }
+  .cq-steps > li {
+    counter-increment: step;
+    position: relative;
+    padding: 0 0 4px 34px;
+    margin-bottom: 18px;
+  }
+  .cq-steps > li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0; top: 1px;
+    width: 22px; height: 22px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    border-radius: 50%;
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    font-weight: 500;
+    color: var(--accent);
+  }
+  .cq-steps > li > :first-child { margin-top: 0; }
+
+  /* ==== Problemes: símptoma → causa → solució ==== */
+  .cq-issues { margin: 4px 0 0; }
+  .cq-issues dt {
+    font-weight: 600;
+    margin-top: 16px;
+    color: var(--ko);
+  }
+  .cq-issues dt:first-child { margin-top: 0; }
+  .cq-issues dd { margin: 4px 0 0 0; }
+  .cq-issues dd .lbl {
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-right: 6px;
+  }
+
+  /* ==== Taula de referència ==== */
+  .cq-tablewrap { overflow-x: auto; margin: 14px 0 4px; }
+  .cq-table { border-collapse: collapse; width: 100%; font-size: .9rem; }
+  .cq-table th, .cq-table td {
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+  }
+  .cq-table th {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: .78rem;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom-color: var(--accent-line);
+    white-space: nowrap;
+  }
+  .cq-table td:first-child { white-space: nowrap; }
+  .cq-table tr:last-child td { border-bottom: none; }
+
+  /* ==== Nota de versió (Ubuntu 24.04 vs 26.04) ==== */
+  .cq-note {
+    margin: 14px 0 4px;
+    padding: 10px 14px;
+    border-left: 3px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 0 6px 6px 0;
+    font-size: .9rem;
+  }
+  .cq-note .lbl {
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 2px;
+  }
+
+
+  /* ==== Índex del mòdul (portada) ==== */
+  .cq-index { display: grid; gap: 10px; margin: 4px 0 0; padding: 0; list-style: none; }
+  .cq-index a {
+    display: flex; align-items: baseline; gap: 12px;
+    padding: 13px 16px;
+    border: 1px solid var(--rule); border-radius: 8px;
+    background: var(--paper); color: var(--ink); text-decoration: none;
+    transition: border-color .12s ease, background .12s ease;
+  }
+  .cq-index a:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .cq-index .ref {
+    font-family: var(--font-mono); font-size: .74rem; font-weight: 500;
+    color: var(--accent); letter-spacing: .06em; flex: 0 0 auto;
+  }
+  .cq-index .ttl { font-family: var(--font-display); font-weight: 700; font-size: .98rem; }
+  .cq-index .sub { display: block; font-size: .84rem; color: var(--muted); font-weight: 400; font-family: var(--font-body); margin-top: 1px; }
+
+  /* ==== Quiz ==== */
+  .cq-question { margin: 22px 0 0; }
+  .cq-question + .cq-question { padding-top: 22px; border-top: 1px solid var(--rule); }
+  .cq-question .statement { font-weight: 600; margin-bottom: 10px; }
+  .cq-option {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 10px 14px;
+    margin: 7px 0;
+    border: 1px solid var(--rule);
+    border-radius: 7px;
+    background: var(--card);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: .95rem;
+    color: var(--ink);
+    transition: border-color .12s ease, background .12s ease;
+  }
+  .cq-option:hover:not(:disabled) { border-color: #B3C2D2; }
+  .cq-option:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .cq-option.cq-selected { border-color: var(--accent); background: var(--accent-soft); }
+  .cq-option.cq-correct { border-color: var(--ok); background: var(--ok-soft); color: var(--ok); }
+  .cq-option.cq-incorrect { border-color: var(--ko); background: var(--ko-soft); color: var(--ko); }
+  .cq-check-btn {
+    margin-top: 10px;
+    padding: 9px 20px;
+    border: none;
+    border-radius: 7px;
+    background: var(--accent);
+    color: #FFFFFF;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: .88rem;
+    cursor: pointer;
+  }
+  .cq-check-btn:hover:not(:disabled) { background: var(--accent-hover); }
+  .cq-check-btn:disabled { background: #B3C2D2; cursor: default; }
+  .cq-feedback { margin-top: 10px; font-size: .88rem; font-weight: 600; }
+  .cq-feedback.ok { color: var(--ok); }
+  .cq-feedback.ko { color: var(--ko); }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+  /* ==== Impressió: els alumnes imprimeixen la teoria ==== */
+  @media print {
+    body { background: #FFF; padding: 0; font-size: 11pt; }
+    .cq-block { border-color: #CCC; page-break-inside: avoid; margin-bottom: 12px; }
+    .cq-block pre { background: #F4F4F4; color: #000; border: 1px solid #DDD; }
+    .cq-block pre .c, .cq-block pre .o { color: #555; }
+    .cq-check-btn { display: none; }
+  }
+/* === SINAPSI-CSS FI ======================================== */
+</style>
+</head>
+<body>
+<header class="cq-header">
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · Teoria 0</div>
+  <h1>Repàs d'adreçament</h1>
+  <p class="lede">El mínim de xarxes que necessites tenir clar abans de començar el mòdul.</p>
+</header>
+
+<!-- ============ 1 · OBJECTIUS ============ -->
+<div class="cq-block" data-kind="objectius">
+  <h4>Què sabràs fer en acabar</h4>
+  <ul>
+    <li>Diferenciar l'adreça MAC de l'adreça IP.</li>
+    <li>Interpretar una màscara escrita en format CIDR (<code>/24</code>).</li>
+    <li>Dir quina és l'adreça de xarxa, la de difusió i quantes en queden per als equips.</li>
+    <li>Reconèixer els rangs privats.</li>
+  </ul>
+</div>
+
+<!-- ============ 2 · MAC I IP ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>Dues adreces per a cada targeta</h4>
+  <p>
+    Cada targeta de xarxa té <strong>dues</strong> adreces, i fan feines diferents:
+  </p>
+  <ul>
+    <li>
+      <strong>MAC</strong> (<code>08:00:27:1f:a3:0c</code>) — ve de fàbrica i no canvia. Serveix
+      dins de la xarxa local i és la que fa servir DHCP per reconèixer cada equip.
+    </li>
+    <li>
+      <strong>IP</strong> (<code>192.168.1.50</code>) — la poses tu o te la dona un servidor.
+      Serveix per arribar a qualsevol lloc, també fora de la teva xarxa.
+    </li>
+  </ul>
+  <p>
+    La comparació habitual: la MAC és el número de sèrie del teu mòbil; la IP és el número de
+    telèfon. El primer no canvia mai; el segon depèn d'on estiguis donat d'alta.
+  </p>
+</div>
+
+<!-- ============ 3 · IP I MÀSCARA ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>La màscara parteix l'adreça en dos</h4>
+  <p>
+    Una adreça IPv4 són quatre números de 0 a 255, i sempre va acompanyada d'una
+    <strong>màscara</strong>. La màscara diu quina part de l'adreça identifica la
+    <strong>xarxa</strong> i quina identifica l'<strong>equip</strong>.
+  </p>
+  <p>
+    A <code>192.168.1.50/24</code>, el <code>/24</code> vol dir que els <strong>24 primers
+    bits</strong> (els tres primers números) són la xarxa. Per tant: xarxa
+    <code>192.168.1</code>, equip <code>50</code>.
+  </p>
+  <p>
+    <strong>Dos equips es poden parlar directament si comparteixen la part de xarxa.</strong> Si
+    no, el trànsit ha de passar per la porta d'enllaç. Aquesta única frase explica la meitat dels
+    problemes de xarxa que et trobaràs.
+  </p>
+</div>
+
+<!-- ============ 4 · CIDR ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>Les màscares que faràs servir</h4>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>CIDR</th><th>Màscara</th><th>Adreces</th><th>Equips</th></tr></thead>
+      <tbody>
+        <tr><td><code>/24</code></td><td>255.255.255.0</td><td>256</td><td>254</td></tr>
+        <tr><td><code>/20</code></td><td>255.255.240.0</td><td>4.096</td><td>4.094</td></tr>
+        <tr><td><code>/16</code></td><td>255.255.0.0</td><td>65.536</td><td>65.534</td></tr>
+        <tr><td><code>/8</code></td><td>255.0.0.0</td><td>16.777.216</td><td>16.777.214</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    Per què sempre <strong>dos equips menys</strong> del total? Perquè de cada xarxa hi ha dues
+    adreces que no es poden donar a ningú: la <strong>primera</strong> (adreça de xarxa) i
+    l'<strong>última</strong> (difusió).
+  </p>
+</div>
+
+<!-- ============ MÀSCARES NO RODONES ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>Les màscares no acaben sempre en un punt</h4>
+  <p>
+    El <code>/24</code>, el <code>/16</code> i el <code>/8</code> són còmodes perquè cauen just
+    entre dos números de l'adreça. Però la màscara pot ser <strong>qualsevol valor entre /0 i
+    /32</strong>, i a la pràctica en trobaràs moltes que no són rodones, com la <code>/20</code>
+    o la <code>/26</code>.
+  </p>
+  <p>
+    Partir una xarxa gran en trossos més petits és el que s'anomena <strong>subnetting</strong>.
+    Serveix per separar aules, plantes o departaments sense malgastar adreces: si una aula té 20
+    ordinadors, donar-li una <code>/24</code> sencera vol dir desaprofitar-ne 234.
+  </p>
+  <div class="cq-note">
+    <span class="lbl">En aquest mòdul</span>
+    Farem servir <code>/24</code>, <code>/16</code> i <code>/8</code> per centrar-nos en els
+    serveis. Aquí només cal que sàpigues que les altres existeixen i que <strong>qui mana sempre
+    és la màscara</strong>: és ella qui decideix quina és la primera adreça i quina l'última, no
+    el fet que un número acabi en 0 o en 255.
+  </div>
+</div>
+
+<!-- ============ 5 · EXEMPLE ============ -->
+<div class="cq-block" data-kind="exemple">
+  <h4>Desglossar la xarxa 192.168.1.0/24</h4>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Adreça</th><th>Què és</th><th>Es pot fer servir?</th></tr></thead>
+      <tbody>
+        <tr><td><code>192.168.1.0</code></td><td>Adreça de xarxa</td><td>No</td></tr>
+        <tr><td><code>192.168.1.1</code></td><td>Primera assignable — sol ser la porta d'enllaç</td><td>Sí</td></tr>
+        <tr><td><code>192.168.1.2 – .254</code></td><td>Equips</td><td>Sí</td></tr>
+        <tr><td><code>192.168.1.255</code></td><td>Difusió (<em>broadcast</em>)</td><td>No</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    La de <strong>difusió</strong> és la que fa servir un client DHCP per preguntar si hi ha
+    algun servidor: un missatge que arriba a tothom de la xarxa alhora.
+  </p>
+</div>
+
+<!-- ============ 6 · RANGS PRIVATS ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>Adreces privades i públiques</h4>
+  <p>
+    Hi ha tres rangs reservats per a xarxes internes. <strong>No existeixen a Internet</strong>:
+    els pots fer servir a casa, a l'institut i a l'empresa sense demanar permís a ningú.
+  </p>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Rang</th><th>En CIDR</th><th>On el veuràs</th></tr></thead>
+      <tbody>
+        <tr><td>10.0.0.0 – 10.255.255.255</td><td><code>10.0.0.0/8</code></td><td>Empreses grans</td></tr>
+        <tr><td>172.16.0.0 – 172.31.255.255</td><td><code>172.16.0.0/12</code></td><td>Xarxes mitjanes</td></tr>
+        <tr><td>192.168.0.0 – 192.168.255.255</td><td><code>192.168.0.0/16</code></td><td>Cases i oficines</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    Els faràs servir tots tres durant el mòdul. Com que no surten a Internet, cal un servidor que
+    tradueixi les adreces quan els clients hi volen sortir: és el <strong>NAT</strong> de la
+    teoria T4.
+  </p>
+</div>
+
+<!-- ============ 7 · PAS A PAS ============ -->
+<div class="cq-block" data-kind="pas a pas">
+  <h4>Llegir la teva pròpia xarxa</h4>
+
+  <ol class="cq-steps">
+    <li>
+      <p><strong>Mira les teves adreces</strong>, la MAC i la IP alhora:</p>
+<pre>ip -c addr show</pre>
+      <p>
+        La MAC surt a <code>link/ether</code> i la IP amb la màscara a <code>inet</code>, en
+        format CIDR. Apunta-les.
+      </p>
+      <div class="cq-note">
+        <span class="lbl">Escriu menys</span>
+        <code>ip</code> accepta les ordres abreujades mentre no siguin ambigües:
+        <code>ip -c a</code> és exactament el mateix que <code>ip -c addr show</code>. Igualment,
+        <code>ip -c r</code> per a les rutes, <code>ip -c l</code> per a les targetes i
+        <code>ip -c n</code> per als veïns. Als apunts hi trobaràs la forma llarga perquè es
+        llegeix millor, però al teclat faràs servir la curta.
+      </div>
+    </li>
+
+    <li>
+      <p><strong>Mira per on surts</strong> de la teva xarxa:</p>
+<pre>ip -c route</pre>
+      <p>
+        La línia que comença per <code>default via</code> és la porta d'enllaç. Comprova que
+        està dins de la teva mateixa xarxa: si no hi fos, no hi podries arribar.
+      </p>
+    </li>
+
+    <li>
+      <p><strong>Fes els càlculs sense fer-los.</strong> Python ve instal·lat a Ubuntu i sap de xarxes:</p>
+<pre>python3 -c "import ipaddress as i; n=i.ip_network('192.168.1.0/24'); \
+print('Xarxa:', n.network_address); \
+print('Difusió:', n.broadcast_address); \
+print('Equips:', n.num_addresses - 2)"</pre>
+      <p>Canvia la xarxa per la teva i comprova que et surt el que esperaves.</p>
+    </li>
+
+    <li>
+      <p><strong>Comprova qui tens a la vora</strong> amb la taula de veïns, que lliga IP i MAC:</p>
+<pre>ip -c neigh</pre>
+      <p>
+        Aquí veus les dues adreces treballant juntes: per parlar amb un veí de la teva xarxa, el
+        teu equip necessita saber-ne la MAC.
+      </p>
+    </li>
+  </ol>
+</div>
+
+<!-- ============ 8 · PROBLEMES ============ -->
+<div class="cq-block" data-kind="problemes">
+  <h4>Confusions habituals</h4>
+  <dl class="cq-issues">
+    <dt>Dos equips no es veuen tot i tenir IP</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Estan en xarxes diferents. Per exemple <code>192.168.1.5/24</code> i <code>192.168.2.5/24</code>: comparteixen els dos primers números, però amb <code>/24</code> en calen tres.</p>
+      <p><span class="lbl">Solució</span> Compara la part de xarxa de tots dos segons la màscara, no a ull.</p>
+    </dd>
+
+    <dt>Assignar la primera o l'última adreça a un equip</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Són la de xarxa i la de difusió. No es poden fer servir.</p>
+      <p><span class="lbl">Solució</span> A la <code>192.168.1.0/24</code>, el primer equip és la <code>.1</code> i l'últim la <code>.254</code>.</p>
+    </dd>
+
+    <dt>La porta d'enllaç està fora de la xarxa</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Un error de teclat, com posar <code>192.168.2.1</code> en una xarxa <code>192.168.1.0/24</code>.</p>
+      <p><span class="lbl">Solució</span> La porta d'enllaç ha de ser sempre una adreça de la teva pròpia xarxa. Comprova-ho amb <code>ip route</code>.</p>
+    </dd>
+  </dl>
+</div>
+
+<!-- ============ 9 · RESUM ============ -->
+<div class="cq-block" data-kind="resum">
+  <h4>Resum</h4>
+  <ul>
+    <li>La <strong>MAC</strong> ve de fàbrica i és local; la <strong>IP</strong> es configura i serveix arreu.</li>
+    <li>La <strong>màscara</strong> parteix l'adreça en part de xarxa i part d'equip.</li>
+    <li>De cada xarxa, la <strong>primera</strong> i l'<strong>última</strong> adreça no s'assignen.</li>
+    <li>Rangs privats: <code>10.0.0.0/8</code>, <code>172.16.0.0/12</code> i <code>192.168.0.0/16</code>.</li>
+    <li>La <strong>porta d'enllaç</strong> ha d'estar dins de la teva pròpia xarxa.</li>
+  </ul>
+
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Comanda</th><th>Per a què serveix</th></tr></thead>
+      <tbody>
+        <tr><td><code>ip -c addr show</code><br><code>ip -c a</code></td><td>Veure la MAC i la IP amb la màscara</td></tr>
+        <tr><td><code>ip -c route</code><br><code>ip -c r</code></td><td>Veure la porta d'enllaç</td></tr>
+        <tr><td><code>ip -c neigh</code><br><code>ip -c n</code></td><td>Veure els veïns i la seva MAC</td></tr>
+        <tr><td><code>ip -c link show</code><br><code>ip -c l</code></td><td>Veure les targetes i els seus noms</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p style="margin-top:16px">
+    <strong>Següent:</strong> a <em>T1 · Configurar la xarxa a Ubuntu Server</em> començaràs a
+    escriure tu aquesta configuració.
+  </p>
+</div>
+
+<!-- ============ 10 · QUIZ ============ -->
+<div class="cq-block" data-kind="quiz">
+  <h4>Comprova el que has après</h4>
+
+  <div class="cq-question" data-id="t0-cidr" data-type="single">
+    <div class="statement">Quina màscara correspon a <code>/24</code>?</div>
+    <button class="cq-option" data-correct="false">255.255.0.0</button>
+    <button class="cq-option" data-correct="true">255.255.255.0</button>
+    <button class="cq-option" data-correct="false">255.0.0.0</button>
+    <button class="cq-option" data-correct="false">255.255.255.255</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+
+  <div class="cq-question" data-id="t0-equips" data-type="single">
+    <div class="statement">Quants equips es poden connectar a la xarxa <code>192.168.1.0/24</code>?</div>
+    <button class="cq-option" data-correct="false">256</button>
+    <button class="cq-option" data-correct="false">255</button>
+    <button class="cq-option" data-correct="true">254</button>
+    <button class="cq-option" data-correct="false">253</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+
+  <div class="cq-question" data-id="t0-difusio-mascara" data-type="single">
+    <div class="statement">Quina és l'adreça de difusió de la xarxa <code>10.0.0.0/8</code>?</div>
+    <button class="cq-option" data-correct="false">10.0.0.255</button>
+    <button class="cq-option" data-correct="true">10.255.255.255</button>
+    <button class="cq-option" data-correct="false">10.0.255.255</button>
+    <button class="cq-option" data-correct="false">255.255.255.255</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+
+  <div class="cq-question" data-id="t0-privada" data-type="single">
+    <div class="statement">Quina d'aquestes adreces <em>no</em> és privada?</div>
+    <button class="cq-option" data-correct="false">10.5.4.3</button>
+    <button class="cq-option" data-correct="false">172.16.0.10</button>
+    <button class="cq-option" data-correct="false">192.168.30.1</button>
+    <button class="cq-option" data-correct="true">9.9.9.9</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+
+  <div class="cq-question" data-id="t0-mateixa-xarxa" data-type="single">
+    <div class="statement">Els equips <code>192.168.1.10/24</code> i <code>192.168.2.10/24</code> es poden parlar directament?</div>
+    <button class="cq-option" data-correct="false">Sí, comparteixen els dos primers números</button>
+    <button class="cq-option" data-correct="true">No, amb <code>/24</code> la part de xarxa són els tres primers i no coincideix</button>
+    <button class="cq-option" data-correct="false">Sí, perquè totes dues són privades</button>
+    <button class="cq-option" data-correct="false">Només si tenen la mateixa MAC</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+
+  <div class="cq-question" data-id="t0-certes" data-type="multi">
+    <div class="statement">Selecciona totes les afirmacions certes</div>
+    <button class="cq-option" data-correct="true">L'adreça MAC ve de fàbrica amb la targeta.</button>
+    <button class="cq-option" data-correct="true">L'última adreça d'una xarxa és la de difusió i no s'assigna.</button>
+    <button class="cq-option" data-correct="true">La porta d'enllaç ha d'estar dins de la mateixa xarxa que l'equip.</button>
+    <button class="cq-option" data-correct="false">Les adreces privades es poden fer servir a Internet.</button>
+    <button class="cq-option" data-correct="false">Una adreça IP funciona sense necessitat de màscara.</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+</div>
+
+<script>
+  // Motor únic per a totes les preguntes single i multi.
+  document.querySelectorAll('.cq-question').forEach(function (question) {
+    var id = question.dataset.id;
+    if (!id) {
+      throw new Error('Falta data-id a una pregunta del quiz.');
+    }
+    var type = question.dataset.type;
+    if (type !== 'single' && type !== 'multi') {
+      throw new Error('data-type invàlid ("' + type + '") a la pregunta "' + id + '".');
+    }
+
+    var options = question.querySelectorAll('.cq-option');
+    var checkBtn = question.querySelector('.cq-check-btn');
+    var feedback = question.querySelector('.cq-feedback');
+
+    options.forEach(function (opt) {
+      opt.addEventListener('click', function () {
+        if (type === 'single') {
+          options.forEach(function (o) { o.classList.remove('cq-selected'); });
+          opt.classList.add('cq-selected');
+        } else {
+          opt.classList.toggle('cq-selected');
+        }
+      });
+    });
+
+    checkBtn.addEventListener('click', function () {
+      var allCorrect = true;
+      options.forEach(function (opt) {
+        var isCorrect = opt.dataset.correct === 'true';
+        var isSelected = opt.classList.contains('cq-selected');
+        opt.classList.remove('cq-selected');
+        if (isCorrect) {
+          opt.classList.add('cq-correct');
+        } else if (isSelected) {
+          opt.classList.add('cq-incorrect');
+        }
+        opt.disabled = true;
+        if (isCorrect !== isSelected) {
+          allCorrect = false;
+        }
+      });
+      feedback.textContent = allCorrect ? 'Correcte!' : 'Incorrecte, revisa les respostes marcades.';
+      feedback.className = 'cq-feedback ' + (allCorrect ? 'ok' : 'ko');
+      checkBtn.disabled = true;
+    });
+  });
+</script>
+
+</body>
+</html>

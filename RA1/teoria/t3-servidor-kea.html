@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>T3 · Servidor DHCP amb Kea — Serveis en Xarxa (0227)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* === SINAPSI-CSS INICI =======================================
+   0227 · Serveis en Xarxa — Identitat visual del mòdul
+   Blau estructural · taronja per als avisos · paper clar
+   per a la lectura · codi en fosc.
+   Aquest bloc és IDÈNTIC a totes les pàgines del mòdul.
+   No l'editis en una sola pàgina: edita'l a totes o extreu-lo
+   a un full compartit (_identitat/sinapsi.css).
+   ============================================================ */
+  :root {
+    --paper:        #FBFCFD;
+    --card:         #FFFFFF;
+    --ink:          #131A22;
+    --muted:        #5C6875;
+    --rule:         #E3E7EC;
+    --accent:       #1D4E89;
+    --accent-hover: #26639F;
+    --accent-soft:  #EFF5FB;
+    --accent-line:  #DCE7F3;
+    --warn:         #C2410C;
+    --warn-soft:    #FEF6EF;
+    --warn-line:    #F0CBAE;
+    --code-bg:      #16202E;
+    --code-ink:     #E2E9F1;
+    --ok:           #0E7A4B;
+    --ok-soft:      #F0FAF4;
+    --ok-line:      #C6E7D6;
+    --ko:           #B4232B;
+    --ko-soft:      #FEF4F4;
+    --ko-line:      #F2CFCF;
+    --font-display: "Ubuntu", -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-body:    "Source Sans 3", -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-mono:    "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+  }
+
+  body {
+    margin: 0;
+    padding: 40px 16px 72px;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ==== Capçalera de la pàgina ==== */
+  .cq-header {
+    max-width: 660px;
+    margin: 0 auto 26px;
+  }
+  .cq-header .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .cq-header h1 {
+    margin: 6px 0 4px;
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -.02em;
+    line-height: 1.15;
+  }
+  .cq-header .lede {
+    margin: 0;
+    color: var(--muted);
+    font-size: 1.05rem;
+  }
+
+  /* ==== Bloc de contingut: patró únic per a tots els tipus ==== */
+  .cq-block {
+    max-width: 660px;
+    margin: 0 auto 20px;
+    padding: 26px 30px 28px;
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    position: relative;
+  }
+
+  /* Etiqueta de secció: petita, monoespaiada, com la capçalera
+     d'una fitxa tècnica. El text surt de l'atribut data-kind. */
+  .cq-block::before {
+    content: attr(data-kind);
+    position: absolute;
+    top: -8px;
+    left: 26px;
+    padding: 1px 9px;
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 20px;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .cq-block h4 {
+    margin: 4px 0 14px;
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -.01em;
+    line-height: 1.3;
+    color: var(--ink);
+  }
+  .cq-block p { margin: 0 0 14px; }
+  .cq-block p:last-child { margin-bottom: 0; }
+  .cq-block em { font-style: italic; color: var(--muted); }
+  .cq-block strong { font-weight: 600; }
+  .cq-block ul, .cq-block ol { margin: 0 0 14px; padding-left: 22px; }
+  .cq-block li { margin-bottom: 6px; }
+  .cq-block li:last-child { margin-bottom: 0; }
+  .cq-block a { color: var(--accent); }
+
+  .cq-block code {
+    font-family: var(--font-mono);
+    font-size: .84em;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    border-radius: 4px;
+    padding: 1px 5px;
+    color: var(--accent);
+  }
+  .cq-block pre {
+    margin: 14px 0 18px;
+    padding: 16px 18px;
+    background: var(--code-bg);
+    color: var(--code-ink);
+    border-radius: 8px;
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: .82rem;
+    line-height: 1.6;
+  }
+  .cq-block pre code { all: unset; font: inherit; }
+  .cq-block pre .c { color: #7E93AB; }   /* comentari dins del codi */
+  .cq-block pre .o { color: #8FD0A5; }   /* sortida esperada */
+
+  /* ---- Variants de color per tipus de bloc ---- */
+  .cq-block[data-kind="objectius"],
+  .cq-block[data-kind="pas a pas"],
+  .cq-block[data-kind="lliurament"],
+  .cq-block[data-kind="resum"] { border-color: var(--accent-line); }
+  .cq-block[data-kind="objectius"]::before,
+  .cq-block[data-kind="pas a pas"]::before,
+  .cq-block[data-kind="lliurament"]::before,
+  .cq-block[data-kind="resum"]::before { border-color: var(--accent-line); color: var(--accent); }
+  .cq-block[data-kind="objectius"] h4,
+  .cq-block[data-kind="pas a pas"] h4,
+  .cq-block[data-kind="lliurament"] h4,
+  .cq-block[data-kind="resum"] h4 { color: var(--accent); }
+
+  .cq-block[data-kind="recordatori"] { background: var(--warn-soft); border-color: #F5DCC8; }
+  .cq-block[data-kind="recordatori"]::before { background: var(--warn-soft); border-color: var(--warn-line); color: var(--warn); }
+  .cq-block[data-kind="recordatori"] h4 { color: var(--warn); }
+
+  .cq-block[data-kind="bones pràctiques"] { background: var(--ok-soft); border-color: var(--ok-line); }
+  .cq-block[data-kind="bones pràctiques"]::before { background: var(--ok-soft); border-color: var(--ok-line); color: var(--ok); }
+  .cq-block[data-kind="bones pràctiques"] h4 { color: var(--ok); }
+
+  .cq-block[data-kind="problemes"] { background: var(--ko-soft); border-color: var(--ko-line); }
+  .cq-block[data-kind="problemes"]::before { background: var(--ko-soft); border-color: var(--ko-line); color: var(--ko); }
+  .cq-block[data-kind="problemes"] h4 { color: var(--ko); }
+
+  /* ==== Diagrama de passos en flux (DORA i similars) ==== */
+  .dora-flow {
+    display: flex;
+    align-items: stretch;
+    gap: 6px;
+    margin: 20px 0 22px;
+    flex-wrap: wrap;
+  }
+  .dora-step {
+    flex: 1 1 130px;
+    padding: 14px 12px 12px;
+    border: 1px solid var(--rule);
+    border-top: 2px solid var(--accent);
+    border-radius: 6px;
+    background: var(--paper);
+  }
+  .dora-step .n {
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: .08em;
+  }
+  .dora-step .t {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: .9rem;
+    letter-spacing: .02em;
+    margin: 2px 0 5px;
+  }
+  .dora-step .d { font-size: .8rem; line-height: 1.45; color: var(--muted); }
+  .dora-arrow { align-self: center; color: #B3C2D2; font-size: 1rem; }
+  @media (max-width: 620px) {
+    .dora-arrow { display: none; }
+    .dora-step { flex-basis: 100%; }
+  }
+
+  /* ==== Passos numerats de les guies pas a pas ==== */
+  .cq-steps { counter-reset: step; margin: 4px 0 0; padding: 0; list-style: none; }
+  .cq-steps > li {
+    counter-increment: step;
+    position: relative;
+    padding: 0 0 4px 34px;
+    margin-bottom: 18px;
+  }
+  .cq-steps > li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0; top: 1px;
+    width: 22px; height: 22px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    border-radius: 50%;
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    font-weight: 500;
+    color: var(--accent);
+  }
+  .cq-steps > li > :first-child { margin-top: 0; }
+
+  /* ==== Problemes: símptoma → causa → solució ==== */
+  .cq-issues { margin: 4px 0 0; }
+  .cq-issues dt {
+    font-weight: 600;
+    margin-top: 16px;
+    color: var(--ko);
+  }
+  .cq-issues dt:first-child { margin-top: 0; }
+  .cq-issues dd { margin: 4px 0 0 0; }
+  .cq-issues dd .lbl {
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-right: 6px;
+  }
+
+  /* ==== Taula de referència ==== */
+  .cq-tablewrap { overflow-x: auto; margin: 14px 0 4px; }
+  .cq-table { border-collapse: collapse; width: 100%; font-size: .9rem; }
+  .cq-table th, .cq-table td {
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+  }
+  .cq-table th {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: .78rem;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom-color: var(--accent-line);
+    white-space: nowrap;
+  }
+  .cq-table td:first-child { white-space: nowrap; }
+  .cq-table tr:last-child td { border-bottom: none; }
+
+  /* ==== Nota de versió (Ubuntu 24.04 vs 26.04) ==== */
+  .cq-note {
+    margin: 14px 0 4px;
+    padding: 10px 14px;
+    border-left: 3px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 0 6px 6px 0;
+    font-size: .9rem;
+  }
+  .cq-note .lbl {
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 2px;
+  }
+
+
+  /* ==== Índex del mòdul (portada) ==== */
+  .cq-index { display: grid; gap: 10px; margin: 4px 0 0; padding: 0; list-style: none; }
+  .cq-index a {
+    display: flex; align-items: baseline; gap: 12px;
+    padding: 13px 16px;
+    border: 1px solid var(--rule); border-radius: 8px;
+    background: var(--paper); color: var(--ink); text-decoration: none;
+    transition: border-color .12s ease, background .12s ease;
+  }
+  .cq-index a:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .cq-index .ref {
+    font-family: var(--font-mono); font-size: .74rem; font-weight: 500;
+    color: var(--accent); letter-spacing: .06em; flex: 0 0 auto;
+  }
+  .cq-index .ttl { font-family: var(--font-display); font-weight: 700; font-size: .98rem; }
+  .cq-index .sub { display: block; font-size: .84rem; color: var(--muted); font-weight: 400; font-family: var(--font-body); margin-top: 1px; }
+
+  /* ==== Quiz ==== */
+  .cq-question { margin: 22px 0 0; }
+  .cq-question + .cq-question { padding-top: 22px; border-top: 1px solid var(--rule); }
+  .cq-question .statement { font-weight: 600; margin-bottom: 10px; }
+  .cq-option {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 10px 14px;
+    margin: 7px 0;
+    border: 1px solid var(--rule);
+    border-radius: 7px;
+    background: var(--card);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: .95rem;
+    color: var(--ink);
+    transition: border-color .12s ease, background .12s ease;
+  }
+  .cq-option:hover:not(:disabled) { border-color: #B3C2D2; }
+  .cq-option:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .cq-option.cq-selected { border-color: var(--accent); background: var(--accent-soft); }
+  .cq-option.cq-correct { border-color: var(--ok); background: var(--ok-soft); color: var(--ok); }
+  .cq-option.cq-incorrect { border-color: var(--ko); background: var(--ko-soft); color: var(--ko); }
+  .cq-check-btn {
+    margin-top: 10px;
+    padding: 9px 20px;
+    border: none;
+    border-radius: 7px;
+    background: var(--accent);
+    color: #FFFFFF;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: .88rem;
+    cursor: pointer;
+  }
+  .cq-check-btn:hover:not(:disabled) { background: var(--accent-hover); }
+  .cq-check-btn:disabled { background: #B3C2D2; cursor: default; }
+  .cq-feedback { margin-top: 10px; font-size: .88rem; font-weight: 600; }
+  .cq-feedback.ok { color: var(--ok); }
+  .cq-feedback.ko { color: var(--ko); }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+  /* ==== Impressió: els alumnes imprimeixen la teoria ==== */
+  @media print {
+    body { background: #FFF; padding: 0; font-size: 11pt; }
+    .cq-block { border-color: #CCC; page-break-inside: avoid; margin-bottom: 12px; }
+    .cq-block pre { background: #F4F4F4; color: #000; border: 1px solid #DDD; }
+    .cq-block pre .c, .cq-block pre .o { color: #555; }
+    .cq-check-btn { display: none; }
+  }
+/* === SINAPSI-CSS FI ======================================== */
+</style>
+</head>
+<body>
+<header class="cq-header">
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · Teoria 3</div>
+  <h1>Servidor DHCP amb Kea</h1>
+  <p class="lede">Muntar, configurar i comprovar el servidor DHCP que fan servir avui les empreses.</p>
+</header>
+
+<!-- ============ 1 · OBJECTIUS ============ -->
+<div class="cq-block" data-kind="objectius">
+  <h4>Què sabràs fer en acabar</h4>
+  <ul>
+    <li>Instal·lar i posar en marxa el servidor Kea.</li>
+    <li>Entendre cada bloc del fitxer <code>kea-dhcp4.conf</code>.</li>
+    <li>Definir un rang d'adreces i calcular-ne la mida.</li>
+    <li>Fer una reserva d'IP per adreça MAC.</li>
+    <li>Llegir els registres per veure les concessions.</li>
+  </ul>
+</div>
+
+<!-- ============ 2 · QUÈ ÉS KEA ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>Per què Kea i no una altra cosa</h4>
+  <p>
+    Durant vint anys, el servidor DHCP de Linux va ser <code>isc-dhcp-server</code>. La
+    fundació que el mantenia el va donar per acabat el 2022 i el va substituir per
+    <strong>Kea</strong>, del mateix equip. És el que ve als repositoris d'Ubuntu i el que
+    trobaràs a les empreses.
+  </p>
+  <p>
+    Si busques per Internet, veuràs molta documentació d'<code>isc-dhcp-server</code> amb una
+    sintaxi diferent. <strong>No et serveix.</strong> Comprova sempre que el que llegeixes
+    parla de Kea.
+  </p>
+  <p>
+    Kea es configura amb un fitxer <strong>JSON</strong>, i té un servei separat per a cada
+    feina. A nosaltres només ens cal el d'IPv4: <code>kea-dhcp4-server</code>.
+  </p>
+</div>
+
+<!-- ============ 3 · ANATOMIA DEL FITXER ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>El fitxer de configuració, bloc a bloc</h4>
+  <p>
+    Tot viu a <code>/etc/kea/kea-dhcp4.conf</code>. Sembla llarg, però només hi ha quatre coses
+    que hagis de tocar:
+  </p>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Bloc</th><th>Què hi poses</th></tr></thead>
+      <tbody>
+        <tr><td><code>interfaces-config</code></td><td>Per quina targeta escolta el servidor</td></tr>
+        <tr><td><code>subnet</code></td><td>La xarxa que gestiona, amb màscara</td></tr>
+        <tr><td><code>pools</code></td><td>El rang d'adreces que pot repartir</td></tr>
+        <tr><td><code>option-data</code></td><td>Porta d'enllaç, DNS i nom de domini</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    La resta (<code>control-socket</code>, <code>lease-database</code>) ve donada i no cal
+    tocar-la: és on Kea guarda quines adreces té concedides.
+  </p>
+</div>
+
+<!-- ============ 4 · EXEMPLE ============ -->
+<div class="cq-block" data-kind="exemple">
+  <h4>Una configuració completa i mínima</h4>
+  <p>Xarxa <code>192.168.1.0/24</code>, servidor a la <code>.1</code>, repartint de la 100 a la 200:</p>
+<pre>{
+"Dhcp4": {
+  "interfaces-config": {
+    "interfaces": [ "enp2s0" ]              <span class="c">// targeta personal1</span>
+  },
+  "control-socket": {
+    "socket-type": "unix",
+    "socket-name": "/run/kea/kea4-ctrl-socket"
+  },
+  "lease-database": { "type": "memfile", "lfc-interval": 3600 },
+
+  "valid-lifetime": 600,                    <span class="c">// durada de la concessió</span>
+  "max-valid-lifetime": 7200,
+
+  "subnet4": [
+    {
+      "id": 1,
+      "subnet": "192.168.1.0/24",
+      "pools": [ { "pool": "192.168.1.100 - 192.168.1.200" } ],
+      "option-data": [
+        { "name": "routers",             "data": "192.168.1.1" },
+        { "name": "domain-name-servers", "data": "9.9.9.9"     },
+        { "name": "domain-name",         "data": "adria.local" }
+      ]
+    }
+  ]
+}
+}</pre>
+  <p>
+    <strong>Compte amb les comes.</strong> A JSON, l'últim element d'una llista
+    <em>no</em> en porta. És l'error número u i deixa el servei sense arrencar.
+  </p>
+</div>
+
+<!-- ============ 5 · CALCULAR EL RANG ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>Quantes adreces necessites</h4>
+  <p>
+    Les activitats et demanaran rangs per a un nombre concret d'equips. El càlcul és una resta,
+    però has de comptar bé: <strong>els dos extrems del rang hi entren</strong>.
+  </p>
+  <p>
+    De la <code>.100</code> a la <code>.200</code> hi ha <code>200 − 100 + 1 = 101</code>
+    adreces. Si en necessites exactament 99, el rang va de la <code>.100</code> a la
+    <code>.198</code>.
+  </p>
+  <p>
+    I recorda que tota xarxa té dues adreces que <strong>mai</strong> es reparteixen: la
+    <strong>primera</strong> (adreça de xarxa) i l'<strong>última</strong> (difusió). Quines són
+    depèn de la <strong>màscara</strong>, no de l'últim número:
+  </p>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Xarxa</th><th>Primera (xarxa)</th><th>Última (difusió)</th></tr></thead>
+      <tbody>
+        <tr><td><code>192.168.1.0/24</code></td><td><code>192.168.1.0</code></td><td><code>192.168.1.255</code></td></tr>
+        <tr><td><code>172.16.0.0/16</code></td><td><code>172.16.0.0</code></td><td><code>172.16.255.255</code></td></tr>
+        <tr><td><code>10.0.0.0/8</code></td><td><code>10.0.0.0</code></td><td><code>10.255.255.255</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    Fixa-t'hi en la <code>10.0.0.0/8</code>: adreces com la <code>10.0.0.255</code> o la
+    <code>10.0.1.0</code> <strong>són perfectament vàlides</strong> per a un equip. Que un número
+    acabi en 0 o en 255 no vol dir res per si sol. La del servidor tampoc es reparteix, i per això
+    va fora del rang.
+  </p>
+</div>
+
+<!-- ============ 6 · RESERVES ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>Reservar una IP per a un equip concret</h4>
+  <p>
+    Una <strong>reserva</strong> lliga una adreça MAC a una IP: aquell equip rebrà sempre la
+    mateixa. S'escriu dins de la subxarxa, just després de <code>option-data</code>:
+  </p>
+<pre>      "reservations": [
+        {
+          "hw-address": "00:1a:2b:3c:4d:5e",
+          "ip-address": "192.168.1.10"
+        },
+        {
+          "hw-address": "00:1a:2b:3c:4d:5f",
+          "ip-address": "192.168.1.11"
+        }
+      ]</pre>
+  <p>
+    L'adreça reservada ha d'estar <strong>dins de la subxarxa</strong> però
+    <strong>fora del <code>pool</code></strong>. Si la poses dins del rang, Kea la podria haver
+    donat abans a un altre equip.
+  </p>
+</div>
+
+<!-- ============ 7 · PAS A PAS ============ -->
+<div class="cq-block" data-kind="pas a pas">
+  <h4>Muntar el servidor</h4>
+  <p>
+    Punt de partida: la targeta <code>personal1</code> ja ha de tenir IP fixa (teoria T1). Sense
+    això, Kea no arrencarà.
+  </p>
+
+  <ol class="cq-steps">
+    <li>
+      <p><strong>Instal·la el servei d'IPv4</strong>, que és l'únic que necessites:</p>
+<pre>sudo apt update
+sudo apt install -y kea-dhcp4-server</pre>
+    </li>
+
+    <li>
+      <p><strong>Desa una còpia</strong> de la configuració original abans de tocar res:</p>
+<pre>sudo cp /etc/kea/kea-dhcp4.conf /etc/kea/kea-dhcp4.conf.original</pre>
+    </li>
+
+    <li>
+      <p><strong>Edita el fitxer</strong> i deixa'l com el de l'exemple, amb les teves dades:</p>
+<pre>sudo nano /etc/kea/kea-dhcp4.conf</pre>
+    </li>
+
+    <li>
+      <p><strong>Comprova la sintaxi abans d'arrencar.</strong> Kea té un mode de prova que llegeix el fitxer i et diu si està bé:</p>
+<pre>sudo kea-dhcp4 -t /etc/kea/kea-dhcp4.conf</pre>
+      <p>Si hi ha una coma de més, aquí ho sabràs, amb el número de línia.</p>
+    </li>
+
+    <li>
+      <p><strong>Arrenca i comprova</strong> que està actiu:</p>
+<pre>sudo systemctl restart kea-dhcp4-server
+sudo systemctl status kea-dhcp4-server</pre>
+      <p>Ha de sortir <code>active (running)</code> en verd.</p>
+    </li>
+
+    <li>
+      <p><strong>Verifica que escolta</strong> al port 67:</p>
+<pre>sudo ss -ulnp | grep :67</pre>
+    </li>
+
+    <li>
+      <p><strong>Mira les concessions en directe</strong> mentre arrenques el client:</p>
+<pre>sudo journalctl -u kea-dhcp4-server -f</pre>
+      <p>
+        Veuràs línies <code>DHCP4_LEASE_ALLOC</code> amb la MAC i la IP concedida. La llista
+        completa de concessions la tens a
+        <code>/var/lib/kea/kea-leases4.csv</code>.
+      </p>
+    </li>
+  </ol>
+
+  <div class="cq-note">
+    <span class="lbl">Ubuntu 26.04</span>
+    Els noms de paquet, servei i fitxers són els mateixos a 24.04 i 26.04. El que pot canviar és
+    la versió de Kea i, amb ella, algun valor per defecte del fitxer que et ve instal·lat.
+  </div>
+</div>
+
+<!-- ============ 8 · BONES PRÀCTIQUES ============ -->
+<div class="cq-block" data-kind="bones pràctiques">
+  <h4>Criteris professionals</h4>
+  <ul>
+    <li><strong>Valida sempre abans d'arrencar</strong> amb <code>kea-dhcp4 -t</code>. Estalvia la meitat dels problemes.</li>
+    <li><strong>Còpia de l'original.</strong> És la teva marxa enrere si t'hi perds.</li>
+    <li><strong>Escolta només per la targeta interna.</strong> Mai posis la targeta que va a la xarxa del centre a <code>interfaces</code>.</li>
+    <li><strong>Reserves fora del <em>pool</em></strong>, i totes juntes en una zona d'adreces baixes.</li>
+    <li><strong>Comenta la configuració</strong> amb <code>//</code>: Kea ho admet i el teu jo del mes vinent ho agrairà.</li>
+  </ul>
+</div>
+
+<!-- ============ 9 · PROBLEMES ============ -->
+<div class="cq-block" data-kind="problemes">
+  <h4>Errors habituals</h4>
+  <dl class="cq-issues">
+    <dt>El servei no arrenca</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Error de JSON (una coma sobrant) o la targeta de <code>interfaces</code> no existeix o no té IP.</p>
+      <p><span class="lbl">Solució</span> <code>sudo kea-dhcp4 -t /etc/kea/kea-dhcp4.conf</code> et dona el motiu i la línia. Si el fitxer és correcte, mira <code>journalctl -u kea-dhcp4-server -n 30</code>.</p>
+    </dd>
+
+    <dt>El servei està actiu però el client no rep res</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Escolta per la targeta equivocada, o el client està en una xarxa diferent de la del <code>subnet</code>.</p>
+      <p><span class="lbl">Solució</span> Comprova amb <code>ss -ulnp | grep :67</code> i, al servidor, <code>sudo tcpdump -i enp2s0 -n port 67</code>. Si no hi arriba el DISCOVER, el problema és de connexió, no de Kea.</p>
+    </dd>
+
+    <dt>La reserva no s'aplica</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> La MAC està mal escrita, o el client encara té una concessió antiga vàlida.</p>
+      <p><span class="lbl">Solució</span> Copia la MAC de la sortida del client, no la transcriguis a mà. Al client, força la renovació amb <code>sudo networkctl renew enp1s0</code>.</p>
+    </dd>
+
+    <dt>El client rep IP però no té Internet</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Kea ha fet la seva feina. Falta que el servidor encamini el trànsit cap a fora.</p>
+      <p><span class="lbl">Solució</span> És el contingut de la teoria T4: IP forwarding i NAT.</p>
+    </dd>
+  </dl>
+</div>
+
+<!-- ============ 10 · RESUM ============ -->
+<div class="cq-block" data-kind="resum">
+  <h4>Resum</h4>
+  <ul>
+    <li><strong>Kea</strong> substitueix <code>isc-dhcp-server</code>. La documentació antiga no serveix.</li>
+    <li>Es configura en <strong>JSON</strong> a <code>/etc/kea/kea-dhcp4.conf</code>.</li>
+    <li>Quatre blocs a tocar: <code>interfaces-config</code>, <code>subnet</code>, <code>pools</code> i <code>option-data</code>.</li>
+    <li>Les <strong>reserves</strong> van dins de la subxarxa i fora del <em>pool</em>.</li>
+    <li>Al comptar adreces d'un rang, <strong>els dos extrems hi entren</strong>.</li>
+  </ul>
+
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Comanda</th><th>Per a què serveix</th></tr></thead>
+      <tbody>
+        <tr><td><code>apt install kea-dhcp4-server</code></td><td>Instal·lar el servei</td></tr>
+        <tr><td><code>kea-dhcp4 -t &lt;fitxer&gt;</code></td><td>Validar la configuració</td></tr>
+        <tr><td><code>systemctl restart kea-dhcp4-server</code></td><td>Aplicar els canvis</td></tr>
+        <tr><td><code>systemctl status kea-dhcp4-server</code></td><td>Veure si està actiu o l'error</td></tr>
+        <tr><td><code>journalctl -u kea-dhcp4-server -f</code></td><td>Veure les concessions en directe</td></tr>
+        <tr><td><code>ss -ulnp | grep :67</code></td><td>Comprovar que escolta</td></tr>
+        <tr><td><code>cat /var/lib/kea/kea-leases4.csv</code></td><td>Llista de concessions</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p style="margin-top:16px">
+    <strong>Següent:</strong> a <em>T4 · Encaminament i NAT</em> faràs que els clients del teu
+    servidor tinguin Internet.
+  </p>
+</div>
+
+<!-- ============ 11 · QUIZ ============ -->
+<div class="cq-block" data-kind="quiz">
+  <h4>Comprova el que has après</h4>
+
+  <div class="cq-question" data-id="t3-fitxer" data-type="single">
+    <div class="statement">On es configura el servidor Kea per a IPv4?</div>
+    <button class="cq-option" data-correct="false"><code>/etc/dhcp/dhcpd.conf</code></button>
+    <button class="cq-option" data-correct="true"><code>/etc/kea/kea-dhcp4.conf</code></button>
+    <button class="cq-option" data-correct="false"><code>/etc/netplan/01-kea.yaml</code></button>
+    <button class="cq-option" data-correct="false"><code>/var/lib/kea/kea-leases4.csv</code></button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+
+  <div class="cq-question" data-id="t3-rang" data-type="single">
+    <div class="statement">Quantes adreces reparteix el rang <code>10.0.0.50 - 10.0.0.150</code>?</div>
+    <button class="cq-option" data-correct="false">100</button>
+    <button class="cq-option" data-correct="true">101</button>
+    <button class="cq-option" data-correct="false">99</button>
+    <button class="cq-option" data-correct="false">150</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+
+  <div class="cq-question" data-id="t3-validar" data-type="single">
+    <div class="statement">Quina comanda comprova la configuració <em>abans</em> d'arrencar el servei?</div>
+    <button class="cq-option" data-correct="false"><code>systemctl status kea-dhcp4-server</code></button>
+    <button class="cq-option" data-correct="true"><code>kea-dhcp4 -t /etc/kea/kea-dhcp4.conf</code></button>
+    <button class="cq-option" data-correct="false"><code>netplan try</code></button>
+    <button class="cq-option" data-correct="false"><code>ss -ulnp | grep :67</code></button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+
+  <div class="cq-question" data-id="t3-opcions" data-type="single">
+    <div class="statement">Quin nom d'opció serveix per repartir la porta d'enllaç?</div>
+    <button class="cq-option" data-correct="false"><code>gateway</code></button>
+    <button class="cq-option" data-correct="true"><code>routers</code></button>
+    <button class="cq-option" data-correct="false"><code>domain-name-servers</code></button>
+    <button class="cq-option" data-correct="false"><code>default-route</code></button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+
+  <div class="cq-question" data-id="t3-certes" data-type="multi">
+    <div class="statement">Selecciona totes les afirmacions certes sobre Kea</div>
+    <button class="cq-option" data-correct="true">La configuració és un fitxer JSON.</button>
+    <button class="cq-option" data-correct="true">Les IP reservades han d'estar fora del <em>pool</em>.</button>
+    <button class="cq-option" data-correct="true">La targeta on escolta ha de tenir IP fixa.</button>
+    <button class="cq-option" data-correct="false">Cal posar una coma després de l'últim element d'una llista.</button>
+    <button class="cq-option" data-correct="false">La documentació d'isc-dhcp-server serveix per configurar Kea.</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+</div>
+
+<script>
+  // Motor únic per a totes les preguntes single i multi.
+  document.querySelectorAll('.cq-question').forEach(function (question) {
+    var id = question.dataset.id;
+    if (!id) {
+      throw new Error('Falta data-id a una pregunta del quiz.');
+    }
+    var type = question.dataset.type;
+    if (type !== 'single' && type !== 'multi') {
+      throw new Error('data-type invàlid ("' + type + '") a la pregunta "' + id + '".');
+    }
+
+    var options = question.querySelectorAll('.cq-option');
+    var checkBtn = question.querySelector('.cq-check-btn');
+    var feedback = question.querySelector('.cq-feedback');
+
+    options.forEach(function (opt) {
+      opt.addEventListener('click', function () {
+        if (type === 'single') {
+          options.forEach(function (o) { o.classList.remove('cq-selected'); });
+          opt.classList.add('cq-selected');
+        } else {
+          opt.classList.toggle('cq-selected');
+        }
+      });
+    });
+
+    checkBtn.addEventListener('click', function () {
+      var allCorrect = true;
+      options.forEach(function (opt) {
+        var isCorrect = opt.dataset.correct === 'true';
+        var isSelected = opt.classList.contains('cq-selected');
+        opt.classList.remove('cq-selected');
+        if (isCorrect) {
+          opt.classList.add('cq-correct');
+        } else if (isSelected) {
+          opt.classList.add('cq-incorrect');
+        }
+        opt.disabled = true;
+        if (isCorrect !== isSelected) {
+          allCorrect = false;
+        }
+      });
+      feedback.textContent = allCorrect ? 'Correcte!' : 'Incorrecte, revisa les respostes marcades.';
+      feedback.className = 'cq-feedback ' + (allCorrect ? 'ok' : 'ko');
+      checkBtn.disabled = true;
+    });
+  });
+</script>
+
+</body>
+</html>
