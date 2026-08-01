@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>T9 · Primari i secundari — Serveis en Xarxa (0227)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* === SINAPSI-CSS INICI =======================================
+   0227 · Serveis en Xarxa — Identitat visual del mòdul
+   Blau estructural · taronja per als avisos · paper clar
+   per a la lectura · codi en fosc.
+   Aquest bloc és IDÈNTIC a totes les pàgines del mòdul.
+   No l'editis en una sola pàgina: edita'l a totes o extreu-lo
+   a un full compartit (_identitat/sinapsi.css).
+   ============================================================ */
+  :root {
+    --paper:        #FBFCFD;
+    --card:         #FFFFFF;
+    --ink:          #131A22;
+    --muted:        #5C6875;
+    --rule:         #E3E7EC;
+    --accent:       #1D4E89;
+    --accent-hover: #26639F;
+    --accent-soft:  #EFF5FB;
+    --accent-line:  #DCE7F3;
+    --warn:         #C2410C;
+    --warn-soft:    #FEF6EF;
+    --warn-line:    #F0CBAE;
+    --code-bg:      #16202E;
+    --code-ink:     #E2E9F1;
+    --ok:           #0E7A4B;
+    --ok-soft:      #F0FAF4;
+    --ok-line:      #C6E7D6;
+    --ko:           #B4232B;
+    --ko-soft:      #FEF4F4;
+    --ko-line:      #F2CFCF;
+    --font-display: "Ubuntu", -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-body:    "Source Sans 3", -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-mono:    "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+  }
+
+  body {
+    margin: 0;
+    padding: 40px 16px 72px;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ==== Capçalera de la pàgina ==== */
+  .cq-header {
+    max-width: 660px;
+    margin: 0 auto 26px;
+  }
+  .cq-header .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .cq-header h1 {
+    margin: 6px 0 4px;
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -.02em;
+    line-height: 1.15;
+  }
+  .cq-header .lede {
+    margin: 0;
+    color: var(--muted);
+    font-size: 1.05rem;
+  }
+
+  /* ==== Bloc de contingut: patró únic per a tots els tipus ==== */
+  .cq-block {
+    max-width: 660px;
+    margin: 0 auto 20px;
+    padding: 26px 30px 28px;
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    position: relative;
+  }
+
+  /* Etiqueta de secció: petita, monoespaiada, com la capçalera
+     d'una fitxa tècnica. El text surt de l'atribut data-kind. */
+  .cq-block::before {
+    content: attr(data-kind);
+    position: absolute;
+    top: -8px;
+    left: 26px;
+    padding: 1px 9px;
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 20px;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .cq-block h4 {
+    margin: 4px 0 14px;
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -.01em;
+    line-height: 1.3;
+    color: var(--ink);
+  }
+  .cq-block p { margin: 0 0 14px; }
+  .cq-block p:last-child { margin-bottom: 0; }
+  .cq-block em { font-style: italic; color: var(--muted); }
+  .cq-block strong { font-weight: 600; }
+  .cq-block ul, .cq-block ol { margin: 0 0 14px; padding-left: 22px; }
+  .cq-block li { margin-bottom: 6px; }
+  .cq-block li:last-child { margin-bottom: 0; }
+  .cq-block a { color: var(--accent); }
+
+  .cq-block code {
+    font-family: var(--font-mono);
+    font-size: .84em;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    border-radius: 4px;
+    padding: 1px 5px;
+    color: var(--accent);
+  }
+  .cq-block pre {
+    margin: 14px 0 18px;
+    padding: 16px 18px;
+    background: var(--code-bg);
+    color: var(--code-ink);
+    border-radius: 8px;
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: .82rem;
+    line-height: 1.6;
+  }
+  .cq-block pre code { all: unset; font: inherit; }
+  .cq-block pre .c { color: #7E93AB; }   /* comentari dins del codi */
+  .cq-block pre .o { color: #8FD0A5; }   /* sortida esperada */
+
+  /* ---- Variants de color per tipus de bloc ---- */
+  .cq-block[data-kind="objectius"],
+  .cq-block[data-kind="pas a pas"],
+  .cq-block[data-kind="lliurament"],
+  .cq-block[data-kind="resum"] { border-color: var(--accent-line); }
+  .cq-block[data-kind="objectius"]::before,
+  .cq-block[data-kind="pas a pas"]::before,
+  .cq-block[data-kind="lliurament"]::before,
+  .cq-block[data-kind="resum"]::before { border-color: var(--accent-line); color: var(--accent); }
+  .cq-block[data-kind="objectius"] h4,
+  .cq-block[data-kind="pas a pas"] h4,
+  .cq-block[data-kind="lliurament"] h4,
+  .cq-block[data-kind="resum"] h4 { color: var(--accent); }
+
+  .cq-block[data-kind="recordatori"] { background: var(--warn-soft); border-color: #F5DCC8; }
+  .cq-block[data-kind="recordatori"]::before { background: var(--warn-soft); border-color: var(--warn-line); color: var(--warn); }
+  .cq-block[data-kind="recordatori"] h4 { color: var(--warn); }
+
+  .cq-block[data-kind="bones pràctiques"] { background: var(--ok-soft); border-color: var(--ok-line); }
+  .cq-block[data-kind="bones pràctiques"]::before { background: var(--ok-soft); border-color: var(--ok-line); color: var(--ok); }
+  .cq-block[data-kind="bones pràctiques"] h4 { color: var(--ok); }
+
+  .cq-block[data-kind="problemes"] { background: var(--ko-soft); border-color: var(--ko-line); }
+  .cq-block[data-kind="problemes"]::before { background: var(--ko-soft); border-color: var(--ko-line); color: var(--ko); }
+  .cq-block[data-kind="problemes"] h4 { color: var(--ko); }
+
+  /* ==== Diagrama de passos en flux (DORA i similars) ==== */
+  .dora-flow {
+    display: flex;
+    align-items: stretch;
+    gap: 6px;
+    margin: 20px 0 22px;
+    flex-wrap: wrap;
+  }
+  .dora-step {
+    flex: 1 1 130px;
+    padding: 14px 12px 12px;
+    border: 1px solid var(--rule);
+    border-top: 2px solid var(--accent);
+    border-radius: 6px;
+    background: var(--paper);
+  }
+  .dora-step .n {
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: .08em;
+  }
+  .dora-step .t {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: .9rem;
+    letter-spacing: .02em;
+    margin: 2px 0 5px;
+  }
+  .dora-step .d { font-size: .8rem; line-height: 1.45; color: var(--muted); }
+  .dora-arrow { align-self: center; color: #B3C2D2; font-size: 1rem; }
+  @media (max-width: 620px) {
+    .dora-arrow { display: none; }
+    .dora-step { flex-basis: 100%; }
+  }
+
+  /* ==== Passos numerats de les guies pas a pas ==== */
+  .cq-steps { counter-reset: step; margin: 4px 0 0; padding: 0; list-style: none; }
+  .cq-steps > li {
+    counter-increment: step;
+    position: relative;
+    padding: 0 0 4px 34px;
+    margin-bottom: 18px;
+  }
+  .cq-steps > li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0; top: 1px;
+    width: 22px; height: 22px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    border-radius: 50%;
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    font-weight: 500;
+    color: var(--accent);
+  }
+  .cq-steps > li > :first-child { margin-top: 0; }
+
+  /* ==== Problemes: símptoma → causa → solució ==== */
+  .cq-issues { margin: 4px 0 0; }
+  .cq-issues dt {
+    font-weight: 600;
+    margin-top: 16px;
+    color: var(--ko);
+  }
+  .cq-issues dt:first-child { margin-top: 0; }
+  .cq-issues dd { margin: 4px 0 0 0; }
+  .cq-issues dd .lbl {
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-right: 6px;
+  }
+
+  /* ==== Taula de referència ==== */
+  .cq-tablewrap { overflow-x: auto; margin: 14px 0 4px; }
+  .cq-table { border-collapse: collapse; width: 100%; font-size: .9rem; }
+  .cq-table th, .cq-table td {
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+  }
+  .cq-table th {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: .78rem;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom-color: var(--accent-line);
+    white-space: nowrap;
+  }
+  .cq-table td:first-child { white-space: nowrap; }
+  .cq-table tr:last-child td { border-bottom: none; }
+
+  /* ==== Nota de versió (Ubuntu 24.04 vs 26.04) ==== */
+  .cq-note {
+    margin: 14px 0 4px;
+    padding: 10px 14px;
+    border-left: 3px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 0 6px 6px 0;
+    font-size: .9rem;
+  }
+  .cq-note .lbl {
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 2px;
+  }
+
+
+  /* ==== Índex del mòdul (portada) ==== */
+  .cq-index { display: grid; gap: 10px; margin: 4px 0 0; padding: 0; list-style: none; }
+  .cq-index a {
+    display: flex; align-items: baseline; gap: 12px;
+    padding: 13px 16px;
+    border: 1px solid var(--rule); border-radius: 8px;
+    background: var(--paper); color: var(--ink); text-decoration: none;
+    transition: border-color .12s ease, background .12s ease;
+  }
+  .cq-index a:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .cq-index .ref {
+    font-family: var(--font-mono); font-size: .74rem; font-weight: 500;
+    color: var(--accent); letter-spacing: .06em; flex: 0 0 auto;
+  }
+  .cq-index .ttl { font-family: var(--font-display); font-weight: 700; font-size: .98rem; }
+  .cq-index .sub { display: block; font-size: .84rem; color: var(--muted); font-weight: 400; font-family: var(--font-body); margin-top: 1px; }
+
+  /* ==== Quiz ==== */
+  .cq-question { margin: 22px 0 0; }
+  .cq-question + .cq-question { padding-top: 22px; border-top: 1px solid var(--rule); }
+  .cq-question .statement { font-weight: 600; margin-bottom: 10px; }
+  .cq-option {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 10px 14px;
+    margin: 7px 0;
+    border: 1px solid var(--rule);
+    border-radius: 7px;
+    background: var(--card);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: .95rem;
+    color: var(--ink);
+    transition: border-color .12s ease, background .12s ease;
+  }
+  .cq-option:hover:not(:disabled) { border-color: #B3C2D2; }
+  .cq-option:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .cq-option.cq-selected { border-color: var(--accent); background: var(--accent-soft); }
+  .cq-option.cq-correct { border-color: var(--ok); background: var(--ok-soft); color: var(--ok); }
+  .cq-option.cq-incorrect { border-color: var(--ko); background: var(--ko-soft); color: var(--ko); }
+  .cq-check-btn {
+    margin-top: 10px;
+    padding: 9px 20px;
+    border: none;
+    border-radius: 7px;
+    background: var(--accent);
+    color: #FFFFFF;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: .88rem;
+    cursor: pointer;
+  }
+  .cq-check-btn:hover:not(:disabled) { background: var(--accent-hover); }
+  .cq-check-btn:disabled { background: #B3C2D2; cursor: default; }
+  .cq-feedback { margin-top: 10px; font-size: .88rem; font-weight: 600; }
+  .cq-feedback.ok { color: var(--ok); }
+  .cq-feedback.ko { color: var(--ko); }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+  /* ==== Impressió: els alumnes imprimeixen la teoria ==== */
+  @media print {
+    body { background: #FFF; padding: 0; font-size: 11pt; }
+    .cq-block { border-color: #CCC; page-break-inside: avoid; margin-bottom: 12px; }
+    .cq-block pre { background: #F4F4F4; color: #000; border: 1px solid #DDD; }
+    .cq-block pre .c, .cq-block pre .o { color: #555; }
+    .cq-check-btn { display: none; }
+  }
+/* === SINAPSI-CSS FI ======================================== */
+</style>
+</head>
+<body>
+<header class="cq-header">
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA2 · Teoria 9</div>
+  <h1>Primari i secundari</h1>
+  <p class="lede">Que la teva zona no depengui d'una sola màquina: transferències de zona.</p>
+</header>
+
+<!-- ============ 1 · OBJECTIUS ============ -->
+<div class="cq-block" data-kind="objectius">
+  <h4>Què sabràs fer en acabar</h4>
+  <ul>
+    <li>Explicar per què tota zona vol dos servidors com a mínim.</li>
+    <li>Configurar un servidor <strong>secundari</strong> que es descarregui la zona.</li>
+    <li>Autoritzar la transferència amb <code>allow-transfer</code>.</li>
+    <li>Entendre el paper del <strong>serial</strong> i de la notificació.</li>
+    <li>Comprovar una transferència amb <code>dig AXFR</code>.</li>
+  </ul>
+</div>
+
+<!-- ============ 2 · PER QUÈ ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>Un sol servidor de noms és un sol punt de fallada</h4>
+  <p>
+    Si la teva zona la serveix una màquina i aquella màquina cau, els seus noms deixen d'existir
+    per a tothom. No és que vagi lent: simplement no hi ha resposta.
+  </p>
+  <p>
+    Per això el DNS està pensat des del primer dia perquè una zona la serveixin
+    <strong>diversos servidors</strong>. Un té l'original i la resta en tenen una còpia que
+    mantenen sola.
+  </p>
+  <p>
+    El truc és que <strong>tots responen igual d'autoritativament</strong>. Al client li és
+    indiferent a quin pregunta: no hi ha cap servidor «de segona».
+  </p>
+</div>
+
+<!-- ============ 3 · ELS DOS PAPERS ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>Qui fa què</h4>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th></th><th>Primari</th><th>Secundari</th></tr></thead>
+      <tbody>
+        <tr><td><strong>El fitxer de zona</strong></td><td>L'escrius tu</td><td>Se'l descarrega sol</td></tr>
+        <tr><td><strong>On es guarda</strong></td><td><code>/etc/bind/zones/</code></td><td><code>/var/cache/bind/</code></td></tr>
+        <tr><td><strong>Es pot editar</strong></td><td>Sí, és l'original</td><td>Mai: es perdria a la següent còpia</td></tr>
+        <tr><td><strong>Declaració</strong></td><td><code>type primary</code></td><td><code>type secondary</code> + <code>primaries</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    Els noms antics són <em>master</em> i <em>slave</em>. Els trobaràs a molta documentació i
+    BIND encara els accepta, però el vocabulari vigent és <strong>primary</strong> i
+    <strong>secondary</strong>.
+  </p>
+</div>
+
+<!-- ============ 4 · LA TRANSFERÈNCIA ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>Com viatja la zona</h4>
+  <p>
+    La còpia es diu <strong>transferència de zona</strong> i, a diferència de les consultes
+    normals, va per <strong>TCP</strong>, també al port 53: pot ser molta informació de cop.
+  </p>
+  <div class="dora-flow">
+    <div class="dora-step">
+      <div class="n">01</div>
+      <div class="t">NOTIFY</div>
+      <div class="d">El primari avisa: «he canviat alguna cosa».</div>
+    </div>
+    <div class="dora-arrow">→</div>
+    <div class="dora-step">
+      <div class="n">02</div>
+      <div class="t">SOA</div>
+      <div class="d">El secundari li demana el serial i el compara amb el seu.</div>
+    </div>
+    <div class="dora-arrow">→</div>
+    <div class="dora-step">
+      <div class="n">03</div>
+      <div class="t">AXFR</div>
+      <div class="d">Si és més alt, es descarrega la zona sencera.</div>
+    </div>
+  </div>
+  <p>
+    Si ningú avisa, el secundari pregunta pel seu compte cada <em>refresh</em> segons. I si el
+    serial no ha pujat, <strong>no es descarrega res</strong>: aquesta és la raó de ser del camp.
+  </p>
+</div>
+
+<!-- ============ 5 · EXEMPLE ============ -->
+<div class="cq-block" data-kind="exemple">
+  <h4>Les dues declaracions</h4>
+  <p>Al <strong>primari</strong>, s'autoritza qui es pot endur la zona i a qui s'avisa:</p>
+<pre>zone "adria.internal" {
+    type primary;
+    file "/etc/bind/zones/db.adria.internal";
+    allow-transfer { 192.168.1.9; };
+    also-notify { 192.168.1.9; };
+};</pre>
+  <p>Al <strong>secundari</strong>, d'on ve la zona i on la desa:</p>
+<pre>zone "adria.internal" {
+    type secondary;
+    file "/var/cache/bind/db.adria.internal";
+    primaries { 192.168.1.8; };
+};</pre>
+  <p>
+    A la zona hi ha d'haver un registre <strong>NS per a cada servidor</strong>, primari i
+    secundari: si no, per a la resta del món el secundari no existeix.
+  </p>
+</div>
+
+<!-- ============ 6 · SEGURETAT ============ -->
+<div class="cq-block" data-kind="cas real">
+  <h4>Una transferència oberta és el mapa de la teva xarxa</h4>
+  <p>
+    Una zona conté totes les màquines amb nom i adreça. Si qualsevol se la pot descarregar, li
+    estàs regalant l'inventari sencer: servidors, impressores, còpies de seguretat i com es diu
+    cada cosa.
+  </p>
+  <p>
+    Per defecte BIND ja no permet transferències a tothom, però encara es troben servidors mal
+    configurats on <code>dig AXFR</code> ho descarrega tot. És una de les primeres coses que prova
+    qui audita una xarxa.
+  </p>
+  <p>
+    La regla és simple: <code>allow-transfer</code> amb les IP dels teus secundaris, i cap més. En
+    entorns seriosos, a més, es signa amb una clau compartida (<strong>TSIG</strong>).
+  </p>
+</div>
+
+<!-- ============ 7 · PAS A PAS ============ -->
+<div class="cq-block" data-kind="pas a pas">
+  <h4>Muntar un secundari</h4>
+  <p>Amb dues màquines a la mateixa xarxa: la teva com a primari i una altra com a secundari.</p>
+
+  <ol class="cq-steps">
+    <li>
+      <p><strong>Al primari</strong>, afegeix <code>allow-transfer</code> i <code>also-notify</code> a la zona, apuja el <strong>serial</strong> i recarrega:</p>
+<pre>sudo named-checkconf
+sudo rndc reload</pre>
+    </li>
+
+    <li>
+      <p><strong>Comprova des del secundari</strong> que el primari el deixa passar:</p>
+<pre>dig @192.168.1.8 adria.internal AXFR</pre>
+      <p>
+        Si surt la zona sencera, endavant. Si surt <code>Transfer failed</code>, revisa
+        l'<code>allow-transfer</code> abans de continuar.
+      </p>
+    </li>
+
+    <li>
+      <p><strong>Al secundari</strong>, instal·la BIND i declara la zona amb <code>type secondary</code>, sense escriure cap fitxer de zona.</p>
+    </li>
+
+    <li>
+      <p><strong>Recarrega i mira els registres</strong>: hi has de veure la transferència:</p>
+<pre>sudo rndc reload
+sudo journalctl -u named -n 20 | grep -i transfer</pre>
+    </li>
+
+    <li>
+      <p><strong>Comprova que el fitxer ha aparegut sol</strong> i que el secundari respon:</p>
+<pre>ls -l /var/cache/bind/
+dig @192.168.1.9 www.adria.internal +short</pre>
+      <p>
+        Ara fes una prova de veritat: canvia un registre al primari, apuja el serial, recarrega i
+        torna a preguntar al secundari.
+      </p>
+    </li>
+  </ol>
+</div>
+
+<!-- ============ 8 · BONES PRÀCTIQUES ============ -->
+<div class="cq-block" data-kind="bones pràctiques">
+  <h4>Criteris professionals</h4>
+  <ul>
+    <li><strong>Els dos servidors, en llocs diferents.</strong> Dos servidors al mateix armari cauen alhora.</li>
+    <li><strong><code>allow-transfer</code> tancat</strong> a la llista de secundaris.</li>
+    <li><strong>Un registre NS per servidor</strong> dins de la zona.</li>
+    <li><strong>No editis mai el fitxer del secundari</strong>: es reescriu sol.</li>
+    <li><strong>Repartiu els dos servidors als clients</strong>, perquè la caiguda d'un no es noti.</li>
+  </ul>
+</div>
+
+<!-- ============ 9 · PROBLEMES ============ -->
+<div class="cq-block" data-kind="problemes">
+  <h4>Errors habituals</h4>
+  <dl class="cq-issues">
+    <dt><code>Transfer failed</code> als registres del secundari</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> El primari no l'autoritza, o no hi ha connexió pel port 53 <strong>TCP</strong>.</p>
+      <p><span class="lbl">Solució</span> Prova <code>dig @primari zona AXFR</code> des del secundari: si falla també, és l'<code>allow-transfer</code>.</p>
+    </dd>
+
+    <dt>El secundari serveix dades antigues</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> El serial del primari no ha pujat després del canvi.</p>
+      <p><span class="lbl">Solució</span> Compara els dos serials: <code>dig @primari zona SOA +short</code> i el mateix contra el secundari.</p>
+    </dd>
+
+    <dt>El secundari no desa el fitxer</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> El camí no és escrivible per al servei. Les zones secundàries van a <code>/var/cache/bind/</code>.</p>
+      <p><span class="lbl">Solució</span> Canvia el <code>file</code> i mira l'error exacte a <code>journalctl -u named</code>.</p>
+    </dd>
+  </dl>
+</div>
+
+<!-- ============ 10 · RESUM ============ -->
+<div class="cq-block" data-kind="resum">
+  <h4>Resum</h4>
+  <ul>
+    <li>Tota zona vol <strong>dos servidors</strong>; tots dos responen com a autoritatius.</li>
+    <li>El <strong>primari</strong> té l'original; el <strong>secundari</strong> se'l descarrega.</li>
+    <li>La transferència va per <strong>TCP</strong> al port 53 i s'anomena <strong>AXFR</strong>.</li>
+    <li>El <strong>serial</strong> és el que dispara la còpia; sense apujar-lo, no passa res.</li>
+    <li><code>allow-transfer</code> tancat: una zona oberta és el mapa de la xarxa.</li>
+  </ul>
+
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Comanda</th><th>Per a què serveix</th></tr></thead>
+      <tbody>
+        <tr><td><code>dig @&lt;primari&gt; &lt;zona&gt; AXFR</code></td><td>Provar la transferència a mà</td></tr>
+        <tr><td><code>dig @&lt;servidor&gt; &lt;zona&gt; SOA +short</code></td><td>Comparar serials</td></tr>
+        <tr><td><code>rndc reload</code></td><td>Recarregar el primari després d'un canvi</td></tr>
+        <tr><td><code>rndc retransfer &lt;zona&gt;</code></td><td>Forçar la descàrrega al secundari</td></tr>
+        <tr><td><code>journalctl -u named | grep transfer</code></td><td>Veure si la còpia s'ha fet</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p style="margin-top:16px">
+    <strong>Següent:</strong> les activitats. Muntaràs el resolutor, la teva zona, la integració
+    amb el DHCP i, per parelles, la transferència entre dos servidors.
+  </p>
+</div>
+
+<!-- ============ 11 · QUIZ ============ -->
+<div class="cq-block" data-kind="quiz">
+  <h4>Comprova el que has après</h4>
+
+  <div class="cq-question" data-id="t9-transport" data-type="single">
+    <div class="statement">Per quin protocol de transport viatja una transferència de zona?</div>
+    <button class="cq-option" data-correct="false">UDP, port 53</button>
+    <button class="cq-option" data-correct="true">TCP, port 53</button>
+    <button class="cq-option" data-correct="false">TCP, port 853</button>
+    <button class="cq-option" data-correct="false">UDP, port 67</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+
+  <div class="cq-question" data-id="t9-serial" data-type="single">
+    <div class="statement">Què fa que el secundari es descarregui la zona altra vegada?</div>
+    <button class="cq-option" data-correct="false">Que hagi passat el TTL</button>
+    <button class="cq-option" data-correct="true">Que el serial del primari sigui més alt que el seu</button>
+    <button class="cq-option" data-correct="false">Que es reiniciï el servei del primari</button>
+    <button class="cq-option" data-correct="false">Que el client li ho demani</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+
+  <div class="cq-question" data-id="t9-fitxer" data-type="single">
+    <div class="statement">Al servidor secundari, qui escriu el fitxer de zona?</div>
+    <button class="cq-option" data-correct="false">L'administrador, copiant-lo del primari</button>
+    <button class="cq-option" data-correct="true">El propi BIND, en fer la transferència</button>
+    <button class="cq-option" data-correct="false">El servei DHCP</button>
+    <button class="cq-option" data-correct="false">No hi ha fitxer: tot es guarda a memòria</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+
+  <div class="cq-question" data-id="t9-seguretat" data-type="single">
+    <div class="statement">Per què s'ha de limitar <code>allow-transfer</code>?</div>
+    <button class="cq-option" data-correct="false">Perquè les transferències consumeixen molta memòria</button>
+    <button class="cq-option" data-correct="true">Perquè qui es descarrega la zona obté l'inventari sencer de la xarxa</button>
+    <button class="cq-option" data-correct="false">Perquè si no, el secundari no es descarrega res</button>
+    <button class="cq-option" data-correct="false">Perquè el port 53 TCP està tancat per defecte</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+
+  <div class="cq-question" data-id="t9-afirmacions" data-type="multi">
+    <div class="statement">Selecciona totes les afirmacions certes</div>
+    <button class="cq-option" data-correct="true">El secundari respon amb la mateixa autoritat que el primari.</button>
+    <button class="cq-option" data-correct="true">A la zona hi ha d'haver un registre NS per a cada servidor.</button>
+    <button class="cq-option" data-correct="true">El fitxer del secundari no s'ha d'editar a mà.</button>
+    <button class="cq-option" data-correct="false">El secundari només serveix quan el primari està aturat.</button>
+    <button class="cq-option" data-correct="false">La transferència es fa amb el mateix mecanisme que una consulta normal.</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+</div>
+
+<script>
+  // Motor únic per a totes les preguntes single i multi.
+  document.querySelectorAll('.cq-question').forEach(function (question) {
+    var id = question.dataset.id;
+    if (!id) {
+      throw new Error('Falta data-id a una pregunta del quiz.');
+    }
+    var type = question.dataset.type;
+    if (type !== 'single' && type !== 'multi') {
+      throw new Error('data-type invàlid ("' + type + '") a la pregunta "' + id + '".');
+    }
+
+    var options = question.querySelectorAll('.cq-option');
+    var checkBtn = question.querySelector('.cq-check-btn');
+    var feedback = question.querySelector('.cq-feedback');
+
+    options.forEach(function (opt) {
+      opt.addEventListener('click', function () {
+        if (type === 'single') {
+          options.forEach(function (o) { o.classList.remove('cq-selected'); });
+          opt.classList.add('cq-selected');
+        } else {
+          opt.classList.toggle('cq-selected');
+        }
+      });
+    });
+
+    checkBtn.addEventListener('click', function () {
+      var allCorrect = true;
+      options.forEach(function (opt) {
+        var isCorrect = opt.dataset.correct === 'true';
+        var isSelected = opt.classList.contains('cq-selected');
+        opt.classList.remove('cq-selected');
+        if (isCorrect) {
+          opt.classList.add('cq-correct');
+        } else if (isSelected) {
+          opt.classList.add('cq-incorrect');
+        }
+        opt.disabled = true;
+        if (isCorrect !== isSelected) {
+          allCorrect = false;
+        }
+      });
+      feedback.textContent = allCorrect ? 'Correcte!' : 'Incorrecte, revisa les respostes marcades.';
+      feedback.className = 'cq-feedback ' + (allCorrect ? 'ok' : 'ko');
+      checkBtn.disabled = true;
+    });
+  });
+</script>
+
+</body>
+</html>

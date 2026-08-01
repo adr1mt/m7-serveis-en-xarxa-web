@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>T6 · L'arbre del DNS — Serveis en Xarxa (0227)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* === SINAPSI-CSS INICI =======================================
+   0227 · Serveis en Xarxa — Identitat visual del mòdul
+   Blau estructural · taronja per als avisos · paper clar
+   per a la lectura · codi en fosc.
+   Aquest bloc és IDÈNTIC a totes les pàgines del mòdul.
+   No l'editis en una sola pàgina: edita'l a totes o extreu-lo
+   a un full compartit (_identitat/sinapsi.css).
+   ============================================================ */
+  :root {
+    --paper:        #FBFCFD;
+    --card:         #FFFFFF;
+    --ink:          #131A22;
+    --muted:        #5C6875;
+    --rule:         #E3E7EC;
+    --accent:       #1D4E89;
+    --accent-hover: #26639F;
+    --accent-soft:  #EFF5FB;
+    --accent-line:  #DCE7F3;
+    --warn:         #C2410C;
+    --warn-soft:    #FEF6EF;
+    --warn-line:    #F0CBAE;
+    --code-bg:      #16202E;
+    --code-ink:     #E2E9F1;
+    --ok:           #0E7A4B;
+    --ok-soft:      #F0FAF4;
+    --ok-line:      #C6E7D6;
+    --ko:           #B4232B;
+    --ko-soft:      #FEF4F4;
+    --ko-line:      #F2CFCF;
+    --font-display: "Ubuntu", -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-body:    "Source Sans 3", -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-mono:    "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+  }
+
+  body {
+    margin: 0;
+    padding: 40px 16px 72px;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ==== Capçalera de la pàgina ==== */
+  .cq-header {
+    max-width: 660px;
+    margin: 0 auto 26px;
+  }
+  .cq-header .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .cq-header h1 {
+    margin: 6px 0 4px;
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -.02em;
+    line-height: 1.15;
+  }
+  .cq-header .lede {
+    margin: 0;
+    color: var(--muted);
+    font-size: 1.05rem;
+  }
+
+  /* ==== Bloc de contingut: patró únic per a tots els tipus ==== */
+  .cq-block {
+    max-width: 660px;
+    margin: 0 auto 20px;
+    padding: 26px 30px 28px;
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    position: relative;
+  }
+
+  /* Etiqueta de secció: petita, monoespaiada, com la capçalera
+     d'una fitxa tècnica. El text surt de l'atribut data-kind. */
+  .cq-block::before {
+    content: attr(data-kind);
+    position: absolute;
+    top: -8px;
+    left: 26px;
+    padding: 1px 9px;
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 20px;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .cq-block h4 {
+    margin: 4px 0 14px;
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -.01em;
+    line-height: 1.3;
+    color: var(--ink);
+  }
+  .cq-block p { margin: 0 0 14px; }
+  .cq-block p:last-child { margin-bottom: 0; }
+  .cq-block em { font-style: italic; color: var(--muted); }
+  .cq-block strong { font-weight: 600; }
+  .cq-block ul, .cq-block ol { margin: 0 0 14px; padding-left: 22px; }
+  .cq-block li { margin-bottom: 6px; }
+  .cq-block li:last-child { margin-bottom: 0; }
+  .cq-block a { color: var(--accent); }
+
+  .cq-block code {
+    font-family: var(--font-mono);
+    font-size: .84em;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    border-radius: 4px;
+    padding: 1px 5px;
+    color: var(--accent);
+  }
+  .cq-block pre {
+    margin: 14px 0 18px;
+    padding: 16px 18px;
+    background: var(--code-bg);
+    color: var(--code-ink);
+    border-radius: 8px;
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: .82rem;
+    line-height: 1.6;
+  }
+  .cq-block pre code { all: unset; font: inherit; }
+  .cq-block pre .c { color: #7E93AB; }   /* comentari dins del codi */
+  .cq-block pre .o { color: #8FD0A5; }   /* sortida esperada */
+
+  /* ---- Variants de color per tipus de bloc ---- */
+  .cq-block[data-kind="objectius"],
+  .cq-block[data-kind="pas a pas"],
+  .cq-block[data-kind="lliurament"],
+  .cq-block[data-kind="resum"] { border-color: var(--accent-line); }
+  .cq-block[data-kind="objectius"]::before,
+  .cq-block[data-kind="pas a pas"]::before,
+  .cq-block[data-kind="lliurament"]::before,
+  .cq-block[data-kind="resum"]::before { border-color: var(--accent-line); color: var(--accent); }
+  .cq-block[data-kind="objectius"] h4,
+  .cq-block[data-kind="pas a pas"] h4,
+  .cq-block[data-kind="lliurament"] h4,
+  .cq-block[data-kind="resum"] h4 { color: var(--accent); }
+
+  .cq-block[data-kind="recordatori"] { background: var(--warn-soft); border-color: #F5DCC8; }
+  .cq-block[data-kind="recordatori"]::before { background: var(--warn-soft); border-color: var(--warn-line); color: var(--warn); }
+  .cq-block[data-kind="recordatori"] h4 { color: var(--warn); }
+
+  .cq-block[data-kind="bones pràctiques"] { background: var(--ok-soft); border-color: var(--ok-line); }
+  .cq-block[data-kind="bones pràctiques"]::before { background: var(--ok-soft); border-color: var(--ok-line); color: var(--ok); }
+  .cq-block[data-kind="bones pràctiques"] h4 { color: var(--ok); }
+
+  .cq-block[data-kind="problemes"] { background: var(--ko-soft); border-color: var(--ko-line); }
+  .cq-block[data-kind="problemes"]::before { background: var(--ko-soft); border-color: var(--ko-line); color: var(--ko); }
+  .cq-block[data-kind="problemes"] h4 { color: var(--ko); }
+
+  /* ==== Diagrama de passos en flux (DORA i similars) ==== */
+  .dora-flow {
+    display: flex;
+    align-items: stretch;
+    gap: 6px;
+    margin: 20px 0 22px;
+    flex-wrap: wrap;
+  }
+  .dora-step {
+    flex: 1 1 130px;
+    padding: 14px 12px 12px;
+    border: 1px solid var(--rule);
+    border-top: 2px solid var(--accent);
+    border-radius: 6px;
+    background: var(--paper);
+  }
+  .dora-step .n {
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: .08em;
+  }
+  .dora-step .t {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: .9rem;
+    letter-spacing: .02em;
+    margin: 2px 0 5px;
+  }
+  .dora-step .d { font-size: .8rem; line-height: 1.45; color: var(--muted); }
+  .dora-arrow { align-self: center; color: #B3C2D2; font-size: 1rem; }
+  @media (max-width: 620px) {
+    .dora-arrow { display: none; }
+    .dora-step { flex-basis: 100%; }
+  }
+
+  /* ==== Passos numerats de les guies pas a pas ==== */
+  .cq-steps { counter-reset: step; margin: 4px 0 0; padding: 0; list-style: none; }
+  .cq-steps > li {
+    counter-increment: step;
+    position: relative;
+    padding: 0 0 4px 34px;
+    margin-bottom: 18px;
+  }
+  .cq-steps > li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0; top: 1px;
+    width: 22px; height: 22px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    border-radius: 50%;
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    font-weight: 500;
+    color: var(--accent);
+  }
+  .cq-steps > li > :first-child { margin-top: 0; }
+
+  /* ==== Problemes: símptoma → causa → solució ==== */
+  .cq-issues { margin: 4px 0 0; }
+  .cq-issues dt {
+    font-weight: 600;
+    margin-top: 16px;
+    color: var(--ko);
+  }
+  .cq-issues dt:first-child { margin-top: 0; }
+  .cq-issues dd { margin: 4px 0 0 0; }
+  .cq-issues dd .lbl {
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-right: 6px;
+  }
+
+  /* ==== Taula de referència ==== */
+  .cq-tablewrap { overflow-x: auto; margin: 14px 0 4px; }
+  .cq-table { border-collapse: collapse; width: 100%; font-size: .9rem; }
+  .cq-table th, .cq-table td {
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+  }
+  .cq-table th {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: .78rem;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom-color: var(--accent-line);
+    white-space: nowrap;
+  }
+  .cq-table td:first-child { white-space: nowrap; }
+  .cq-table tr:last-child td { border-bottom: none; }
+
+  /* ==== Nota de versió (Ubuntu 24.04 vs 26.04) ==== */
+  .cq-note {
+    margin: 14px 0 4px;
+    padding: 10px 14px;
+    border-left: 3px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 0 6px 6px 0;
+    font-size: .9rem;
+  }
+  .cq-note .lbl {
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 2px;
+  }
+
+
+  /* ==== Índex del mòdul (portada) ==== */
+  .cq-index { display: grid; gap: 10px; margin: 4px 0 0; padding: 0; list-style: none; }
+  .cq-index a {
+    display: flex; align-items: baseline; gap: 12px;
+    padding: 13px 16px;
+    border: 1px solid var(--rule); border-radius: 8px;
+    background: var(--paper); color: var(--ink); text-decoration: none;
+    transition: border-color .12s ease, background .12s ease;
+  }
+  .cq-index a:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .cq-index .ref {
+    font-family: var(--font-mono); font-size: .74rem; font-weight: 500;
+    color: var(--accent); letter-spacing: .06em; flex: 0 0 auto;
+  }
+  .cq-index .ttl { font-family: var(--font-display); font-weight: 700; font-size: .98rem; }
+  .cq-index .sub { display: block; font-size: .84rem; color: var(--muted); font-weight: 400; font-family: var(--font-body); margin-top: 1px; }
+
+  /* ==== Quiz ==== */
+  .cq-question { margin: 22px 0 0; }
+  .cq-question + .cq-question { padding-top: 22px; border-top: 1px solid var(--rule); }
+  .cq-question .statement { font-weight: 600; margin-bottom: 10px; }
+  .cq-option {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 10px 14px;
+    margin: 7px 0;
+    border: 1px solid var(--rule);
+    border-radius: 7px;
+    background: var(--card);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: .95rem;
+    color: var(--ink);
+    transition: border-color .12s ease, background .12s ease;
+  }
+  .cq-option:hover:not(:disabled) { border-color: #B3C2D2; }
+  .cq-option:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .cq-option.cq-selected { border-color: var(--accent); background: var(--accent-soft); }
+  .cq-option.cq-correct { border-color: var(--ok); background: var(--ok-soft); color: var(--ok); }
+  .cq-option.cq-incorrect { border-color: var(--ko); background: var(--ko-soft); color: var(--ko); }
+  .cq-check-btn {
+    margin-top: 10px;
+    padding: 9px 20px;
+    border: none;
+    border-radius: 7px;
+    background: var(--accent);
+    color: #FFFFFF;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: .88rem;
+    cursor: pointer;
+  }
+  .cq-check-btn:hover:not(:disabled) { background: var(--accent-hover); }
+  .cq-check-btn:disabled { background: #B3C2D2; cursor: default; }
+  .cq-feedback { margin-top: 10px; font-size: .88rem; font-weight: 600; }
+  .cq-feedback.ok { color: var(--ok); }
+  .cq-feedback.ko { color: var(--ko); }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+  /* ==== Impressió: els alumnes imprimeixen la teoria ==== */
+  @media print {
+    body { background: #FFF; padding: 0; font-size: 11pt; }
+    .cq-block { border-color: #CCC; page-break-inside: avoid; margin-bottom: 12px; }
+    .cq-block pre { background: #F4F4F4; color: #000; border: 1px solid #DDD; }
+    .cq-block pre .c, .cq-block pre .o { color: #555; }
+    .cq-check-btn { display: none; }
+  }
+/* === SINAPSI-CSS FI ======================================== */
+</style>
+</head>
+<body>
+<header class="cq-header">
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA2 · Teoria 6</div>
+  <h1>L'arbre del DNS</h1>
+  <p class="lede">Com és possible que un sistema amb milers de milions de noms respongui en mil·lisegons.</p>
+</header>
+
+<!-- ============ 1 · OBJECTIUS ============ -->
+<div class="cq-block" data-kind="objectius">
+  <h4>Què sabràs fer en acabar</h4>
+  <ul>
+    <li>Llegir un nom de domini d'esquerra a dreta i saber què és cada part.</li>
+    <li>Explicar què és una zona d'autoritat i què és una delegació.</li>
+    <li>Distingir un servidor <strong>recursiu</strong> d'un d'<strong>autoritatiu</strong>.</li>
+    <li>Seguir una resolució sencera amb <code>dig +trace</code>.</li>
+    <li>Entendre el paper del TTL i de la memòria cau.</li>
+  </ul>
+</div>
+
+<!-- ============ 2 · L'ARBRE ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>Una base de dades reparida entre tots</h4>
+  <p>
+    Ningú té la llista sencera de noms d'Internet: seria impossible de mantenir. El DNS és una
+    base de dades <strong>distribuïda i jeràrquica</strong>, en forma d'arbre invertit.
+  </p>
+  <p>
+    A dalt hi ha l'<strong>arrel</strong>, que s'escriu amb un punt sol: <code>.</code>. Per sota,
+    els dominis de primer nivell o <strong>TLD</strong> (<code>.net</code>, <code>.cat</code>,
+    <code>.es</code>). Per sota, els dominis registrats, i encara més avall els subdominis.
+  </p>
+  <p>
+    Un nom es llegeix <strong>de dreta a esquerra</strong>, de més general a més concret. A
+    <code>moodle.elpuig.xeill.net</code>, el TLD és <code>.net</code>, el domini és
+    <code>xeill.net</code>, el subdomini <code>elpuig</code> i la màquina <code>moodle</code>.
+  </p>
+</div>
+
+<!-- ============ 3 · ZONES I DELEGACIÓ ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>Zones d'autoritat i delegació</h4>
+  <p>
+    Cada tros de l'arbre té un responsable. Aquest tros es diu <strong>zona d'autoritat</strong>:
+    el conjunt de noms dels quals un servidor concret té les dades bones.
+  </p>
+  <p>
+    Quan el responsable d'una zona vol que una branca la gestioni algú altre, la
+    <strong>delega</strong>: hi deixa un registre que diu «per a tot això, pregunta a aquell
+    servidor». Així els servidors arrel deleguen cada TLD, i el responsable de
+    <code>xeill.net</code> pot delegar <code>elpuig.xeill.net</code>.
+  </p>
+  <p>
+    Aquesta és la clau de tot: <strong>ningú ho sap tot, però tothom sap a qui preguntar</strong>.
+    El sistema creix sense que cap servidor s'hagi de fer més gran.
+  </p>
+</div>
+
+<!-- ============ 4 · DOS TIPUS DE SERVIDOR ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>Recursiu o autoritatiu</h4>
+  <p>
+    Es diuen tots dos «servidor DNS», però fan feines oposades. No confondre'ls és el que més
+    ajuda a entendre el servei.
+  </p>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th></th><th>Recursiu</th><th>Autoritatiu</th></tr></thead>
+      <tbody>
+        <tr><td><strong>A qui serveix</strong></td><td>Als clients de la seva xarxa</td><td>A tot Internet</td></tr>
+        <tr><td><strong>Què sap</strong></td><td>Res propi: ho va a buscar</td><td>Només la seva zona</td></tr>
+        <tr><td><strong>Té memòria cau</strong></td><td>Sí, és la seva raó de ser</td><td>No li cal</td></tr>
+        <tr><td><strong>Exemple</strong></td><td><code>9.9.9.9</code>, el del teu centre</td><td>Els que responen per <code>upc.edu</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    A les activitats el teu BIND farà <strong>totes dues coses</strong>: recursiu per als clients
+    de <code>personal1</code> i autoritatiu de la teva zona.
+  </p>
+</div>
+
+<!-- ============ 5 · EXEMPLE ============ -->
+<div class="cq-block" data-kind="exemple">
+  <h4>Una resolució, salt a salt</h4>
+  <p>
+    Preguntes per <code>moodle.elpuig.xeill.net</code> i el recursiu no en sap res. Comença per
+    dalt i va baixant:
+  </p>
+  <div class="dora-flow">
+    <div class="dora-step">
+      <div class="n">01</div>
+      <div class="t">ARREL</div>
+      <div class="d">«Jo no ho sé, però de <code>.net</code> se n'encarreguen aquests.»</div>
+    </div>
+    <div class="dora-arrow">→</div>
+    <div class="dora-step">
+      <div class="n">02</div>
+      <div class="t">TLD .net</div>
+      <div class="d">«De <code>xeill.net</code>, pregunta a aquells altres.»</div>
+    </div>
+    <div class="dora-arrow">→</div>
+    <div class="dora-step">
+      <div class="n">03</div>
+      <div class="t">AUTORITATIU</div>
+      <div class="d">«L'adreça de <code>moodle</code> és aquesta.»</div>
+    </div>
+  </div>
+  <p>Ho pots veure tu mateix, salt per salt:</p>
+<pre>dig moodle.elpuig.xeill.net +trace</pre>
+  <p>
+    Tres consultes per a una resposta. Per això <strong>la memòria cau és imprescindible</strong>:
+    la segona vegada, res d'això torna a passar.
+  </p>
+</div>
+
+<!-- ============ 6 · TTL I CAU ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>El TTL: quant dura una resposta</h4>
+  <p>
+    Cada resposta DNS ve amb un <strong>TTL</strong> (<em>Time To Live</em>), en segons. És el
+    temps que qui la rep la pot guardar abans de tornar a preguntar. El decideix
+    <strong>l'amo de la zona</strong>, no qui pregunta.
+  </p>
+  <p>Té una conseqüència pràctica que et trobaràs sempre:</p>
+  <ul>
+    <li>TTL <strong>alt</strong> (hores): menys consultes, però els canvis triguen a veure's.</li>
+    <li>TTL <strong>baix</strong> (minuts): els canvis es propaguen ràpid, però hi ha més trànsit.</li>
+  </ul>
+  <p>
+    Per això, abans d'una migració prevista, es baixa el TTL uns dies; i quan tot funciona, es
+    torna a pujar.
+  </p>
+</div>
+
+<!-- ============ 7 · CAS REAL ============ -->
+<div class="cq-block" data-kind="cas real">
+  <h4>«He canviat la IP i mig món encara veu l'antiga»</h4>
+  <p>
+    Una empresa canvia de servidor i actualitza el registre. Uns usuaris veuen la web nova
+    immediatament i altres continuen a l'antiga durant hores. No hi ha cap error: cadascú té la
+    resposta guardada amb el TTL que hi havia <em>abans</em> del canvi.
+  </p>
+  <p>
+    Mentre duri, els dos servidors han de funcionar. Apagar l'antic el mateix dia del canvi és
+    l'error clàssic, i deixa fora els usuaris que encara el tenen a la memòria cau.
+  </p>
+  <p>
+    De la mateixa manera, a classe: si canvies un registre i el client no ho veu, sovint no
+    t'has equivocat, només has d'esperar o buidar la cau.
+  </p>
+</div>
+
+<!-- ============ 8 · PAS A PAS ============ -->
+<div class="cq-block" data-kind="pas a pas">
+  <h4>Recórrer l'arbre amb dig</h4>
+  <ol class="cq-steps">
+    <li>
+      <p><strong>Mira qui té l'autoritat</strong> sobre un domini conegut:</p>
+<pre>dig upc.edu NS +short</pre>
+    </li>
+
+    <li>
+      <p><strong>Pregunta directament a l'autoritatiu</strong>, saltant-te tota la cadena:</p>
+<pre>dig @&lt;un dels NS&gt; www.upc.edu +short</pre>
+      <p>La resposta arriba amb la marca <code>aa</code> (<em>authoritative answer</em>).</p>
+    </li>
+
+    <li>
+      <p><strong>Demana-li un nom que no sigui seu</strong> i mira què passa:</p>
+<pre>dig @&lt;un dels NS&gt; www.wikipedia.org</pre>
+      <p>
+        No te'l resoldrà: un autoritatiu no fa de recursiu. Fixa't en l'estat de la capçalera
+        (<code>status</code>) i en si hi ha <code>ANSWER SECTION</code>.
+      </p>
+    </li>
+
+    <li>
+      <p><strong>Segueix la resolució sencera</strong> des de l'arrel:</p>
+<pre>dig www.upc.edu +trace</pre>
+    </li>
+
+    <li>
+      <p><strong>Observa el TTL baixant.</strong> Repeteix dues vegades amb uns segons de diferència:</p>
+<pre>dig www.upc.edu | grep -A1 "ANSWER SECTION"</pre>
+      <p>El número de la segona columna ha baixat: és el que queda de vida a la memòria cau.</p>
+    </li>
+  </ol>
+</div>
+
+<!-- ============ 9 · BONES PRÀCTIQUES ============ -->
+<div class="cq-block" data-kind="bones pràctiques">
+  <h4>Criteris professionals</h4>
+  <ul>
+    <li><strong>Un recursiu no s'obre a Internet.</strong> Serveix només la teva xarxa; si no, l'usaran per a atacs.</li>
+    <li><strong>Un autoritatiu no fa recursió.</strong> Respon de la seva zona i prou.</li>
+    <li><strong>Dos servidors per zona</strong> com a mínim: és el que demana el DNS des del primer dia.</li>
+    <li><strong>Baixa el TTL abans d'un canvi previst</strong> i torna'l a pujar després.</li>
+    <li><strong>Comprova sempre contra l'autoritatiu</strong> amb <code>dig @servidor</code>: la cau amaga els errors.</li>
+  </ul>
+</div>
+
+<!-- ============ 10 · PROBLEMES ============ -->
+<div class="cq-block" data-kind="problemes">
+  <h4>Errors habituals</h4>
+  <dl class="cq-issues">
+    <dt><code>dig</code> respon <code>NXDOMAIN</code></dt>
+    <dd>
+      <p><span class="lbl">Causa</span> El nom no existeix a la zona. Sovint és una errada d'escriptura o falta el punt final.</p>
+      <p><span class="lbl">Solució</span> Comprova el nom sencer i pregunta directament a l'autoritatiu.</p>
+    </dd>
+
+    <dt><code>SERVFAIL</code> en preguntar per un domini</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> El servidor ho ha intentat i no se n'ha sortit: no arriba als autoritatius o falla la validació DNSSEC.</p>
+      <p><span class="lbl">Solució</span> Prova el mateix nom contra <code>9.9.9.9</code>. Si allà va, el problema és del teu servidor.</p>
+    </dd>
+
+    <dt>Un nom es resol des de fora i des de dins no</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> El teu servidor intern té una zona amb el mateix nom i respon ell, sense saber-ho tot.</p>
+      <p><span class="lbl">Solució</span> Compara <code>dig @elteuservidor nom</code> amb <code>dig @9.9.9.9 nom</code>.</p>
+    </dd>
+  </dl>
+</div>
+
+<!-- ============ 11 · RESUM ============ -->
+<div class="cq-block" data-kind="resum">
+  <h4>Resum</h4>
+  <ul>
+    <li>El DNS és un <strong>arbre</strong>: arrel, TLD, dominis i subdominis, llegit de dreta a esquerra.</li>
+    <li>Una <strong>zona d'autoritat</strong> és el tros del qual un servidor té les dades bones.</li>
+    <li><strong>Delegar</strong> és dir «d'aquesta branca se n'encarrega aquell servidor».</li>
+    <li>El <strong>recursiu</strong> busca per als clients; l'<strong>autoritatiu</strong> respon de la seva zona.</li>
+    <li>El <strong>TTL</strong> mana quant es guarda una resposta a la memòria cau.</li>
+  </ul>
+
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Comanda</th><th>Per a què serveix</th></tr></thead>
+      <tbody>
+        <tr><td><code>dig &lt;domini&gt; NS</code></td><td>Qui té l'autoritat sobre la zona</td></tr>
+        <tr><td><code>dig @&lt;servidor&gt; &lt;nom&gt;</code></td><td>Preguntar a un servidor concret</td></tr>
+        <tr><td><code>dig &lt;nom&gt; +trace</code></td><td>Seguir la resolució des de l'arrel</td></tr>
+        <tr><td><code>dig &lt;nom&gt; +short</code></td><td>Només la resposta</td></tr>
+        <tr><td><code>dig -x &lt;adreça&gt;</code></td><td>Resolució inversa</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p style="margin-top:16px">
+    <strong>Següent:</strong> a <em>T7 · Servidor DNS amb BIND 9</em> muntaràs el recursiu que
+    fins ara només has fet servir.
+  </p>
+</div>
+
+<!-- ============ 12 · QUIZ ============ -->
+<div class="cq-block" data-kind="quiz">
+  <h4>Comprova el que has après</h4>
+
+  <div class="cq-question" data-id="t6-lectura" data-type="single">
+    <div class="statement">A <code>aula3.smx.institut.cat</code>, quin és el TLD?</div>
+    <button class="cq-option" data-correct="false"><code>aula3</code></button>
+    <button class="cq-option" data-correct="false"><code>institut</code></button>
+    <button class="cq-option" data-correct="true"><code>cat</code></button>
+    <button class="cq-option" data-correct="false"><code>smx</code></button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+
+  <div class="cq-question" data-id="t6-tipus" data-type="single">
+    <div class="statement">Quina és la diferència principal entre un servidor recursiu i un d'autoritatiu?</div>
+    <button class="cq-option" data-correct="false">El recursiu treballa amb UDP i l'autoritatiu amb TCP</button>
+    <button class="cq-option" data-correct="true">El recursiu busca la resposta per als clients; l'autoritatiu només respon de la seva zona</button>
+    <button class="cq-option" data-correct="false">L'autoritatiu té memòria cau i el recursiu no</button>
+    <button class="cq-option" data-correct="false">El recursiu només serveix noms inventats</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+
+  <div class="cq-question" data-id="t6-delegacio" data-type="single">
+    <div class="statement">Què vol dir que una zona està delegada?</div>
+    <button class="cq-option" data-correct="true">Que la responsabilitat d'una branca passa a un altre servidor de noms</button>
+    <button class="cq-option" data-correct="false">Que la zona s'ha copiat a un servidor secundari</button>
+    <button class="cq-option" data-correct="false">Que el domini ha caducat</button>
+    <button class="cq-option" data-correct="false">Que el servidor deixa de fer recursió</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+
+  <div class="cq-question" data-id="t6-ttl" data-type="single">
+    <div class="statement">Has canviat una adreça a la teva zona i un client encara veu l'antiga. Què ho explica millor?</div>
+    <button class="cq-option" data-correct="false">El client té l'adreça a <code>/etc/hosts</code> segur</button>
+    <button class="cq-option" data-correct="true">Té la resposta antiga a la memòria cau i encara no s'ha esgotat el TTL</button>
+    <button class="cq-option" data-correct="false">El servidor autoritatiu ha deixat de respondre</button>
+    <button class="cq-option" data-correct="false">Cal reiniciar el client perquè agafi el canvi</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+
+  <div class="cq-question" data-id="t6-afirmacions" data-type="multi">
+    <div class="statement">Selecciona totes les afirmacions certes</div>
+    <button class="cq-option" data-correct="true">Els noms es llegeixen de dreta a esquerra, de més general a més concret.</button>
+    <button class="cq-option" data-correct="true">Un recursiu obert a tot Internet és un problema de seguretat.</button>
+    <button class="cq-option" data-correct="false">Els servidors arrel guarden tots els noms d'Internet.</button>
+    <button class="cq-option" data-correct="true">Convé tenir dos servidors de noms per zona.</button>
+    <button class="cq-option" data-correct="false">El TTL el decideix el client que pregunta.</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+</div>
+
+<script>
+  // Motor únic per a totes les preguntes single i multi.
+  document.querySelectorAll('.cq-question').forEach(function (question) {
+    var id = question.dataset.id;
+    if (!id) {
+      throw new Error('Falta data-id a una pregunta del quiz.');
+    }
+    var type = question.dataset.type;
+    if (type !== 'single' && type !== 'multi') {
+      throw new Error('data-type invàlid ("' + type + '") a la pregunta "' + id + '".');
+    }
+
+    var options = question.querySelectorAll('.cq-option');
+    var checkBtn = question.querySelector('.cq-check-btn');
+    var feedback = question.querySelector('.cq-feedback');
+
+    options.forEach(function (opt) {
+      opt.addEventListener('click', function () {
+        if (type === 'single') {
+          options.forEach(function (o) { o.classList.remove('cq-selected'); });
+          opt.classList.add('cq-selected');
+        } else {
+          opt.classList.toggle('cq-selected');
+        }
+      });
+    });
+
+    checkBtn.addEventListener('click', function () {
+      var allCorrect = true;
+      options.forEach(function (opt) {
+        var isCorrect = opt.dataset.correct === 'true';
+        var isSelected = opt.classList.contains('cq-selected');
+        opt.classList.remove('cq-selected');
+        if (isCorrect) {
+          opt.classList.add('cq-correct');
+        } else if (isSelected) {
+          opt.classList.add('cq-incorrect');
+        }
+        opt.disabled = true;
+        if (isCorrect !== isSelected) {
+          allCorrect = false;
+        }
+      });
+      feedback.textContent = allCorrect ? 'Correcte!' : 'Incorrecte, revisa les respostes marcades.';
+      feedback.className = 'cq-feedback ' + (allCorrect ? 'ok' : 'ko');
+      checkBtn.disabled = true;
+    });
+  });
+</script>
+
+</body>
+</html>

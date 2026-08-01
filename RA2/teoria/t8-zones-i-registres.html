@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>T8 · Zones i registres — Serveis en Xarxa (0227)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* === SINAPSI-CSS INICI =======================================
+   0227 · Serveis en Xarxa — Identitat visual del mòdul
+   Blau estructural · taronja per als avisos · paper clar
+   per a la lectura · codi en fosc.
+   Aquest bloc és IDÈNTIC a totes les pàgines del mòdul.
+   No l'editis en una sola pàgina: edita'l a totes o extreu-lo
+   a un full compartit (_identitat/sinapsi.css).
+   ============================================================ */
+  :root {
+    --paper:        #FBFCFD;
+    --card:         #FFFFFF;
+    --ink:          #131A22;
+    --muted:        #5C6875;
+    --rule:         #E3E7EC;
+    --accent:       #1D4E89;
+    --accent-hover: #26639F;
+    --accent-soft:  #EFF5FB;
+    --accent-line:  #DCE7F3;
+    --warn:         #C2410C;
+    --warn-soft:    #FEF6EF;
+    --warn-line:    #F0CBAE;
+    --code-bg:      #16202E;
+    --code-ink:     #E2E9F1;
+    --ok:           #0E7A4B;
+    --ok-soft:      #F0FAF4;
+    --ok-line:      #C6E7D6;
+    --ko:           #B4232B;
+    --ko-soft:      #FEF4F4;
+    --ko-line:      #F2CFCF;
+    --font-display: "Ubuntu", -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-body:    "Source Sans 3", -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-mono:    "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+  }
+
+  body {
+    margin: 0;
+    padding: 40px 16px 72px;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ==== Capçalera de la pàgina ==== */
+  .cq-header {
+    max-width: 660px;
+    margin: 0 auto 26px;
+  }
+  .cq-header .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .cq-header h1 {
+    margin: 6px 0 4px;
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -.02em;
+    line-height: 1.15;
+  }
+  .cq-header .lede {
+    margin: 0;
+    color: var(--muted);
+    font-size: 1.05rem;
+  }
+
+  /* ==== Bloc de contingut: patró únic per a tots els tipus ==== */
+  .cq-block {
+    max-width: 660px;
+    margin: 0 auto 20px;
+    padding: 26px 30px 28px;
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    position: relative;
+  }
+
+  /* Etiqueta de secció: petita, monoespaiada, com la capçalera
+     d'una fitxa tècnica. El text surt de l'atribut data-kind. */
+  .cq-block::before {
+    content: attr(data-kind);
+    position: absolute;
+    top: -8px;
+    left: 26px;
+    padding: 1px 9px;
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 20px;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .cq-block h4 {
+    margin: 4px 0 14px;
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -.01em;
+    line-height: 1.3;
+    color: var(--ink);
+  }
+  .cq-block p { margin: 0 0 14px; }
+  .cq-block p:last-child { margin-bottom: 0; }
+  .cq-block em { font-style: italic; color: var(--muted); }
+  .cq-block strong { font-weight: 600; }
+  .cq-block ul, .cq-block ol { margin: 0 0 14px; padding-left: 22px; }
+  .cq-block li { margin-bottom: 6px; }
+  .cq-block li:last-child { margin-bottom: 0; }
+  .cq-block a { color: var(--accent); }
+
+  .cq-block code {
+    font-family: var(--font-mono);
+    font-size: .84em;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    border-radius: 4px;
+    padding: 1px 5px;
+    color: var(--accent);
+  }
+  .cq-block pre {
+    margin: 14px 0 18px;
+    padding: 16px 18px;
+    background: var(--code-bg);
+    color: var(--code-ink);
+    border-radius: 8px;
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: .82rem;
+    line-height: 1.6;
+  }
+  .cq-block pre code { all: unset; font: inherit; }
+  .cq-block pre .c { color: #7E93AB; }   /* comentari dins del codi */
+  .cq-block pre .o { color: #8FD0A5; }   /* sortida esperada */
+
+  /* ---- Variants de color per tipus de bloc ---- */
+  .cq-block[data-kind="objectius"],
+  .cq-block[data-kind="pas a pas"],
+  .cq-block[data-kind="lliurament"],
+  .cq-block[data-kind="resum"] { border-color: var(--accent-line); }
+  .cq-block[data-kind="objectius"]::before,
+  .cq-block[data-kind="pas a pas"]::before,
+  .cq-block[data-kind="lliurament"]::before,
+  .cq-block[data-kind="resum"]::before { border-color: var(--accent-line); color: var(--accent); }
+  .cq-block[data-kind="objectius"] h4,
+  .cq-block[data-kind="pas a pas"] h4,
+  .cq-block[data-kind="lliurament"] h4,
+  .cq-block[data-kind="resum"] h4 { color: var(--accent); }
+
+  .cq-block[data-kind="recordatori"] { background: var(--warn-soft); border-color: #F5DCC8; }
+  .cq-block[data-kind="recordatori"]::before { background: var(--warn-soft); border-color: var(--warn-line); color: var(--warn); }
+  .cq-block[data-kind="recordatori"] h4 { color: var(--warn); }
+
+  .cq-block[data-kind="bones pràctiques"] { background: var(--ok-soft); border-color: var(--ok-line); }
+  .cq-block[data-kind="bones pràctiques"]::before { background: var(--ok-soft); border-color: var(--ok-line); color: var(--ok); }
+  .cq-block[data-kind="bones pràctiques"] h4 { color: var(--ok); }
+
+  .cq-block[data-kind="problemes"] { background: var(--ko-soft); border-color: var(--ko-line); }
+  .cq-block[data-kind="problemes"]::before { background: var(--ko-soft); border-color: var(--ko-line); color: var(--ko); }
+  .cq-block[data-kind="problemes"] h4 { color: var(--ko); }
+
+  /* ==== Diagrama de passos en flux (DORA i similars) ==== */
+  .dora-flow {
+    display: flex;
+    align-items: stretch;
+    gap: 6px;
+    margin: 20px 0 22px;
+    flex-wrap: wrap;
+  }
+  .dora-step {
+    flex: 1 1 130px;
+    padding: 14px 12px 12px;
+    border: 1px solid var(--rule);
+    border-top: 2px solid var(--accent);
+    border-radius: 6px;
+    background: var(--paper);
+  }
+  .dora-step .n {
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: .08em;
+  }
+  .dora-step .t {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: .9rem;
+    letter-spacing: .02em;
+    margin: 2px 0 5px;
+  }
+  .dora-step .d { font-size: .8rem; line-height: 1.45; color: var(--muted); }
+  .dora-arrow { align-self: center; color: #B3C2D2; font-size: 1rem; }
+  @media (max-width: 620px) {
+    .dora-arrow { display: none; }
+    .dora-step { flex-basis: 100%; }
+  }
+
+  /* ==== Passos numerats de les guies pas a pas ==== */
+  .cq-steps { counter-reset: step; margin: 4px 0 0; padding: 0; list-style: none; }
+  .cq-steps > li {
+    counter-increment: step;
+    position: relative;
+    padding: 0 0 4px 34px;
+    margin-bottom: 18px;
+  }
+  .cq-steps > li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0; top: 1px;
+    width: 22px; height: 22px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    border-radius: 50%;
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    font-weight: 500;
+    color: var(--accent);
+  }
+  .cq-steps > li > :first-child { margin-top: 0; }
+
+  /* ==== Problemes: símptoma → causa → solució ==== */
+  .cq-issues { margin: 4px 0 0; }
+  .cq-issues dt {
+    font-weight: 600;
+    margin-top: 16px;
+    color: var(--ko);
+  }
+  .cq-issues dt:first-child { margin-top: 0; }
+  .cq-issues dd { margin: 4px 0 0 0; }
+  .cq-issues dd .lbl {
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-right: 6px;
+  }
+
+  /* ==== Taula de referència ==== */
+  .cq-tablewrap { overflow-x: auto; margin: 14px 0 4px; }
+  .cq-table { border-collapse: collapse; width: 100%; font-size: .9rem; }
+  .cq-table th, .cq-table td {
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+  }
+  .cq-table th {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: .78rem;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom-color: var(--accent-line);
+    white-space: nowrap;
+  }
+  .cq-table td:first-child { white-space: nowrap; }
+  .cq-table tr:last-child td { border-bottom: none; }
+
+  /* ==== Nota de versió (Ubuntu 24.04 vs 26.04) ==== */
+  .cq-note {
+    margin: 14px 0 4px;
+    padding: 10px 14px;
+    border-left: 3px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 0 6px 6px 0;
+    font-size: .9rem;
+  }
+  .cq-note .lbl {
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 2px;
+  }
+
+
+  /* ==== Índex del mòdul (portada) ==== */
+  .cq-index { display: grid; gap: 10px; margin: 4px 0 0; padding: 0; list-style: none; }
+  .cq-index a {
+    display: flex; align-items: baseline; gap: 12px;
+    padding: 13px 16px;
+    border: 1px solid var(--rule); border-radius: 8px;
+    background: var(--paper); color: var(--ink); text-decoration: none;
+    transition: border-color .12s ease, background .12s ease;
+  }
+  .cq-index a:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .cq-index .ref {
+    font-family: var(--font-mono); font-size: .74rem; font-weight: 500;
+    color: var(--accent); letter-spacing: .06em; flex: 0 0 auto;
+  }
+  .cq-index .ttl { font-family: var(--font-display); font-weight: 700; font-size: .98rem; }
+  .cq-index .sub { display: block; font-size: .84rem; color: var(--muted); font-weight: 400; font-family: var(--font-body); margin-top: 1px; }
+
+  /* ==== Quiz ==== */
+  .cq-question { margin: 22px 0 0; }
+  .cq-question + .cq-question { padding-top: 22px; border-top: 1px solid var(--rule); }
+  .cq-question .statement { font-weight: 600; margin-bottom: 10px; }
+  .cq-option {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 10px 14px;
+    margin: 7px 0;
+    border: 1px solid var(--rule);
+    border-radius: 7px;
+    background: var(--card);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: .95rem;
+    color: var(--ink);
+    transition: border-color .12s ease, background .12s ease;
+  }
+  .cq-option:hover:not(:disabled) { border-color: #B3C2D2; }
+  .cq-option:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .cq-option.cq-selected { border-color: var(--accent); background: var(--accent-soft); }
+  .cq-option.cq-correct { border-color: var(--ok); background: var(--ok-soft); color: var(--ok); }
+  .cq-option.cq-incorrect { border-color: var(--ko); background: var(--ko-soft); color: var(--ko); }
+  .cq-check-btn {
+    margin-top: 10px;
+    padding: 9px 20px;
+    border: none;
+    border-radius: 7px;
+    background: var(--accent);
+    color: #FFFFFF;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: .88rem;
+    cursor: pointer;
+  }
+  .cq-check-btn:hover:not(:disabled) { background: var(--accent-hover); }
+  .cq-check-btn:disabled { background: #B3C2D2; cursor: default; }
+  .cq-feedback { margin-top: 10px; font-size: .88rem; font-weight: 600; }
+  .cq-feedback.ok { color: var(--ok); }
+  .cq-feedback.ko { color: var(--ko); }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+  /* ==== Impressió: els alumnes imprimeixen la teoria ==== */
+  @media print {
+    body { background: #FFF; padding: 0; font-size: 11pt; }
+    .cq-block { border-color: #CCC; page-break-inside: avoid; margin-bottom: 12px; }
+    .cq-block pre { background: #F4F4F4; color: #000; border: 1px solid #DDD; }
+    .cq-block pre .c, .cq-block pre .o { color: #555; }
+    .cq-check-btn { display: none; }
+  }
+/* === SINAPSI-CSS FI ======================================== */
+</style>
+</head>
+<body>
+<header class="cq-header">
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA2 · Teoria 8</div>
+  <h1>Zones i registres</h1>
+  <p class="lede">Donar noms propis a la teva xarxa: zona directa, zona inversa i tipus de registre.</p>
+</header>
+
+<!-- ============ 1 · OBJECTIUS ============ -->
+<div class="cq-block" data-kind="objectius">
+  <h4>Què sabràs fer en acabar</h4>
+  <ul>
+    <li>Declarar una zona directa i una d'inversa a BIND.</li>
+    <li>Escriure un fitxer de zona amb el registre <strong>SOA</strong> ben posat.</li>
+    <li>Distingir els registres A, PTR, CNAME, MX, TXT i NS.</li>
+    <li>Recordar per què el <strong>punt final</strong> canvia el significat d'un nom.</li>
+    <li>Validar la zona i recarregar-la sense aturar el servei.</li>
+  </ul>
+</div>
+
+<!-- ============ 2 · DUES ZONES ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>Dues zones per a la mateixa xarxa</h4>
+  <p>
+    Fins ara el teu servidor repetia el que deien els altres. Ara tindrà dades pròpies: serà
+    <strong>autoritatiu</strong> d'una zona teva.
+  </p>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Zona</th><th>Respon a</th><th>Es diu</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Directa</strong></td><td>«Quina IP té aquest nom?»</td><td><code>adria.internal</code></td></tr>
+        <tr><td><strong>Inversa</strong></td><td>«Quin nom té aquesta IP?»</td><td><code>1.168.192.in-addr.arpa</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    El nom de la zona inversa és la <strong>xarxa escrita al revés</strong> seguida de
+    <code>in-addr.arpa</code>. Per a <code>192.168.1.0/24</code>, els tres primers octets girats:
+    <code>1.168.192</code>. Fa estrany, però té sentit: així les adreces també es llegeixen de
+    general a concret, com els noms.
+  </p>
+</div>
+
+<!-- ============ 3 · DECLARAR-LES ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>Declarar les zones</h4>
+  <p>
+    Les zones es declaren a <code>named.conf.local</code>. Cada declaració diu tres coses: com es
+    diu la zona, quin paper hi fa aquest servidor i on són les dades.
+  </p>
+<pre>zone "adria.internal" {
+    type primary;
+    file "/etc/bind/zones/db.adria.internal";
+};
+
+zone "1.168.192.in-addr.arpa" {
+    type primary;
+    file "/etc/bind/zones/db.192.168.1";
+};</pre>
+  <p>
+    <code>type primary</code> vol dir que aquest servidor té l'original, escrit per tu. La
+    documentació antiga en diu <code>master</code>: és el mateix, però el nom vigent és
+    <code>primary</code>.
+  </p>
+</div>
+
+<!-- ============ 4 · EL SOA ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>La capçalera de tota zona: el registre SOA</h4>
+  <p>
+    Tot fitxer de zona comença igual: el TTL per defecte i un registre <strong>SOA</strong>
+    (<em>Start Of Authority</em>), que declara qui mana a la zona i cada quan s'ha de revisar.
+  </p>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Camp</th><th>Què vol dir</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Serial</strong></td><td>Número de versió. <strong>S'ha d'apujar a cada canvi</strong></td></tr>
+        <tr><td><strong>Refresh</strong></td><td>Cada quant el secundari pregunta si hi ha novetats</td></tr>
+        <tr><td><strong>Retry</strong></td><td>Cada quant torna a provar si ha fallat</td></tr>
+        <tr><td><strong>Expire</strong></td><td>Quan el secundari deixa de servir dades velles</td></tr>
+        <tr><td><strong>Minimum</strong></td><td>Quant es guarden les respostes negatives</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    El serial és el camp que més maldecaps dona: si no l'apuges, el secundari
+    <strong>no s'assabenta de res</strong>. El format recomanat és
+    <code>AAAAMMDDNN</code>.
+  </p>
+</div>
+
+<!-- ============ 5 · EXEMPLE DIRECTA ============ -->
+<div class="cq-block" data-kind="exemple">
+  <h4>Fitxer de zona directa</h4>
+  <p>Per a <code>adria.internal</code>, amb el servidor a la <code>192.168.1.8</code>:</p>
+<pre>$TTL 600
+@   IN  SOA ns1.adria.internal. admin.adria.internal. (
+            2026080101  <span class="c">; Serial</span>
+            3600        <span class="c">; Refresh</span>
+            1800        <span class="c">; Retry</span>
+            604800      <span class="c">; Expire</span>
+            600 )       <span class="c">; Minimum</span>
+
+@       IN  NS      ns1.adria.internal.
+ns1     IN  A       192.168.1.8
+www     IN  A       192.168.1.8
+portatil IN A       192.168.1.50
+intranet IN CNAME   www.adria.internal.
+@       IN  MX  10  correu.adria.internal.
+correu  IN  A       192.168.1.9
+@       IN  TXT     "Xarxa interna de proves"</pre>
+  <p>
+    La <code>@</code> vol dir «la zona sencera», aquí <code>adria.internal.</code>. I el correu
+    de l'administrador s'escriu amb un punt on aniria l'arrova:
+    <code>admin.adria.internal.</code> és <code>admin@adria.internal</code>.
+  </p>
+</div>
+
+<!-- ============ 6 · EL PUNT FINAL ============ -->
+<div class="cq-block" data-kind="recordatori">
+  <h4>El punt final no és decoració</h4>
+  <p>
+    Un nom acabat en punt és <strong>absolut</strong>: es fa servir tal com és. Un nom sense punt
+    és <strong>relatiu</strong>: BIND hi enganxa el nom de la zona al darrere.
+  </p>
+  <p>
+    Per això <code>www</code> dins de <code>adria.internal</code> vol dir
+    <code>www.adria.internal.</code>, però si escrius <code>www.adria.internal</code> sense punt,
+    acabes amb <code>www.adria.internal.adria.internal.</code>, que no existeix. És l'error més
+    freqüent de tots.
+  </p>
+</div>
+
+<!-- ============ 7 · REGISTRES ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>Els tipus de registre que faràs servir</h4>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Tipus</th><th>Per a què</th></tr></thead>
+      <tbody>
+        <tr><td><strong>A</strong></td><td>Nom → adreça IPv4</td></tr>
+        <tr><td><strong>AAAA</strong></td><td>Nom → adreça IPv6</td></tr>
+        <tr><td><strong>PTR</strong></td><td>Adreça → nom, a la zona inversa</td></tr>
+        <tr><td><strong>CNAME</strong></td><td>Àlies: un nom que apunta a un altre nom</td></tr>
+        <tr><td><strong>MX</strong></td><td>Qui rep el correu del domini, amb prioritat</td></tr>
+        <tr><td><strong>NS</strong></td><td>Quins servidors tenen l'autoritat de la zona</td></tr>
+        <tr><td><strong>TXT</strong></td><td>Text lliure. S'usa per a verificacions i antispam</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    Dues regles: un <strong>CNAME apunta a un nom</strong>, mai a una IP, i el
+    <strong>MX també</strong> ha d'apuntar a un nom que tingui el seu registre A.
+  </p>
+</div>
+
+<!-- ============ 8 · EXEMPLE INVERSA ============ -->
+<div class="cq-block" data-kind="exemple">
+  <h4>Fitxer de zona inversa</h4>
+  <p>Les mateixes màquines, al revés. Aquí el número de l'esquerra és l'últim octet:</p>
+<pre>$TTL 600
+@   IN  SOA ns1.adria.internal. admin.adria.internal. (
+            2026080101 3600 1800 604800 600 )
+
+@       IN  NS      ns1.adria.internal.
+8       IN  PTR     ns1.adria.internal.
+9       IN  PTR     correu.adria.internal.
+50      IN  PTR     portatil.adria.internal.</pre>
+  <p>
+    Els noms de la dreta van <strong>tots amb punt final</strong>: són d'una altra zona. I fixa't
+    que <code>www</code> no hi surt: la inversa dona <em>un</em> nom per adreça, i el bo és el de
+    la màquina, no el de l'àlies.
+  </p>
+</div>
+
+<!-- ============ 9 · PAS A PAS ============ -->
+<div class="cq-block" data-kind="pas a pas">
+  <h4>Crear i comprovar una zona</h4>
+  <ol class="cq-steps">
+    <li>
+      <p><strong>Crea la carpeta</strong> de les teves zones:</p>
+<pre>sudo mkdir -p /etc/bind/zones</pre>
+    </li>
+
+    <li>
+      <p><strong>Declara les dues zones</strong> a <code>named.conf.local</code> i escriu els dos fitxers, seguint els exemples d'aquesta pàgina.</p>
+    </li>
+
+    <li>
+      <p><strong>Valida cada zona per separat.</strong> El primer argument és el nom de la zona i el segon el fitxer:</p>
+<pre>sudo named-checkzone adria.internal \
+     /etc/bind/zones/db.adria.internal</pre>
+      <p>Ha de dir <code>OK</code> i el número de serial. Fes el mateix amb la inversa.</p>
+    </li>
+
+    <li>
+      <p><strong>Valida la configuració i recarrega</strong> sense aturar el servei:</p>
+<pre>sudo named-checkconf
+sudo rndc reload</pre>
+    </li>
+
+    <li>
+      <p><strong>Comprova-ho amb <code>dig</code></strong>, preguntant al teu servidor:</p>
+<pre>dig @192.168.1.8 www.adria.internal +short
+dig @192.168.1.8 adria.internal MX +short
+dig @192.168.1.8 -x 192.168.1.8 +short</pre>
+      <p>La resposta ha de portar la marca <code>aa</code>: ets tu qui té l'autoritat.</p>
+    </li>
+  </ol>
+</div>
+
+<!-- ============ 10 · BONES PRÀCTIQUES ============ -->
+<div class="cq-block" data-kind="bones pràctiques">
+  <h4>Criteris professionals</h4>
+  <ul>
+    <li><strong>Apuja el serial a cada canvi.</strong> Amb format de data, i sense excepcions.</li>
+    <li><strong><code>named-checkzone</code> abans de recarregar</strong>: una zona amb un error no es carrega i el servei es queda amb la versió antiga.</li>
+    <li><strong>Punt final</strong> a tots els noms absoluts. Repassa'ls un a un.</li>
+    <li><strong>Cada màquina, un A i el seu PTR.</strong> Molts serveis comproven la inversa.</li>
+    <li><strong>Àlies amb CNAME</strong>, no repetint el registre A: si canvia la IP, només toques un lloc.</li>
+  </ul>
+</div>
+
+<!-- ============ 11 · PROBLEMES ============ -->
+<div class="cq-block" data-kind="problemes">
+  <h4>Errors habituals</h4>
+  <dl class="cq-issues">
+    <dt><code>named-checkzone</code> es queixa de <code>NS record</code> o de l'SOA</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Falta el registre NS de la zona, o el nom del SOA no té punt final.</p>
+      <p><span class="lbl">Solució</span> Compara la capçalera amb l'exemple, caràcter a caràcter.</p>
+    </dd>
+
+    <dt>El nom es resol amb el domini repetit dues vegades</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Has escrit un nom absolut sense punt final.</p>
+      <p><span class="lbl">Solució</span> <code>dig @elteuservidor nom</code> i mira la resposta sencera: hi veuràs el nom duplicat.</p>
+    </dd>
+
+    <dt>Has editat la zona i el canvi no es veu</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> No has apujat el serial, o no has recarregat, o el client té la resposta a la memòria cau.</p>
+      <p><span class="lbl">Solució</span> Serial, <code>rndc reload</code> i pregunta amb <code>dig @servidor</code>, que se salta la cau del client.</p>
+    </dd>
+  </dl>
+</div>
+
+<!-- ============ 12 · RESUM ============ -->
+<div class="cq-block" data-kind="resum">
+  <h4>Resum</h4>
+  <ul>
+    <li>Cada xarxa vol <strong>dues zones</strong>: la directa i la inversa <code>in-addr.arpa</code>.</li>
+    <li>Les zones es declaren a <code>named.conf.local</code> amb <code>type primary</code>.</li>
+    <li>Tot fitxer de zona comença amb <code>$TTL</code> i un <strong>SOA</strong>; el <strong>serial s'apuja sempre</strong>.</li>
+    <li>A i PTR per a les màquines, CNAME per als àlies, MX per al correu, NS per als servidors.</li>
+    <li>El <strong>punt final</strong> distingeix un nom absolut d'un de relatiu.</li>
+  </ul>
+
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Comanda</th><th>Per a què serveix</th></tr></thead>
+      <tbody>
+        <tr><td><code>named-checkzone &lt;zona&gt; &lt;fitxer&gt;</code></td><td>Validar un fitxer de zona</td></tr>
+        <tr><td><code>rndc reload</code></td><td>Recarregar sense aturar el servei</td></tr>
+        <tr><td><code>rndc reload &lt;zona&gt;</code></td><td>Recarregar només una zona</td></tr>
+        <tr><td><code>dig @&lt;servidor&gt; &lt;nom&gt; &lt;tipus&gt;</code></td><td>Comprovar un registre concret</td></tr>
+        <tr><td><code>dig @&lt;servidor&gt; -x &lt;adreça&gt;</code></td><td>Comprovar la resolució inversa</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p style="margin-top:16px">
+    <strong>Següent:</strong> a <em>T9 · Primari i secundari</em> la teva zona deixarà de dependre
+    d'una sola màquina.
+  </p>
+</div>
+
+<!-- ============ 13 · QUIZ ============ -->
+<div class="cq-block" data-kind="quiz">
+  <h4>Comprova el que has après</h4>
+
+  <div class="cq-question" data-id="t8-inversa" data-type="single">
+    <div class="statement">Com es diu la zona inversa de la xarxa <code>192.168.1.0/24</code>?</div>
+    <button class="cq-option" data-correct="false"><code>192.168.1.in-addr.arpa</code></button>
+    <button class="cq-option" data-correct="true"><code>1.168.192.in-addr.arpa</code></button>
+    <button class="cq-option" data-correct="false"><code>0.1.168.192.in-addr.arpa</code></button>
+    <button class="cq-option" data-correct="false"><code>arpa.in-addr.192.168.1</code></button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+
+  <div class="cq-question" data-id="t8-serial" data-type="single">
+    <div class="statement">Has canviat un registre però no has tocat el serial. Què passa?</div>
+    <button class="cq-option" data-correct="false">La zona no es carrega i el servei s'atura</button>
+    <button class="cq-option" data-correct="true">El servidor secundari no detecta el canvi i continua amb les dades antigues</button>
+    <button class="cq-option" data-correct="false">El TTL passa a ser zero</button>
+    <button class="cq-option" data-correct="false">No passa res, el serial és informatiu</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+
+  <div class="cq-question" data-id="t8-punt" data-type="single">
+    <div class="statement">Dins de la zona <code>adria.internal</code>, què vol dir la línia <code>web IN A 192.168.1.20</code>?</div>
+    <button class="cq-option" data-correct="true">Que <code>web.adria.internal</code> té l'adreça <code>192.168.1.20</code></button>
+    <button class="cq-option" data-correct="false">Que <code>web</code> és un àlies de la zona</button>
+    <button class="cq-option" data-correct="false">Que és un error: falta el punt final</button>
+    <button class="cq-option" data-correct="false">Que <code>web</code> és el servidor de correu</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+
+  <div class="cq-question" data-id="t8-cname" data-type="single">
+    <div class="statement">Quina d'aquestes línies és incorrecta?</div>
+    <button class="cq-option" data-correct="true"><code>intranet IN CNAME 192.168.1.8</code></button>
+    <button class="cq-option" data-correct="false"><code>intranet IN CNAME www.adria.internal.</code></button>
+    <button class="cq-option" data-correct="false"><code>www IN A 192.168.1.8</code></button>
+    <button class="cq-option" data-correct="false"><code>8 IN PTR ns1.adria.internal.</code></button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+
+  <div class="cq-question" data-id="t8-afirmacions" data-type="multi">
+    <div class="statement">Selecciona totes les afirmacions certes</div>
+    <button class="cq-option" data-correct="true">El registre PTR viu a la zona inversa.</button>
+    <button class="cq-option" data-correct="true"><code>named-checkzone</code> es fa servir abans de recarregar.</button>
+    <button class="cq-option" data-correct="true">El correu de l'administrador del SOA porta un punt on aniria l'arrova.</button>
+    <button class="cq-option" data-correct="false">Un CNAME pot apuntar directament a una adreça IP.</button>
+    <button class="cq-option" data-correct="false">Les zones es declaren a <code>named.conf.options</code>.</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+</div>
+
+<script>
+  // Motor únic per a totes les preguntes single i multi.
+  document.querySelectorAll('.cq-question').forEach(function (question) {
+    var id = question.dataset.id;
+    if (!id) {
+      throw new Error('Falta data-id a una pregunta del quiz.');
+    }
+    var type = question.dataset.type;
+    if (type !== 'single' && type !== 'multi') {
+      throw new Error('data-type invàlid ("' + type + '") a la pregunta "' + id + '".');
+    }
+
+    var options = question.querySelectorAll('.cq-option');
+    var checkBtn = question.querySelector('.cq-check-btn');
+    var feedback = question.querySelector('.cq-feedback');
+
+    options.forEach(function (opt) {
+      opt.addEventListener('click', function () {
+        if (type === 'single') {
+          options.forEach(function (o) { o.classList.remove('cq-selected'); });
+          opt.classList.add('cq-selected');
+        } else {
+          opt.classList.toggle('cq-selected');
+        }
+      });
+    });
+
+    checkBtn.addEventListener('click', function () {
+      var allCorrect = true;
+      options.forEach(function (opt) {
+        var isCorrect = opt.dataset.correct === 'true';
+        var isSelected = opt.classList.contains('cq-selected');
+        opt.classList.remove('cq-selected');
+        if (isCorrect) {
+          opt.classList.add('cq-correct');
+        } else if (isSelected) {
+          opt.classList.add('cq-incorrect');
+        }
+        opt.disabled = true;
+        if (isCorrect !== isSelected) {
+          allCorrect = false;
+        }
+      });
+      feedback.textContent = allCorrect ? 'Correcte!' : 'Incorrecte, revisa les respostes marcades.';
+      feedback.className = 'cq-feedback ' + (allCorrect ? 'ok' : 'ko');
+      checkBtn.disabled = true;
+    });
+  });
+</script>
+
+</body>
+</html>

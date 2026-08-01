@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Serveis en Xarxa (0227) — CFGM SMX</title>
+<title>A7 · DHCP i DNS treballant junts — Serveis en Xarxa (0227)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -373,27 +373,218 @@
 </head>
 <body>
 <header class="cq-header">
-  <div class="eyebrow">CFGM SMX · Mòdul 0227</div>
-  <h1>Serveis en Xarxa</h1>
-  <p class="lede">Material del mòdul: teoria, activitats i comprovacions, resultat d'aprenentatge per resultat d'aprenentatge.</p>
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA2 · Activitat 7</div>
+  <h1>DHCP i DNS treballant junts</h1>
+  <p class="lede">El client s'endolla, rep adreça i DNS, resol els teus noms i surt a Internet.</p>
 </header>
 
-<!-- ============ RESULTATS D'APRENENTATGE ============ -->
-<div class="cq-block" data-kind="mòdul">
-  <h4>Resultats d'aprenentatge</h4>
-  <ul class="cq-index">
-    <li><a href="RA1/index.html">
-      <span class="ref">RA1</span>
-      <span class="ttl">Serveis de configuració dinàmica
-        <span class="sub">DHCP: adreçament, Kea, encaminament i NAT</span></span></a></li>
-    <li><a href="RA2/index.html">
-      <span class="ref">RA2</span>
-      <span class="ttl">Serveis de resolució de noms
-        <span class="sub">DNS: client, jerarquia, BIND 9, zones i transferències</span></span></a></li>
-  </ul>
-  <p style="margin-top:16px; color:var(--muted); font-size:.92rem">
-    Els resultats d'aprenentatge següents s'aniran publicant a mesura que estiguin llestos.
+<!-- ============ OBJECTIUS ============ -->
+<div class="cq-block" data-kind="objectius">
+  <h4>Què has de saber abans de començar</h4>
+  <p>
+    Del RA1: <strong>T3</strong> (Kea) i <strong>T4</strong> (encaminament i NAT). D'aquest RA:
+    <strong>T7</strong> i <strong>T8</strong>, i tenir feta l'activitat <strong>6</strong>.
+  </p>
+  <p>
+    Amb aquesta activitat aprendràs a integrar els dos serveis del mòdul: el DHCP reparteix la
+    configuració i, dins d'aquesta configuració, hi va el teu propi servidor DNS. El client no
+    s'ha de tocar.
   </p>
 </div>
+
+<!-- ============ ESCENARI ============ -->
+<div class="cq-block" data-kind="escenari">
+  <h4>Amb què treballaràs</h4>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Màquina</th><th>Targetes</th><th>Paper</th></tr></thead>
+      <tbody>
+        <tr><td>Ubuntu <strong>Server</strong></td><td>puigcastellar1 + personal1</td><td>DNS, DHCP i porta d'enllaç</td></tr>
+        <tr><td>Ubuntu <strong>Desktop</strong></td><td>només personal1</td><td>Client, sense configurar res</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    Comença amb una <strong>màquina nova</strong> a isardVDI i torna-hi a muntar el BIND de
+    l'activitat 6: amb el teu document al davant són cinc minuts, i és la millor manera de
+    comprovar que allò que vas escriure serveix.
+  </p>
+</div>
+
+<!-- ============ ENUNCIAT ============ -->
+<div class="cq-block" data-kind="enunciat">
+  <h4>Què has de fer</h4>
+  <ol>
+    <li>Deixar el servidor com al final de l'activitat 6: <code>192.168.1.8/24</code> a <code>personal1</code> i la teva zona funcionant.</li>
+    <li>Instal·lar <strong>Kea</strong> i repartir adreces per a la xarxa <code>192.168.1.0/24</code>, amb el rang que decideixis.</li>
+    <li>Repartir com a DNS <strong>el teu propi servidor</strong> i com a domini <code>elteunom.internal</code>.</li>
+    <li>Ampliar la zona amb els registres de la taula, i els seus PTR a la inversa.</li>
+    <li>Activar l'<strong>encaminament i el NAT</strong> perquè el client tingui Internet.</li>
+  </ol>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Nom</th><th>Tipus</th><th>Valor</th></tr></thead>
+      <tbody>
+        <tr><td><code>maquina1</code></td><td>A</td><td><code>192.168.1.20</code></td></tr>
+        <tr><td><code>servidor2</code></td><td>A</td><td><code>192.168.1.21</code></td></tr>
+        <tr><td><code>intranet</code></td><td>CNAME</td><td>Àlies de <code>maquina1</code></td></tr>
+        <tr><td>La zona</td><td>TXT</td><td>Un missatge breu teu</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ============ ON BUSCAR ============ -->
+<div class="cq-block" data-kind="enunciat">
+  <h4>D'on has de treure cada cosa</h4>
+  <p>Tot això ja ho has fet abans, en activitats diferents. Aquí ho ajuntes:</p>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Què has de fer</th><th>On ho tens</th></tr></thead>
+      <tbody>
+        <tr><td>BIND, zona directa i inversa</td><td>Teories <strong>T7</strong> i <strong>T8</strong>, activitat <strong>6</strong></td></tr>
+        <tr><td>Instal·lar i configurar Kea</td><td>Teoria <strong>T3</strong> del RA1</td></tr>
+        <tr><td>Opcions que reparteix el DHCP</td><td><code>domain-name-servers</code> i <code>domain-name</code>, a la T3</td></tr>
+        <tr><td>IP forwarding i NAT amb nftables</td><td>Teoria <strong>T4</strong> del RA1</td></tr>
+        <tr><td>Comprovar què ha rebut el client</td><td>Teoria <strong>T5</strong> d'aquest RA</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ============ RECORDATORI ============ -->
+<div class="cq-block" data-kind="recordatori">
+  <h4>Dos serveis, la mateixa regla</h4>
+  <p>
+    Ni Kea ni BIND han d'escoltar per <code>puigcastellar1</code>. Un DHCP furtiu deixa companys
+    sense adreça i un resolutor obert és un problema de seguretat. Tots dos serveis, només per
+    <code>personal1</code>.
+  </p>
+</div>
+
+<!-- ============ OBSERVACIÓ ============ -->
+<div class="cq-block" data-kind="observació">
+  <h4>Els dos serveis s'han de posar d'acord</h4>
+  <p>
+    <strong>El rang i els registres no s'han de trepitjar.</strong> Si Kea pot donar la
+    <code>192.168.1.20</code> a qualsevol portàtil, el nom <code>maquina1</code> apuntarà a una
+    màquina que no toca. Decideix on comença el rang i deixa les adreces amb nom fora.
+  </p>
+  <p>
+    <strong>Aquí no hi ha DNS dinàmic.</strong> Kea no escriu res a la teva zona: els noms els
+    poses tu a mà. Que un client rebi adreça no vol dir que tingui nom, i és el motiu pel qual
+    les màquines importants es reserven per MAC.
+  </p>
+</div>
+
+<!-- ============ COMPROVACIÓ ============ -->
+<div class="cq-block" data-kind="comprovació">
+  <h4>Com sabràs que ho has fet bé</h4>
+  <p>
+    Abans d'entregar, has de poder respondre <strong>sí</strong> a totes aquestes preguntes, amb
+    la sortida d'una comanda al davant:
+  </p>
+  <ul>
+    <li>El client, <strong>sense tocar-hi res</strong>, rep adreça del teu rang, la teva porta d'enllaç i el teu DNS.</li>
+    <li>Els registres del servidor mostren la concessió, i <code>resolvectl status</code> al client mostra el teu servidor i el teu domini.</li>
+    <li>Des del client es resolen <code>maquina1</code>, l'àlies <code>intranet</code>, el registre TXT i la inversa.</li>
+    <li>Des del client es resolen també noms d'Internet.</li>
+    <li>El client fa <code>ping</code> a una IP d'Internet i a un nom de domini.</li>
+  </ul>
+</div>
+
+<!-- ============ PROBLEMES ============ -->
+<div class="cq-block" data-kind="problemes">
+  <h4>Si alguna cosa no va</h4>
+  <dl class="cq-issues">
+    <dt>El client rep IP i DNS correctes, però no resol els teus noms</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Gairebé sempre, el domini. Si l'has batejat <code>.local</code>, la consulta se'n va per mDNS i no arriba al teu servidor.</p>
+      <p><span class="lbl">Solució</span> Fes servir <code>.internal</code>. Comprova primer amb <code>dig @elteuservidor nom</code>: si el servidor respon i el client no, el problema és del client, no de la zona.</p>
+    </dd>
+
+    <dt>El client no fa cas del DNS que li has repartit</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> El fitxer <code>/etc/resolv.conf</code> del client no apunta al servei de systemd-resolved.</p>
+      <p><span class="lbl">Solució</span> Comprova <code>resolvectl status</code> i que <code>/etc/resolv.conf</code> sigui l'enllaç que gestiona el sistema. Si algú l'ha substituït per un fitxer normal, aquell fitxer mana.</p>
+    </dd>
+
+    <dt>Resol noms però no navega</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Falta l'encaminament o el NAT.</p>
+      <p><span class="lbl">Solució</span> Prova per capes des del client: porta d'enllaç, <code>ping</code> al servidor, <code>ping</code> a una IP d'Internet i <code>ping</code> a un nom.</p>
+    </dd>
+
+    <dt>Un nom apunta a la màquina equivocada</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> L'adreça del registre cau dins del rang que reparteix Kea.</p>
+      <p><span class="lbl">Solució</span> Treu-la del rang o reserva-la per MAC, i apuja el serial de la zona.</p>
+    </dd>
+  </dl>
+</div>
+
+<!-- ============ LLIURAMENT ============ -->
+<div class="cq-block" data-kind="lliurament">
+  <h4>Què has d'entregar</h4>
+  <p>
+    Un <strong>document tècnic</strong> on expliquis tot el que has anat fent, amb els teus
+    fitxers de configuració i les captures del resultat.
+  </p>
+  <p>
+    Respon-hi també, amb les teves paraules: <strong>per què el client acaba fent servir el teu
+    DNS sense que ningú l'hi hagi configurat?</strong>
+  </p>
+</div>
+
+<script>
+  // Motor únic per a totes les preguntes single i multi.
+  document.querySelectorAll('.cq-question').forEach(function (question) {
+    var id = question.dataset.id;
+    if (!id) {
+      throw new Error('Falta data-id a una pregunta del quiz.');
+    }
+    var type = question.dataset.type;
+    if (type !== 'single' && type !== 'multi') {
+      throw new Error('data-type invàlid ("' + type + '") a la pregunta "' + id + '".');
+    }
+
+    var options = question.querySelectorAll('.cq-option');
+    var checkBtn = question.querySelector('.cq-check-btn');
+    var feedback = question.querySelector('.cq-feedback');
+
+    options.forEach(function (opt) {
+      opt.addEventListener('click', function () {
+        if (type === 'single') {
+          options.forEach(function (o) { o.classList.remove('cq-selected'); });
+          opt.classList.add('cq-selected');
+        } else {
+          opt.classList.toggle('cq-selected');
+        }
+      });
+    });
+
+    checkBtn.addEventListener('click', function () {
+      var allCorrect = true;
+      options.forEach(function (opt) {
+        var isCorrect = opt.dataset.correct === 'true';
+        var isSelected = opt.classList.contains('cq-selected');
+        opt.classList.remove('cq-selected');
+        if (isCorrect) {
+          opt.classList.add('cq-correct');
+        } else if (isSelected) {
+          opt.classList.add('cq-incorrect');
+        }
+        opt.disabled = true;
+        if (isCorrect !== isSelected) {
+          allCorrect = false;
+        }
+      });
+      feedback.textContent = allCorrect ? 'Correcte!' : 'Incorrecte, revisa les respostes marcades.';
+      feedback.className = 'cq-feedback ' + (allCorrect ? 'ok' : 'ko');
+      checkBtn.disabled = true;
+    });
+  });
+</script>
+
 </body>
 </html>

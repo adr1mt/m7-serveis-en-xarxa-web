@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Serveis en Xarxa (0227) — CFGM SMX</title>
+<title>RA2 · Serveis en Xarxa (0227) — Serveis en Xarxa (0227)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -375,25 +375,137 @@
 <header class="cq-header">
   <div class="eyebrow">CFGM SMX · Mòdul 0227</div>
   <h1>Serveis en Xarxa</h1>
-  <p class="lede">Material del mòdul: teoria, activitats i comprovacions, resultat d'aprenentatge per resultat d'aprenentatge.</p>
+  <p class="lede">RA2 · Instal·lació de serveis de resolució de noms (DNS)</p>
 </header>
 
-<!-- ============ RESULTATS D'APRENENTATGE ============ -->
-<div class="cq-block" data-kind="mòdul">
-  <h4>Resultats d'aprenentatge</h4>
+<div class="cq-block" data-kind="teoria">
+  <h4>Teoria</h4>
+  <p>Llegeix-les en ordre. Cada pàgina acaba amb una guia pas a pas i un test per comprovar què has entès.</p>
   <ul class="cq-index">
-    <li><a href="RA1/index.html">
-      <span class="ref">RA1</span>
-      <span class="ttl">Serveis de configuració dinàmica
-        <span class="sub">DHCP: adreçament, Kea, encaminament i NAT</span></span></a></li>
-    <li><a href="RA2/index.html">
-      <span class="ref">RA2</span>
-      <span class="ttl">Serveis de resolució de noms
-        <span class="sub">DNS: client, jerarquia, BIND 9, zones i transferències</span></span></a></li>
+    <li><a href="teoria/t5-noms-i-resolucio.html">
+      <span class="ref">T5</span>
+      <span class="ttl">Noms i resolució al client
+        <span class="sub">De /etc/hosts a systemd-resolved</span></span></a></li>
+    <li><a href="teoria/t6-arbre-dns.html">
+      <span class="ref">T6</span>
+      <span class="ttl">L'arbre del DNS
+        <span class="sub">Jerarquia, zones, delegació i TTL</span></span></a></li>
+    <li><a href="teoria/t7-servidor-bind.html">
+      <span class="ref">T7</span>
+      <span class="ttl">Servidor DNS amb BIND 9
+        <span class="sub">Resolutor amb memòria cau per a la LAN</span></span></a></li>
+    <li><a href="teoria/t8-zones-i-registres.html">
+      <span class="ref">T8</span>
+      <span class="ttl">Zones i registres
+        <span class="sub">Zona directa, inversa i tipus de registre</span></span></a></li>
+    <li><a href="teoria/t9-primari-secundari.html">
+      <span class="ref">T9</span>
+      <span class="ttl">Primari i secundari
+        <span class="sub">Transferències de zona i redundància</span></span></a></li>
   </ul>
-  <p style="margin-top:16px; color:var(--muted); font-size:.92rem">
-    Els resultats d'aprenentatge següents s'aniran publicant a mesura que estiguin llestos.
+</div>
+
+<div class="cq-block" data-kind="activitats">
+  <h4>Activitats</h4>
+  <p>
+    Cada activitat es fa sobre una <strong>màquina nova</strong> a isardVDI, amb les targetes
+    <code>puigcastellar1</code> i <code>personal1</code>. La xarxa interna d'aquest RA és la
+    <code>192.168.1.0/24</code>.
+  </p>
+  <ul class="cq-index">
+    <li><a href="activitats/a5-client-dns.html">
+      <span class="ref">A5</span>
+      <span class="ttl">El client davant dels noms
+        <span class="sub">Investigar com resol la teva màquina</span></span></a></li>
+    <li><a href="activitats/a6-servidor-bind.html">
+      <span class="ref">A6</span>
+      <span class="ttl">Servidor DNS amb BIND 9
+        <span class="sub">Resolutor i zona pròpia, directa i inversa</span></span></a></li>
+    <li><a href="activitats/a7-kea-i-bind.html">
+      <span class="ref">A7</span>
+      <span class="ttl">DHCP i DNS treballant junts
+        <span class="sub">Kea reparteix el teu DNS i el client navega</span></span></a></li>
+    <li><a href="activitats/a8-zona-secundaria.html">
+      <span class="ref">A8</span>
+      <span class="ttl">Zona secundària per parelles
+        <span class="sub">Transferència de zona entre dos servidors</span></span></a></li>
+  </ul>
+</div>
+
+<div class="cq-block" data-kind="ordre recomanat">
+  <h4>En quin ordre fer-ho</h4>
+  <p>La teoria i les activitats estan pensades per alternar-se, no per fer-les en dos blocs separats:</p>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Primer llegeix</th><th>I després fes</th></tr></thead>
+      <tbody>
+        <tr><td>T5 · T6</td><td>A5 — el client davant dels noms</td></tr>
+        <tr><td>T7 · T8</td><td>A6 — servidor DNS amb BIND</td></tr>
+        <tr><td>—</td><td>A7 — DHCP i DNS junts</td></tr>
+        <tr><td>T9</td><td>A8 — zona secundària, per parelles</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="cq-block" data-kind="recordatori">
+  <h4>El domini de la teva xarxa acaba en .internal</h4>
+  <p>
+    A tot el RA2 els dominis interns es diuen <code>elteunom.internal</code>. Evita
+    <code>.local</code>: està reservat per a mDNS i fa que els clients no arribin a preguntar al
+    teu servidor. Ho tens explicat a la <strong>T5</strong>.
   </p>
 </div>
+
+<script>
+  // Motor únic per a totes les preguntes single i multi.
+  document.querySelectorAll('.cq-question').forEach(function (question) {
+    var id = question.dataset.id;
+    if (!id) {
+      throw new Error('Falta data-id a una pregunta del quiz.');
+    }
+    var type = question.dataset.type;
+    if (type !== 'single' && type !== 'multi') {
+      throw new Error('data-type invàlid ("' + type + '") a la pregunta "' + id + '".');
+    }
+
+    var options = question.querySelectorAll('.cq-option');
+    var checkBtn = question.querySelector('.cq-check-btn');
+    var feedback = question.querySelector('.cq-feedback');
+
+    options.forEach(function (opt) {
+      opt.addEventListener('click', function () {
+        if (type === 'single') {
+          options.forEach(function (o) { o.classList.remove('cq-selected'); });
+          opt.classList.add('cq-selected');
+        } else {
+          opt.classList.toggle('cq-selected');
+        }
+      });
+    });
+
+    checkBtn.addEventListener('click', function () {
+      var allCorrect = true;
+      options.forEach(function (opt) {
+        var isCorrect = opt.dataset.correct === 'true';
+        var isSelected = opt.classList.contains('cq-selected');
+        opt.classList.remove('cq-selected');
+        if (isCorrect) {
+          opt.classList.add('cq-correct');
+        } else if (isSelected) {
+          opt.classList.add('cq-incorrect');
+        }
+        opt.disabled = true;
+        if (isCorrect !== isSelected) {
+          allCorrect = false;
+        }
+      });
+      feedback.textContent = allCorrect ? 'Correcte!' : 'Incorrecte, revisa les respostes marcades.';
+      feedback.className = 'cq-feedback ' + (allCorrect ? 'ok' : 'ko');
+      checkBtn.disabled = true;
+    });
+  });
+</script>
+
 </body>
 </html>

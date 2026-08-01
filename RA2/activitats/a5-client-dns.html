@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Serveis en Xarxa (0227) — CFGM SMX</title>
+<title>A5 · El client davant dels noms — Serveis en Xarxa (0227)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -373,27 +373,206 @@
 </head>
 <body>
 <header class="cq-header">
-  <div class="eyebrow">CFGM SMX · Mòdul 0227</div>
-  <h1>Serveis en Xarxa</h1>
-  <p class="lede">Material del mòdul: teoria, activitats i comprovacions, resultat d'aprenentatge per resultat d'aprenentatge.</p>
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA2 · Activitat 5</div>
+  <h1>El client davant dels noms</h1>
+  <p class="lede">Investigar com resol la teva màquina abans de muntar cap servidor.</p>
 </header>
 
-<!-- ============ RESULTATS D'APRENENTATGE ============ -->
-<div class="cq-block" data-kind="mòdul">
-  <h4>Resultats d'aprenentatge</h4>
-  <ul class="cq-index">
-    <li><a href="RA1/index.html">
-      <span class="ref">RA1</span>
-      <span class="ttl">Serveis de configuració dinàmica
-        <span class="sub">DHCP: adreçament, Kea, encaminament i NAT</span></span></a></li>
-    <li><a href="RA2/index.html">
-      <span class="ref">RA2</span>
-      <span class="ttl">Serveis de resolució de noms
-        <span class="sub">DNS: client, jerarquia, BIND 9, zones i transferències</span></span></a></li>
-  </ul>
-  <p style="margin-top:16px; color:var(--muted); font-size:.92rem">
-    Els resultats d'aprenentatge següents s'aniran publicant a mesura que estiguin llestos.
+<!-- ============ OBJECTIUS ============ -->
+<div class="cq-block" data-kind="objectius">
+  <h4>Què has de saber abans de començar</h4>
+  <p>
+    Teoria <strong>T5</strong> (noms i resolució al client) i <strong>T6</strong> (l'arbre del
+    DNS).
+  </p>
+  <p>
+    Amb aquesta activitat aprendràs a fer de detectiu amb la resolució de noms: descobriràs quin
+    servidor fa servir la teva màquina, com respon i com es comporten els servidors públics
+    d'Internet.
   </p>
 </div>
+
+<!-- ============ ESCENARI ============ -->
+<div class="cq-block" data-kind="escenari">
+  <h4>Amb què treballaràs</h4>
+  <p>
+    Una màquina virtual <strong>Ubuntu nova</strong> a isardVDI amb la targeta
+    <code>puigcastellar1</code>, que rep la configuració del DHCP del centre. Aquí no muntes cap
+    servei: només observes i documentes.
+  </p>
+  <p>
+    Totes les respostes s'han d'acompanyar de la <strong>sortida de la comanda</strong> que les
+    justifica. Una resposta sense la seva captura no compta.
+  </p>
+</div>
+
+<!-- ============ ENUNCIAT 1 ============ -->
+<div class="cq-block" data-kind="enunciat">
+  <h4>1 · Com està configurada la teva màquina</h4>
+  <ol>
+    <li>Quin servidor DNS fa servir i <strong>d'on l'ha tret</strong>? Quin és el domini de cerca?</li>
+    <li>Què hi ha a <code>/etc/resolv.conf</code>? Per què hi surt aquella adreça i no la del servidor?</li>
+    <li>Quin procés escolta al port 53 de la teva màquina? Comprova-ho.</li>
+    <li>Quin percentatge d'encerts té la memòria cau ara mateix? Fes unes quantes consultes i torna-ho a mirar.</li>
+    <li>Quina línia de <code>/etc/nsswitch.conf</code> decideix l'ordre de resolució, i què vol dir?</li>
+  </ol>
+</div>
+
+<!-- ============ ENUNCIAT 2 ============ -->
+<div class="cq-block" data-kind="enunciat">
+  <h4>2 · Les eines de consulta</h4>
+  <ol>
+    <li>Resol <code>es.wikipedia.org</code> amb <code>host</code>, primer amb el DNS del centre i després amb <code>1.1.1.1</code>. Hi ha diferències?</li>
+    <li>Amb <code>dig</code>: com s'especifica el servidor? I que la consulta vagi per TCP? I que et doni qualsevol tipus de registre?</li>
+    <li>Esbrina quins servidors DNS són responsables de <code>xeill.net</code>, <code>wikipedia.org</code> i <code>fsf.org</code>.</li>
+    <li>Pregunta a un d'aquests servidors per un nom que <strong>no</strong> sigui de la seva zona. Respon? Què vol dir això?</li>
+    <li>Resol el domini <code>xn--j1ay.xn--p1ai</code> i mira com el mostra el navegador. Què és el <em>punycode</em>?</li>
+  </ol>
+</div>
+
+<!-- ============ ENUNCIAT 3 ============ -->
+<div class="cq-block" data-kind="enunciat">
+  <h4>3 · Els servidors públics</h4>
+  <ol>
+    <li>Consulta el mateix nom a <code>1.1.1.1</code>, <code>9.9.9.9</code> i <code>8.8.8.8</code> i compara el <code>Query time</code>. Repeteix-ho i explica per què canvia.</li>
+    <li>On és físicament cadascun? Pots fer servir <a href="https://geoiptool.com/es">geoiptool</a>.</li>
+    <li>Fes una llista de tres resolutors públics: qui els manté i amb quin interès.</li>
+    <li>On es pot obtenir la llista oficial dels <strong>servidors arrel</strong>?</li>
+    <li>Segueix la resolució de <code>moodle.elpuig.xeill.net</code> des de l'arrel i explica els salts que fa.</li>
+  </ol>
+</div>
+
+<!-- ============ ON BUSCAR ============ -->
+<div class="cq-block" data-kind="enunciat">
+  <h4>D'on has de treure cada cosa</h4>
+  <p>Les comandes no te les donem fetes; sí que et diem on trobar-les:</p>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Què has de fer</th><th>On ho tens</th></tr></thead>
+      <tbody>
+        <tr><td>Estat, cau i consultes del client</td><td>Teoria <strong>T5</strong>, taula del resum</td></tr>
+        <tr><td>Opcions de <code>dig</code></td><td><code>man dig</code></td></tr>
+        <tr><td>Qui escolta a un port</td><td><code>ss --help</code>, del RA1</td></tr>
+        <tr><td>Seguir la resolució des de l'arrel</td><td>Teoria <strong>T6</strong></td></tr>
+        <tr><td>Servidors arrel</td><td><a href="https://root-servers.org">root-servers.org</a></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ============ OBSERVACIÓ ============ -->
+<div class="cq-block" data-kind="observació">
+  <h4>Compte amb la memòria cau quan comparis temps</h4>
+  <p>
+    Si consultes dues vegades el mateix nom, la segona anirà molt més ràpid perquè la resposta ja
+    és a la memòria cau, i no estaràs comparant servidors sinó cau contra xarxa.
+  </p>
+  <p>
+    Per comparar de veritat, pregunta directament a cada servidor amb <code>dig @adreça</code>,
+    fes servir un nom diferent a cada prova o buida la cau entre consulta i consulta. Explica al
+    document quina d'aquestes tres coses has fet.
+  </p>
+</div>
+
+<!-- ============ COMPROVACIÓ ============ -->
+<div class="cq-block" data-kind="comprovació">
+  <h4>Com sabràs que ho has fet bé</h4>
+  <p>Abans d'entregar, repassa que el document compleixi això:</p>
+  <ul>
+    <li>Cada resposta va acompanyada de la comanda i de la seva sortida.</li>
+    <li>Has distingit el servei local <code>127.0.0.53</code> del servidor DNS de veritat.</li>
+    <li>Has trobat almenys un servidor que <strong>no</strong> et resol noms de fora de la seva zona, i saps per què.</li>
+    <li>Els temps de resposta que compares són comparables entre ells.</li>
+    <li>Expliques els salts de la resolució, no només enganxes la sortida.</li>
+  </ul>
+</div>
+
+<!-- ============ PROBLEMES ============ -->
+<div class="cq-block" data-kind="problemes">
+  <h4>Si alguna cosa no va</h4>
+  <dl class="cq-issues">
+    <dt><code>dig</code> o <code>host</code> no existeixen</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Falta el paquet d'eines de consulta.</p>
+      <p><span class="lbl">Solució</span> Instal·la <code>dnsutils</code>.</p>
+    </dd>
+
+    <dt>Totes les consultes triguen el mateix, vinguin d'on vinguin</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Estàs preguntant sempre al servei local, que respon de la cau.</p>
+      <p><span class="lbl">Solució</span> Fes servir <code>dig @adreça</code> per anar directe al servidor.</p>
+    </dd>
+
+    <dt>Un servidor públic no et respon</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> La xarxa del centre pot filtrar el port 53 cap a fora.</p>
+      <p><span class="lbl">Solució</span> Documenta-ho: també és un resultat. Prova amb un altre servidor i digues què has observat.</p>
+    </dd>
+  </dl>
+</div>
+
+<!-- ============ LLIURAMENT ============ -->
+<div class="cq-block" data-kind="lliurament">
+  <h4>Què has d'entregar</h4>
+  <p>
+    Un <strong>document tècnic</strong> on expliquis tot el que has anat fent, amb les captures
+    del resultat.
+  </p>
+  <p>
+    Respon-hi també, amb les teves paraules: <strong>quina diferència hi ha entre el servidor que
+    surt a <code>/etc/resolv.conf</code> i el que et resol els noms de veritat?</strong>
+  </p>
+</div>
+
+<script>
+  // Motor únic per a totes les preguntes single i multi.
+  document.querySelectorAll('.cq-question').forEach(function (question) {
+    var id = question.dataset.id;
+    if (!id) {
+      throw new Error('Falta data-id a una pregunta del quiz.');
+    }
+    var type = question.dataset.type;
+    if (type !== 'single' && type !== 'multi') {
+      throw new Error('data-type invàlid ("' + type + '") a la pregunta "' + id + '".');
+    }
+
+    var options = question.querySelectorAll('.cq-option');
+    var checkBtn = question.querySelector('.cq-check-btn');
+    var feedback = question.querySelector('.cq-feedback');
+
+    options.forEach(function (opt) {
+      opt.addEventListener('click', function () {
+        if (type === 'single') {
+          options.forEach(function (o) { o.classList.remove('cq-selected'); });
+          opt.classList.add('cq-selected');
+        } else {
+          opt.classList.toggle('cq-selected');
+        }
+      });
+    });
+
+    checkBtn.addEventListener('click', function () {
+      var allCorrect = true;
+      options.forEach(function (opt) {
+        var isCorrect = opt.dataset.correct === 'true';
+        var isSelected = opt.classList.contains('cq-selected');
+        opt.classList.remove('cq-selected');
+        if (isCorrect) {
+          opt.classList.add('cq-correct');
+        } else if (isSelected) {
+          opt.classList.add('cq-incorrect');
+        }
+        opt.disabled = true;
+        if (isCorrect !== isSelected) {
+          allCorrect = false;
+        }
+      });
+      feedback.textContent = allCorrect ? 'Correcte!' : 'Incorrecte, revisa les respostes marcades.';
+      feedback.className = 'cq-feedback ' + (allCorrect ? 'ok' : 'ko');
+      checkBtn.disabled = true;
+    });
+  });
+</script>
+
 </body>
 </html>
