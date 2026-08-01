@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>T1.3 · Servidor DHCP amb Kea — Serveis en Xarxa (0227)</title>
+<title>T4.1 · Com viatja un correu electrònic — Serveis en Xarxa (0227)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -388,233 +388,189 @@
 </head>
 <body>
 <header class="cq-header">
-  <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · T1.3</div>
-  <h1>Servidor DHCP amb Kea</h1>
-  <p class="lede">Muntar, configurar i comprovar el servidor DHCP que fan servir avui les empreses.</p>
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA4 · T4.1</div>
+  <h1>Com viatja un correu electrònic</h1>
+  <p class="lede">Els actors, els protocols i el camí exacte que segueix un missatge del remitent al destinatari.</p>
 </header>
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
   <h4>Què sabràs fer en acabar</h4>
   <ul>
-    <li>Instal·lar i posar en marxa el servidor Kea.</li>
-    <li>Entendre cada bloc del fitxer <code>kea-dhcp4.conf</code>.</li>
-    <li>Definir un rang d'adreces i calcular-ne la mida.</li>
-    <li>Fer una reserva d'IP per adreça MAC.</li>
-    <li>Llegir els registres per veure les concessions.</li>
+    <li>Distingir el <strong>MUA</strong>, el <strong>MTA</strong> i el <strong>MDA</strong>, i posar-hi un exemple real de cada un.</li>
+    <li>Associar cada protocol de correu amb el seu port.</li>
+    <li>Explicar la diferència real entre <strong>IMAP</strong> i <strong>POP3</strong>.</li>
+    <li>Descriure el viatge complet d'un missatge, incloent-hi la consulta al DNS.</li>
+    <li>Llegir els codis d'una conversa SMTP.</li>
   </ul>
 </div>
 
-<!-- ============ 2 · QUÈ ÉS KEA ============ -->
+<!-- ============ 2 · ELS TRES ACTORS ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Per què Kea i no una altra cosa</h4>
+  <h4>Tres papers, tres programes diferents</h4>
   <p>
-    Durant vint anys, el servidor DHCP de Linux va ser <code>isc-dhcp-server</code>. La
-    fundació que el mantenia el va donar per acabat el 2022 i el va substituir per
-    <strong>Kea</strong>, del mateix equip. És el que ve als repositoris d'Ubuntu i el que
-    trobaràs a les empreses.
+    Cap correu viatja sol: sempre hi intervenen tres tipus de programari, cadascun amb una feina
+    concreta. Confondre'ls és l'origen de la majoria de dubtes d'aquest RA.
   </p>
+  <ul>
+    <li><strong>MUA</strong> (<em>Mail User Agent</em>): el client que fas servir per escriure i llegir. Exemples: Thunderbird, Outlook, l'app de Gmail.</li>
+    <li><strong>MTA</strong> (<em>Mail Transfer Agent</em>): el servidor que transporta el correu entre dominis per SMTP. Exemples: Postfix, Exim.</li>
+    <li><strong>MDA</strong> (<em>Mail Delivery Agent</em>): qui rep el correu de l'MTA i el desa a la bústia fins que el MUA el consulta. Exemple: Dovecot.</li>
+  </ul>
   <p>
-    Si busques per Internet, veuràs molta documentació d'<code>isc-dhcp-server</code> amb una
-    sintaxi diferent. <strong>No et serveix.</strong> Comprova sempre que el que llegeixes
-    parla de Kea.
-  </p>
-  <p>
-    Kea es configura amb un fitxer <strong>JSON</strong>, i té un servei separat per a cada
-    feina. A nosaltres només ens cal el d'IPv4: <code>kea-dhcp4-server</code>.
+    Postfix i Dovecot són programes separats que s'instal·len a la mateixa màquina. N'hi ha que
+    fan les dues feines alhora, com el Stalwart de la T4.2, però continuen sent dos papers.
   </p>
 </div>
 
-<!-- ============ 3 · ANATOMIA DEL FITXER ============ -->
+<!-- ============ 3 · PROTOCOLS I PORTS ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>El fitxer de configuració, bloc a bloc</h4>
+  <h4>Un protocol per a cada tram del viatge</h4>
   <p>
-    Tot viu a <code>/etc/kea/kea-dhcp4.conf</code>. Sembla llarg, però només hi ha quatre coses
-    que hagis de tocar:
+    El correu no fa servir un sol protocol de cap a cap: n'hi ha un per enviar i un altre per
+    recollir, i cadascun té la seva versió xifrada.
   </p>
   <div class="cq-tablewrap">
     <table class="cq-table">
-      <thead><tr><th>Bloc</th><th>Què hi poses</th></tr></thead>
+      <thead><tr><th>Protocol</th><th>Port</th><th>Per a què serveix</th></tr></thead>
       <tbody>
-        <tr><td><code>interfaces-config</code></td><td>Per quina targeta escolta el servidor</td></tr>
-        <tr><td><code>subnet</code></td><td>La xarxa que gestiona, amb màscara</td></tr>
-        <tr><td><code>pools</code></td><td>El rang d'adreces que pot repartir</td></tr>
-        <tr><td><code>option-data</code></td><td>Porta d'enllaç, DNS i nom de domini</td></tr>
+        <tr><td>SMTP</td><td>25</td><td>Enviar correu entre servidors (MTA↔MTA)</td></tr>
+        <tr><td>SMTP submission</td><td>587 / 465</td><td>El client envia al seu propi servidor (MUA→MTA)</td></tr>
+        <tr><td>IMAP / IMAPS</td><td>143 / 993</td><td>Consultar el correu deixant-lo al servidor</td></tr>
+        <tr><td>POP3 / POP3S</td><td>110 / 995</td><td>Baixar el correu al dispositiu</td></tr>
       </tbody>
     </table>
   </div>
   <p>
-    La resta (<code>control-socket</code>, <code>lease-database</code>) ve donada i no cal
-    tocar-la: és on Kea guarda quines adreces té concedides.
+    El 25 i la submission fan la mateixa feina —parlar SMTP— però amb un client diferent a
+    l'altra banda: el 25 és de servidor a servidor, la submission és del teu client cap al teu
+    servidor. Té dos ports: el <strong>587</strong> comença en clar i puja a TLS amb
+    <code>STARTTLS</code>; el <strong>465</strong> ja neix xifrat. Avui es prefereix el 465.
   </p>
 </div>
 
-<!-- ============ 4 · EXEMPLE ============ -->
+<!-- ============ 4 · IMAP VS POP3 ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>IMAP i POP3: es queda o es baixa</h4>
+  <p>
+    La diferència no és de seguretat, és de <strong>on viu el correu</strong>. Amb IMAP el missatge
+    es queda al servidor i el client només en mostra una còpia sincronitzada; amb POP3 el client el
+    baixa i, de sèrie, l'esborra del servidor.
+  </p>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th></th><th>IMAP</th><th>POP3</th></tr></thead>
+      <tbody>
+        <tr><td>El correu viu a</td><td>El servidor</td><td>El dispositiu</td></tr>
+        <tr><td>Múltiples dispositius</td><td>Sincronitzats</td><td>Cadascun amb el seu tros</td></tr>
+        <tr><td>Ús actual</td><td>L'habitual</td><td>Casos concrets, un sol dispositiu</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    Per això mòbil, portàtil i webmail mostren els mateixos correus llegits amb IMAP: tots miren
+    el mateix servidor. Amb POP3, el primer dispositiu que baixa el missatge se l'emporta.
+  </p>
+</div>
+
+<!-- ============ 5 · EXEMPLE: DIÀLEG SMTP ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h4>Una configuració completa i mínima</h4>
-  <p>Xarxa <code>192.168.1.0/24</code>, servidor a la <code>.1</code>, repartint de la 100 a la 200:</p>
-<pre>{
-"Dhcp4": {
-  "interfaces-config": {
-    "interfaces": [ "enp2s0" ]              <span class="c">// targeta personal1</span>
-  },
-  "control-socket": {
-    "socket-type": "unix",
-    "socket-name": "/run/kea/kea4-ctrl-socket"
-  },
-  "lease-database": { "type": "memfile", "lfc-interval": 3600 },
-
-  "valid-lifetime": 600,                    <span class="c">// durada de la concessió</span>
-  "max-valid-lifetime": 7200,
-
-  "subnet4": [
-    {
-      "id": 1,
-      "subnet": "192.168.1.0/24",
-      "pools": [ { "pool": "192.168.1.100 - 192.168.1.200" } ],
-      "option-data": [
-        { "name": "routers",             "data": "192.168.1.1" },
-        { "name": "domain-name-servers", "data": "9.9.9.9"     },
-        { "name": "domain-name",         "data": "adria.internal" }
-      ]
-    }
-  ]
-}
-}</pre>
+  <h4>Una conversa SMTP vista per dins</h4>
   <p>
-    <strong>Compte amb les comes i les claus.</strong> A JSON, cada element d'una llista en porta
-    una menys l'últim. La que falta i la clau sense tancar deixen el servei sense arrencar, i és
-    l'error número u: valida sempre el fitxer abans de reiniciar.
+    Igual que amb FTP a la T3.1, darrere de "s'ha enviat el correu" hi ha un diàleg de text amb
+    ordres i codis. Aquest és el que fa un MTA en entregar un missatge a un altre:
+  </p>
+<pre><span class="o">220 mail.personal.internal ESMTP Postfix</span>
+EHLO puigcastellar.internal
+<span class="o">250-mail.personal.internal</span>
+<span class="o">250-PIPELINING</span>
+<span class="o">250-STARTTLS</span>
+<span class="o">250 SMTPUTF8</span>
+MAIL FROM:&lt;anna@puigcastellar.internal&gt;
+<span class="o">250 2.1.0 Ok</span>
+RCPT TO:&lt;bruno@personal.internal&gt;
+<span class="o">250 2.1.5 Ok</span>
+DATA
+<span class="o">354 Envia el contingut i acaba amb &lt;CRLF&gt;.&lt;CRLF&gt;</span>
+Subject: Reunió de dimarts
+<span class="c"># ... capçaleres i cos del missatge ...</span>
+.
+<span class="o">250 2.0.0 Ok: queued as A1B2C3</span>
+QUIT
+<span class="o">221 2.0.0 Bye</span></pre>
+  <p>
+    <code>MAIL FROM</code> declara el remitent, <code>RCPT TO</code> el destinatari, i
+    <code>DATA</code> obre l'enviament del contingut: el punt sol en una línia el tanca. Cap
+    d'aquestes ordres xifra res per si sola; per això s'hi afegeix TLS per sobre.
   </p>
 </div>
 
-<!-- ============ 5 · CALCULAR EL RANG ============ -->
-<div class="cq-block" data-kind="teoria">
-  <h4>Quantes adreces necessites</h4>
+<!-- ============ 6 · CAS REAL: EL VIATGE COMPLET ============ -->
+<div class="cq-block" data-kind="cas real">
+  <h4>D'anna a bruno, pas a pas</h4>
   <p>
-    Les activitats et demanaran rangs per a un nombre concret d'equips. El càlcul és una resta,
-    però has de comptar bé: <strong>els dos extrems del rang hi entren</strong>.
+    <code>anna@puigcastellar.internal</code> envia un correu a
+    <code>bruno@personal.internal</code>. El seu MUA no sap on és <code>personal.internal</code>:
+    només parla amb el MTA de casa, per submission (port 587 o 465).
   </p>
   <p>
-    De la <code>.100</code> a la <code>.200</code> hi ha <code>200 − 100 + 1 = 101</code>
-    adreces. Si en necessites exactament 99, el rang va de la <code>.100</code> a la
-    <code>.198</code>.
+    El MTA de <code>puigcastellar.internal</code> ha de trobar qui rep correu per a
+    <code>personal.internal</code>. Fa exactament el que ja vas veure al RA2 amb qualsevol altre
+    registre: una consulta al DNS, aquí demanant el <strong>registre MX</strong>.
   </p>
   <p>
-    I recorda que tota xarxa té dues adreces que <strong>mai</strong> es reparteixen: la
-    <strong>primera</strong> (adreça de xarxa) i l'<strong>última</strong> (difusió). Quines són
-    depèn de la <strong>màscara</strong>, no de l'últim número:
-  </p>
-  <div class="cq-tablewrap">
-    <table class="cq-table">
-      <thead><tr><th>Xarxa</th><th>Primera (xarxa)</th><th>Última (difusió)</th></tr></thead>
-      <tbody>
-        <tr><td><code>192.168.1.0/24</code></td><td><code>192.168.1.0</code></td><td><code>192.168.1.255</code></td></tr>
-        <tr><td><code>172.16.0.0/16</code></td><td><code>172.16.0.0</code></td><td><code>172.16.255.255</code></td></tr>
-        <tr><td><code>10.0.0.0/8</code></td><td><code>10.0.0.0</code></td><td><code>10.255.255.255</code></td></tr>
-      </tbody>
-    </table>
-  </div>
-  <p>
-    Fixa-t'hi en la <code>10.0.0.0/8</code>: adreces com la <code>10.0.0.255</code> o la
-    <code>10.0.1.0</code> <strong>són perfectament vàlides</strong> per a un equip. La del
-    servidor tampoc es reparteix, i per això va fora del rang.
-  </p>
-</div>
-
-<!-- ============ 6 · RESERVES ============ -->
-<div class="cq-block" data-kind="teoria">
-  <h4>Reservar una IP per a un equip concret</h4>
-  <p>
-    Una <strong>reserva</strong> lliga una adreça MAC a una IP: aquell equip rebrà sempre la
-    mateixa. S'escriu dins de la subxarxa, just després de <code>option-data</code>:
-  </p>
-<pre>      "reservations": [
-        {
-          "hw-address": "00:1a:2b:3c:4d:5e",
-          "ip-address": "192.168.1.10"
-        },
-        {
-          "hw-address": "00:1a:2b:3c:4d:5f",
-          "ip-address": "192.168.1.11"
-        }
-      ]</pre>
-  <p>
-    L'adreça reservada ha d'estar <strong>dins de la subxarxa</strong> però
-    <strong>fora del <code>pool</code></strong>. Si la poses dins del rang, Kea la podria haver
-    donat abans a un altre equip.
+    El DNS respon amb el nom del servidor de correu i la seva <strong>prioritat</strong>. Encara no
+    n'hi ha prou: el MTA torna a preguntar al DNS, ara pel <strong>registre A</strong> d'aquest
+    nom, per obtenir la IP. Amb la IP a la mà, obre una connexió SMTP al port 25 i entrega el
+    missatge.
   </p>
 </div>
 
 <!-- ============ 7 · PAS A PAS ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h4>Muntar el servidor</h4>
+  <h4>Observa el viatge sense muntar res</h4>
   <p>
-    Punt de partida: la targeta <code>personal1</code> ja ha de tenir IP fixa (teoria T1.1). Sense
-    això, Kea no arrencarà.
+    Encara no instal·les cap servidor —això és la T4.2. Aquí només mires, amb eines de consulta,
+    com un domini real anuncia el seu servei de correu.
   </p>
 
   <ol class="cq-steps">
     <li>
-      <p><strong>Instal·la el servei d'IPv4</strong>, que és l'únic que necessites:</p>
+      <p><strong>Instal·la les eines de consulta DNS</strong> si encara no hi són:</p>
 <pre>sudo apt update
-sudo apt install -y kea-dhcp4-server</pre>
+sudo apt install -y bind9-dnsutils</pre>
     </li>
 
     <li>
-      <p><strong>Desa una còpia</strong> de la configuració original abans de tocar res:</p>
-<pre>sudo cp /etc/kea/kea-dhcp4.conf /etc/kea/kea-dhcp4.conf.original</pre>
-    </li>
-
-    <li>
-      <p><strong>Edita el fitxer</strong> i deixa'l com el de l'exemple, amb les teves dades:</p>
-<pre>sudo nano /etc/kea/kea-dhcp4.conf</pre>
-    </li>
-
-    <li>
-      <p><strong>Comprova la sintaxi abans d'arrencar.</strong> Kea té un mode de prova que llegeix el fitxer i et diu si està bé:</p>
-<pre>sudo -u _kea kea-dhcp4 -t /etc/kea/kea-dhcp4.conf</pre>
+      <p><strong>Mira els registres MX</strong> d'un domini real:</p>
+<pre>dig MX wikipedia.org</pre>
       <p>
-        Va com l'usuari <code>_kea</code>, el del servei, i no com a <code>root</code>: l'AppArmor
-        que porta el paquet no deixa que el programa obri fitxers fora dels seus. Si t'hi
-        descuides, la resposta és <code>Unable to open file</code> encara que el fitxer hi sigui.
-      </p>
-      <p>
-        Si falta una coma o una clau, aquí ho sabràs, amb el fitxer, la línia i la columna:
-        <code>syntax error, unexpected max-valid-lifetime, expecting "," or }</code>. Si tot va
-        bé, no diu res i acaba amb codi 0.
+        A la secció <code>ANSWER</code> hi surt cada servidor de correu amb la seva
+        <strong>prioritat</strong>: el número més baix és el preferit.
       </p>
     </li>
 
     <li>
-      <p><strong>Arrenca i comprova</strong> que està actiu:</p>
-<pre>sudo systemctl restart kea-dhcp4-server
-sudo systemctl status kea-dhcp4-server</pre>
-      <p>Ha de sortir <code>active (running)</code> en verd.</p>
-    </li>
-
-    <li>
-      <p><strong>Verifica que escolta</strong> al port 67:</p>
-<pre>sudo ss -ulnp | grep :67</pre>
-    </li>
-
-    <li>
-      <p><strong>Mira les concessions en directe</strong> mentre arrenques el client:</p>
-<pre>sudo journalctl -u kea-dhcp4-server -f</pre>
+      <p><strong>Prova un domini amb diverses prioritats</strong>, per veure l'ordre de reserva:</p>
+<pre>dig MX gmail.com</pre>
       <p>
-        Veuràs línies <code>DHCP4_LEASE_ALLOC</code> amb la MAC i la IP concedida. La llista
-        completa de concessions la tens a
-        <code>/var/lib/kea/kea-leases4.csv</code>.
+        Surten cinc servidors amb prioritats diferents: primer s'intenta el de prioritat més
+        baixa, i els altres queden com a reserva si el primer no respon.
       </p>
+    </li>
+
+    <li>
+      <p><strong>Comprova el registre A</strong> del nom que ha sortit al MX: sense IP, cap
+      MTA hi pot connectar encara que el MX existeixi.</p>
+<pre>dig A gmail-smtp-in.l.google.com</pre>
     </li>
   </ol>
 
   <div class="cq-note">
     <span class="lbl">Ubuntu 26.04</span>
-    El paquet porta Kea 3.0. Molta documentació i molts tutorials escriuen la validació com
-    <code>sudo kea-dhcp4 -t</code>, sense l'usuari: així no funciona, perquè el perfil d'AppArmor
-    del paquet no deixa que el programa obri el fitxer. Compara sempre amb la sortida de la teva
-    màquina.
+    Les eines <code>dig</code> i <code>host</code> vénen totes dues al paquet
+    <code>bind9-dnsutils</code>. No hi ha cap paquet <code>dnsutils</code> propi: és un
+    metapaquet que ja apunta a aquest.
   </div>
 </div>
 
@@ -622,11 +578,11 @@ sudo systemctl status kea-dhcp4-server</pre>
 <div class="cq-block" data-kind="bones pràctiques">
   <h4>Criteris professionals</h4>
   <ul>
-    <li><strong>Valida sempre abans d'arrencar</strong> amb <code>sudo -u _kea kea-dhcp4 -t</code>. Estalvia la meitat dels problemes.</li>
-    <li><strong>Còpia de l'original.</strong> És la teva marxa enrere si t'hi perds.</li>
-    <li><strong>Escolta només per la targeta interna.</strong> Mai posis la targeta que va a la xarxa del centre a <code>interfaces</code>.</li>
-    <li><strong>Reserves fora del <em>pool</em></strong>, i totes juntes en una zona d'adreces baixes.</li>
-    <li><strong>Comenta la configuració</strong> amb <code>//</code>: Kea ho admet i el teu jo del mes vinent ho agrairà.</li>
+    <li><strong>Submission (587 o 465) per als clients</strong>, mai el 25 directe: el 25 és per a servidors.</li>
+    <li><strong>IMAP com a opció per defecte</strong>: POP3 només quan de debò cal correu local i prou.</li>
+    <li><strong>Comprova el MX abans que res</strong>: sense ell, cap correu extern arriba, es configuri el que es configuri.</li>
+    <li><strong>Respecta les prioritats</strong>: el servidor de reserva no és decoratiu, s'ha de mantenir viu.</li>
+    <li><strong>Mai open relay</strong>: un MTA només ha d'acceptar correu dels seus propis usuaris.</li>
   </ul>
 </div>
 
@@ -634,28 +590,22 @@ sudo systemctl status kea-dhcp4-server</pre>
 <div class="cq-block" data-kind="problemes">
   <h4>Errors habituals</h4>
   <dl class="cq-issues">
-    <dt>El servei no arrenca</dt>
+    <dt>Configurar el client de correu pel port 25</dt>
     <dd>
-      <p><span class="lbl">Causa</span> Error de JSON (una coma sobrant) o la targeta de <code>interfaces</code> no existeix o no té IP.</p>
-      <p><span class="lbl">Solució</span> <code>sudo -u _kea kea-dhcp4 -t /etc/kea/kea-dhcp4.conf</code> et dona el motiu, la línia i la columna. Si el fitxer és correcte, mira <code>journalctl -u kea-dhcp4-server -n 30</code>.</p>
+      <p><span class="lbl">Causa</span> Es configura el client de correu (MUA) per enviar pel 25, com si fos un altre MTA.</p>
+      <p><span class="lbl">Solució</span> El client sempre envia per <strong>submission</strong>, 587 o 465; el 25 és exclusiu de la conversa entre servidors.</p>
     </dd>
 
-    <dt>El servei està actiu però el client no rep res</dt>
+    <dt>Creure que sense registre MX el correu arriba igual</dt>
     <dd>
-      <p><span class="lbl">Causa</span> Escolta per la targeta equivocada, o el client està en una xarxa diferent de la del <code>subnet</code>.</p>
-      <p><span class="lbl">Solució</span> Comprova amb <code>ss -ulnp | grep :67</code> i, al servidor, <code>sudo tcpdump -i enp2s0 -n port 67</code>. Si no hi arriba el DISCOVER, el problema és de connexió, no de Kea.</p>
+      <p><span class="lbl">Causa</span> El domini només té registre A i es dona per fet que "amb la IP ja n'hi ha prou".</p>
+      <p><span class="lbl">Solució</span> Sense MX, cap MTA sap a qui trucar: el registre A del domini no serveix per a correu.</p>
     </dd>
 
-    <dt>La reserva no s'aplica</dt>
+    <dt>Pensar que IMAP i POP3 són dues formes de fer el mateix</dt>
     <dd>
-      <p><span class="lbl">Causa</span> La MAC està mal escrita, o el client encara té una concessió antiga vàlida.</p>
-      <p><span class="lbl">Solució</span> Copia la MAC de la sortida del client, no la transcriguis a mà. Al client, força la renovació amb <code>sudo networkctl renew enp1s0</code>.</p>
-    </dd>
-
-    <dt>El client rep IP però no té Internet</dt>
-    <dd>
-      <p><span class="lbl">Causa</span> Kea ha fet la seva feina. Falta que el servidor encamini el trànsit cap a fora.</p>
-      <p><span class="lbl">Solució</span> És el contingut de la teoria T1.4: IP forwarding i NAT.</p>
+      <p><span class="lbl">Causa</span> Es tracten com a intercanviables perquè totes dues "consulten el correu".</p>
+      <p><span class="lbl">Solució</span> Recorda on es queda el missatge: al servidor amb IMAP, al dispositiu amb POP3.</p>
     </dd>
   </dl>
 </div>
@@ -664,31 +614,16 @@ sudo systemctl status kea-dhcp4-server</pre>
 <div class="cq-block" data-kind="resum">
   <h4>Resum</h4>
   <ul>
-    <li><strong>Kea</strong> substitueix <code>isc-dhcp-server</code>. La documentació antiga no serveix.</li>
-    <li>Es configura en <strong>JSON</strong> a <code>/etc/kea/kea-dhcp4.conf</code>.</li>
-    <li>Quatre blocs a tocar: <code>interfaces-config</code>, <code>subnet</code>, <code>pools</code> i <code>option-data</code>.</li>
-    <li>Les <strong>reserves</strong> van dins de la subxarxa i fora del <em>pool</em>.</li>
-    <li>Al comptar adreces d'un rang, <strong>els dos extrems hi entren</strong>.</li>
+    <li><strong>MUA</strong> escriu i llegeix, <strong>MTA</strong> transporta per SMTP, <strong>MDA</strong> guarda la bústia.</li>
+    <li>SMTP: <strong>25</strong> entre servidors, <strong>587 o 465</strong> del client cap al seu servidor.</li>
+    <li>Recollida: <strong>IMAP/IMAPS</strong> (143/993) deixa el correu al servidor; <strong>POP3/POP3S</strong> (110/995) el baixa.</li>
+    <li>Abans d'entregar, el MTA consulta el <strong>registre MX</strong> i després el <strong>registre A</strong> del nom que hi apareix.</li>
+    <li>Un servidor mai accepta correu de qui no és seu: evitar l'<strong>open relay</strong>.</li>
   </ul>
 
-  <div class="cq-tablewrap">
-    <table class="cq-table">
-      <thead><tr><th>Comanda</th><th>Per a què serveix</th></tr></thead>
-      <tbody>
-        <tr><td><code>apt install kea-dhcp4-server</code></td><td>Instal·lar el servei</td></tr>
-        <tr><td><code>sudo -u _kea kea-dhcp4 -t &lt;fitxer&gt;</code></td><td>Validar la configuració</td></tr>
-        <tr><td><code>systemctl restart kea-dhcp4-server</code></td><td>Aplicar els canvis</td></tr>
-        <tr><td><code>systemctl status kea-dhcp4-server</code></td><td>Veure si està actiu o l'error</td></tr>
-        <tr><td><code>journalctl -u kea-dhcp4-server -f</code></td><td>Veure les concessions en directe</td></tr>
-        <tr><td><code>ss -ulnp | grep :67</code></td><td>Comprovar que escolta</td></tr>
-        <tr><td><code>cat /var/lib/kea/kea-leases4.csv</code></td><td>Llista de concessions</td></tr>
-      </tbody>
-    </table>
-  </div>
-
   <p style="margin-top:16px">
-    <strong>Següent:</strong> a <em>T1.4 · Encaminament i NAT</em> faràs que els clients del teu
-    servidor tinguin Internet.
+    <strong>Següent:</strong> a <em>T4.2</em> instal·laràs el servidor que fa realitat aquest
+    viatge.
   </p>
 </div>
 
@@ -696,53 +631,42 @@ sudo systemctl status kea-dhcp4-server</pre>
 <div class="cq-block" data-kind="quiz">
   <h4>Comprova el que has après</h4>
 
-  <div class="cq-question" data-id="t1-3-fitxer" data-type="single">
-    <div class="statement">On es configura el servidor Kea per a IPv4?</div>
-    <button class="cq-option" data-correct="false"><code>/etc/dhcp/dhcpd.conf</code></button>
-    <button class="cq-option" data-correct="true"><code>/etc/kea/kea-dhcp4.conf</code></button>
-    <button class="cq-option" data-correct="false"><code>/etc/netplan/01-kea.yaml</code></button>
-    <button class="cq-option" data-correct="false"><code>/var/lib/kea/kea-leases4.csv</code></button>
+  <div class="cq-question" data-id="t4-1-actors" data-type="single">
+    <div class="statement">Quin dels tres actors és Dovecot, en un servidor típic?</div>
+    <button class="cq-option" data-correct="false">MUA</button>
+    <button class="cq-option" data-correct="false">MTA</button>
+    <button class="cq-option" data-correct="true">MDA</button>
+    <button class="cq-option" data-correct="false">Cap dels tres: és un client de correu</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t1-3-rang" data-type="single">
-    <div class="statement">Quantes adreces reparteix el rang <code>10.0.0.50 - 10.0.0.150</code>?</div>
-    <button class="cq-option" data-correct="false">100</button>
-    <button class="cq-option" data-correct="true">101</button>
-    <button class="cq-option" data-correct="false">99</button>
-    <button class="cq-option" data-correct="false">150</button>
+  <div class="cq-question" data-id="t4-1-ports" data-type="single">
+    <div class="statement">Un client de correu envia un missatge des de casa cap al seu propi servidor. Quin port fa servir?</div>
+    <button class="cq-option" data-correct="false">25</button>
+    <button class="cq-option" data-correct="true">587</button>
+    <button class="cq-option" data-correct="false">143</button>
+    <button class="cq-option" data-correct="false">995</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t1-3-validar" data-type="single">
-    <div class="statement">Quina comanda comprova la configuració <em>abans</em> d'arrencar el servei?</div>
-    <button class="cq-option" data-correct="false"><code>systemctl status kea-dhcp4-server</code></button>
-    <button class="cq-option" data-correct="true"><code>sudo -u _kea kea-dhcp4 -t /etc/kea/kea-dhcp4.conf</code></button>
-    <button class="cq-option" data-correct="false"><code>netplan try</code></button>
-    <button class="cq-option" data-correct="false"><code>ss -ulnp | grep :67</code></button>
+  <div class="cq-question" data-id="t4-1-imap-pop3" data-type="single">
+    <div class="statement">Per què avui la majoria de serveis fan servir IMAP en lloc de POP3?</div>
+    <button class="cq-option" data-correct="false">Perquè IMAP no necessita cap connexió a Internet</button>
+    <button class="cq-option" data-correct="true">Perquè el correu es queda al servidor i es manté sincronitzat entre dispositius</button>
+    <button class="cq-option" data-correct="false">Perquè POP3 no permet enviar correu</button>
+    <button class="cq-option" data-correct="false">Perquè IMAP no fa servir cap port fix</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t1-3-opcions" data-type="single">
-    <div class="statement">Quin nom d'opció serveix per repartir la porta d'enllaç?</div>
-    <button class="cq-option" data-correct="false"><code>gateway</code></button>
-    <button class="cq-option" data-correct="true"><code>routers</code></button>
-    <button class="cq-option" data-correct="false"><code>domain-name-servers</code></button>
-    <button class="cq-option" data-correct="false"><code>default-route</code></button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
-  </div>
-
-  <div class="cq-question" data-id="t1-3-certes" data-type="multi">
-    <div class="statement">Selecciona totes les afirmacions certes sobre Kea</div>
-    <button class="cq-option" data-correct="true">La configuració és un fitxer JSON.</button>
-    <button class="cq-option" data-correct="true">Les IP reservades han d'estar fora del <em>pool</em>.</button>
-    <button class="cq-option" data-correct="true">La targeta on escolta ha de tenir IP fixa.</button>
-    <button class="cq-option" data-correct="false">Cal posar una coma després de l'últim element d'una llista.</button>
-    <button class="cq-option" data-correct="false">La documentació d'isc-dhcp-server serveix per configurar Kea.</button>
+  <div class="cq-question" data-id="t4-1-mx" data-type="single">
+    <div class="statement">Un servidor vol entregar un correu a un domini extern. Quin és el primer pas al DNS?</div>
+    <button class="cq-option" data-correct="false">Consultar directament el registre A del domini</button>
+    <button class="cq-option" data-correct="true">Consultar el registre MX del domini</button>
+    <button class="cq-option" data-correct="false">Consultar el registre MX del seu propi domini</button>
+    <button class="cq-option" data-correct="false">Connectar-se pel port 587 sense consultar el DNS</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>

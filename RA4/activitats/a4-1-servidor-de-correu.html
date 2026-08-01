@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Serveis en Xarxa (0227) — CFGM SMX</title>
+<title>A4.1 · El correu intern del centre — Serveis en Xarxa (0227)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -388,35 +388,224 @@
 </head>
 <body>
 <header class="cq-header">
-  <div class="eyebrow">CFGM SMX · Mòdul 0227</div>
-  <h1>Serveis en Xarxa</h1>
-  <p class="lede">Material del mòdul: teoria, activitats i comprovacions, resultat d'aprenentatge per resultat d'aprenentatge.</p>
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA4 · A4.1</div>
+  <h1>El correu intern del centre</h1>
+  <p class="lede">Munta un servidor de correu propi i demostra que dos comptes es poden escriure.</p>
 </header>
 
-<!-- ============ RESULTATS D'APRENENTATGE ============ -->
-<div class="cq-block" data-kind="mòdul">
-  <h4>Resultats d'aprenentatge</h4>
-  <ul class="cq-index">
-    <li><a href="RA1/index.html">
-      <span class="ref">RA1</span>
-      <span class="ttl">Serveis de configuració dinàmica
-        <span class="sub">DHCP: adreçament, Kea, encaminament i NAT</span></span></a></li>
-    <li><a href="RA2/index.html">
-      <span class="ref">RA2</span>
-      <span class="ttl">Serveis de resolució de noms
-        <span class="sub">DNS: client, jerarquia, BIND 9, zones i transferències</span></span></a></li>
-    <li><a href="RA3/index.html">
-      <span class="ref">RA3</span>
-      <span class="ttl">Serveis de transferència de fitxers
-        <span class="sub">FTP: vsftpd, accés anònim, límits, FTPS i SFTP</span></span></a></li>
-    <li><a href="RA4/index.html">
-      <span class="ref">RA4</span>
-      <span class="ttl">Servidors de correu electrònic
-        <span class="sub">SMTP i IMAP: Stalwart, comptes, àlies i usos indeguts</span></span></a></li>
-  </ul>
-  <p style="margin-top:16px; color:var(--muted); font-size:.92rem">
-    Els resultats d'aprenentatge següents s'aniran publicant a mesura que estiguin llestos.
+<!-- ============ OBJECTIUS ============ -->
+<div class="cq-block" data-kind="objectius">
+  <h4>Què has de saber abans de començar</h4>
+  <p>
+    Teories <strong>T4.1</strong> (actors i protocols del correu) i <strong>T4.2</strong>
+    (instal·lació de Stalwart, domini i comptes).
+  </p>
+  <p>
+    Muntaràs el servidor de correu del centre amb el domini
+    <code>puigcastellar.internal</code>, hi crearàs dos comptes i demostraràs, amb un client de
+    correu de veritat, que es poden escriure entre ells.
   </p>
 </div>
+
+<!-- ============ ESCENARI ============ -->
+<div class="cq-block" data-kind="escenari">
+  <h4>Amb què treballaràs</h4>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Màquina</th><th>Targetes</th><th>Adreça</th></tr></thead>
+      <tbody>
+        <tr><td>Ubuntu <strong>Server</strong></td><td>puigcastellar1 + personal1</td><td><code>192.168.1.8/24</code> a personal1</td></tr>
+        <tr><td>Ubuntu <strong>Desktop</strong></td><td>només personal1</td><td><code>192.168.1.100/24</code>, fixa</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    <strong>Màquina nova</strong> a isardVDI. El servidor Stalwart va a la màquina Server; el
+    client de correu, a la Desktop.
+  </p>
+</div>
+
+<!-- ============ ENUNCIAT ============ -->
+<div class="cq-block" data-kind="enunciat">
+  <h4>Què has de fer</h4>
+  <ol>
+    <li>Instal·lar Stalwart al servidor amb el domini <code>puigcastellar.internal</code> i el
+      hostname <code>mail.puigcastellar.internal</code>.</li>
+    <li>Completar l'assistent inicial i recuperar la contrasenya de <em>bootstrap</em> quan et la
+      demani.</li>
+    <li>Crear <strong>dos comptes</strong> amb noms triats per tu: no facis servir
+      <code>anna</code> ni <code>bruno</code>, que són els de la teoria.</li>
+    <li>Deixar el servei arrencant sol després d'un reinici de la màquina.</li>
+    <li>Configurar un client de correu a la Desktop i enviar un missatge d'un compte a l'altre,
+      i llegir-lo des del client.</li>
+  </ol>
+</div>
+
+<!-- ============ ON BUSCAR ============ -->
+<div class="cq-block" data-kind="enunciat">
+  <h4>D'on has de treure cada cosa</h4>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Què has de fer</th><th>On ho tens</th></tr></thead>
+      <tbody>
+        <tr><td>Instal·lar Stalwart en dos passos</td><td>Teoria <strong>T4.2</strong>, pas a pas</td></tr>
+        <tr><td>Recuperar la contrasenya de bootstrap</td><td>Teoria <strong>T4.2</strong>, problemes</td></tr>
+        <tr><td>Domini, hostname i certificat a l'assistent</td><td>Teoria <strong>T4.2</strong>, pas a pas</td></tr>
+        <tr><td>Crear comptes des de la consola web</td><td>Teoria <strong>T4.2</strong>, pas a pas</td></tr>
+        <tr><td>Resoldre el nom sense DNS extern</td><td>Teoria <strong>T4.2</strong>, observació</td></tr>
+        <tr><td>Ports que fa servir el client de correu</td><td>Teoria <strong>T4.1</strong>, taula de protocols</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ============ RECORDATORI ============ -->
+<div class="cq-block" data-kind="recordatori">
+  <h4>La contrasenya de bootstrap només surt un cop</h4>
+  <p>
+    En arrencar per primera vegada, Stalwart genera una contrasenya d'administrador temporal i
+    la mostra <strong>només un cop</strong>, als registres del servei. Si no la copies llavors,
+    l'has perduda.
+  </p>
+  <p>
+    Si això et passa, no és cap error: la teoria T4.2 explica com tornar a començar l'assistent
+    des de zero.
+  </p>
+</div>
+
+<!-- ============ OBSERVACIÓ ============ -->
+<div class="cq-block" data-kind="observació">
+  <h4>Aquí no hi ha fitxers de configuració per editar</h4>
+  <p>
+    A diferència de vsftpd o BIND, Stalwart es configura <strong>tot des de la consola web</strong>.
+    El fitxer <code>/etc/stalwart/config.json</code> només guarda on desa les dades; dominis,
+    comptes i ports viuen dins la seva pròpia base de dades.
+  </p>
+  <p>
+    Si canvies un port des de la consola, el canvi no s'aplica en calent: cal reiniciar el
+    servei perquè el nou listener s'obri.
+  </p>
+</div>
+
+<!-- ============ COMPROVACIÓ ============ -->
+<div class="cq-block" data-kind="comprovació">
+  <h4>Com sabràs que ho has fet bé</h4>
+  <ul>
+    <li>El servei apareix actiu: <code>systemctl status stalwart</code> mostra
+      <code>active (running)</code>.</li>
+    <li>Els ports de correu escolten: <code>ss -tlnp</code> mostra el 25, el 465 i el 993 en
+      <code>LISTEN</code>.</li>
+    <li>El servei segueix actiu després de <code>sudo reboot</code>, sense tornar a executar
+      l'assistent.</li>
+    <li>Un correu enviat des d'un compte apareix llegit a la bústia de l'altre, des del client
+      de correu.</li>
+  </ul>
+</div>
+
+<!-- ============ PROBLEMES ============ -->
+<div class="cq-block" data-kind="problemes">
+  <h4>Si alguna cosa no va</h4>
+  <dl class="cq-issues">
+    <dt>Has perdut la contrasenya de bootstrap</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Només es mostra un cop als registres i no l'has copiada.</p>
+      <p><span class="lbl">Solució</span> Torna a l'assistent des de zero, tal com explica la T4.2.</p>
+    </dd>
+
+    <dt>El client no troba <code>mail.puigcastellar.internal</code></dt>
+    <dd>
+      <p><span class="lbl">Causa</span> No hi ha DNS extern per a aquest domini i falta la línia
+        corresponent a <code>/etc/hosts</code> de la màquina que el consulta.</p>
+      <p><span class="lbl">Solució</span> Afegeix-hi el nom amb la IP del servidor, a totes dues
+        màquines si cal.</p>
+    </dd>
+
+    <dt>El client de correu es queixa del certificat</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Stalwart genera un certificat <strong>autofirmat</strong>,
+        no signat per cap autoritat coneguda.</p>
+      <p><span class="lbl">Solució</span> Accepta l'excepció de seguretat: en producció seria un
+        certificat de debò.</p>
+    </dd>
+  </dl>
+</div>
+
+<!-- ============ LLIURAMENT ============ -->
+<div class="cq-block" data-kind="lliurament">
+  <h4>Què has d'entregar</h4>
+  <p>
+    Un <strong>document tècnic</strong> amb el domini i els noms de compte triats, la sortida de
+    <code>ss -tlnp</code> i de <code>systemctl status stalwart</code>, i una captura del correu
+    llegit des del client.
+  </p>
+  <p>
+    Respon-hi també: <strong>per què Stalwart pot fer de MTA i de MDA alhora, mentre que a la
+    T4.1 Postfix i Dovecot són programes separats? Quin avantatge i quin risc hi veus en tenir-ho
+    tot en un sol servei?</strong>
+  </p>
+</div>
+
+<script>
+  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  (function () {
+    function editant(node) {
+      return node && node.closest && node.closest('[contenteditable="true"]');
+    }
+    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+      document.addEventListener(nom, function (e) {
+        if (!editant(e.target)) { e.preventDefault(); }
+      });
+    });
+  })();
+
+  // Motor únic per a totes les preguntes single i multi.
+  document.querySelectorAll('.cq-question').forEach(function (question) {
+    var id = question.dataset.id;
+    if (!id) {
+      throw new Error('Falta data-id a una pregunta del quiz.');
+    }
+    var type = question.dataset.type;
+    if (type !== 'single' && type !== 'multi') {
+      throw new Error('data-type invàlid ("' + type + '") a la pregunta "' + id + '".');
+    }
+
+    var options = question.querySelectorAll('.cq-option');
+    var checkBtn = question.querySelector('.cq-check-btn');
+    var feedback = question.querySelector('.cq-feedback');
+
+    options.forEach(function (opt) {
+      opt.addEventListener('click', function () {
+        if (type === 'single') {
+          options.forEach(function (o) { o.classList.remove('cq-selected'); });
+          opt.classList.add('cq-selected');
+        } else {
+          opt.classList.toggle('cq-selected');
+        }
+      });
+    });
+
+    checkBtn.addEventListener('click', function () {
+      var allCorrect = true;
+      options.forEach(function (opt) {
+        var isCorrect = opt.dataset.correct === 'true';
+        var isSelected = opt.classList.contains('cq-selected');
+        opt.classList.remove('cq-selected');
+        if (isCorrect) {
+          opt.classList.add('cq-correct');
+        } else if (isSelected) {
+          opt.classList.add('cq-incorrect');
+        }
+        opt.disabled = true;
+        if (isCorrect !== isSelected) {
+          allCorrect = false;
+        }
+      });
+      feedback.textContent = allCorrect ? 'Correcte!' : 'Incorrecte, revisa les respostes marcades.';
+      feedback.className = 'cq-feedback ' + (allCorrect ? 'ok' : 'ko');
+      checkBtn.disabled = true;
+    });
+  });
+</script>
+
 </body>
 </html>

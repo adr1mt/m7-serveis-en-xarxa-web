@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Serveis en Xarxa (0227) — CFGM SMX</title>
+<title>A4.2 · Bústia compartida i porta tancada — Serveis en Xarxa (0227)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -388,35 +388,219 @@
 </head>
 <body>
 <header class="cq-header">
-  <div class="eyebrow">CFGM SMX · Mòdul 0227</div>
-  <h1>Serveis en Xarxa</h1>
-  <p class="lede">Material del mòdul: teoria, activitats i comprovacions, resultat d'aprenentatge per resultat d'aprenentatge.</p>
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA4 · A4.2</div>
+  <h1>Bústia compartida i porta tancada</h1>
+  <p class="lede">Un àlies, accés remot amb Thunderbird i la prova que el servidor no és un colador.</p>
 </header>
 
-<!-- ============ RESULTATS D'APRENENTATGE ============ -->
-<div class="cq-block" data-kind="mòdul">
-  <h4>Resultats d'aprenentatge</h4>
-  <ul class="cq-index">
-    <li><a href="RA1/index.html">
-      <span class="ref">RA1</span>
-      <span class="ttl">Serveis de configuració dinàmica
-        <span class="sub">DHCP: adreçament, Kea, encaminament i NAT</span></span></a></li>
-    <li><a href="RA2/index.html">
-      <span class="ref">RA2</span>
-      <span class="ttl">Serveis de resolució de noms
-        <span class="sub">DNS: client, jerarquia, BIND 9, zones i transferències</span></span></a></li>
-    <li><a href="RA3/index.html">
-      <span class="ref">RA3</span>
-      <span class="ttl">Serveis de transferència de fitxers
-        <span class="sub">FTP: vsftpd, accés anònim, límits, FTPS i SFTP</span></span></a></li>
-    <li><a href="RA4/index.html">
-      <span class="ref">RA4</span>
-      <span class="ttl">Servidors de correu electrònic
-        <span class="sub">SMTP i IMAP: Stalwart, comptes, àlies i usos indeguts</span></span></a></li>
-  </ul>
-  <p style="margin-top:16px; color:var(--muted); font-size:.92rem">
-    Els resultats d'aprenentatge següents s'aniran publicant a mesura que estiguin llestos.
+<!-- ============ OBJECTIUS ============ -->
+<div class="cq-block" data-kind="objectius">
+  <h4>Què has de saber abans de començar</h4>
+  <p>
+    Teoria <strong>T4.3</strong> (àlies, IMAP remot i tancar el relay obert). Fas servir també la
+    instal·lació i els comptes de la <strong>T4.2</strong>, que aquí tornaràs a fer de zero.
+  </p>
+  <p>
+    Afegiràs un àlies de bústia compartida, hi accediràs des de Thunderbird per IMAP i
+    demostraràs que el servidor <strong>no</strong> és un open relay.
   </p>
 </div>
+
+<!-- ============ ESCENARI ============ -->
+<div class="cq-block" data-kind="escenari">
+  <h4>Amb què treballaràs</h4>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Màquina</th><th>Targetes</th><th>Adreça</th></tr></thead>
+      <tbody>
+        <tr><td>Ubuntu <strong>Server</strong></td><td>puigcastellar1 + personal1</td><td><code>192.168.1.8/24</code> a personal1</td></tr>
+        <tr><td>Ubuntu <strong>Desktop</strong></td><td>només personal1</td><td><code>192.168.1.100/24</code>, fixa</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    <strong>Màquina nova</strong> a isardVDI: torna a instal·lar Stalwart i a crear els comptes
+    seguint el pas a pas de la T4.2.
+  </p>
+</div>
+
+<!-- ============ ENUNCIAT ============ -->
+<div class="cq-block" data-kind="enunciat">
+  <h4>Què has de fer</h4>
+  <ol>
+    <li>Muntar el servidor des de zero: domini, hostname i almenys dos comptes amb nom.</li>
+    <li>Crear un àlies del tipus <code>suport@puigcastellar.internal</code> que entregui a un
+      dels comptes reals.</li>
+    <li>Instal·lar <strong>Thunderbird</strong> a la Desktop i configurar-lo amb els ports
+      correctes per llegir la bústia en remot.</li>
+    <li>Demostrar que un client <strong>sense autenticar</strong> no pot fer servir el servidor
+      per reenviar correu cap a fora.</li>
+  </ol>
+</div>
+
+<!-- ============ ON BUSCAR ============ -->
+<div class="cq-block" data-kind="enunciat">
+  <h4>D'on has de treure cada cosa</h4>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Què has de fer</th><th>On ho tens</th></tr></thead>
+      <tbody>
+        <tr><td>Tornar a muntar el servidor i els comptes</td><td>Teoria <strong>T4.2</strong>, pas a pas</td></tr>
+        <tr><td>Crear un àlies des de la consola web</td><td>Teoria <strong>T4.3</strong>, pas a pas</td></tr>
+        <tr><td>Configurar Thunderbird amb IMAP remot</td><td>Teoria <strong>T4.3</strong>, pas a pas</td></tr>
+        <tr><td>Provar el relay sense autenticar</td><td>Teoria <strong>T4.3</strong>, observació</td></tr>
+        <tr><td>Ports que fa servir Thunderbird</td><td>Teoria <strong>T4.1</strong>, taula de protocols</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ============ RECORDATORI ============ -->
+<div class="cq-block" data-kind="recordatori">
+  <h4>Thunderbird va pels ports 465 i 993, mai pel 587 ni pel 143</h4>
+  <p>
+    L'assistent de Stalwart obre de sèrie el <strong>465</strong> (submission amb TLS implícit)
+    i el <strong>993</strong> (IMAPS): són els que ha de fer servir Thunderbird. No calen ni
+    s'obren el 587 ni el 143.
+  </p>
+  <p>
+    Al formulari de comptes, el camp «Domain» no és una caixa de text: obre un cercador on
+    escrius i cliques l'opció de la llista.
+  </p>
+</div>
+
+<!-- ============ OBSERVACIÓ ============ -->
+<div class="cq-block" data-kind="observació">
+  <h4>Un servidor de correu ha de negar-se a reenviar</h4>
+  <p>
+    Un <em>open relay</em> és un servidor que accepta correu de qualsevol origen i el reenvia a
+    qualsevol destí, encara que ni el remitent ni el destinatari siguin seus. Stalwart, per
+    defecte, només entrega a dominis externs el correu que ve d'un usuari autenticat.
+  </p>
+  <p>
+    La prova consisteix a connectar-se al port 25 <strong>sense</strong> identificar-se i
+    intentar enviar a un domini que no és el propi. El servidor ha de tallar-ho amb un codi
+    d'error, no acceptar-ho en silenci.
+  </p>
+</div>
+
+<!-- ============ COMPROVACIÓ ============ -->
+<div class="cq-block" data-kind="comprovació">
+  <h4>Com sabràs que ho has fet bé</h4>
+  <ul>
+    <li>Un correu enviat a <code>suport@puigcastellar.internal</code> arriba a la bústia del
+      compte real al qual apunta l'àlies.</li>
+    <li>Thunderbird llegeix la bústia per IMAP al port 993 i envia pel 465, sense
+      fitxers locals de correu.</li>
+    <li>L'intent de relay sense autenticar respon exactament
+      <code>550 5.1.2 Relay not allowed.</code>, capturat com a evidència.</li>
+  </ul>
+</div>
+
+<!-- ============ PROBLEMES ============ -->
+<div class="cq-block" data-kind="problemes">
+  <h4>Si alguna cosa no va</h4>
+  <dl class="cq-issues">
+    <dt>L'àlies no entrega a ningú</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> S'ha creat sobre un domini o un compte equivocat, o ha
+        quedat desactivat.</p>
+      <p><span class="lbl">Solució</span> Revisa'l dins la fitxa del compte de destí, a
+        Email → Email Aliases.</p>
+    </dd>
+
+    <dt>Thunderbird no es connecta o rebutja el certificat</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> El certificat de Stalwart és <strong>autofirmat</strong>;
+        Thunderbird no en confia per defecte.</p>
+      <p><span class="lbl">Solució</span> Accepta l'excepció de seguretat en configurar el
+        compte, com ja vas veure a l'A4.1.</p>
+    </dd>
+
+    <dt>El relay es rebutja fins i tot autenticat</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Has provat des del port equivocat, o el compte no és
+        vàlid.</p>
+      <p><span class="lbl">Solució</span> Autenticat i pel port de submission, un usuari real sí
+        que pot enviar cap a fora: la prova és amb un client anònim pel 25.</p>
+    </dd>
+  </dl>
+</div>
+
+<!-- ============ LLIURAMENT ============ -->
+<div class="cq-block" data-kind="lliurament">
+  <h4>Què has d'entregar</h4>
+  <p>
+    Un <strong>document tècnic</strong> amb l'àlies creat, una captura de Thunderbird mostrant
+    el correu arribat i el text exacte de la resposta <code>550</code> a l'intent de relay.
+  </p>
+  <p>
+    Respon-hi també: <strong>per què un open relay és un problema per a persones alienes al
+    centre, i no només per a qui gestiona el servidor?</strong>
+  </p>
+</div>
+
+<script>
+  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  (function () {
+    function editant(node) {
+      return node && node.closest && node.closest('[contenteditable="true"]');
+    }
+    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+      document.addEventListener(nom, function (e) {
+        if (!editant(e.target)) { e.preventDefault(); }
+      });
+    });
+  })();
+
+  // Motor únic per a totes les preguntes single i multi.
+  document.querySelectorAll('.cq-question').forEach(function (question) {
+    var id = question.dataset.id;
+    if (!id) {
+      throw new Error('Falta data-id a una pregunta del quiz.');
+    }
+    var type = question.dataset.type;
+    if (type !== 'single' && type !== 'multi') {
+      throw new Error('data-type invàlid ("' + type + '") a la pregunta "' + id + '".');
+    }
+
+    var options = question.querySelectorAll('.cq-option');
+    var checkBtn = question.querySelector('.cq-check-btn');
+    var feedback = question.querySelector('.cq-feedback');
+
+    options.forEach(function (opt) {
+      opt.addEventListener('click', function () {
+        if (type === 'single') {
+          options.forEach(function (o) { o.classList.remove('cq-selected'); });
+          opt.classList.add('cq-selected');
+        } else {
+          opt.classList.toggle('cq-selected');
+        }
+      });
+    });
+
+    checkBtn.addEventListener('click', function () {
+      var allCorrect = true;
+      options.forEach(function (opt) {
+        var isCorrect = opt.dataset.correct === 'true';
+        var isSelected = opt.classList.contains('cq-selected');
+        opt.classList.remove('cq-selected');
+        if (isCorrect) {
+          opt.classList.add('cq-correct');
+        } else if (isSelected) {
+          opt.classList.add('cq-incorrect');
+        }
+        opt.disabled = true;
+        if (isCorrect !== isSelected) {
+          allCorrect = false;
+        }
+      });
+      feedback.textContent = allCorrect ? 'Correcte!' : 'Incorrecte, revisa les respostes marcades.';
+      feedback.className = 'cq-feedback ' + (allCorrect ? 'ok' : 'ko');
+      checkBtn.disabled = true;
+    });
+  });
+</script>
+
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>T1.3 · Servidor DHCP amb Kea — Serveis en Xarxa (0227)</title>
+<title>T4.2 · Un servidor de correu amb Stalwart — Serveis en Xarxa (0227)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -388,361 +388,292 @@
 </head>
 <body>
 <header class="cq-header">
-  <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · T1.3</div>
-  <h1>Servidor DHCP amb Kea</h1>
-  <p class="lede">Muntar, configurar i comprovar el servidor DHCP que fan servir avui les empreses.</p>
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA4 · T4.2</div>
+  <h1>Un servidor de correu amb Stalwart</h1>
+  <p class="lede">MTA i MDA en un sol servei: instal·lació, assistent web i els comptes d'anna i bruno.</p>
 </header>
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
   <h4>Què sabràs fer en acabar</h4>
   <ul>
-    <li>Instal·lar i posar en marxa el servidor Kea.</li>
-    <li>Entendre cada bloc del fitxer <code>kea-dhcp4.conf</code>.</li>
-    <li>Definir un rang d'adreces i calcular-ne la mida.</li>
-    <li>Fer una reserva d'IP per adreça MAC.</li>
-    <li>Llegir els registres per veure les concessions.</li>
+    <li>Explicar per què aquest RA fa servir Stalwart i no Postfix+Dovecot per separat.</li>
+    <li>Situar cada port que obre l'assistent i saber quin fa servir el client.</li>
+    <li>Recuperar la contrasenya de bootstrap dels logs sense perdre-la.</li>
+    <li>Completar l'assistent de configuració inicial amb els valors del domini <code>puigcastellar.internal</code>.</li>
+    <li>Crear comptes d'usuari des de la consola web.</li>
   </ul>
 </div>
 
-<!-- ============ 2 · QUÈ ÉS KEA ============ -->
+<!-- ============ 2 · UN SOL SERVEI, UN PREU DIFERENT ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Per què Kea i no una altra cosa</h4>
+  <h4>Un sol servei, un preu diferent</h4>
   <p>
-    Durant vint anys, el servidor DHCP de Linux va ser <code>isc-dhcp-server</code>. La
-    fundació que el mantenia el va donar per acabat el 2022 i el va substituir per
-    <strong>Kea</strong>, del mateix equip. És el que ve als repositoris d'Ubuntu i el que
-    trobaràs a les empreses.
+    Stalwart és un únic programa que fa alhora de <strong>MTA</strong> i de <strong>MDA</strong>:
+    on el material de producció fa servir Postfix per transportar i Dovecot per entregar, aquí
+    un sol servei fa les dues feines.
   </p>
   <p>
-    Si busques per Internet, veuràs molta documentació d'<code>isc-dhcp-server</code> amb una
-    sintaxi diferent. <strong>No et serveix.</strong> Comprova sempre que el que llegeixes
-    parla de Kea.
+    El preu és el contrari del que ja coneixes: <code>named.conf</code> al RA2 i
+    <code>vsftpd.conf</code> al RA3 eren fitxers de text que editaves amb <code>nano</code>.
+    Stalwart no en té cap: la configuració es fa des d'una consola web i es desa en una base de
+    dades (RocksDB), no en text pla.
   </p>
   <p>
-    Kea es configura amb un fitxer <strong>JSON</strong>, i té un servei separat per a cada
-    feina. A nosaltres només ens cal el d'IPv4: <code>kea-dhcp4-server</code>.
+    L'únic fitxer real, <code>/etc/stalwart/config.json</code>, només diu on és aquesta base de
+    dades. Dominis, comptes i àlies es creen sempre per la web, mai obrint un editor de text.
   </p>
 </div>
 
-<!-- ============ 3 · ANATOMIA DEL FITXER ============ -->
+<!-- ============ 3 · PORTS ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>El fitxer de configuració, bloc a bloc</h4>
+  <h4>Els ports que obre l'assistent</h4>
   <p>
-    Tot viu a <code>/etc/kea/kea-dhcp4.conf</code>. Sembla llarg, però només hi ha quatre coses
-    que hagis de tocar:
+    En instal·lar-se, l'assistent de configuració inicial obre aquests ports sense que calgui
+    tocar res més:
   </p>
   <div class="cq-tablewrap">
     <table class="cq-table">
-      <thead><tr><th>Bloc</th><th>Què hi poses</th></tr></thead>
+      <thead><tr><th>Port</th><th>Protocol</th><th>Per a què serveix</th></tr></thead>
       <tbody>
-        <tr><td><code>interfaces-config</code></td><td>Per quina targeta escolta el servidor</td></tr>
-        <tr><td><code>subnet</code></td><td>La xarxa que gestiona, amb màscara</td></tr>
-        <tr><td><code>pools</code></td><td>El rang d'adreces que pot repartir</td></tr>
-        <tr><td><code>option-data</code></td><td>Porta d'enllaç, DNS i nom de domini</td></tr>
+        <tr><td>25</td><td>SMTP</td><td>Entrega entre servidors (MTA↔MTA)</td></tr>
+        <tr><td>465</td><td>SMTP submission, TLS implícit</td><td>El client envia correu al servidor</td></tr>
+        <tr><td>993</td><td>IMAPS</td><td>El client consulta el correu, que es queda al servidor</td></tr>
+        <tr><td>995</td><td>POP3S</td><td>El client baixa el correu al dispositiu</td></tr>
+        <tr><td>8080</td><td>HTTP</td><td>Consola web d'administració</td></tr>
       </tbody>
     </table>
   </div>
   <p>
-    La resta (<code>control-socket</code>, <code>lease-database</code>) ve donada i no cal
-    tocar-la: és on Kea guarda quines adreces té concedides.
+    A la T4.1 vas veure que la submission té dos ports possibles: el 587 (<code>STARTTLS</code>)
+    i el 465 (TLS implícit). Stalwart només obre el 465 de sèrie, el que recomana avui l'RFC
+    8314: el client xifra des del primer byte. Per això el correu es configura amb
+    <strong>465 i 993</strong>, no amb 587 i 143.
   </p>
 </div>
 
-<!-- ============ 4 · EXEMPLE ============ -->
+<!-- ============ 4 · EXEMPLE: CERTIFICAT AUTOFIRMAT ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h4>Una configuració completa i mínima</h4>
-  <p>Xarxa <code>192.168.1.0/24</code>, servidor a la <code>.1</code>, repartint de la 100 a la 200:</p>
-<pre>{
-"Dhcp4": {
-  "interfaces-config": {
-    "interfaces": [ "enp2s0" ]              <span class="c">// targeta personal1</span>
-  },
-  "control-socket": {
-    "socket-type": "unix",
-    "socket-name": "/run/kea/kea4-ctrl-socket"
-  },
-  "lease-database": { "type": "memfile", "lfc-interval": 3600 },
-
-  "valid-lifetime": 600,                    <span class="c">// durada de la concessió</span>
-  "max-valid-lifetime": 7200,
-
-  "subnet4": [
-    {
-      "id": 1,
-      "subnet": "192.168.1.0/24",
-      "pools": [ { "pool": "192.168.1.100 - 192.168.1.200" } ],
-      "option-data": [
-        { "name": "routers",             "data": "192.168.1.1" },
-        { "name": "domain-name-servers", "data": "9.9.9.9"     },
-        { "name": "domain-name",         "data": "adria.internal" }
-      ]
-    }
-  ]
-}
-}</pre>
+  <h4>El certificat que ningú ha signat</h4>
   <p>
-    <strong>Compte amb les comes i les claus.</strong> A JSON, cada element d'una llista en porta
-    una menys l'últim. La que falta i la clau sense tancar deixen el servei sense arrencar, i és
-    l'error número u: valida sempre el fitxer abans de reiniciar.
+    Sense domini públic ni ACME/Let's Encrypt actiu, Stalwart genera sol un certificat
+    autofirmat (amb la llibreria <code>rcgen</code>) la primera vegada que arrenca. És vàlid per
+    xifrar la connexió, però cap entitat de confiança l'ha signat, i per això el client hi
+    protestarà o l'haurà d'acceptar amb una excepció manual:
+  </p>
+<pre>echo | openssl s_client -connect mail.puigcastellar.internal:993 -quiet
+<span class="o">depth=0 CN=rcgen self signed cert</span>
+<span class="o">verify error:num=18:self-signed certificate</span></pre>
+  <p>
+    En un desplegament real, amb domini públic, aquest pas el faria ACME i l'avís no sortiria.
   </p>
 </div>
 
-<!-- ============ 5 · CALCULAR EL RANG ============ -->
-<div class="cq-block" data-kind="teoria">
-  <h4>Quantes adreces necessites</h4>
+<!-- ============ 5 · CAS REAL ============ -->
+<div class="cq-block" data-kind="cas real">
+  <h4>Per a qui existeixen eines com aquesta</h4>
   <p>
-    Les activitats et demanaran rangs per a un nombre concret d'equips. El càlcul és una resta,
-    però has de comptar bé: <strong>els dos extrems del rang hi entren</strong>.
+    Stalwart, Mailcow o Mail-in-a-Box existeixen per a qui no té equip per mantenir
+    Postfix+Dovecot+Rspamd com a peces separades: petites organitzacions i departaments IT
+    reduïts, com podria ser el de l'institut mateix.
   </p>
   <p>
-    De la <code>.100</code> a la <code>.200</code> hi ha <code>200 − 100 + 1 = 101</code>
-    adreces. Si en necessites exactament 99, el rang va de la <code>.100</code> a la
-    <code>.198</code>.
-  </p>
-  <p>
-    I recorda que tota xarxa té dues adreces que <strong>mai</strong> es reparteixen: la
-    <strong>primera</strong> (adreça de xarxa) i l'<strong>última</strong> (difusió). Quines són
-    depèn de la <strong>màscara</strong>, no de l'últim número:
-  </p>
-  <div class="cq-tablewrap">
-    <table class="cq-table">
-      <thead><tr><th>Xarxa</th><th>Primera (xarxa)</th><th>Última (difusió)</th></tr></thead>
-      <tbody>
-        <tr><td><code>192.168.1.0/24</code></td><td><code>192.168.1.0</code></td><td><code>192.168.1.255</code></td></tr>
-        <tr><td><code>172.16.0.0/16</code></td><td><code>172.16.0.0</code></td><td><code>172.16.255.255</code></td></tr>
-        <tr><td><code>10.0.0.0/8</code></td><td><code>10.0.0.0</code></td><td><code>10.255.255.255</code></td></tr>
-      </tbody>
-    </table>
-  </div>
-  <p>
-    Fixa-t'hi en la <code>10.0.0.0/8</code>: adreces com la <code>10.0.0.255</code> o la
-    <code>10.0.1.0</code> <strong>són perfectament vàlides</strong> per a un equip. La del
-    servidor tampoc es reparteix, i per això va fora del rang.
+    La contrapartida és que si vols tocar alguna cosa que la consola web no exposa, no tens cap
+    fitxer per obrir a mà: depens del que l'eina et deixi fer des del navegador.
   </p>
 </div>
 
-<!-- ============ 6 · RESERVES ============ -->
-<div class="cq-block" data-kind="teoria">
-  <h4>Reservar una IP per a un equip concret</h4>
-  <p>
-    Una <strong>reserva</strong> lliga una adreça MAC a una IP: aquell equip rebrà sempre la
-    mateixa. S'escriu dins de la subxarxa, just després de <code>option-data</code>:
-  </p>
-<pre>      "reservations": [
-        {
-          "hw-address": "00:1a:2b:3c:4d:5e",
-          "ip-address": "192.168.1.10"
-        },
-        {
-          "hw-address": "00:1a:2b:3c:4d:5f",
-          "ip-address": "192.168.1.11"
-        }
-      ]</pre>
-  <p>
-    L'adreça reservada ha d'estar <strong>dins de la subxarxa</strong> però
-    <strong>fora del <code>pool</code></strong>. Si la poses dins del rang, Kea la podria haver
-    donat abans a un altre equip.
-  </p>
-</div>
-
-<!-- ============ 7 · PAS A PAS ============ -->
+<!-- ============ 6 · PAS A PAS ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h4>Muntar el servidor</h4>
-  <p>
-    Punt de partida: la targeta <code>personal1</code> ja ha de tenir IP fixa (teoria T1.1). Sense
-    això, Kea no arrencarà.
-  </p>
+  <h4>Instal·lar Stalwart i deixar-lo llest per als comptes</h4>
 
   <ol class="cq-steps">
     <li>
-      <p><strong>Instal·la el servei d'IPv4</strong>, que és l'únic que necessites:</p>
-<pre>sudo apt update
-sudo apt install -y kea-dhcp4-server</pre>
-    </li>
-
-    <li>
-      <p><strong>Desa una còpia</strong> de la configuració original abans de tocar res:</p>
-<pre>sudo cp /etc/kea/kea-dhcp4.conf /etc/kea/kea-dhcp4.conf.original</pre>
-    </li>
-
-    <li>
-      <p><strong>Edita el fitxer</strong> i deixa'l com el de l'exemple, amb les teves dades:</p>
-<pre>sudo nano /etc/kea/kea-dhcp4.conf</pre>
-    </li>
-
-    <li>
-      <p><strong>Comprova la sintaxi abans d'arrencar.</strong> Kea té un mode de prova que llegeix el fitxer i et diu si està bé:</p>
-<pre>sudo -u _kea kea-dhcp4 -t /etc/kea/kea-dhcp4.conf</pre>
+      <p><strong>Baixa l'script d'instal·lació i, després, executa'l</strong> (mai en una sola
+      canonada <code>curl | sh</code>: primer es baixa, s'hi pot fer un cop d'ull, i llavors
+      s'executa):</p>
+<pre>curl --proto "=https" --tlsv1.2 -sSf \
+  https://get.stalw.art/install.sh -o install.sh
+sudo sh install.sh</pre>
       <p>
-        Va com l'usuari <code>_kea</code>, el del servei, i no com a <code>root</code>: l'AppArmor
-        que porta el paquet no deixa que el programa obri fitxers fora dels seus. Si t'hi
-        descuides, la resposta és <code>Unable to open file</code> encara que el fitxer hi sigui.
-      </p>
-      <p>
-        Si falta una coma o una clau, aquí ho sabràs, amb el fitxer, la línia i la columna:
-        <code>syntax error, unexpected max-valid-lifetime, expecting "," or }</code>. Si tot va
-        bé, no diu res i acaba amb codi 0.
+        Crea l'usuari de sistema <code>stalwart</code>, instal·la el binari, escriu la unitat
+        systemd i arrenca el servei en <em>bootstrap mode</em>.
       </p>
     </li>
 
     <li>
-      <p><strong>Arrenca i comprova</strong> que està actiu:</p>
-<pre>sudo systemctl restart kea-dhcp4-server
-sudo systemctl status kea-dhcp4-server</pre>
-      <p>Ha de sortir <code>active (running)</code> en verd.</p>
-    </li>
-
-    <li>
-      <p><strong>Verifica que escolta</strong> al port 67:</p>
-<pre>sudo ss -ulnp | grep :67</pre>
-    </li>
-
-    <li>
-      <p><strong>Mira les concessions en directe</strong> mentre arrenques el client:</p>
-<pre>sudo journalctl -u kea-dhcp4-server -f</pre>
+      <p><strong>Recupera la contrasenya temporal d'administrador.</strong> Només es mostra
+      aquesta vegada, als logs: si la perds, no hi ha manera de recuperar-la i cal esborrar la
+      configuració perquè Stalwart torni a generar-ne una altra.</p>
+<pre>sudo journalctl -u stalwart -n 200 --no-pager \
+  | grep -A8 "bootstrap mode"</pre>
       <p>
-        Veuràs línies <code>DHCP4_LEASE_ALLOC</code> amb la MAC i la IP concedida. La llista
-        completa de concessions la tens a
-        <code>/var/lib/kea/kea-leases4.csv</code>.
+        Surt l'usuari <code>admin</code> i una contrasenya a l'atzar. Apunta-la abans de
+        continuar.
       </p>
+    </li>
+
+    <li>
+      <p><strong>Obre l'assistent de configuració inicial</strong> a
+      <code>http://mail.puigcastellar.internal:8080/admin</code> (o l'adreça del servidor) i
+      completa'l amb aquests valors:</p>
+      <ul>
+        <li><strong>Server Identity</strong>: Hostname <code>mail.puigcastellar.internal</code>,
+        Default Email Domain <code>puigcastellar.internal</code>, «Automatically Obtain TLS
+        Certificate» desactivat, «Generate Email Signing Keys (DKIM)» activat.</li>
+        <li><strong>Storage</strong>: RocksDB, valors per defecte.</li>
+        <li><strong>Account Directory</strong>: «Use the internal directory».</li>
+        <li><strong>Logging</strong>: valors per defecte.</li>
+        <li><strong>Automatic DNS Management</strong>: «Manual DNS server management».</li>
+      </ul>
+      <p>
+        En clicar «Finish setup» es genera l'administrador definitiu, amb correu i contrasenya
+        que només es mostren un cop a la pantalla final: apunta-la també.
+      </p>
+    </li>
+
+    <li>
+      <p><strong>Reinicia</strong> perquè el servei apliqui la configuració que acaba de generar
+      l'assistent:</p>
+<pre>sudo systemctl restart stalwart</pre>
+    </li>
+
+    <li>
+      <p><strong>Afegeix el nom a <code>/etc/hosts</code></strong>: sense DNS extern (al RA4 no
+      es munta BIND), el nom es resol amb una línia manual. En un desplegament real seria el
+      registre MX que ja vas veure al RA2:</p>
+<pre>echo "127.0.0.1 mail.puigcastellar.internal" | sudo tee -a /etc/hosts</pre>
+      <p>Al servidor mateix hi val el <code>127.0.0.1</code>. A qualsevol altra màquina que
+      hi hagi de connectar, la línia porta la <strong>IP del servidor</strong> a la xarxa
+      interna, no la de loopback.</p>
+    </li>
+
+    <li>
+      <p><strong>Comprova que els ports escolten:</strong></p>
+<pre>sudo ss -tlnp | grep -E ":(25|465|993|995|8080) "</pre>
+      <p>Han de sortir les cinc línies, una per cada port de la taula del bloc anterior.</p>
+    </li>
+
+    <li>
+      <p><strong>Crea els comptes <code>anna</code> i <code>bruno</code></strong> a Directory →
+      Accounts → Create user, un cop per cada compte:</p>
+      <ul>
+        <li><strong>Username</strong>: <code>anna</code> (i després <code>bruno</code>).</li>
+        <li><strong>Domain</strong>: clica el botó que obre el cercador i tria
+        <code>puigcastellar.internal</code> de la llista; no s'hi escriu text lliure.</li>
+        <li><strong>Credentials → Add item → Password</strong>: una contrasenya de 8 caràcters
+        com a mínim.</li>
+        <li>Botó <strong>Create</strong>.</li>
+      </ul>
     </li>
   </ol>
-
-  <div class="cq-note">
-    <span class="lbl">Ubuntu 26.04</span>
-    El paquet porta Kea 3.0. Molta documentació i molts tutorials escriuen la validació com
-    <code>sudo kea-dhcp4 -t</code>, sense l'usuari: així no funciona, perquè el perfil d'AppArmor
-    del paquet no deixa que el programa obri el fitxer. Compara sempre amb la sortida de la teva
-    màquina.
-  </div>
 </div>
 
-<!-- ============ 8 · BONES PRÀCTIQUES ============ -->
+<!-- ============ 7 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
   <h4>Criteris professionals</h4>
   <ul>
-    <li><strong>Valida sempre abans d'arrencar</strong> amb <code>sudo -u _kea kea-dhcp4 -t</code>. Estalvia la meitat dels problemes.</li>
-    <li><strong>Còpia de l'original.</strong> És la teva marxa enrere si t'hi perds.</li>
-    <li><strong>Escolta només per la targeta interna.</strong> Mai posis la targeta que va a la xarxa del centre a <code>interfaces</code>.</li>
-    <li><strong>Reserves fora del <em>pool</em></strong>, i totes juntes en una zona d'adreces baixes.</li>
-    <li><strong>Comenta la configuració</strong> amb <code>//</code>: Kea ho admet i el teu jo del mes vinent ho agrairà.</li>
+    <li><strong>Apunta les dues contrasenyes</strong> (bootstrap i admin final) en un lloc segur: no es tornen a mostrar.</li>
+    <li><strong>Cap fitxer a editar a mà</strong>: dominis, comptes i àlies, sempre per la consola web.</li>
+    <li><strong>Reinicia després de qualsevol canvi</strong> de configuració: no hi ha recàrrega en calent.</li>
+    <li><strong>Contrasenyes de compte de 8 caràcters com a mínim</strong>, sempre.</li>
+    <li><strong>No obris cap port que no calgui</strong>: 587 i 143 queden tancats a posta.</li>
   </ul>
 </div>
 
-<!-- ============ 9 · PROBLEMES ============ -->
+<!-- ============ 8 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
   <h4>Errors habituals</h4>
   <dl class="cq-issues">
-    <dt>El servei no arrenca</dt>
+    <dt>No trobo cap fitxer de configuració per editar</dt>
     <dd>
-      <p><span class="lbl">Causa</span> Error de JSON (una coma sobrant) o la targeta de <code>interfaces</code> no existeix o no té IP.</p>
-      <p><span class="lbl">Solució</span> <code>sudo -u _kea kea-dhcp4 -t /etc/kea/kea-dhcp4.conf</code> et dona el motiu, la línia i la columna. Si el fitxer és correcte, mira <code>journalctl -u kea-dhcp4-server -n 30</code>.</p>
+      <p><span class="lbl">Causa</span> S'espera un fitxer com <code>named.conf</code> o <code>vsftpd.conf</code>.</p>
+      <p><span class="lbl">Solució</span> Amb aquest instal·lador la configuració de debò viu a RocksDB; el <code>.json</code> només diu on és la base de dades. Es gestiona des de la consola web.</p>
     </dd>
 
-    <dt>El servei està actiu però el client no rep res</dt>
+    <dt>El formulari diu «This field is required» al camp Domain, tot i tenir-hi text</dt>
     <dd>
-      <p><span class="lbl">Causa</span> Escolta per la targeta equivocada, o el client està en una xarxa diferent de la del <code>subnet</code>.</p>
-      <p><span class="lbl">Solució</span> Comprova amb <code>ss -ulnp | grep :67</code> i, al servidor, <code>sudo tcpdump -i enp2s0 -n port 67</code>. Si no hi arriba el DISCOVER, el problema és de connexió, no de Kea.</p>
+      <p><span class="lbl">Causa</span> El camp no és una caixa de text lliure: és un botó que obre un cercador.</p>
+      <p><span class="lbl">Solució</span> Clica el camp, escriu per filtrar i clica l'opció de la llista.</p>
     </dd>
 
-    <dt>La reserva no s'aplica</dt>
+    <dt>La contrasenya de bootstrap ja no surt enlloc</dt>
     <dd>
-      <p><span class="lbl">Causa</span> La MAC està mal escrita, o el client encara té una concessió antiga vàlida.</p>
-      <p><span class="lbl">Solució</span> Copia la MAC de la sortida del client, no la transcriguis a mà. Al client, força la renovació amb <code>sudo networkctl renew enp1s0</code>.</p>
+      <p><span class="lbl">Causa</span> Només es mostra un cop als logs, i s'ha perdut o el bootstrap ja ha expirat.</p>
+      <p><span class="lbl">Solució</span> Esborra la configuració i deixa que Stalwart en generi una altra en tornar a arrencar en bootstrap mode.</p>
     </dd>
 
-    <dt>El client rep IP però no té Internet</dt>
+    <dt>Els canvis no es noten després de tocar la configuració</dt>
     <dd>
-      <p><span class="lbl">Causa</span> Kea ha fet la seva feina. Falta que el servidor encamini el trànsit cap a fora.</p>
-      <p><span class="lbl">Solució</span> És el contingut de la teoria T1.4: IP forwarding i NAT.</p>
+      <p><span class="lbl">Causa</span> Un canvi de configuració no s'aplica en calent.</p>
+      <p><span class="lbl">Solució</span> <code>sudo systemctl restart stalwart</code>.</p>
+    </dd>
+
+    <dt>No trobo cap fitxer de registre</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Es busca un <code>.log</code>, com el de vsftpd al RA3.</p>
+      <p><span class="lbl">Solució</span> Els logs de Stalwart van al journal de systemd: <code>journalctl -u stalwart</code>.</p>
     </dd>
   </dl>
 </div>
 
-<!-- ============ 10 · RESUM ============ -->
+<!-- ============ 9 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
   <h4>Resum</h4>
   <ul>
-    <li><strong>Kea</strong> substitueix <code>isc-dhcp-server</code>. La documentació antiga no serveix.</li>
-    <li>Es configura en <strong>JSON</strong> a <code>/etc/kea/kea-dhcp4.conf</code>.</li>
-    <li>Quatre blocs a tocar: <code>interfaces-config</code>, <code>subnet</code>, <code>pools</code> i <code>option-data</code>.</li>
-    <li>Les <strong>reserves</strong> van dins de la subxarxa i fora del <em>pool</em>.</li>
-    <li>Al comptar adreces d'un rang, <strong>els dos extrems hi entren</strong>.</li>
+    <li><strong>Stalwart</strong> fa d'MTA i d'MDA alhora: substitueix Postfix+Dovecot en aquest RA.</li>
+    <li>Configuració <strong>tota per la consola web</strong>: dades a RocksDB, no en fitxers de text.</li>
+    <li>Ports de sèrie: <strong>25, 465, 993, 995</strong> i <strong>8080</strong> (consola). El client fa servir 465 i 993.</li>
+    <li>La contrasenya de bootstrap només es mostra <strong>un cop</strong>, als logs.</li>
+    <li>Certificat <strong>autofirmat</strong>: el client hi protestarà fins que hi facis una excepció.</li>
   </ul>
 
-  <div class="cq-tablewrap">
-    <table class="cq-table">
-      <thead><tr><th>Comanda</th><th>Per a què serveix</th></tr></thead>
-      <tbody>
-        <tr><td><code>apt install kea-dhcp4-server</code></td><td>Instal·lar el servei</td></tr>
-        <tr><td><code>sudo -u _kea kea-dhcp4 -t &lt;fitxer&gt;</code></td><td>Validar la configuració</td></tr>
-        <tr><td><code>systemctl restart kea-dhcp4-server</code></td><td>Aplicar els canvis</td></tr>
-        <tr><td><code>systemctl status kea-dhcp4-server</code></td><td>Veure si està actiu o l'error</td></tr>
-        <tr><td><code>journalctl -u kea-dhcp4-server -f</code></td><td>Veure les concessions en directe</td></tr>
-        <tr><td><code>ss -ulnp | grep :67</code></td><td>Comprovar que escolta</td></tr>
-        <tr><td><code>cat /var/lib/kea/kea-leases4.csv</code></td><td>Llista de concessions</td></tr>
-      </tbody>
-    </table>
-  </div>
-
   <p style="margin-top:16px">
-    <strong>Següent:</strong> a <em>T1.4 · Encaminament i NAT</em> faràs que els clients del teu
-    servidor tinguin Internet.
+    <strong>Següent:</strong> a <em>T4.3</em> crearàs un àlies, llegiràs el correu per IMAP i
+    comprovaràs que el servidor no és cap open relay.
   </p>
 </div>
 
-<!-- ============ 11 · QUIZ ============ -->
+<!-- ============ 10 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
   <h4>Comprova el que has après</h4>
 
-  <div class="cq-question" data-id="t1-3-fitxer" data-type="single">
-    <div class="statement">On es configura el servidor Kea per a IPv4?</div>
-    <button class="cq-option" data-correct="false"><code>/etc/dhcp/dhcpd.conf</code></button>
-    <button class="cq-option" data-correct="true"><code>/etc/kea/kea-dhcp4.conf</code></button>
-    <button class="cq-option" data-correct="false"><code>/etc/netplan/01-kea.yaml</code></button>
-    <button class="cq-option" data-correct="false"><code>/var/lib/kea/kea-leases4.csv</code></button>
+  <div class="cq-question" data-id="t4-2-substitueix" data-type="single">
+    <div class="statement">Per què Stalwart substitueix Postfix+Dovecot en aquest RA?</div>
+    <button class="cq-option" data-correct="true">Perquè fa d'MTA i d'MDA alhora en un sol servei</button>
+    <button class="cq-option" data-correct="false">Perquè és més ràpid transportant correu</button>
+    <button class="cq-option" data-correct="false">Perquè no necessita cap tipus de xifratge</button>
+    <button class="cq-option" data-correct="false">Perquè no té cap consola d'administració</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t1-3-rang" data-type="single">
-    <div class="statement">Quantes adreces reparteix el rang <code>10.0.0.50 - 10.0.0.150</code>?</div>
-    <button class="cq-option" data-correct="false">100</button>
-    <button class="cq-option" data-correct="true">101</button>
-    <button class="cq-option" data-correct="false">99</button>
-    <button class="cq-option" data-correct="false">150</button>
+  <div class="cq-question" data-id="t4-2-config" data-type="single">
+    <div class="statement">On es guarda "de veritat" la configuració de Stalwart amb aquest instal·lador?</div>
+    <button class="cq-option" data-correct="false">A <code>/etc/stalwart/config.json</code>, sencera</button>
+    <button class="cq-option" data-correct="true">Dins una base de dades RocksDB</button>
+    <button class="cq-option" data-correct="false">A <code>/etc/stalwart/stalwart.conf</code></button>
+    <button class="cq-option" data-correct="false">No es guarda enlloc: cal repetir l'assistent cada cop</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t1-3-validar" data-type="single">
-    <div class="statement">Quina comanda comprova la configuració <em>abans</em> d'arrencar el servei?</div>
-    <button class="cq-option" data-correct="false"><code>systemctl status kea-dhcp4-server</code></button>
-    <button class="cq-option" data-correct="true"><code>sudo -u _kea kea-dhcp4 -t /etc/kea/kea-dhcp4.conf</code></button>
-    <button class="cq-option" data-correct="false"><code>netplan try</code></button>
-    <button class="cq-option" data-correct="false"><code>ss -ulnp | grep :67</code></button>
+  <div class="cq-question" data-id="t4-2-ports-client" data-type="single">
+    <div class="statement">Quins ports fa servir el client de correu per connectar-se a aquest servidor?</div>
+    <button class="cq-option" data-correct="false">587 i 143</button>
+    <button class="cq-option" data-correct="false">25 i 110</button>
+    <button class="cq-option" data-correct="true">465 i 993</button>
+    <button class="cq-option" data-correct="false">8080 i 443</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t1-3-opcions" data-type="single">
-    <div class="statement">Quin nom d'opció serveix per repartir la porta d'enllaç?</div>
-    <button class="cq-option" data-correct="false"><code>gateway</code></button>
-    <button class="cq-option" data-correct="true"><code>routers</code></button>
-    <button class="cq-option" data-correct="false"><code>domain-name-servers</code></button>
-    <button class="cq-option" data-correct="false"><code>default-route</code></button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
-  </div>
-
-  <div class="cq-question" data-id="t1-3-certes" data-type="multi">
-    <div class="statement">Selecciona totes les afirmacions certes sobre Kea</div>
-    <button class="cq-option" data-correct="true">La configuració és un fitxer JSON.</button>
-    <button class="cq-option" data-correct="true">Les IP reservades han d'estar fora del <em>pool</em>.</button>
-    <button class="cq-option" data-correct="true">La targeta on escolta ha de tenir IP fixa.</button>
-    <button class="cq-option" data-correct="false">Cal posar una coma després de l'últim element d'una llista.</button>
-    <button class="cq-option" data-correct="false">La documentació d'isc-dhcp-server serveix per configurar Kea.</button>
+  <div class="cq-question" data-id="t4-2-bootstrap" data-type="single">
+    <div class="statement">On trobes la contrasenya temporal d'administrador després d'instal·lar Stalwart?</div>
+    <button class="cq-option" data-correct="false">A <code>/etc/stalwart/config.json</code></button>
+    <button class="cq-option" data-correct="false">En un correu que envia el propi servidor</button>
+    <button class="cq-option" data-correct="true">Als logs, amb <code>journalctl -u stalwart</code></button>
+    <button class="cq-option" data-correct="false">No cal contrasenya: l'assistent no en demana cap</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
