@@ -397,7 +397,7 @@
 <div class="cq-block" data-kind="objectius">
   <h4>Què has de saber abans de començar</h4>
   <p>
-    Teoria <strong>T1.0</strong> (adreçament) i <strong>T1.1</strong> (Netplan).
+    Teoria <strong>T1.0</strong> (adreçament) i guia <strong>G1.1</strong> (Netplan).
   </p>
   <p>
     Amb aquesta activitat aprendràs a posar a punt un servidor acabat d'instal·lar: nom, hora,
@@ -455,7 +455,7 @@
         <tr><td>Nom de l'equip</td><td><code>hostnamectl --help</code></td></tr>
         <tr><td>Zona horària</td><td><code>timedatectl --help</code></td></tr>
         <tr><td>Actualitzacions automàtiques</td><td>El fitxer <code>/etc/apt/apt.conf.d/20auto-upgrades</code></td></tr>
-        <tr><td>Configuració de xarxa</td><td>Teoria <strong>T1.1</strong> i els <a href="https://netplan.readthedocs.io/en/stable/examples/">exemples oficials de Netplan</a></td></tr>
+        <tr><td>Configuració de xarxa</td><td>Guia <strong>G1.1</strong> i els <a href="https://netplan.readthedocs.io/en/stable/examples/">exemples oficials de Netplan</a></td></tr>
       </tbody>
     </table>
   </div>
@@ -466,7 +466,7 @@
   <h4>Estàs treballant per SSH</h4>
   <p>
     Un error a la configuració de xarxa et pot deixar fora de la màquina. Aplica els canvis
-    <strong>de la manera segura que has vist a T1.1</strong>, no de la ràpida: si perds la
+    <strong>de la manera segura que has vist a la G1.1</strong>, no de la ràpida: si perds la
     connexió, la configuració es desfà sola al cap de dos minuts. Si tot i així et quedes fora,
     entra per la consola de la VM a isardVDI.
   </p>
@@ -521,7 +521,7 @@
     <dt><code>enp2s0</code> no té la IP que li has posat</dt>
     <dd>
       <p><span class="lbl">Causa</span> Falta desactivar-hi el DHCP, o el nom de la targeta no és el que has escrit.</p>
-      <p><span class="lbl">Solució</span> Compara el nom amb la sortida de <code>ip -c link show</code> i repassa T1.1.</p>
+      <p><span class="lbl">Solució</span> Compara el nom amb la sortida de <code>ip -c link show</code> i repassa la G1.1.</p>
     </dd>
 
     <dt>Has perdut la connexió SSH</dt>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>T3.2 · Servidor vsftpd amb usuaris locals — Serveis en Xarxa (0227)</title>
+<title>G3.2 · Guia: SFTP d'OpenSSH — Serveis en Xarxa (0227)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -388,351 +388,131 @@
 </head>
 <body>
 <header class="cq-header">
-  <div class="eyebrow">0227 · Serveis en Xarxa · RA3 · T3.2</div>
-  <h1>Servidor vsftpd amb usuaris locals</h1>
-  <p class="lede">Comptes del sistema, permisos d'escriptura i cada usuari tancat al seu directori.</p>
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA3 · G3.2</div>
+  <h1>Guia: SFTP d'OpenSSH</h1>
+  <p class="lede">Transferència xifrada sense instal·lar cap servei nou.</p>
 </header>
 
-<!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h4>Què sabràs fer en acabar</h4>
+  <h4>Què hi ha en aquesta guia</h4>
+  <p>Documentació oficial: <code>man sshd_config</code> i https://www.openssh.com/manual.html</p>
   <ul>
-    <li>Configurar <strong>vsftpd</strong> per a usuaris del sistema, amb permís d'escriptura.</li>
-    <li>Crear usuaris i grups pensats per a accés remot.</li>
-    <li>Tancar cada usuari al seu directori amb <strong>chroot</strong>.</li>
-    <li>Decidir <em>qui</em> pot entrar amb una llista blanca.</li>
-    <li>Comprovar el servei i llegir-ne el registre.</li>
+    <li>No s'instal·la res: l'SFTP ja ve amb el servidor SSH.</li>
+    <li>Tot es configura a <code>/etc/ssh/sshd_config</code>.</li>
   </ul>
 </div>
 
-<!-- ============ 2 · UN SOL FITXER ============ -->
-<div class="cq-block" data-kind="teoria">
-  <h4>Un paquet, un servei, un fitxer</h4>
-  <p>
-    <strong>vsftpd</strong> (<em>Very Secure FTP Daemon</em>) és el servidor FTP estàndard a
-    Debian i Ubuntu des de fa vint anys, i el que fan servir servidors públics grans. Tota la
-    configuració viu en un únic fitxer.
-  </p>
-  <div class="cq-tablewrap">
-    <table class="cq-table">
-      <thead><tr><th>On</th><th>Què hi ha</th></tr></thead>
-      <tbody>
-        <tr><td><code>/etc/vsftpd.conf</code></td><td>Tota la configuració, una directiva per línia</td></tr>
-        <tr><td><code>/etc/ftpusers</code></td><td>Comptes que tenen l'FTP prohibit</td></tr>
-        <tr><td><code>/etc/vsftpd.userlist</code></td><td>La llista que crearàs tu</td></tr>
-        <tr><td><code>/var/log/vsftpd.log</code></td><td>Registre de connexions i transferències</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <p>
-    El format és estricte: <code>directiva=valor</code>, sense espais al voltant de l'igual. Un
-    espai de més i el servei no arrenca.
-  </p>
-</div>
-
-<!-- ============ 3 · LES DIRECTIVES ============ -->
-<div class="cq-block" data-kind="teoria">
-  <h4>Les directives que has de decidir</h4>
-  <p>
-    De sèrie, vsftpd deixa entrar els usuaris del sistema però <strong>no</strong> els deixa
-    escriure ni els tanca enlloc. Aquestes són les que has de tocar:
-  </p>
-  <div class="cq-tablewrap">
-    <table class="cq-table">
-      <thead><tr><th>Directiva</th><th>Què decideix</th></tr></thead>
-      <tbody>
-        <tr><td><code>local_enable</code></td><td>Si els usuaris del sistema poden entrar</td></tr>
-        <tr><td><code>write_enable</code></td><td>Si poden pujar, esborrar o crear carpetes</td></tr>
-        <tr><td><code>local_umask</code></td><td>Amb quins permisos arriben els fitxers pujats</td></tr>
-        <tr><td><code>chroot_local_user</code></td><td>Si queden tancats al seu directori</td></tr>
-        <tr><td><code>userlist_enable</code></td><td>Si es consulta una llista d'usuaris</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <p>
-    <code>local_umask=022</code> deixa els fitxers llegibles per tothom;
-    <code>077</code>, el valor de sèrie, només per al propietari.
-  </p>
-</div>
-
-<!-- ============ 4 · CHROOT ============ -->
-<div class="cq-block" data-kind="teoria">
-  <h4>Enjaular l'usuari: chroot</h4>
-  <p>
-    Sense <code>chroot_local_user</code>, qui entra per FTP es pot moure per <strong>tot el
-    sistema de fitxers</strong>: pot baixar-se <code>/etc/passwd</code> o llegir els directoris
-    dels companys. Té els permisos del seu compte, i això és massa.
-  </p>
-  <p>
-    Un <strong>chroot</strong> canvia quin directori és l'arrel per a aquella sessió. L'usuari veu
-    el seu directori personal com si fos <code>/</code> i no en pot sortir: el
-    <code>cd ..</code> no el porta enlloc.
-  </p>
-  <p>
-    És la diferència entre un compte de servei i un compte de sistema. Un usuari d'FTP no ha de
-    poder passejar per la màquina.
-  </p>
-</div>
-
-<!-- ============ 5 · EXEMPLE ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h4>Configuració per a usuaris locals enjaulats</h4>
-  <p>Aquestes són les línies que canvies o afegeixes a <code>/etc/vsftpd.conf</code>:</p>
-<pre><span class="c"># Qui entra</span>
-anonymous_enable=NO
-local_enable=YES
-
-<span class="c"># Què pot fer</span>
-write_enable=YES
-local_umask=022
-
-<span class="c"># On queda tancat</span>
-chroot_local_user=YES
-local_root=/home/$USER
-user_sub_token=$USER
-
-<span class="c"># Llista blanca: només aquests usuaris</span>
-userlist_enable=YES
-userlist_file=/etc/vsftpd.userlist
-userlist_deny=NO</pre>
+  <h4>El bloc Match del sshd_config</h4>
+  <p>SFTP enjaulat, <strong>al final</strong> de <code>/etc/ssh/sshd_config</code>:</p>
+<pre>Match Group sftpusers
+    ChrootDirectory /home/%u
+    ForceCommand internal-sftp
+    AllowTcpForwarding no
+    X11Forwarding no</pre>
   <p>
-    Amb <code>user_sub_token</code>, el <code>$USER</code> de <code>local_root</code> se substitueix
-    pel nom de qui entra: cadascú aterra al seu directori personal i no en pot sortir.
-  </p>
-  <p>
-    Fixa't que <code>local_root</code> apunta a <code>/home/$USER</code> i <strong>no</strong> a
-    <code>/home/$USER/fitxers</code>. El que hi posis serà l'arrel de la gàbia, i una arrel on
-    l'usuari pugui escriure fa que vsftpd es negui a servir-lo. Ho tens al bloc següent.
+    El <code>%u</code> és el nom de qui entra. Tot el que ve després d'un <code>Match</code>
+    s'aplica només a aquell grup, i per això ha d'anar al final del fitxer.
   </p>
 </div>
 
-<!-- ============ 6 · LA TRAMPA DEL CHROOT ============ -->
+<!-- ============ 6 · PERMISOS DEL CHROOT ============ -->
 <div class="cq-block" data-kind="observació">
-  <h4>L'arrel del chroot no pot ser escrivible</h4>
+  <h4>El chroot de SSH és més exigent que el de vsftpd</h4>
   <p>
-    L'arrel de la gàbia és el directori que digui <code>local_root</code>. Si l'usuari hi pot
-    escriure, vsftpd no el deixa entrar i li respon
-    <code>500 OOPS: vsftpd: refusing to run with writable root inside chroot()</code>. No és un
-    error teu: és una protecció.
-  </p>
-  <p>Tens dues sortides, i no valen el mateix:</p>
-  <ul>
-    <li><strong>La bona:</strong> l'arrel del chroot és de <code>root</code> i no s'hi pot escriure; a dins hi ha una carpeta <code>fitxers</code> que sí que és de l'usuari, i és on farà els <code>put</code>.</li>
-    <li><strong>La ràpida:</strong> afegir <code>allow_writeable_chroot=YES</code>. Funciona, però renuncies a la protecció.</li>
-  </ul>
-</div>
-
-<!-- ============ 7 · CAS REAL ============ -->
-<div class="cq-block" data-kind="cas real">
-  <h4>El compte compartit de la petita empresa</h4>
-  <p>
-    Un muntatge que es veu molt: un sol compte d'FTP, la contrasenya apuntada en un correu antic,
-    i tothom hi entra. Proveïdors, clients i l'informàtic que va marxar fa dos anys.
+    <code>ChrootDirectory</code> imposa una condició que sorprèn tothom la primera vegada: el
+    directori <strong>i tots els que hi ha per sobre</strong> han de ser de <code>root</code> i no
+    escrivibles per ningú més.
   </p>
   <p>
-    El dia que apareix un fitxer esborrat no hi ha manera de saber qui ha estat: el registre diu
-    sempre el mateix nom. I quan algú deixa l'empresa, o es canvia la contrasenya a tothom o no es
-    canvia a ningú.
+    És a dir, <code>/home/alumne1</code> ha de ser de <code>root:root</code> amb permisos
+    <code>755</code>, i la carpeta on l'usuari sí que escriu ha d'anar a dins. Exactament el
+    mateix esquema que a la T3.2, però aquí sshd ho comprova sense excepcions.
   </p>
   <p>
-    Un compte per persona no és burocràcia: és l'única cosa que fa que el registre serveixi per a
-    alguna cosa i que donar de baixa un usuari sigui una ordre i prou.
+    Si no es compleix, la connexió es talla de seguida i el missatge del client no diu per què.
+    Qui t'ho explica és el registre del servidor.
   </p>
 </div>
 
-<!-- ============ 8 · PAS A PAS ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h4>Muntar el servidor amb usuaris enjaulats</h4>
-
+  <h4>Enjaular un grup dins de SFTP</h4>
   <ol class="cq-steps">
-    <li>
-      <p><strong>Instal·la i desa una còpia</strong> del fitxer original:</p>
-<pre>sudo apt install -y vsftpd
-sudo cp /etc/vsftpd.conf /etc/vsftpd.conf.original</pre>
+<li>
+      <p><strong>Prepara el grup d'SFTP</strong> i posa-hi l'usuari:</p>
+<pre>sudo groupadd sftpusers
+sudo usermod -aG sftpusers alumne1</pre>
     </li>
 
-    <li>
-      <p><strong>Crea el grup i l'usuari.</strong> El compte necessita una <em>shell</em> vàlida,
-      o no podrà autenticar-se:</p>
-<pre>sudo groupadd ftpusers
-sudo useradd -m -g ftpusers -s /bin/bash alumne1
-sudo passwd alumne1</pre>
+<li>
+      <p><strong>Afegeix el bloc <code>Match</code></strong> al final de
+      <code>/etc/ssh/sshd_config</code>, valida i recarrega:</p>
+<pre>sudo nano /etc/ssh/sshd_config
+sudo sshd -t
+sudo systemctl restart ssh</pre>
     </li>
 
-    <li>
-      <p><strong>Prepara el directori</strong>: arrel de <code>root</code>, i a dins la carpeta on
-      sí que podrà escriure:</p>
-<pre>sudo chown root:root /home/alumne1
-sudo chmod 755 /home/alumne1
-sudo mkdir /home/alumne1/fitxers
-sudo chown alumne1:ftpusers /home/alumne1/fitxers</pre>
-    </li>
-
-    <li>
-      <p><strong>Escriu la configuració</strong> amb l'exemple d'aquesta pàgina:</p>
-<pre>sudo nano /etc/vsftpd.conf</pre>
-    </li>
-
-    <li>
-      <p><strong>Crea la llista blanca</strong>, un nom d'usuari per línia:</p>
-<pre>echo "alumne1" | sudo tee /etc/vsftpd.userlist</pre>
-    </li>
-
-    <li>
-      <p><strong>Reinicia i comprova</strong> que ha arrencat:</p>
-<pre>sudo systemctl restart vsftpd
-systemctl status vsftpd</pre>
-    </li>
-
-    <li>
-      <p><strong>Prova-ho des del client</strong>, i mira que el <code>cd ..</code> no el tregui
-      d'on és:</p>
-<pre>ftp 192.168.1.8</pre>
+<li>
+      <p><strong>Prova l'SFTP</strong> des del client, i mira que no et doni consola:</p>
+<pre>sftp alumne1@192.168.1.8
+ssh alumne1@192.168.1.8</pre>
       <p>
-        Un cop dins, <code>pwd</code> ha de dir <code>/</code> i <code>cd ..</code> l'ha de deixar
-        al mateix lloc. El <code>put</code> a l'arrel fallarà: has d'entrar primer a
-        <code>cd fitxers</code>, que és l'única carpeta on l'usuari escriu.
+        El primer ha d'entrar i el segon s'ha de tancar amb <code>This service allows sftp
+        connections only</code>. Dins de l'SFTP funcionen <code>ls</code>, <code>get</code>,
+        <code>put</code> i <code>bye</code>, com a l'FTP.
       </p>
     </li>
   </ol>
-
-  <div class="cq-note">
-    <span class="lbl">Ubuntu 26.04</span>
-    Si vols que l'usuari no pugui obrir sessió a la màquina, li pots posar
-    <code>-s /usr/sbin/nologin</code>, però aleshores has d'afegir aquesta línia a
-    <code>/etc/shells</code>: vsftpd comprova la <em>shell</em> a través de PAM. Si te'n descuides,
-    el client només veu <code>530 Login incorrect</code>, i qui t'ho explica és el registre:
-    <code>pam_shells(vsftpd:auth): User has an invalid shell</code>.
-  </div>
 </div>
 
-<!-- ============ 9 · BONES PRÀCTIQUES ============ -->
-<div class="cq-block" data-kind="bones pràctiques">
-  <h4>Criteris professionals</h4>
-  <ul>
-    <li><strong>Un compte per persona</strong>, mai un compte compartit.</li>
-    <li><strong>Un grup dedicat</strong> (<code>ftpusers</code>) per aplicar permisos d'una sola vegada.</li>
-    <li><strong>Llista blanca</strong> amb <code>userlist_deny=NO</code>: qui no hi és, no entra.</li>
-    <li><strong>Chroot sempre</strong>, i amb l'arrel no escrivible.</li>
-    <li><strong>Còpia del fitxer original</strong> abans de la primera edició.</li>
-  </ul>
-</div>
-
-<!-- ============ 10 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
   <h4>Errors habituals</h4>
   <dl class="cq-issues">
-    <dt><code>500 OOPS: refusing to run with writable root inside chroot()</code></dt>
+<dt>vsftpd no arrenca en activar el TLS, i no diu res</dt>
     <dd>
-      <p><span class="lbl">Causa</span> El directori on aterra l'usuari és seu i hi pot escriure.</p>
-      <p><span class="lbl">Solució</span> Fes que l'arrel sigui de <code>root</code> i sense permís d'escriptura, amb una subcarpeta seva a dins.</p>
+      <p><span class="lbl">Causa</span> Una directiva que no existeix: <code>ssl_tlsv1_2</code> en comptes de <code>ssl_tlsv12</code>, o <code>ssl_enable=YES</code> sense les dues línies <code>rsa_</code>. Al registre només hi surt <code>status=2/INVALIDARGUMENT</code>.</p>
+      <p><span class="lbl">Solució</span> Comenta el bloc de TLS sencer, arrenca, i torna a posar les línies d'una en una fins que el servei caigui: la culpable és l'última que has escrit.</p>
     </dd>
 
-    <dt><code>530 Login incorrect</code> amb la contrasenya bona</dt>
+    <dt>El client <code>ftp</code> deixa de connectar en activar el TLS</dt>
     <dd>
-      <p><span class="lbl">Causa</span> L'usuari no és a <code>/etc/vsftpd.userlist</code>, o té una <em>shell</em> que no és a <code>/etc/shells</code>.</p>
-      <p><span class="lbl">Solució</span> Revisa la llista i la <em>shell</em> del compte amb <code>getent passwd alumne1</code>.</p>
+      <p><span class="lbl">Causa</span> És l'efecte buscat: aquest client no sap fer TLS i el servidor ja no accepta clar. Respon <code>530 Non-anonymous sessions must use encryption</code>.</p>
+      <p><span class="lbl">Solució</span> Fes servir <code>lftp</code>, FileZilla o qualsevol client amb suport d'FTPS.</p>
     </dd>
 
-    <dt><code>550 Permission denied</code> en pujar</dt>
+    <dt>El client rebutja el certificat</dt>
     <dd>
-      <p><span class="lbl">Causa</span> Falta <code>write_enable=YES</code>, o la carpeta de destinació no és de l'usuari.</p>
-      <p><span class="lbl">Solució</span> Comprova la directiva i després <code>ls -ld</code> de la carpeta.</p>
+      <p><span class="lbl">Causa</span> És autosignat i no el signa cap autoritat coneguda.</p>
+      <p><span class="lbl">Solució</span> A l'aula, accepta'l a mà o desactiva'n la verificació al client. En producció, certificat signat.</p>
     </dd>
 
-    <dt>El servei no arrenca després d'editar</dt>
+    <dt>L'SFTP es tanca just després d'autenticar</dt>
     <dd>
-      <p><span class="lbl">Causa</span> Un espai al voltant de l'<code>=</code>, o una directiva mal escrita.</p>
-      <p><span class="lbl">Solució</span> vsftpd plega sense dir res: al registre només hi veuràs
-      <code>status=2/INVALIDARGUMENT</code>. Comenta les línies que has tocat, arrenca, i torna-les
-      a posar d'una en una fins que caigui.</p>
+      <p><span class="lbl">Causa</span> El <code>ChrootDirectory</code> o algun directori superior no és de <code>root</code>, o és escrivible pel grup.</p>
+      <p><span class="lbl">Solució</span> <code>sudo journalctl -u ssh -n 20</code> ho diu clar, i després <code>ls -ld</code> de tota la ruta.</p>
+    </dd>
+
+    <dt>El bloc <code>Match</code> afecta tothom</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Està enmig del fitxer: tot el que ve darrere queda dins del <code>Match</code>.</p>
+      <p><span class="lbl">Solució</span> Mou-lo al final i valida amb <code>sudo sshd -t</code>.</p>
     </dd>
   </dl>
 </div>
 
-<!-- ============ 11 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h4>Resum</h4>
-  <ul>
-    <li>Tota la configuració és a <strong><code>/etc/vsftpd.conf</code></strong>, en format <code>directiva=valor</code>.</li>
-    <li>De sèrie els usuaris entren però <strong>no escriuen</strong>: cal <code>write_enable=YES</code>.</li>
-    <li><strong><code>chroot_local_user=YES</code></strong> tanca cada usuari al seu directori.</li>
-    <li>L'arrel del chroot <strong>no pot ser escrivible</strong>: la carpeta escrivible va a dins.</li>
-    <li>La llista blanca són tres directives: <code>userlist_enable</code>, <code>userlist_file</code> i <code>userlist_deny=NO</code>.</li>
-  </ul>
-
+  <h4>Fitxa ràpida</h4>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Comanda</th><th>Per a què serveix</th></tr></thead>
       <tbody>
-        <tr><td><code>systemctl restart vsftpd</code></td><td>Aplicar els canvis</td></tr>
-        <tr><td><code>journalctl -u vsftpd -n 20</code></td><td>Veure per què no arrenca</td></tr>
-        <tr><td><code>getent passwd alumne1</code></td><td>Comprovar directori i <em>shell</em></td></tr>
-        <tr><td><code>ls -ld /home/alumne1</code></td><td>Comprovar propietari i permisos</td></tr>
-        <tr><td><code>tail -f /var/log/vsftpd.log</code></td><td>Seguir les connexions en directe</td></tr>
+        <tr><td><code>sudo sshd -t</code></td><td>Validar el fitxer abans de recarregar</td></tr>
+        <tr><td><code>sudo systemctl restart ssh</code></td><td>Aplicar els canvis</td></tr>
+        <tr><td><code>sftp usuari@servidor</code></td><td>Provar l'accés</td></tr>
+        <tr><td><code>ssh usuari@servidor</code></td><td>Comprovar que no dona consola</td></tr>
+        <tr><td><code>journalctl -u ssh -n 20</code></td><td>Saber per què es talla la sessió</td></tr>
       </tbody>
     </table>
-  </div>
-
-  <p style="margin-top:16px">
-    <strong>Següent:</strong> a <em>T3.3 · Accés anònim i límits</em> obriràs una part del servidor
-    a qui no té compte, i posaràs fre al que poden fer.
-  </p>
-</div>
-
-<!-- ============ 12 · QUIZ ============ -->
-<div class="cq-block" data-kind="quiz">
-  <h4>Comprova el que has après</h4>
-
-  <div class="cq-question" data-id="t3-2-fitxer" data-type="single">
-    <div class="statement">On es configura vsftpd?</div>
-    <button class="cq-option" data-correct="false"><code>/etc/vsftpd/vsftpd.d/</code></button>
-    <button class="cq-option" data-correct="true"><code>/etc/vsftpd.conf</code></button>
-    <button class="cq-option" data-correct="false"><code>/etc/ftpusers</code></button>
-    <button class="cq-option" data-correct="false"><code>/var/log/vsftpd.log</code></button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
-  </div>
-
-  <div class="cq-question" data-id="t3-2-chroot" data-type="single">
-    <div class="statement">Què aconsegueixes amb <code>chroot_local_user=YES</code>?</div>
-    <button class="cq-option" data-correct="false">Que els usuaris puguin pujar fitxers</button>
-    <button class="cq-option" data-correct="true">Que cada usuari vegi el seu directori com si fos l'arrel i no en pugui sortir</button>
-    <button class="cq-option" data-correct="false">Que la connexió es xifri</button>
-    <button class="cq-option" data-correct="false">Que només entrin els usuaris de la llista</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
-  </div>
-
-  <div class="cq-question" data-id="t3-2-oops" data-type="single">
-    <div class="statement">Surt <code>500 OOPS: refusing to run with writable root inside chroot()</code>. Quina és la solució recomanable?</div>
-    <button class="cq-option" data-correct="false">Desactivar el chroot</button>
-    <button class="cq-option" data-correct="true">Deixar l'arrel en mans de <code>root</code> i crear-hi a dins una carpeta escrivible per l'usuari</button>
-    <button class="cq-option" data-correct="false">Donar permisos 777 al directori personal</button>
-    <button class="cq-option" data-correct="false">Fer servir el compte <code>root</code> per connectar</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
-  </div>
-
-  <div class="cq-question" data-id="t3-2-userlist" data-type="single">
-    <div class="statement">Vols que només entrin els usuaris d'una llista. Què hi poses?</div>
-    <button class="cq-option" data-correct="false"><code>userlist_enable=NO</code></button>
-    <button class="cq-option" data-correct="true"><code>userlist_enable=YES</code> i <code>userlist_deny=NO</code></button>
-    <button class="cq-option" data-correct="false"><code>userlist_deny=YES</code></button>
-    <button class="cq-option" data-correct="false">Els noms a <code>/etc/ftpusers</code></button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
-  </div>
-
-  <div class="cq-question" data-id="t3-2-afirmacions" data-type="multi">
-    <div class="statement">Selecciona totes les afirmacions certes</div>
-    <button class="cq-option" data-correct="true">Sense <code>write_enable=YES</code> ningú no pot pujar fitxers.</button>
-    <button class="cq-option" data-correct="true"><code>/etc/ftpusers</code> conté comptes que tenen l'FTP prohibit.</button>
-    <button class="cq-option" data-correct="true">Convé un compte per persona i un grup dedicat.</button>
-    <button class="cq-option" data-correct="false">Un espai al voltant de l'<code>=</code> és indiferent.</button>
-    <button class="cq-option" data-correct="false">El chroot xifra la sessió.</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
   </div>
 </div>
 

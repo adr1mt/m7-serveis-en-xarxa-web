@@ -395,7 +395,7 @@
 
 <div class="cq-block" data-kind="teoria">
   <h4>Teoria</h4>
-  <p>Llegeix-les en ordre. Cada pàgina acaba amb una guia pas a pas i un test per comprovar què has entès.</p>
+  <p>Expliquen com funciona el servei, sense lligar-lo a cap producte.</p>
   <ul class="cq-index">
     <li><a href="teoria/t2-1-noms-i-resolucio.html">
       <span class="ref">T2.1</span>
@@ -405,18 +405,24 @@
       <span class="ref">T2.2</span>
       <span class="ttl">L'arbre del DNS
         <span class="sub">Jerarquia, zones, delegació i TTL</span></span></a></li>
-    <li><a href="teoria/t2-3-servidor-bind.html">
+    <li><a href="teoria/t2-3-zones-i-registres.html">
       <span class="ref">T2.3</span>
-      <span class="ttl">Servidor DNS amb BIND 9
-        <span class="sub">Resolutor amb memòria cau per a la LAN</span></span></a></li>
-    <li><a href="teoria/t2-4-zones-i-registres.html">
-      <span class="ref">T2.4</span>
       <span class="ttl">Zones i registres
         <span class="sub">Zona directa, inversa i tipus de registre</span></span></a></li>
-    <li><a href="teoria/t2-5-primari-secundari.html">
-      <span class="ref">T2.5</span>
+    <li><a href="teoria/t2-4-primari-secundari.html">
+      <span class="ref">T2.4</span>
       <span class="ttl">Primari i secundari
         <span class="sub">Transferències de zona i redundància</span></span></a></li>
+  </ul>
+</div>
+
+<div class="cq-block" data-kind="guies">
+  <h4>Guies</h4>
+  <ul class="cq-index">
+    <li><a href="guies/g2-1-bind9.html">
+      <span class="ref">G2.1</span>
+      <span class="ttl">Guia: BIND 9
+        <span class="sub">Resolutor, zones pròpies i servidor secundari</span></span></a></li>
   </ul>
 </div>
 
@@ -449,15 +455,16 @@
 
 <div class="cq-block" data-kind="ordre recomanat">
   <h4>En quin ordre fer-ho</h4>
-  <p>La teoria i les activitats estan pensades per alternar-se, no per fer-les en dos blocs separats:</p>
+  <p>
+    Primer entens el servei, després tens el manual a mà per fer les activitats.</p>
   <div class="cq-tablewrap">
     <table class="cq-table">
-      <thead><tr><th>Primer llegeix</th><th>I després fes</th></tr></thead>
+      <thead><tr><th>Llegeix</th><th>Tingues a mà</th><th>Fes</th></tr></thead>
       <tbody>
-        <tr><td>T2.1 · T2.2</td><td>A2.1 — el client davant dels noms</td></tr>
-        <tr><td>T2.3 · T2.4</td><td>A2.2 — servidor DNS amb BIND</td></tr>
-        <tr><td>—</td><td>A2.3 — DHCP i DNS junts</td></tr>
-        <tr><td>T2.5</td><td>A2.4 — zona secundària, per parelles</td></tr>
+        <tr><td>T2.1 · T2.2</td><td>—</td><td>A2.1 — el client davant dels noms</td></tr>
+        <tr><td>T2.3</td><td>G2.1</td><td>A2.2 — servidor DNS amb BIND</td></tr>
+        <tr><td>—</td><td>G2.1</td><td>A2.3 — DHCP i DNS junts</td></tr>
+        <tr><td>T2.4</td><td>G2.1</td><td>A2.4 — zona secundària, per parelles</td></tr>
       </tbody>
     </table>
   </div>

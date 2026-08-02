@@ -397,7 +397,8 @@
 <div class="cq-block" data-kind="objectius">
   <h4>Què has de saber abans de començar</h4>
   <p>
-    Teories <strong>T1.2</strong> (DHCP), <strong>T1.3</strong> (Kea) i <strong>T1.4</strong>
+    Teories <strong>T1.1</strong> (DHCP) i <strong>T1.2</strong> (encaminament i NAT), i les
+    guies <strong>G1.2</strong> i <strong>G1.3</strong>
     (encaminament i NAT).
   </p>
   <p>
@@ -445,11 +446,11 @@
     <table class="cq-table">
       <thead><tr><th>Què has de fer</th><th>On ho tens</th></tr></thead>
       <tbody>
-        <tr><td>Posada a punt i Netplan</td><td>Teoria <strong>T1.1</strong> i activitat <strong>A1.1</strong></td></tr>
-        <tr><td>Instal·lar Kea i estructura de <code>kea-dhcp4.conf</code></td><td>Teoria <strong>T1.3</strong></td></tr>
-        <tr><td>Validar la configuració abans d'arrencar</td><td>Teoria <strong>T1.3</strong></td></tr>
-        <tr><td>Reserves MAC ↔ IP i registres del servei</td><td>Teoria <strong>T1.3</strong></td></tr>
-        <tr><td>IP forwarding i NAT amb nftables</td><td>Teoria <strong>T1.4</strong></td></tr>
+        <tr><td>Posada a punt i Netplan</td><td>Guia <strong>G1.1</strong> i activitat <strong>A1.1</strong></td></tr>
+        <tr><td>Instal·lar Kea i estructura de <code>kea-dhcp4.conf</code></td><td>Guia <strong>G1.2</strong></td></tr>
+        <tr><td>Validar la configuració abans d'arrencar</td><td>Guia <strong>G1.2</strong></td></tr>
+        <tr><td>Reserves MAC ↔ IP i registres del servei</td><td>Guia <strong>G1.2</strong></td></tr>
+        <tr><td>IP forwarding i NAT amb nftables</td><td>Guia <strong>G1.3</strong></td></tr>
       </tbody>
     </table>
   </div>
@@ -505,7 +506,7 @@
     <dt>Kea no arrenca</dt>
     <dd>
       <p><span class="lbl">Causa</span> Una coma sobrant al JSON, o <code>personal1</code> encara no té la IP fixa.</p>
-      <p><span class="lbl">Solució</span> Valida el fitxer amb l'opció que has vist a T1.3: et diu la línia exacta.</p>
+      <p><span class="lbl">Solució</span> Valida el fitxer amb l'opció que has vist a la G1.2: et diu la línia exacta.</p>
     </dd>
 
     <dt>El client no rep res</dt>

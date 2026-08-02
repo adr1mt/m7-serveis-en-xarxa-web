@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>T3.4 · FTPS i SFTP: transferència xifrada — Serveis en Xarxa (0227)</title>
+<title>T2.3 · Zones i registres — Serveis en Xarxa (0227)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -388,354 +388,166 @@
 </head>
 <body>
 <header class="cq-header">
-  <div class="eyebrow">0227 · Serveis en Xarxa · RA3 · T3.4</div>
-  <h1>FTPS i SFTP: transferència xifrada</h1>
-  <p class="lede">Dos noms que s'assemblen molt i són dues coses completament diferents.</p>
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA2 · T2.3</div>
+  <h1>Zones i registres</h1>
+  <p class="lede">Què és una zona, què hi ha dins i quins registres necessites.</p>
 </header>
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
   <h4>Què sabràs fer en acabar</h4>
   <ul>
-    <li>Distingir <strong>FTP</strong>, <strong>FTPS</strong> i <strong>SFTP</strong>, i saber quin és quin.</li>
-    <li>Veure amb un capturador que l'FTP en clar ensenya la contrasenya.</li>
-    <li>Activar <strong>TLS</strong> a vsftpd i obligar-lo a fer-lo servir.</li>
-    <li>Muntar <strong>SFTP</strong> enjaulat amb OpenSSH, sense instal·lar res.</li>
-    <li>Provar-ho amb clients de línia d'ordres i gràfics.</li>
+    <li>Distingir una zona <strong>directa</strong> d'una d'<strong>inversa</strong>.</li>
+    <li>Escriure un fitxer de zona amb el registre <strong>SOA</strong> ben posat.</li>
+    <li>Distingir els registres A, PTR, CNAME, MX, TXT i NS.</li>
+    <li>Recordar per què el <strong>punt final</strong> canvia el significat d'un nom.</li>
+    <li>Dir per què el <strong>serial</strong> s'ha d'apujar a cada canvi.</li>
   </ul>
 </div>
 
-<!-- ============ 2 · TRES NOMS ============ -->
+<!-- ============ 2 · DUES ZONES ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Tres noms que sonen igual</h4>
+  <h4>Dues zones per a la mateixa xarxa</h4>
   <p>
-    La confusió és universal i val la pena aclarir-la d'entrada: <strong>SFTP no és FTP amb una
-    <em>s</em></strong>. No comparteixen ni protocol ni servidor.
+    Fins ara el teu servidor repetia el que deien els altres. Ara tindrà dades pròpies: serà
+    <strong>autoritatiu</strong> d'una zona teva.
   </p>
   <div class="cq-tablewrap">
     <table class="cq-table">
-      <thead><tr><th></th><th>Què és</th><th>Port</th><th>Servei</th></tr></thead>
+      <thead><tr><th>Zona</th><th>Respon a</th><th>Es diu</th></tr></thead>
       <tbody>
-        <tr><td>FTP</td><td>El protocol de sempre, en clar</td><td>21</td><td><code>vsftpd</code></td></tr>
-        <tr><td>FTPS</td><td>El mateix FTP dins d'una capa TLS</td><td>21</td><td><code>vsftpd</code></td></tr>
-        <tr><td>SFTP</td><td>Un subsistema de SSH</td><td>22</td><td><code>ssh</code></td></tr>
+        <tr><td><strong>Directa</strong></td><td>«Quina IP té aquest nom?»</td><td><code>adria.internal</code></td></tr>
+        <tr><td><strong>Inversa</strong></td><td>«Quin nom té aquesta IP?»</td><td><code>1.168.192.in-addr.arpa</code></td></tr>
       </tbody>
     </table>
   </div>
   <p>
-    FTPS conserva els dos canals i totes les seves complicacions. SFTP no en té cap: viatja per la
-    mateixa connexió SSH que ja fas servir per administrar la màquina.
+    El nom de la zona inversa és la <strong>xarxa escrita al revés</strong> seguida de
+    <code>in-addr.arpa</code>. Per a <code>192.168.1.0/24</code>, els tres primers octets girats:
+    <code>1.168.192</code>. Fa estrany, però té sentit: així les adreces també es llegeixen de
+    general a concret, com els noms.
   </p>
 </div>
 
-<!-- ============ 3 · FTPS ============ -->
+<!-- ============ 4 · EL SOA ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>FTPS: TLS damunt de l'FTP</h4>
+  <h4>La capçalera de tota zona: el registre SOA</h4>
   <p>
-    Hi ha dues maneres d'encaixar-hi el TLS. En <strong>explícit</strong>, el client connecta al
-    port 21 de sempre i demana xifrar amb l'ordre <code>AUTH TLS</code>. És el normal, i el que
-    fan tots els clients d'avui.
-  </p>
-  <p>
-    En <strong>implícit</strong>, la connexió va xifrada des del primer byte per un port propi, el
-    990. És anterior a l'estàndard i està en desús.
-  </p>
-  <p>
-    A vsftpd s'activa amb <code>ssl_enable=YES</code>. Però activar-lo no n'obliga l'ús: si vols
-    que ningú no pugui entrar en clar, cal forçar-lo per a les credencials i per a les dades.
-  </p>
-</div>
-
-<!-- ============ 4 · SFTP ============ -->
-<div class="cq-block" data-kind="teoria">
-  <h4>SFTP: un subsistema de SSH</h4>
-  <p>
-    Si la màquina té <code>openssh-server</code>, ja té SFTP. La línia
-    <code>Subsystem sftp</code> del <code>sshd_config</code> hi ve activada de sèrie: qualsevol
-    usuari que pugui fer SSH pot fer SFTP.
-  </p>
-  <p>
-    El problema és justament aquest. Un usuari d'SFTP acostuma a ser un usuari al qual
-    <strong>no</strong> vols donar una consola ni deixar passejar per la màquina. La solució és un
-    bloc <code>Match</code> al final del <code>sshd_config</code>:
+    Tot fitxer de zona comença igual: el TTL per defecte i un registre <strong>SOA</strong>
+    (<em>Start Of Authority</em>), que declara qui mana a la zona i cada quan s'ha de revisar.
   </p>
   <div class="cq-tablewrap">
     <table class="cq-table">
-      <thead><tr><th>Directiva</th><th>Què fa</th></tr></thead>
+      <thead><tr><th>Camp</th><th>Què vol dir</th></tr></thead>
       <tbody>
-        <tr><td><code>ForceCommand internal-sftp</code></td><td>Només SFTP: res de consola</td></tr>
-        <tr><td><code>ChrootDirectory</code></td><td>L'enjaula en un directori</td></tr>
-        <tr><td><code>AllowTcpForwarding no</code></td><td>Li tanca els túnels</td></tr>
+        <tr><td><strong>Serial</strong></td><td>Número de versió. <strong>S'ha d'apujar a cada canvi</strong></td></tr>
+        <tr><td><strong>Refresh</strong></td><td>Cada quant el secundari pregunta si hi ha novetats</td></tr>
+        <tr><td><strong>Retry</strong></td><td>Cada quant torna a provar si ha fallat</td></tr>
+        <tr><td><strong>Expire</strong></td><td>Quan el secundari deixa de servir dades velles</td></tr>
+        <tr><td><strong>Minimum</strong></td><td>Quant es guarden les respostes negatives</td></tr>
       </tbody>
     </table>
   </div>
-</div>
-
-<!-- ============ 5 · EXEMPLE ============ -->
-<div class="cq-block" data-kind="exemple">
-  <h4>Les dues configuracions, de costat</h4>
-  <p>FTPS, a <code>/etc/vsftpd.conf</code>, amb el certificat que ja porta el sistema:</p>
-<pre>ssl_enable=YES
-force_local_logins_ssl=YES
-force_local_data_ssl=YES
-ssl_tlsv1=NO
-ssl_tlsv11=NO
-ssl_tlsv12=YES
-allow_anon_ssl=NO
-rsa_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem
-rsa_private_key_file=/etc/ssl/private/ssl-cert-snakeoil.key</pre>
   <p>
-    Compte amb els noms: són <code>ssl_tlsv11</code> i <code>ssl_tlsv12</code>, sense el guió baix
-    del final. El manual els escriu <code>ssl_tlsv1_1</code> i <code>ssl_tlsv1_2</code>, i molts
-    tutorials també, però vsftpd no els reconeix i es nega a arrencar.
-  </p>
-  <p>SFTP enjaulat, <strong>al final</strong> de <code>/etc/ssh/sshd_config</code>:</p>
-<pre>Match Group sftpusers
-    ChrootDirectory /home/%u
-    ForceCommand internal-sftp
-    AllowTcpForwarding no
-    X11Forwarding no</pre>
-  <p>
-    El <code>%u</code> és el nom de qui entra. Tot el que ve després d'un <code>Match</code>
-    s'aplica només a aquell grup, i per això ha d'anar al final del fitxer.
+    El serial és el camp que més maldecaps dona: si no l'apuges, el secundari
+    <strong>no s'assabenta de res</strong>. El format recomanat és
+    <code>AAAAMMDDNN</code>.
   </p>
 </div>
 
-<!-- ============ 6 · PERMISOS DEL CHROOT ============ -->
-<div class="cq-block" data-kind="observació">
-  <h4>El chroot de SSH és més exigent que el de vsftpd</h4>
-  <p>
-    <code>ChrootDirectory</code> imposa una condició que sorprèn tothom la primera vegada: el
-    directori <strong>i tots els que hi ha per sobre</strong> han de ser de <code>root</code> i no
-    escrivibles per ningú més.
-  </p>
-  <p>
-    És a dir, <code>/home/alumne1</code> ha de ser de <code>root:root</code> amb permisos
-    <code>755</code>, i la carpeta on l'usuari sí que escriu ha d'anar a dins. Exactament el
-    mateix esquema que a la T3.2, però aquí sshd ho comprova sense excepcions.
-  </p>
-  <p>
-    Si no es compleix, la connexió es talla de seguida i el missatge del client no diu per què.
-    Qui t'ho explica és el registre del servidor.
-  </p>
-</div>
-
-<!-- ============ 7 · CAS REAL ============ -->
-<div class="cq-block" data-kind="cas real">
-  <h4>Els escàners no dormen</h4>
-  <p>
-    Qualsevol adreça pública rep, cada dia, intents automàtics de connexió als ports coneguts. El
-    21 és dels més visitats: els robots hi proven parells d'usuari i contrasenya habituals i
-    apunten els servidors que responen.
-  </p>
-  <p>
-    Amb FTP en clar n'hi ha prou que un sol usuari es connecti des d'una xarxa hostil perquè les
-    credencials quedin exposades. No cal trencar res: només escoltar.
-  </p>
-  <p>
-    Per això la recomanació professional d'avui és curta: si el servei ha de sortir de la xarxa
-    interna, SFTP. I si has de mantenir FTP per compatibilitat, FTPS forçat i mai en clar.
-  </p>
-</div>
-
-<!-- ============ 8 · PAS A PAS ============ -->
-<div class="cq-block" data-kind="pas a pas">
-  <h4>Veure el problema i tapar-lo</h4>
-
-  <ol class="cq-steps">
-    <li>
-      <p><strong>Captura una sessió FTP en clar.</strong> En una terminal:</p>
-<pre>sudo apt install -y tcpdump
-sudo tcpdump -i lo -A -n port 21</pre>
-      <p>
-        En una altra, <code>ftp localhost</code> i entra amb el teu usuari. Torna a la primera:
-        hi trobaràs les línies <code>USER</code> i <code>PASS</code> llegibles.
-      </p>
-    </li>
-
-    <li>
-      <p><strong>Activa el TLS</strong> a <code>/etc/vsftpd.conf</code> amb l'exemple d'aquesta
-      pàgina, i reinicia:</p>
-<pre>sudo systemctl restart vsftpd</pre>
-    </li>
-
-    <li>
-      <p><strong>Comprova que ara el clar no passa.</strong> El client <code>ftp</code> no fa TLS:
-      ha de fallar. Fes servir <code>lftp</code>, que sí que en fa:</p>
-<pre>sudo apt install -y lftp
-lftp -u alumne1 -e "set ssl:verify-certificate no" \
-     localhost</pre>
-      <p>
-        El client <code>ftp</code> ha de rebre <code>530 Non-anonymous sessions must use
-        encryption</code>. Repeteix la captura del pas 1 amb <code>lftp</code>: l'única cosa
-        llegible que hi queda és l'<code>AUTH TLS</code> del principi.
-      </p>
-    </li>
-
-    <li>
-      <p><strong>Prepara el grup d'SFTP</strong> i posa-hi l'usuari:</p>
-<pre>sudo groupadd sftpusers
-sudo usermod -aG sftpusers alumne1</pre>
-    </li>
-
-    <li>
-      <p><strong>Afegeix el bloc <code>Match</code></strong> al final de
-      <code>/etc/ssh/sshd_config</code>, valida i recarrega:</p>
-<pre>sudo nano /etc/ssh/sshd_config
-sudo sshd -t
-sudo systemctl restart ssh</pre>
-    </li>
-
-    <li>
-      <p><strong>Prova l'SFTP</strong> des del client, i mira que no et doni consola:</p>
-<pre>sftp alumne1@192.168.1.8
-ssh alumne1@192.168.1.8</pre>
-      <p>
-        El primer ha d'entrar i el segon s'ha de tancar amb <code>This service allows sftp
-        connections only</code>. Dins de l'SFTP funcionen <code>ls</code>, <code>get</code>,
-        <code>put</code> i <code>bye</code>, com a l'FTP.
-      </p>
-    </li>
-  </ol>
-
-  <div class="cq-note">
-    <span class="lbl">Ubuntu 26.04</span>
-    El certificat <em>snakeoil</em> que fa servir l'exemple ve amb el paquet
-    <code>ssl-cert</code>, ja instal·lat, i és autosignat: els clients es queixaran fins que
-    l'acceptis a mà, i per això <code>lftp</code> hi va amb
-    <code>set ssl:verify-certificate no</code>. En producció s'hi posa un certificat de veritat.
+<!-- ============ 7 · REGISTRES ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>Els tipus de registre que faràs servir</h4>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Tipus</th><th>Per a què</th></tr></thead>
+      <tbody>
+        <tr><td><strong>A</strong></td><td>Nom → adreça IPv4</td></tr>
+        <tr><td><strong>AAAA</strong></td><td>Nom → adreça IPv6</td></tr>
+        <tr><td><strong>PTR</strong></td><td>Adreça → nom, a la zona inversa</td></tr>
+        <tr><td><strong>CNAME</strong></td><td>Àlies: un nom que apunta a un altre nom</td></tr>
+        <tr><td><strong>MX</strong></td><td>Qui rep el correu del domini, amb prioritat</td></tr>
+        <tr><td><strong>NS</strong></td><td>Quins servidors tenen l'autoritat de la zona</td></tr>
+        <tr><td><strong>TXT</strong></td><td>Text lliure. S'usa per a verificacions i antispam</td></tr>
+      </tbody>
+    </table>
   </div>
+  <p>
+    Dues regles: un <strong>CNAME apunta a un nom</strong>, mai a una IP, i el
+    <strong>MX també</strong> ha d'apuntar a un nom que tingui el seu registre A.
+  </p>
 </div>
 
-<!-- ============ 9 · BONES PRÀCTIQUES ============ -->
-<div class="cq-block" data-kind="bones pràctiques">
-  <h4>Criteris professionals</h4>
-  <ul>
-    <li><strong>SFTP com a primera opció</strong>: un sol port, ja instal·lat, sense canal de dades.</li>
-    <li><strong>Si has de fer FTPS, força'l</strong>: activar el TLS sense obligar-lo no protegeix ningú.</li>
-    <li><strong>Grup dedicat i <code>Match</code></strong> per als comptes que només han de moure fitxers.</li>
-    <li><strong>Claus en lloc de contrasenyes</strong> quan el compte és per a un procés automàtic.</li>
-    <li><strong>Comprova-ho capturant</strong>: l'única prova que una cosa va xifrada és no poder-la llegir.</li>
-  </ul>
-</div>
-
-<!-- ============ 10 · PROBLEMES ============ -->
-<div class="cq-block" data-kind="problemes">
-  <h4>Errors habituals</h4>
-  <dl class="cq-issues">
-    <dt>vsftpd no arrenca en activar el TLS, i no diu res</dt>
-    <dd>
-      <p><span class="lbl">Causa</span> Una directiva que no existeix: <code>ssl_tlsv1_2</code> en comptes de <code>ssl_tlsv12</code>, o <code>ssl_enable=YES</code> sense les dues línies <code>rsa_</code>. Al registre només hi surt <code>status=2/INVALIDARGUMENT</code>.</p>
-      <p><span class="lbl">Solució</span> Comenta el bloc de TLS sencer, arrenca, i torna a posar les línies d'una en una fins que el servei caigui: la culpable és l'última que has escrit.</p>
-    </dd>
-
-    <dt>El client <code>ftp</code> deixa de connectar en activar el TLS</dt>
-    <dd>
-      <p><span class="lbl">Causa</span> És l'efecte buscat: aquest client no sap fer TLS i el servidor ja no accepta clar. Respon <code>530 Non-anonymous sessions must use encryption</code>.</p>
-      <p><span class="lbl">Solució</span> Fes servir <code>lftp</code>, FileZilla o qualsevol client amb suport d'FTPS.</p>
-    </dd>
-
-    <dt>El client rebutja el certificat</dt>
-    <dd>
-      <p><span class="lbl">Causa</span> És autosignat i no el signa cap autoritat coneguda.</p>
-      <p><span class="lbl">Solució</span> A l'aula, accepta'l a mà o desactiva'n la verificació al client. En producció, certificat signat.</p>
-    </dd>
-
-    <dt>L'SFTP es tanca just després d'autenticar</dt>
-    <dd>
-      <p><span class="lbl">Causa</span> El <code>ChrootDirectory</code> o algun directori superior no és de <code>root</code>, o és escrivible pel grup.</p>
-      <p><span class="lbl">Solució</span> <code>sudo journalctl -u ssh -n 20</code> ho diu clar, i després <code>ls -ld</code> de tota la ruta.</p>
-    </dd>
-
-    <dt>El bloc <code>Match</code> afecta tothom</dt>
-    <dd>
-      <p><span class="lbl">Causa</span> Està enmig del fitxer: tot el que ve darrere queda dins del <code>Match</code>.</p>
-      <p><span class="lbl">Solució</span> Mou-lo al final i valida amb <code>sudo sshd -t</code>.</p>
-    </dd>
-  </dl>
-</div>
-
-<!-- ============ 11 · RESUM ============ -->
+<!-- ============ 12 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
   <h4>Resum</h4>
   <ul>
-    <li><strong>FTPS</strong> és FTP dins de TLS, mateix servidor i mateix port 21.</li>
-    <li><strong>SFTP</strong> és un subsistema de <strong>SSH</strong>, port 22, i no té res a veure amb FTP.</li>
-    <li>A vsftpd, activar el TLS no n'obliga l'ús: cal <code>force_local_logins_ssl</code> i <code>force_local_data_ssl</code>.</li>
-    <li>El bloc <code>Match Group</code> va <strong>al final</strong> del <code>sshd_config</code>.</li>
-    <li><code>ChrootDirectory</code> exigeix tota la ruta de <code>root</code> i no escrivible.</li>
+    <li>Cada xarxa vol <strong>dues zones</strong>: la directa i la inversa <code>in-addr.arpa</code>.</li>
+    <li>El servidor que té l'original d'una zona n'és el <strong>primari</strong>.</li>
+    <li>Tot fitxer de zona comença amb <code>$TTL</code> i un <strong>SOA</strong>; el <strong>serial s'apuja sempre</strong>.</li>
+    <li>A i PTR per a les màquines, CNAME per als àlies, MX per al correu, NS per als servidors.</li>
+    <li>El <strong>punt final</strong> distingeix un nom absolut d'un de relatiu.</li>
   </ul>
 
-  <div class="cq-tablewrap">
-    <table class="cq-table">
-      <thead><tr><th>Comanda</th><th>Per a què serveix</th></tr></thead>
-      <tbody>
-        <tr><td><code>tcpdump -i lo -A port 21</code></td><td>Veure què viatja en clar</td></tr>
-        <tr><td><code>sshd -t</code></td><td>Validar el <code>sshd_config</code></td></tr>
-        <tr><td><code>sftp usuari@servidor</code></td><td>Provar l'SFTP</td></tr>
-        <tr><td><code>lftp -u usuari servidor</code></td><td>Client amb suport d'FTPS</td></tr>
-        <tr><td><code>journalctl -u ssh -n 20</code></td><td>Saber per què es talla la sessió</td></tr>
-      </tbody>
-    </table>
-  </div>
+
 
   <p style="margin-top:16px">
-    <strong>Següent:</strong> les activitats <strong>A3.1</strong>, <strong>A3.2</strong> i
-    <strong>A3.3</strong> munten aquest servei de cap a peus i el tanquen bé.
+    <strong>Següent:</strong> a <em>T2.4 · Primari i secundari</em> veuràs per què una zona no
+    pot dependre d'una sola màquina.
   </p>
 </div>
 
-<!-- ============ 12 · QUIZ ============ -->
+<!-- ============ 13 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
   <h4>Comprova el que has après</h4>
 
-  <div class="cq-question" data-id="t3-4-sftp" data-type="single">
-    <div class="statement">Quin servei has de tenir en marxa per oferir SFTP?</div>
-    <button class="cq-option" data-correct="false"><code>vsftpd</code> amb <code>ssl_enable</code></button>
-    <button class="cq-option" data-correct="true"><code>ssh</code>, que ja porta el subsistema SFTP</button>
-    <button class="cq-option" data-correct="false">Un paquet propi, <code>sftpd</code></button>
-    <button class="cq-option" data-correct="false">Cap: SFTP funciona sense servidor</button>
+  <div class="cq-question" data-id="t2-3-inversa" data-type="single">
+    <div class="statement">Com es diu la zona inversa de la xarxa <code>192.168.1.0/24</code>?</div>
+    <button class="cq-option" data-correct="false"><code>192.168.1.in-addr.arpa</code></button>
+    <button class="cq-option" data-correct="true"><code>1.168.192.in-addr.arpa</code></button>
+    <button class="cq-option" data-correct="false"><code>0.1.168.192.in-addr.arpa</code></button>
+    <button class="cq-option" data-correct="false"><code>arpa.in-addr.192.168.1</code></button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t3-4-ports" data-type="single">
-    <div class="statement">Per quins ports treballen FTPS explícit i SFTP?</div>
-    <button class="cq-option" data-correct="false">990 i 21</button>
-    <button class="cq-option" data-correct="true">21 i 22</button>
-    <button class="cq-option" data-correct="false">22 i 21</button>
-    <button class="cq-option" data-correct="false">Tots dos pel 990</button>
+  <div class="cq-question" data-id="t2-3-serial" data-type="single">
+    <div class="statement">Has canviat un registre però no has tocat el serial. Què passa?</div>
+    <button class="cq-option" data-correct="false">La zona no es carrega i el servei s'atura</button>
+    <button class="cq-option" data-correct="true">El servidor secundari no detecta el canvi i continua amb les dades antigues</button>
+    <button class="cq-option" data-correct="false">El TTL passa a ser zero</button>
+    <button class="cq-option" data-correct="false">No passa res, el serial és informatiu</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t3-4-forca" data-type="single">
-    <div class="statement">Has posat <code>ssl_enable=YES</code> i prou. Què passa?</div>
-    <button class="cq-option" data-correct="false">Que ningú no pot connectar</button>
-    <button class="cq-option" data-correct="true">Que es pot xifrar, però qui vulgui encara pot entrar en clar</button>
-    <button class="cq-option" data-correct="false">Que el servidor passa a escoltar pel port 22</button>
-    <button class="cq-option" data-correct="false">Que l'accés anònim queda xifrat automàticament</button>
+  <div class="cq-question" data-id="t2-3-punt" data-type="single">
+    <div class="statement">Dins de la zona <code>adria.internal</code>, què vol dir la línia <code>web IN A 192.168.1.20</code>?</div>
+    <button class="cq-option" data-correct="true">Que <code>web.adria.internal</code> té l'adreça <code>192.168.1.20</code></button>
+    <button class="cq-option" data-correct="false">Que <code>web</code> és un àlies de la zona</button>
+    <button class="cq-option" data-correct="false">Que és un error: falta el punt final</button>
+    <button class="cq-option" data-correct="false">Que <code>web</code> és el servidor de correu</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t3-4-chroot" data-type="single">
-    <div class="statement">L'SFTP es tanca just després d'autenticar. Què mires primer?</div>
-    <button class="cq-option" data-correct="false">El mode passiu del client</button>
-    <button class="cq-option" data-correct="true">Els permisos del <code>ChrootDirectory</code> i de tota la ruta per sobre</button>
-    <button class="cq-option" data-correct="false">El certificat del servidor</button>
-    <button class="cq-option" data-correct="false">La directiva <code>write_enable</code></button>
+  <div class="cq-question" data-id="t2-3-cname" data-type="single">
+    <div class="statement">Quina d'aquestes línies és incorrecta?</div>
+    <button class="cq-option" data-correct="true"><code>intranet IN CNAME 192.168.1.8</code></button>
+    <button class="cq-option" data-correct="false"><code>intranet IN CNAME www.adria.internal.</code></button>
+    <button class="cq-option" data-correct="false"><code>www IN A 192.168.1.8</code></button>
+    <button class="cq-option" data-correct="false"><code>8 IN PTR ns1.adria.internal.</code></button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t3-4-afirmacions" data-type="multi">
+  <div class="cq-question" data-id="t2-3-afirmacions" data-type="multi">
     <div class="statement">Selecciona totes les afirmacions certes</div>
-    <button class="cq-option" data-correct="true">SFTP no fa servir cap canal de dades separat.</button>
-    <button class="cq-option" data-correct="true">FTPS explícit comença en clar i demana xifrar amb <code>AUTH TLS</code>.</button>
-    <button class="cq-option" data-correct="true"><code>ForceCommand internal-sftp</code> impedeix obrir una consola.</button>
-    <button class="cq-option" data-correct="false">SFTP és el mateix protocol que FTP amb xifratge.</button>
-    <button class="cq-option" data-correct="false">Un certificat autosignat el validen els clients sense dir res.</button>
+    <button class="cq-option" data-correct="true">El registre PTR viu a la zona inversa.</button>
+    <button class="cq-option" data-correct="true">Una zona s'ha de validar abans de recarregar-la.</button>
+    <button class="cq-option" data-correct="true">El correu de l'administrador del SOA porta un punt on aniria l'arrova.</button>
+    <button class="cq-option" data-correct="false">Un CNAME pot apuntar directament a una adreça IP.</button>
+    <button class="cq-option" data-correct="false">Una zona inversa no necessita registre SOA.</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>

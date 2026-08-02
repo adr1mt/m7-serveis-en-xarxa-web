@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>T2.4 · Zones i registres — Serveis en Xarxa (0227)</title>
+<title>G2.1 · Guia: BIND 9 — Serveis en Xarxa (0227)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -388,45 +388,191 @@
 </head>
 <body>
 <header class="cq-header">
-  <div class="eyebrow">0227 · Serveis en Xarxa · RA2 · T2.4</div>
-  <h1>Zones i registres</h1>
-  <p class="lede">Donar noms propis a la teva xarxa: zona directa, zona inversa i tipus de registre.</p>
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA2 · G2.1</div>
+  <h1>Guia: BIND 9</h1>
+  <p class="lede">El resolutor, les zones pròpies i el servidor secundari.</p>
 </header>
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h4>Què sabràs fer en acabar</h4>
+  <h4>Què hi ha en aquesta guia</h4>
+  <p>Documentació oficial: https://bind9.readthedocs.io</p>
   <ul>
-    <li>Declarar una zona directa i una d'inversa a BIND.</li>
-    <li>Escriure un fitxer de zona amb el registre <strong>SOA</strong> ben posat.</li>
-    <li>Distingir els registres A, PTR, CNAME, MX, TXT i NS.</li>
-    <li>Recordar per què el <strong>punt final</strong> canvia el significat d'un nom.</li>
-    <li>Validar la zona i recarregar-la sense aturar el servei.</li>
+    <li>Punt de partida: Ubuntu Server amb IP fixa a la targeta interna.</li>
+    <li>El paquet es diu <code>bind9</code> i el servei, <code>named</code>.</li>
+    <li>Tres parts: el resolutor, les zones i el secundari. Es fan en aquest ordre.</li>
   </ul>
 </div>
 
-<!-- ============ 2 · DUES ZONES ============ -->
+<!-- ============ 2 · QUÈ ÉS BIND ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Dues zones per a la mateixa xarxa</h4>
+  <h4>Per què BIND</h4>
   <p>
-    Fins ara el teu servidor repetia el que deien els altres. Ara tindrà dades pròpies: serà
-    <strong>autoritatiu</strong> d'una zona teva.
+    <strong>BIND</strong> (<em>Berkeley Internet Name Domain</em>) és el servidor DNS més
+    utilitzat de la història d'Internet, i el que fan servir bona part dels servidors arrel. El
+    programa es diu <code>named</code>, de <em>name daemon</em>.
+  </p>
+  <p>El fem servir perquè, amb un sol paquet, cobreix les tres feines del mòdul:</p>
+  <ul>
+    <li><strong>Resolutor</strong> amb memòria cau per als clients de la teva xarxa.</li>
+    <li><strong>Autoritatiu</strong> de les zones que tu declaris.</li>
+    <li><strong>Transferències de zona</strong> entre un primari i un secundari.</li>
+  </ul>
+  <p>
+    Alternatives com <code>dnsmasq</code> són més senzilles, però no fan zones jeràrquiques ni
+    transferències: es queden curtes per al que has de practicar.
+  </p>
+</div>
+
+<!-- ============ 3 · ELS FITXERS ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>On és cada cosa</h4>
+  <p>
+    Tot viu a <code>/etc/bind/</code>. El fitxer principal, <code>named.conf</code>, gairebé no
+    té contingut: només inclou els altres tres. Tu no el tocaràs mai.
   </p>
   <div class="cq-tablewrap">
     <table class="cq-table">
-      <thead><tr><th>Zona</th><th>Respon a</th><th>Es diu</th></tr></thead>
+      <thead><tr><th>Fitxer</th><th>Què hi va</th></tr></thead>
       <tbody>
-        <tr><td><strong>Directa</strong></td><td>«Quina IP té aquest nom?»</td><td><code>adria.internal</code></td></tr>
-        <tr><td><strong>Inversa</strong></td><td>«Quin nom té aquesta IP?»</td><td><code>1.168.192.in-addr.arpa</code></td></tr>
+        <tr><td><code>named.conf.options</code></td><td>Configuració global: qui pot preguntar, forwarders, per on escolta</td></tr>
+        <tr><td><code>named.conf.local</code></td><td>Les teves zones</td></tr>
+        <tr><td><code>named.conf.default-zones</code></td><td>Les zones que porta de sèrie. No es toca</td></tr>
+        <tr><td><code>zones/</code></td><td>Carpeta que crearàs tu per als fitxers de zona</td></tr>
       </tbody>
     </table>
   </div>
   <p>
-    El nom de la zona inversa és la <strong>xarxa escrita al revés</strong> seguida de
-    <code>in-addr.arpa</code>. Per a <code>192.168.1.0/24</code>, els tres primers octets girats:
-    <code>1.168.192</code>. Fa estrany, però té sentit: així les adreces també es llegeixen de
-    general a concret, com els noms.
+    El servei s'anomena <code>named</code> (amb <code>bind9</code> com a àlies), i el paquet
+    <code>bind9-utils</code> hi afegeix les eines de comprovació.
   </p>
+</div>
+
+<!-- ============ 4 · LES OPCIONS ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>Les cinc directives que has de decidir</h4>
+  <p>
+    Tot això va dins del bloc <code>options</code> de <code>named.conf.options</code>. Són poques
+    i totes tenen conseqüències de seguretat.
+  </p>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Directiva</th><th>Què decideix</th></tr></thead>
+      <tbody>
+        <tr><td><code>listen-on</code></td><td>Per quines adreces escolta. La de <code>personal1</code>, no totes</td></tr>
+        <tr><td><code>allow-query</code></td><td>Qui pot fer consultes. Aquí hi va la teva ACL</td></tr>
+        <tr><td><code>recursion</code></td><td>Si busca respostes que no són seves. Sí, però només per als teus</td></tr>
+        <tr><td><code>forwarders</code></td><td>A qui reenvia el que no sap. Si no n'hi ha, va a l'arrel</td></tr>
+        <tr><td><code>dnssec-validation</code></td><td>Si comprova la signatura de les respostes. Es deixa a <code>auto</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    Una <strong>ACL</strong> és una llista amb nom: la declares un cop, a dalt del fitxer, i la
+    fas servir a dins on calgui.
+  </p>
+</div>
+
+<!-- ============ 5 · EXEMPLE ============ -->
+<div class="cq-block" data-kind="exemple">
+  <h4>Un resolutor per a la xarxa 192.168.1.0/24</h4>
+  <p>Aquest és el fitxer sencer d'un servidor que dona servei només a la seva xarxa interna:</p>
+<pre>acl interna { 192.168.1.0/24; localhost; };
+
+options {
+    directory "/var/cache/bind";
+
+    listen-on { 127.0.0.1; 192.168.1.8; };
+    allow-query { interna; };
+    recursion yes;
+    allow-recursion { interna; };
+
+    forwarders { 9.9.9.9; 1.1.1.1; };
+
+    dnssec-validation auto;
+    listen-on-v6 { none; };
+};</pre>
+  <p>
+    Llegit en veu alta: escolta per la seva IP interna, només accepta consultes de la xarxa
+    <code>192.168.1.0/24</code>, busca el que no sap i, per fer-ho, ho pregunta a Quad9 i a
+    Cloudflare.
+  </p>
+</div>
+
+<!-- ============ 6 · FORWARDERS O ARREL ============ -->
+<div class="cq-block" data-kind="observació">
+  <h4>Forwarders: quan sí i quan no</h4>
+  <p>
+    Sense <code>forwarders</code>, el teu BIND resol pel seu compte: comença pels servidors arrel
+    i va baixant per l'arbre. Funciona i és el més independent.
+  </p>
+  <p>
+    Amb <code>forwarders</code>, delega la feina a un resolutor gran, que ja té mig Internet a la
+    memòria cau. Sol ser <strong>més ràpid</strong>, i a més et serveix quan la xarxa on ets no
+    deixa sortir cap al port 53 lliurement.
+  </p>
+  <p>
+    A l'aula fes servir forwarders. Però recorda que, si un dia poses una zona interna amb el
+    mateix nom que una de pública, hauràs de desactivar-los <em>per a aquella zona</em>.
+  </p>
+</div>
+
+<!-- ============ 8 · PAS A PAS ============ -->
+<div class="cq-block" data-kind="pas a pas">
+  <h4>Muntar el resolutor</h4>
+  <p>
+    Amb una màquina que ja tingui IP fixa a <code>personal1</code>: un servidor DNS no pot
+    escoltar per una targeta sense adreça.
+  </p>
+
+  <ol class="cq-steps">
+    <li>
+      <p><strong>Instal·la el servidor i les eines:</strong></p>
+<pre>sudo apt update
+sudo apt install -y bind9 bind9-utils dnsutils</pre>
+    </li>
+
+    <li>
+      <p><strong>Desa una còpia</strong> abans de tocar res:</p>
+<pre>sudo cp /etc/bind/named.conf.options \
+        /etc/bind/named.conf.options.original</pre>
+    </li>
+
+    <li>
+      <p><strong>Escriu les opcions</strong> amb la teva xarxa i la teva IP:</p>
+<pre>sudo nano /etc/bind/named.conf.options</pre>
+      <p>Fes servir l'exemple d'aquesta pàgina com a model.</p>
+    </li>
+
+    <li>
+      <p><strong>Valida la sintaxi.</strong> Si no diu res, és que està bé:</p>
+<pre>sudo named-checkconf</pre>
+    </li>
+
+    <li>
+      <p><strong>Reinicia i comprova</strong> que el servei escolta al port 53:</p>
+<pre>sudo systemctl restart named
+systemctl status named
+sudo ss -ulnp | grep :53</pre>
+    </li>
+
+    <li>
+      <p><strong>Pregunta-li a ell</strong>, primer des del mateix servidor i després des del client:</p>
+<pre>dig @127.0.0.1 www.upc.edu +short
+dig @192.168.1.8 www.upc.edu +short</pre>
+      <p>
+        Repeteix la consulta: la segona vegada el <code>Query time</code> ha de ser molt més
+        petit. Això és la memòria cau treballant.
+      </p>
+    </li>
+  </ol>
+
+  <div class="cq-note">
+    <span class="lbl">Ubuntu 26.04</span>
+    A 26.04 el paquet porta BIND 9.20 i el servei es diu <code>named</code>. En documentació
+    antiga el trobaràs com <code>bind9</code>: continua funcionant com a àlies, i
+    <code>systemctl status bind9</code> et respon el mateix que <code>named</code>.
+  </div>
 </div>
 
 <!-- ============ 3 · DECLARAR-LES ============ -->
@@ -449,32 +595,6 @@ zone "1.168.192.in-addr.arpa" {
     <code>type primary</code> vol dir que aquest servidor té l'original, escrit per tu. La
     documentació antiga en diu <code>master</code>: és el mateix, però el nom vigent és
     <code>primary</code>.
-  </p>
-</div>
-
-<!-- ============ 4 · EL SOA ============ -->
-<div class="cq-block" data-kind="teoria">
-  <h4>La capçalera de tota zona: el registre SOA</h4>
-  <p>
-    Tot fitxer de zona comença igual: el TTL per defecte i un registre <strong>SOA</strong>
-    (<em>Start Of Authority</em>), que declara qui mana a la zona i cada quan s'ha de revisar.
-  </p>
-  <div class="cq-tablewrap">
-    <table class="cq-table">
-      <thead><tr><th>Camp</th><th>Què vol dir</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Serial</strong></td><td>Número de versió. <strong>S'ha d'apujar a cada canvi</strong></td></tr>
-        <tr><td><strong>Refresh</strong></td><td>Cada quant el secundari pregunta si hi ha novetats</td></tr>
-        <tr><td><strong>Retry</strong></td><td>Cada quant torna a provar si ha fallat</td></tr>
-        <tr><td><strong>Expire</strong></td><td>Quan el secundari deixa de servir dades velles</td></tr>
-        <tr><td><strong>Minimum</strong></td><td>Quant es guarden les respostes negatives</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <p>
-    El serial és el camp que més maldecaps dona: si no l'apuges, el secundari
-    <strong>no s'assabenta de res</strong>. El format recomanat és
-    <code>AAAAMMDDNN</code>.
   </p>
 </div>
 
@@ -517,29 +637,6 @@ correu  IN  A       192.168.1.9
     <code>www.adria.internal.</code>, però si escrius <code>www.adria.internal</code> sense punt,
     acabes amb <code>www.adria.internal.adria.internal.</code>, que no existeix. És l'error més
     freqüent de tots.
-  </p>
-</div>
-
-<!-- ============ 7 · REGISTRES ============ -->
-<div class="cq-block" data-kind="teoria">
-  <h4>Els tipus de registre que faràs servir</h4>
-  <div class="cq-tablewrap">
-    <table class="cq-table">
-      <thead><tr><th>Tipus</th><th>Per a què</th></tr></thead>
-      <tbody>
-        <tr><td><strong>A</strong></td><td>Nom → adreça IPv4</td></tr>
-        <tr><td><strong>AAAA</strong></td><td>Nom → adreça IPv6</td></tr>
-        <tr><td><strong>PTR</strong></td><td>Adreça → nom, a la zona inversa</td></tr>
-        <tr><td><strong>CNAME</strong></td><td>Àlies: un nom que apunta a un altre nom</td></tr>
-        <tr><td><strong>MX</strong></td><td>Qui rep el correu del domini, amb prioritat</td></tr>
-        <tr><td><strong>NS</strong></td><td>Quins servidors tenen l'autoritat de la zona</td></tr>
-        <tr><td><strong>TXT</strong></td><td>Text lliure. S'usa per a verificacions i antispam</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <p>
-    Dues regles: un <strong>CNAME apunta a un nom</strong>, mai a una IP, i el
-    <strong>MX també</strong> ha d'apuntar a un nom que tingui el seu registre A.
   </p>
 </div>
 
@@ -598,23 +695,117 @@ dig @192.168.1.8 -x 192.168.1.8 +short</pre>
   </ol>
 </div>
 
-<!-- ============ 10 · BONES PRÀCTIQUES ============ -->
+<!-- ============ 5 · EXEMPLE ============ -->
+<div class="cq-block" data-kind="exemple">
+  <h4>Les dues declaracions</h4>
+  <p>Al <strong>primari</strong>, s'autoritza qui es pot endur la zona i a qui s'avisa:</p>
+<pre>zone "adria.internal" {
+    type primary;
+    file "/etc/bind/zones/db.adria.internal";
+    allow-transfer { 192.168.1.9; };
+    also-notify { 192.168.1.9; };
+};</pre>
+  <p>Al <strong>secundari</strong>, d'on ve la zona i on la desa:</p>
+<pre>zone "adria.internal" {
+    type secondary;
+    file "/var/cache/bind/db.adria.internal";
+    primaries { 192.168.1.8; };
+};</pre>
+  <p>
+    A la zona hi ha d'haver un registre <strong>NS per a cada servidor</strong>, primari i
+    secundari: si no, per a la resta del món el secundari no existeix.
+  </p>
+</div>
+
+<!-- ============ 7 · PAS A PAS ============ -->
+<div class="cq-block" data-kind="pas a pas">
+  <h4>Muntar un secundari</h4>
+  <p>Amb dues màquines a la mateixa xarxa: la teva com a primari i una altra com a secundari.</p>
+
+  <ol class="cq-steps">
+    <li>
+      <p><strong>Al fitxer de zona del primari</strong>, dona d'alta el segon servidor: un
+      <code>NS</code> més per a la zona i el seu <code>A</code>. Sense això la zona es transfereix
+      igualment, però ningú de fora sabrà que el secundari existeix:</p>
+<pre>@       IN  NS      ns2.adria.internal.
+ns2     IN  A       192.168.1.9</pre>
+    </li>
+
+    <li>
+      <p><strong>A la declaració de la zona</strong>, afegeix <code>allow-transfer</code> i
+      <code>also-notify</code>, apuja el <strong>serial</strong> i recarrega:</p>
+<pre>sudo named-checkconf
+sudo rndc reload</pre>
+    </li>
+
+    <li>
+      <p><strong>Comprova des del secundari</strong> que el primari el deixa passar:</p>
+<pre>dig @192.168.1.8 adria.internal AXFR</pre>
+      <p>
+        Si surt la zona sencera, endavant. Si surt <code>Transfer failed</code>, revisa
+        l'<code>allow-transfer</code> abans de continuar.
+      </p>
+    </li>
+
+    <li>
+      <p><strong>Al secundari</strong>, instal·la BIND i declara la zona amb <code>type secondary</code>, sense escriure cap fitxer de zona.</p>
+    </li>
+
+    <li>
+      <p><strong>Recarrega i mira els registres</strong>: hi has de veure la transferència:</p>
+<pre>sudo rndc reload
+sudo journalctl -u named -n 20 | grep -i transfer</pre>
+    </li>
+
+    <li>
+      <p><strong>Comprova que el fitxer ha aparegut sol</strong> i que el secundari respon:</p>
+<pre>ls -l /var/cache/bind/
+dig @192.168.1.9 www.adria.internal +short</pre>
+      <p>
+        Ara fes una prova de veritat: canvia un registre al primari, apuja el serial i recarrega.
+        No has de tocar res al secundari: en pocs segons el seu registre ha de dir
+        <code>received notify for zone</code> i, tot seguit,
+        <code>transferred serial</code> amb el número nou.
+      </p>
+    </li>
+  </ol>
+</div>
+
+<!-- ============ BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
   <h4>Criteris professionals</h4>
   <ul>
-    <li><strong>Apuja el serial a cada canvi.</strong> Amb format de data, i sense excepcions.</li>
-    <li><strong><code>named-checkzone</code> abans de recarregar</strong>: una zona amb un error no es carrega i el servei es queda amb la versió antiga.</li>
-    <li><strong>Punt final</strong> a tots els noms absoluts. Repassa'ls un a un.</li>
-    <li><strong>Cada màquina, un A i el seu PTR.</strong> Molts serveis comproven la inversa.</li>
-    <li><strong>Àlies amb CNAME</strong>, no repetint el registre A: si canvia la IP, només toques un lloc.</li>
+    <li><strong>Còpia de l'original</strong> abans de la primera edició, sempre.</li>
+    <li><strong><code>named-checkconf</code> i <code>named-checkzone</code></strong> abans de recarregar.</li>
+    <li><strong>Escolta només per on has de servir</strong>, mai per la targeta que va a Internet.</li>
+    <li><strong>Apuja el serial a cada canvi</strong>, amb format de data i sense excepcions.</li>
+    <li><strong>Punt final</strong> a tots els noms absoluts, i <code>allow-transfer</code> tancat.</li>
   </ul>
 </div>
 
-<!-- ============ 11 · PROBLEMES ============ -->
+<!-- ============ PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
   <h4>Errors habituals</h4>
   <dl class="cq-issues">
-    <dt><code>named-checkzone</code> es queixa de <code>NS record</code> o de l'SOA</dt>
+<dt>El servei no arrenca</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Un punt i coma que falta, o una clau sense tancar. La sintaxi de BIND no perdona.</p>
+      <p><span class="lbl">Solució</span> <code>sudo named-checkconf</code> et diu el fitxer i la línia exacta: <code>named.conf.options:5: missing ';' before 'allow-query'</code>. Després, <code>journalctl -u named -n 30</code>.</p>
+    </dd>
+
+    <dt>El client rep <code>REFUSED</code></dt>
+    <dd>
+      <p><span class="lbl">Causa</span> El servidor funciona, però no el deixa preguntar: no és dins de l'ACL.</p>
+      <p><span class="lbl">Solució</span> Comprova que la xarxa de l'<code>acl</code> és la del client, amb la màscara correcta.</p>
+    </dd>
+
+    <dt>Des del client no hi ha resposta, i des del servidor sí</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> <code>listen-on</code> no inclou la IP de <code>personal1</code>, o el servei escolta només a <code>127.0.0.1</code>.</p>
+      <p><span class="lbl">Solució</span> <code>sudo ss -ulnp | grep :53</code> al servidor i mira per quines adreces escolta de veritat.</p>
+    </dd>
+
+<dt><code>named-checkzone</code> es queixa de <code>NS record</code> o de l'SOA</dt>
     <dd>
       <p><span class="lbl">Causa</span> Falta el registre NS de la zona, o el nom del SOA no té punt final.</p>
       <p><span class="lbl">Solució</span> El missatge és clar: <code>has no NS records</code> i <code>not loaded due to errors</code>. Compara la capçalera amb l'exemple, caràcter a caràcter.</p>
@@ -631,92 +822,51 @@ dig @192.168.1.8 -x 192.168.1.8 +short</pre>
       <p><span class="lbl">Causa</span> No has apujat el serial, o no has recarregat, o el client té la resposta a la memòria cau.</p>
       <p><span class="lbl">Solució</span> Serial, <code>rndc reload</code> i pregunta amb <code>dig @servidor</code>, que se salta la cau del client.</p>
     </dd>
+
+<dt><code>Transfer failed</code> als registres del secundari</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> El primari no l'autoritza, o no hi ha connexió pel port 53 <strong>TCP</strong>.</p>
+      <p><span class="lbl">Solució</span> Prova <code>dig @primari zona AXFR</code> des del secundari: si falla també, és l'<code>allow-transfer</code>.</p>
+    </dd>
+
+    <dt>El secundari serveix dades antigues</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> El serial del primari no ha pujat després del canvi.</p>
+      <p><span class="lbl">Solució</span> Compara els dos serials: <code>dig @primari zona SOA +short</code> i el mateix contra el secundari.</p>
+    </dd>
+
+    <dt>El secundari no desa el fitxer</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> El camí no és escrivible per al servei. Les zones secundàries van a <code>/var/cache/bind/</code>.</p>
+      <p><span class="lbl">Solució</span> Canvia el <code>file</code> i mira l'error exacte a <code>journalctl -u named</code>.</p>
+    </dd>
   </dl>
 </div>
 
-<!-- ============ 12 · RESUM ============ -->
+<!-- ============ RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h4>Resum</h4>
-  <ul>
-    <li>Cada xarxa vol <strong>dues zones</strong>: la directa i la inversa <code>in-addr.arpa</code>.</li>
-    <li>Les zones es declaren a <code>named.conf.local</code> amb <code>type primary</code>.</li>
-    <li>Tot fitxer de zona comença amb <code>$TTL</code> i un <strong>SOA</strong>; el <strong>serial s'apuja sempre</strong>.</li>
-    <li>A i PTR per a les màquines, CNAME per als àlies, MX per al correu, NS per als servidors.</li>
-    <li>El <strong>punt final</strong> distingeix un nom absolut d'un de relatiu.</li>
-  </ul>
-
+  <h4>Fitxa ràpida</h4>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Comanda</th><th>Per a què serveix</th></tr></thead>
       <tbody>
-        <tr><td><code>named-checkzone &lt;zona&gt; &lt;fitxer&gt;</code></td><td>Validar un fitxer de zona</td></tr>
+<tr><td><code>named-checkconf</code></td><td>Validar la configuració</td></tr>
+        <tr><td><code>systemctl restart named</code></td><td>Aplicar els canvis</td></tr>
+        <tr><td><code>journalctl -u named -f</code></td><td>Veure què diu el servei</td></tr>
+        <tr><td><code>ss -ulnp | grep :53</code></td><td>Comprovar per on escolta</td></tr>
+        <tr><td><code>dig @&lt;servidor&gt; &lt;nom&gt;</code></td><td>Provar-lo de veritat</td></tr>
+<tr><td><code>named-checkzone &lt;zona&gt; &lt;fitxer&gt;</code></td><td>Validar un fitxer de zona</td></tr>
         <tr><td><code>rndc reload</code></td><td>Recarregar sense aturar el servei</td></tr>
         <tr><td><code>rndc reload &lt;zona&gt;</code></td><td>Recarregar només una zona</td></tr>
         <tr><td><code>dig @&lt;servidor&gt; &lt;nom&gt; &lt;tipus&gt;</code></td><td>Comprovar un registre concret</td></tr>
         <tr><td><code>dig @&lt;servidor&gt; -x &lt;adreça&gt;</code></td><td>Comprovar la resolució inversa</td></tr>
+<tr><td><code>dig @&lt;primari&gt; &lt;zona&gt; AXFR</code></td><td>Provar la transferència a mà</td></tr>
+        <tr><td><code>dig @&lt;servidor&gt; &lt;zona&gt; SOA +short</code></td><td>Comparar serials</td></tr>
+        <tr><td><code>rndc reload</code></td><td>Recarregar el primari després d'un canvi</td></tr>
+        <tr><td><code>rndc retransfer &lt;zona&gt;</code></td><td>Forçar la descàrrega al secundari</td></tr>
+        <tr><td><code>journalctl -u named | grep transfer</code></td><td>Veure si la còpia s'ha fet</td></tr>
       </tbody>
     </table>
-  </div>
-
-  <p style="margin-top:16px">
-    <strong>Següent:</strong> a <em>T2.5 · Primari i secundari</em> la teva zona deixarà de dependre
-    d'una sola màquina.
-  </p>
-</div>
-
-<!-- ============ 13 · QUIZ ============ -->
-<div class="cq-block" data-kind="quiz">
-  <h4>Comprova el que has après</h4>
-
-  <div class="cq-question" data-id="t2-4-inversa" data-type="single">
-    <div class="statement">Com es diu la zona inversa de la xarxa <code>192.168.1.0/24</code>?</div>
-    <button class="cq-option" data-correct="false"><code>192.168.1.in-addr.arpa</code></button>
-    <button class="cq-option" data-correct="true"><code>1.168.192.in-addr.arpa</code></button>
-    <button class="cq-option" data-correct="false"><code>0.1.168.192.in-addr.arpa</code></button>
-    <button class="cq-option" data-correct="false"><code>arpa.in-addr.192.168.1</code></button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
-  </div>
-
-  <div class="cq-question" data-id="t2-4-serial" data-type="single">
-    <div class="statement">Has canviat un registre però no has tocat el serial. Què passa?</div>
-    <button class="cq-option" data-correct="false">La zona no es carrega i el servei s'atura</button>
-    <button class="cq-option" data-correct="true">El servidor secundari no detecta el canvi i continua amb les dades antigues</button>
-    <button class="cq-option" data-correct="false">El TTL passa a ser zero</button>
-    <button class="cq-option" data-correct="false">No passa res, el serial és informatiu</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
-  </div>
-
-  <div class="cq-question" data-id="t2-4-punt" data-type="single">
-    <div class="statement">Dins de la zona <code>adria.internal</code>, què vol dir la línia <code>web IN A 192.168.1.20</code>?</div>
-    <button class="cq-option" data-correct="true">Que <code>web.adria.internal</code> té l'adreça <code>192.168.1.20</code></button>
-    <button class="cq-option" data-correct="false">Que <code>web</code> és un àlies de la zona</button>
-    <button class="cq-option" data-correct="false">Que és un error: falta el punt final</button>
-    <button class="cq-option" data-correct="false">Que <code>web</code> és el servidor de correu</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
-  </div>
-
-  <div class="cq-question" data-id="t2-4-cname" data-type="single">
-    <div class="statement">Quina d'aquestes línies és incorrecta?</div>
-    <button class="cq-option" data-correct="true"><code>intranet IN CNAME 192.168.1.8</code></button>
-    <button class="cq-option" data-correct="false"><code>intranet IN CNAME www.adria.internal.</code></button>
-    <button class="cq-option" data-correct="false"><code>www IN A 192.168.1.8</code></button>
-    <button class="cq-option" data-correct="false"><code>8 IN PTR ns1.adria.internal.</code></button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
-  </div>
-
-  <div class="cq-question" data-id="t2-4-afirmacions" data-type="multi">
-    <div class="statement">Selecciona totes les afirmacions certes</div>
-    <button class="cq-option" data-correct="true">El registre PTR viu a la zona inversa.</button>
-    <button class="cq-option" data-correct="true"><code>named-checkzone</code> es fa servir abans de recarregar.</button>
-    <button class="cq-option" data-correct="true">El correu de l'administrador del SOA porta un punt on aniria l'arrova.</button>
-    <button class="cq-option" data-correct="false">Un CNAME pot apuntar directament a una adreça IP.</button>
-    <button class="cq-option" data-correct="false">Les zones es declaren a <code>named.conf.options</code>.</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
   </div>
 </div>
 

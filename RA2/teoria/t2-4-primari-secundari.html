@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>T1.3 · Servidor DHCP amb Kea — Serveis en Xarxa (0227)</title>
+<title>T2.4 · Primari i secundari — Serveis en Xarxa (0227)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -388,307 +388,128 @@
 </head>
 <body>
 <header class="cq-header">
-  <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · T1.3</div>
-  <h1>Servidor DHCP amb Kea</h1>
-  <p class="lede">Muntar, configurar i comprovar el servidor DHCP que fan servir avui les empreses.</p>
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA2 · T2.4</div>
+  <h1>Primari i secundari</h1>
+  <p class="lede">Per què tota zona vol dos servidors i com es copia entre ells.</p>
 </header>
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
   <h4>Què sabràs fer en acabar</h4>
   <ul>
-    <li>Instal·lar i posar en marxa el servidor Kea.</li>
-    <li>Entendre cada bloc del fitxer <code>kea-dhcp4.conf</code>.</li>
-    <li>Definir un rang d'adreces i calcular-ne la mida.</li>
-    <li>Fer una reserva d'IP per adreça MAC.</li>
-    <li>Llegir els registres per veure les concessions.</li>
+    <li>Explicar per què tota zona vol dos servidors com a mínim.</li>
+    <li>Configurar un servidor <strong>secundari</strong> que es descarregui la zona.</li>
+    <li>Explicar per què la transferència s'ha d'autoritzar només als secundaris.</li>
+    <li>Entendre el paper del <strong>serial</strong> i de la notificació.</li>
+    <li>Comprovar una transferència amb <code>dig AXFR</code>.</li>
   </ul>
 </div>
 
-<!-- ============ 2 · QUÈ ÉS KEA ============ -->
+<!-- ============ 2 · PER QUÈ ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Per què Kea i no una altra cosa</h4>
+  <h4>Un sol servidor de noms és un sol punt de fallada</h4>
   <p>
-    Durant vint anys, el servidor DHCP de Linux va ser <code>isc-dhcp-server</code>. La
-    fundació que el mantenia el va donar per acabat el 2022 i el va substituir per
-    <strong>Kea</strong>, del mateix equip. És el que ve als repositoris d'Ubuntu i el que
-    trobaràs a les empreses.
+    Si la teva zona la serveix una màquina i aquella màquina cau, els seus noms deixen d'existir
+    per a tothom. No és que vagi lent: simplement no hi ha resposta.
   </p>
   <p>
-    Si busques per Internet, veuràs molta documentació d'<code>isc-dhcp-server</code> amb una
-    sintaxi diferent. <strong>No et serveix.</strong> Comprova sempre que el que llegeixes
-    parla de Kea.
+    Per això el DNS està pensat des del primer dia perquè una zona la serveixin
+    <strong>diversos servidors</strong>. Un té l'original i la resta en tenen una còpia que
+    mantenen sola.
   </p>
   <p>
-    Kea es configura amb un fitxer <strong>JSON</strong>, i té un servei separat per a cada
-    feina. A nosaltres només ens cal el d'IPv4: <code>kea-dhcp4-server</code>.
+    El truc és que <strong>tots responen igual d'autoritativament</strong>. Al client li és
+    indiferent a quin pregunta: no hi ha cap servidor «de segona».
   </p>
 </div>
 
-<!-- ============ 3 · ANATOMIA DEL FITXER ============ -->
+<!-- ============ 3 · ELS DOS PAPERS ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>El fitxer de configuració, bloc a bloc</h4>
-  <p>
-    Tot viu a <code>/etc/kea/kea-dhcp4.conf</code>. Sembla llarg, però només hi ha quatre coses
-    que hagis de tocar:
-  </p>
+  <h4>Qui fa què</h4>
   <div class="cq-tablewrap">
     <table class="cq-table">
-      <thead><tr><th>Bloc</th><th>Què hi poses</th></tr></thead>
+      <thead><tr><th></th><th>Primari</th><th>Secundari</th></tr></thead>
       <tbody>
-        <tr><td><code>interfaces-config</code></td><td>Per quina targeta escolta el servidor</td></tr>
-        <tr><td><code>subnet</code></td><td>La xarxa que gestiona, amb màscara</td></tr>
-        <tr><td><code>pools</code></td><td>El rang d'adreces que pot repartir</td></tr>
-        <tr><td><code>option-data</code></td><td>Porta d'enllaç, DNS i nom de domini</td></tr>
+        <tr><td><strong>El fitxer de zona</strong></td><td>L'escrius tu</td><td>Se'l descarrega sol</td></tr>
+        <tr><td><strong>On es guarda</strong></td><td>Amb la resta de configuració</td><td>En una carpeta de memòria cau</td></tr>
+        <tr><td><strong>Es pot editar</strong></td><td>Sí, és l'original</td><td>Mai: es perdria a la següent còpia</td></tr>
+        <tr><td><strong>Es declara com</strong></td><td>Primari de la zona</td><td>Secundari, amb la IP del primari</td></tr>
       </tbody>
     </table>
   </div>
   <p>
-    La resta (<code>control-socket</code>, <code>lease-database</code>) ve donada i no cal
-    tocar-la: és on Kea guarda quines adreces té concedides.
+    Els noms antics són <em>master</em> i <em>slave</em>. Els trobaràs a molta documentació,
+    però el vocabulari vigent és <strong>primary</strong> i <strong>secondary</strong>.
   </p>
 </div>
 
-<!-- ============ 4 · EXEMPLE ============ -->
-<div class="cq-block" data-kind="exemple">
-  <h4>Una configuració completa i mínima</h4>
-  <p>Xarxa <code>192.168.1.0/24</code>, servidor a la <code>.1</code>, repartint de la 100 a la 200:</p>
-<pre>{
-"Dhcp4": {
-  "interfaces-config": {
-    "interfaces": [ "enp2s0" ]              <span class="c">// targeta personal1</span>
-  },
-  "control-socket": {
-    "socket-type": "unix",
-    "socket-name": "/run/kea/kea4-ctrl-socket"
-  },
-  "lease-database": { "type": "memfile", "lfc-interval": 3600 },
-
-  "valid-lifetime": 600,                    <span class="c">// durada de la concessió</span>
-  "max-valid-lifetime": 7200,
-
-  "subnet4": [
-    {
-      "id": 1,
-      "subnet": "192.168.1.0/24",
-      "pools": [ { "pool": "192.168.1.100 - 192.168.1.200" } ],
-      "option-data": [
-        { "name": "routers",             "data": "192.168.1.1" },
-        { "name": "domain-name-servers", "data": "9.9.9.9"     },
-        { "name": "domain-name",         "data": "adria.internal" }
-      ]
-    }
-  ]
-}
-}</pre>
-  <p>
-    <strong>Compte amb les comes i les claus.</strong> A JSON, cada element d'una llista en porta
-    una menys l'últim. La que falta i la clau sense tancar deixen el servei sense arrencar, i és
-    l'error número u: valida sempre el fitxer abans de reiniciar.
-  </p>
-</div>
-
-<!-- ============ 5 · CALCULAR EL RANG ============ -->
+<!-- ============ 4 · LA TRANSFERÈNCIA ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Quantes adreces necessites</h4>
+  <h4>Com viatja la zona</h4>
   <p>
-    Les activitats et demanaran rangs per a un nombre concret d'equips. El càlcul és una resta,
-    però has de comptar bé: <strong>els dos extrems del rang hi entren</strong>.
+    La còpia es diu <strong>transferència de zona</strong> i, a diferència de les consultes
+    normals, va per <strong>TCP</strong>, també al port 53: pot ser molta informació de cop.
   </p>
-  <p>
-    De la <code>.100</code> a la <code>.200</code> hi ha <code>200 − 100 + 1 = 101</code>
-    adreces. Si en necessites exactament 99, el rang va de la <code>.100</code> a la
-    <code>.198</code>.
-  </p>
-  <p>
-    I recorda que tota xarxa té dues adreces que <strong>mai</strong> es reparteixen: la
-    <strong>primera</strong> (adreça de xarxa) i l'<strong>última</strong> (difusió). Quines són
-    depèn de la <strong>màscara</strong>, no de l'últim número:
-  </p>
-  <div class="cq-tablewrap">
-    <table class="cq-table">
-      <thead><tr><th>Xarxa</th><th>Primera (xarxa)</th><th>Última (difusió)</th></tr></thead>
-      <tbody>
-        <tr><td><code>192.168.1.0/24</code></td><td><code>192.168.1.0</code></td><td><code>192.168.1.255</code></td></tr>
-        <tr><td><code>172.16.0.0/16</code></td><td><code>172.16.0.0</code></td><td><code>172.16.255.255</code></td></tr>
-        <tr><td><code>10.0.0.0/8</code></td><td><code>10.0.0.0</code></td><td><code>10.255.255.255</code></td></tr>
-      </tbody>
-    </table>
+  <div class="dora-flow">
+    <div class="dora-step">
+      <div class="n">01</div>
+      <div class="t">NOTIFY</div>
+      <div class="d">El primari avisa: «he canviat alguna cosa».</div>
+    </div>
+    <div class="dora-arrow">→</div>
+    <div class="dora-step">
+      <div class="n">02</div>
+      <div class="t">SOA</div>
+      <div class="d">El secundari li demana el serial i el compara amb el seu.</div>
+    </div>
+    <div class="dora-arrow">→</div>
+    <div class="dora-step">
+      <div class="n">03</div>
+      <div class="t">AXFR</div>
+      <div class="d">Si és més alt, es descarrega la zona sencera.</div>
+    </div>
   </div>
   <p>
-    Fixa-t'hi en la <code>10.0.0.0/8</code>: adreces com la <code>10.0.0.255</code> o la
-    <code>10.0.1.0</code> <strong>són perfectament vàlides</strong> per a un equip. La del
-    servidor tampoc es reparteix, i per això va fora del rang.
+    Si ningú avisa, el secundari pregunta pel seu compte cada <em>refresh</em> segons. I si el
+    serial no ha pujat, <strong>no es descarrega res</strong>: aquesta és la raó de ser del camp.
   </p>
 </div>
 
-<!-- ============ 6 · RESERVES ============ -->
-<div class="cq-block" data-kind="teoria">
-  <h4>Reservar una IP per a un equip concret</h4>
+<!-- ============ 6 · SEGURETAT ============ -->
+<div class="cq-block" data-kind="cas real">
+  <h4>Una transferència oberta és el mapa de la teva xarxa</h4>
   <p>
-    Una <strong>reserva</strong> lliga una adreça MAC a una IP: aquell equip rebrà sempre la
-    mateixa. S'escriu dins de la subxarxa, just després de <code>option-data</code>:
+    Una zona conté totes les màquines amb nom i adreça. Si qualsevol se la pot descarregar, li
+    estàs regalant l'inventari sencer: servidors, impressores, còpies de seguretat i com es diu
+    cada cosa.
   </p>
-<pre>      "reservations": [
-        {
-          "hw-address": "00:1a:2b:3c:4d:5e",
-          "ip-address": "192.168.1.10"
-        },
-        {
-          "hw-address": "00:1a:2b:3c:4d:5f",
-          "ip-address": "192.168.1.11"
-        }
-      ]</pre>
   <p>
-    L'adreça reservada ha d'estar <strong>dins de la subxarxa</strong> però
-    <strong>fora del <code>pool</code></strong>. Si la poses dins del rang, Kea la podria haver
-    donat abans a un altre equip.
+    Els servidors actuals ja no permeten transferències a tothom, però encara se'n troben mal
+    configurats on <code>dig AXFR</code> ho descarrega tot. És una de les primeres coses que prova
+    qui audita una xarxa.
   </p>
-</div>
-
-<!-- ============ 7 · PAS A PAS ============ -->
-<div class="cq-block" data-kind="pas a pas">
-  <h4>Muntar el servidor</h4>
   <p>
-    Punt de partida: la targeta <code>personal1</code> ja ha de tenir IP fixa (teoria T1.1). Sense
-    això, Kea no arrencarà.
+    La regla és simple: autoritza la transferència als teus secundaris i a ningú més. En
+    entorns seriosos, a més, es signa amb una clau compartida (<strong>TSIG</strong>).
   </p>
-
-  <ol class="cq-steps">
-    <li>
-      <p><strong>Instal·la el servei d'IPv4</strong>, que és l'únic que necessites:</p>
-<pre>sudo apt update
-sudo apt install -y kea-dhcp4-server</pre>
-    </li>
-
-    <li>
-      <p><strong>Desa una còpia</strong> de la configuració original abans de tocar res:</p>
-<pre>sudo cp /etc/kea/kea-dhcp4.conf /etc/kea/kea-dhcp4.conf.original</pre>
-    </li>
-
-    <li>
-      <p><strong>Edita el fitxer</strong> i deixa'l com el de l'exemple, amb les teves dades:</p>
-<pre>sudo nano /etc/kea/kea-dhcp4.conf</pre>
-    </li>
-
-    <li>
-      <p><strong>Comprova la sintaxi abans d'arrencar.</strong> Kea té un mode de prova que llegeix el fitxer i et diu si està bé:</p>
-<pre>sudo -u _kea kea-dhcp4 -t /etc/kea/kea-dhcp4.conf</pre>
-      <p>
-        Va com l'usuari <code>_kea</code>, el del servei, i no com a <code>root</code>: l'AppArmor
-        que porta el paquet no deixa que el programa obri fitxers fora dels seus. Si t'hi
-        descuides, la resposta és <code>Unable to open file</code> encara que el fitxer hi sigui.
-      </p>
-      <p>
-        Si falta una coma o una clau, aquí ho sabràs, amb el fitxer, la línia i la columna:
-        <code>syntax error, unexpected max-valid-lifetime, expecting "," or }</code>. Si tot va
-        bé, no diu res i acaba amb codi 0.
-      </p>
-    </li>
-
-    <li>
-      <p><strong>Arrenca i comprova</strong> que està actiu:</p>
-<pre>sudo systemctl restart kea-dhcp4-server
-sudo systemctl status kea-dhcp4-server</pre>
-      <p>Ha de sortir <code>active (running)</code> en verd.</p>
-    </li>
-
-    <li>
-      <p><strong>Verifica que escolta</strong> al port 67:</p>
-<pre>sudo ss -ulnp | grep :67</pre>
-    </li>
-
-    <li>
-      <p><strong>Mira les concessions en directe</strong> mentre arrenques el client:</p>
-<pre>sudo journalctl -u kea-dhcp4-server -f</pre>
-      <p>
-        Veuràs línies <code>DHCP4_LEASE_ALLOC</code> amb la MAC i la IP concedida. La llista
-        completa de concessions la tens a
-        <code>/var/lib/kea/kea-leases4.csv</code>.
-      </p>
-    </li>
-  </ol>
-
-  <div class="cq-note">
-    <span class="lbl">Ubuntu 26.04</span>
-    El paquet porta Kea 3.0. Molta documentació i molts tutorials escriuen la validació com
-    <code>sudo kea-dhcp4 -t</code>, sense l'usuari: així no funciona, perquè el perfil d'AppArmor
-    del paquet no deixa que el programa obri el fitxer. Compara sempre amb la sortida de la teva
-    màquina.
-  </div>
-</div>
-
-<!-- ============ 8 · BONES PRÀCTIQUES ============ -->
-<div class="cq-block" data-kind="bones pràctiques">
-  <h4>Criteris professionals</h4>
-  <ul>
-    <li><strong>Valida sempre abans d'arrencar</strong> amb <code>sudo -u _kea kea-dhcp4 -t</code>. Estalvia la meitat dels problemes.</li>
-    <li><strong>Còpia de l'original.</strong> És la teva marxa enrere si t'hi perds.</li>
-    <li><strong>Escolta només per la targeta interna.</strong> Mai posis la targeta que va a la xarxa del centre a <code>interfaces</code>.</li>
-    <li><strong>Reserves fora del <em>pool</em></strong>, i totes juntes en una zona d'adreces baixes.</li>
-    <li><strong>Comenta la configuració</strong> amb <code>//</code>: Kea ho admet i el teu jo del mes vinent ho agrairà.</li>
-  </ul>
-</div>
-
-<!-- ============ 9 · PROBLEMES ============ -->
-<div class="cq-block" data-kind="problemes">
-  <h4>Errors habituals</h4>
-  <dl class="cq-issues">
-    <dt>El servei no arrenca</dt>
-    <dd>
-      <p><span class="lbl">Causa</span> Error de JSON (una coma sobrant) o la targeta de <code>interfaces</code> no existeix o no té IP.</p>
-      <p><span class="lbl">Solució</span> <code>sudo -u _kea kea-dhcp4 -t /etc/kea/kea-dhcp4.conf</code> et dona el motiu, la línia i la columna. Si el fitxer és correcte, mira <code>journalctl -u kea-dhcp4-server -n 30</code>.</p>
-    </dd>
-
-    <dt>El servei està actiu però el client no rep res</dt>
-    <dd>
-      <p><span class="lbl">Causa</span> Escolta per la targeta equivocada, o el client està en una xarxa diferent de la del <code>subnet</code>.</p>
-      <p><span class="lbl">Solució</span> Comprova amb <code>ss -ulnp | grep :67</code> i, al servidor, <code>sudo tcpdump -i enp2s0 -n port 67</code>. Si no hi arriba el DISCOVER, el problema és de connexió, no de Kea.</p>
-    </dd>
-
-    <dt>La reserva no s'aplica</dt>
-    <dd>
-      <p><span class="lbl">Causa</span> La MAC està mal escrita, o el client encara té una concessió antiga vàlida.</p>
-      <p><span class="lbl">Solució</span> Copia la MAC de la sortida del client, no la transcriguis a mà. Al client, força la renovació amb <code>sudo networkctl renew enp1s0</code>.</p>
-    </dd>
-
-    <dt>El client rep IP però no té Internet</dt>
-    <dd>
-      <p><span class="lbl">Causa</span> Kea ha fet la seva feina. Falta que el servidor encamini el trànsit cap a fora.</p>
-      <p><span class="lbl">Solució</span> És el contingut de la teoria T1.4: IP forwarding i NAT.</p>
-    </dd>
-  </dl>
 </div>
 
 <!-- ============ 10 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
   <h4>Resum</h4>
   <ul>
-    <li><strong>Kea</strong> substitueix <code>isc-dhcp-server</code>. La documentació antiga no serveix.</li>
-    <li>Es configura en <strong>JSON</strong> a <code>/etc/kea/kea-dhcp4.conf</code>.</li>
-    <li>Quatre blocs a tocar: <code>interfaces-config</code>, <code>subnet</code>, <code>pools</code> i <code>option-data</code>.</li>
-    <li>Les <strong>reserves</strong> van dins de la subxarxa i fora del <em>pool</em>.</li>
-    <li>Al comptar adreces d'un rang, <strong>els dos extrems hi entren</strong>.</li>
+    <li>Tota zona vol <strong>dos servidors</strong>; tots dos responen com a autoritatius.</li>
+    <li>El <strong>primari</strong> té l'original; el <strong>secundari</strong> se'l descarrega.</li>
+    <li>La transferència va per <strong>TCP</strong> al port 53 i s'anomena <strong>AXFR</strong>.</li>
+    <li>El <strong>serial</strong> és el que dispara la còpia; sense apujar-lo, no passa res.</li>
+    <li>Transferència <strong>tancada</strong> a qui no sigui secundari: una zona oberta és el mapa de la xarxa.</li>
   </ul>
 
-  <div class="cq-tablewrap">
-    <table class="cq-table">
-      <thead><tr><th>Comanda</th><th>Per a què serveix</th></tr></thead>
-      <tbody>
-        <tr><td><code>apt install kea-dhcp4-server</code></td><td>Instal·lar el servei</td></tr>
-        <tr><td><code>sudo -u _kea kea-dhcp4 -t &lt;fitxer&gt;</code></td><td>Validar la configuració</td></tr>
-        <tr><td><code>systemctl restart kea-dhcp4-server</code></td><td>Aplicar els canvis</td></tr>
-        <tr><td><code>systemctl status kea-dhcp4-server</code></td><td>Veure si està actiu o l'error</td></tr>
-        <tr><td><code>journalctl -u kea-dhcp4-server -f</code></td><td>Veure les concessions en directe</td></tr>
-        <tr><td><code>ss -ulnp | grep :67</code></td><td>Comprovar que escolta</td></tr>
-        <tr><td><code>cat /var/lib/kea/kea-leases4.csv</code></td><td>Llista de concessions</td></tr>
-      </tbody>
-    </table>
-  </div>
+
 
   <p style="margin-top:16px">
-    <strong>Següent:</strong> a <em>T1.4 · Encaminament i NAT</em> faràs que els clients del teu
-    servidor tinguin Internet.
+    <strong>Següent:</strong> la <em>G2.1 · BIND 9</em>, que és el manual per muntar-ho tot, i
+    les activitats.
   </p>
 </div>
 
@@ -696,53 +517,53 @@ sudo systemctl status kea-dhcp4-server</pre>
 <div class="cq-block" data-kind="quiz">
   <h4>Comprova el que has après</h4>
 
-  <div class="cq-question" data-id="t1-3-fitxer" data-type="single">
-    <div class="statement">On es configura el servidor Kea per a IPv4?</div>
-    <button class="cq-option" data-correct="false"><code>/etc/dhcp/dhcpd.conf</code></button>
-    <button class="cq-option" data-correct="true"><code>/etc/kea/kea-dhcp4.conf</code></button>
-    <button class="cq-option" data-correct="false"><code>/etc/netplan/01-kea.yaml</code></button>
-    <button class="cq-option" data-correct="false"><code>/var/lib/kea/kea-leases4.csv</code></button>
+  <div class="cq-question" data-id="t2-4-transport" data-type="single">
+    <div class="statement">Per quin protocol de transport viatja una transferència de zona?</div>
+    <button class="cq-option" data-correct="false">UDP, port 53</button>
+    <button class="cq-option" data-correct="true">TCP, port 53</button>
+    <button class="cq-option" data-correct="false">TCP, port 853</button>
+    <button class="cq-option" data-correct="false">UDP, port 67</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t1-3-rang" data-type="single">
-    <div class="statement">Quantes adreces reparteix el rang <code>10.0.0.50 - 10.0.0.150</code>?</div>
-    <button class="cq-option" data-correct="false">100</button>
-    <button class="cq-option" data-correct="true">101</button>
-    <button class="cq-option" data-correct="false">99</button>
-    <button class="cq-option" data-correct="false">150</button>
+  <div class="cq-question" data-id="t2-4-serial" data-type="single">
+    <div class="statement">Què fa que el secundari es descarregui la zona altra vegada?</div>
+    <button class="cq-option" data-correct="false">Que hagi passat el TTL</button>
+    <button class="cq-option" data-correct="true">Que el serial del primari sigui més alt que el seu</button>
+    <button class="cq-option" data-correct="false">Que es reiniciï el servei del primari</button>
+    <button class="cq-option" data-correct="false">Que el client li ho demani</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t1-3-validar" data-type="single">
-    <div class="statement">Quina comanda comprova la configuració <em>abans</em> d'arrencar el servei?</div>
-    <button class="cq-option" data-correct="false"><code>systemctl status kea-dhcp4-server</code></button>
-    <button class="cq-option" data-correct="true"><code>sudo -u _kea kea-dhcp4 -t /etc/kea/kea-dhcp4.conf</code></button>
-    <button class="cq-option" data-correct="false"><code>netplan try</code></button>
-    <button class="cq-option" data-correct="false"><code>ss -ulnp | grep :67</code></button>
+  <div class="cq-question" data-id="t2-4-fitxer" data-type="single">
+    <div class="statement">Al servidor secundari, qui escriu el fitxer de zona?</div>
+    <button class="cq-option" data-correct="false">L'administrador, copiant-lo del primari</button>
+    <button class="cq-option" data-correct="true">El mateix servidor, en fer la transferència</button>
+    <button class="cq-option" data-correct="false">El servei DHCP</button>
+    <button class="cq-option" data-correct="false">No hi ha fitxer: tot es guarda a memòria</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t1-3-opcions" data-type="single">
-    <div class="statement">Quin nom d'opció serveix per repartir la porta d'enllaç?</div>
-    <button class="cq-option" data-correct="false"><code>gateway</code></button>
-    <button class="cq-option" data-correct="true"><code>routers</code></button>
-    <button class="cq-option" data-correct="false"><code>domain-name-servers</code></button>
-    <button class="cq-option" data-correct="false"><code>default-route</code></button>
+  <div class="cq-question" data-id="t2-4-seguretat" data-type="single">
+    <div class="statement">Per què s'ha de limitar qui es pot descarregar una zona sencera?</div>
+    <button class="cq-option" data-correct="false">Perquè les transferències consumeixen molta memòria</button>
+    <button class="cq-option" data-correct="true">Perquè qui es descarrega la zona obté l'inventari sencer de la xarxa</button>
+    <button class="cq-option" data-correct="false">Perquè si no, el secundari no es descarrega res</button>
+    <button class="cq-option" data-correct="false">Perquè el port 53 TCP està tancat per defecte</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t1-3-certes" data-type="multi">
-    <div class="statement">Selecciona totes les afirmacions certes sobre Kea</div>
-    <button class="cq-option" data-correct="true">La configuració és un fitxer JSON.</button>
-    <button class="cq-option" data-correct="true">Les IP reservades han d'estar fora del <em>pool</em>.</button>
-    <button class="cq-option" data-correct="true">La targeta on escolta ha de tenir IP fixa.</button>
-    <button class="cq-option" data-correct="false">Cal posar una coma després de l'últim element d'una llista.</button>
-    <button class="cq-option" data-correct="false">La documentació d'isc-dhcp-server serveix per configurar Kea.</button>
+  <div class="cq-question" data-id="t2-4-afirmacions" data-type="multi">
+    <div class="statement">Selecciona totes les afirmacions certes</div>
+    <button class="cq-option" data-correct="true">El secundari respon amb la mateixa autoritat que el primari.</button>
+    <button class="cq-option" data-correct="true">A la zona hi ha d'haver un registre NS per a cada servidor.</button>
+    <button class="cq-option" data-correct="true">El fitxer del secundari no s'ha d'editar a mà.</button>
+    <button class="cq-option" data-correct="false">El secundari només serveix quan el primari està aturat.</button>
+    <button class="cq-option" data-correct="false">La transferència es fa amb el mateix mecanisme que una consulta normal.</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>

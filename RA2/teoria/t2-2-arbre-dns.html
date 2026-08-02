@@ -462,8 +462,10 @@
     </table>
   </div>
   <p>
-    A les activitats el teu BIND farà <strong>totes dues coses</strong>: recursiu per als clients
-    de <code>personal1</code> i autoritatiu de la teva zona.
+    Un mateix servidor pot fer <strong>totes dues coses</strong>, i és el que faràs a les
+    activitats: recursiu per als clients de <code>personal1</code> i autoritatiu de la teva zona.
+    Els productes més estesos són <strong>BIND</strong>, <strong>Unbound</strong> i
+    <strong>Knot</strong>.
   </p>
 </div>
 
@@ -538,8 +540,26 @@
   </p>
 </div>
 
-<!-- ============ 8 · PAS A PAS ============ -->
-<div class="cq-block" data-kind="pas a pas">
+<!-- ============ 7 · CAS REAL ============ -->
+<div class="cq-block" data-kind="cas real">
+  <h4>El resolutor obert que va acabar en un atac</h4>
+  <p>
+    Un servidor DNS que accepta consultes de tot Internet i fa recursió és un
+    <strong>resolutor obert</strong>. No és només una imprudència: és una arma.
+  </p>
+  <p>
+    L'atacant envia consultes petites al teu servidor falsificant l'adreça d'origen, i les
+    respostes, molt més grans, van a parar a la víctima. Amb pocs servidors com el teu es
+    fabriquen atacs de denegació de servei considerables.
+  </p>
+  <p>
+    Per això tot resolutor ha de limitar qui li pot preguntar. Un servidor de la teva xarxa
+    serveix la teva xarxa, i punt.
+  </p>
+</div>
+
+<!-- ============ 8 · OBSERVACIÓ ============ -->
+<div class="cq-block" data-kind="observació">
   <h4>Recórrer l'arbre amb dig</h4>
   <ol class="cq-steps">
     <li>
@@ -642,8 +662,8 @@
   </div>
 
   <p style="margin-top:16px">
-    <strong>Següent:</strong> a <em>T2.3 · Servidor DNS amb BIND 9</em> muntaràs el recursiu que
-    fins ara només has fet servir.
+    <strong>Següent:</strong> a <em>T2.3 · Zones i registres</em> veuràs què hi ha dins d'una
+    zona pròpia.
   </p>
 </div>
 

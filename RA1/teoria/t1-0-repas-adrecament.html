@@ -529,29 +529,57 @@
   <p>
     Els faràs servir tots tres durant el mòdul. Com que no surten a Internet, cal un servidor que
     tradueixi les adreces quan els clients hi volen sortir: és el <strong>NAT</strong> de la
-    teoria T1.4.
+    teoria T1.2.
   </p>
 </div>
 
-<!-- ============ 7 · PAS A PAS ============ -->
-<div class="cq-block" data-kind="pas a pas">
+<!-- ============ 5 · CALCULAR EL RANG ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>Quantes adreces necessites</h4>
+  <p>
+    Les activitats et demanaran rangs per a un nombre concret d'equips. El càlcul és una resta,
+    però has de comptar bé: <strong>els dos extrems del rang hi entren</strong>.
+  </p>
+  <p>
+    De la <code>.100</code> a la <code>.200</code> hi ha <code>200 − 100 + 1 = 101</code>
+    adreces. Si en necessites exactament 99, el rang va de la <code>.100</code> a la
+    <code>.198</code>.
+  </p>
+  <p>
+    I recorda que tota xarxa té dues adreces que <strong>mai</strong> es reparteixen: la
+    <strong>primera</strong> (adreça de xarxa) i l'<strong>última</strong> (difusió). Quines són
+    depèn de la <strong>màscara</strong>, no de l'últim número:
+  </p>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Xarxa</th><th>Primera (xarxa)</th><th>Última (difusió)</th></tr></thead>
+      <tbody>
+        <tr><td><code>192.168.1.0/24</code></td><td><code>192.168.1.0</code></td><td><code>192.168.1.255</code></td></tr>
+        <tr><td><code>172.16.0.0/16</code></td><td><code>172.16.0.0</code></td><td><code>172.16.255.255</code></td></tr>
+        <tr><td><code>10.0.0.0/8</code></td><td><code>10.0.0.0</code></td><td><code>10.255.255.255</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    Fixa-t'hi en la <code>10.0.0.0/8</code>: adreces com la <code>10.0.0.255</code> o la
+    <code>10.0.1.0</code> <strong>són perfectament vàlides</strong> per a un equip. La del
+    servidor tampoc es reparteix, i per això va fora del rang.
+  </p>
+</div>
+
+<!-- ============ 7 · OBSERVACIÓ ============ -->
+<div class="cq-block" data-kind="observació">
   <h4>Llegir la teva pròpia xarxa</h4>
 
   <ol class="cq-steps">
     <li>
       <p><strong>Mira les teves adreces</strong>, la MAC i la IP alhora:</p>
 <pre>ip -c addr show</pre>
-      <p>
-        La MAC surt a <code>link/ether</code> i la IP amb la màscara a <code>inet</code>, en
-        format CIDR. Apunta-les.
-      </p>
+      <p>La MAC surt a <code>link/ether</code> i la IP a <code>inet</code>. Apunta-les.</p>
       <div class="cq-note">
         <span class="lbl">Escriu menys</span>
-        <code>ip</code> accepta les ordres abreujades mentre no siguin ambigües:
-        <code>ip -c a</code> és exactament el mateix que <code>ip -c addr show</code>. Igualment,
-        <code>ip -c r</code> per a les rutes, <code>ip -c l</code> per a les targetes i
-        <code>ip -c n</code> per als veïns. Als apunts hi trobaràs la forma llarga perquè es
-        llegeix millor, però al teclat faràs servir la curta.
+        <code>ip -c a</code>, <code>ip -c r</code>, <code>ip -c l</code> i <code>ip -c n</code>
+        són les formes curtes de les quatre ordres d'aquest bloc.
       </div>
     </li>
 
@@ -559,26 +587,24 @@
       <p><strong>Mira per on surts</strong> de la teva xarxa:</p>
 <pre>ip -c route</pre>
       <p>
-        La línia que comença per <code>default via</code> és la porta d'enllaç. Comprova que
-        està dins de la teva mateixa xarxa: si no hi fos, no hi podries arribar.
+        La línia <code>default via</code> és la porta d'enllaç, que ha de ser de la teva xarxa.
       </p>
     </li>
 
     <li>
-      <p><strong>Fes els càlculs sense fer-los.</strong> Python ve instal·lat a Ubuntu i sap de xarxes:</p>
+      <p><strong>Fes els càlculs sense fer-los</strong>, amb el Python que ja ve instal·lat:</p>
 <pre>python3 -c "import ipaddress as i; n=i.ip_network('192.168.1.0/24'); \
 print('Xarxa:', n.network_address); \
 print('Difusió:', n.broadcast_address); \
 print('Equips:', n.num_addresses - 2)"</pre>
-      <p>Canvia la xarxa per la teva i comprova que et surt el que esperaves.</p>
+      <p>Canvia la xarxa per la teva.</p>
     </li>
 
     <li>
       <p><strong>Comprova qui tens a la vora</strong> amb la taula de veïns, que lliga IP i MAC:</p>
 <pre>ip -c neigh</pre>
       <p>
-        Aquí veus les dues adreces treballant juntes: per parlar amb un veí de la teva xarxa, el
-        teu equip necessita saber-ne la MAC.
+        Per parlar amb un veí de la teva xarxa, el teu equip necessita saber-ne la MAC.
       </p>
     </li>
   </ol>
@@ -632,8 +658,8 @@ print('Equips:', n.num_addresses - 2)"</pre>
   </div>
 
   <p style="margin-top:16px">
-    <strong>Següent:</strong> a <em>T1.1 · Configurar la xarxa a Ubuntu Server</em> començaràs a
-    escriure tu aquesta configuració.
+    <strong>Següent:</strong> a <em>T1.1 · Fonaments de DHCP</em> veuràs qui reparteix
+    aquestes adreces i com.
   </p>
 </div>
 

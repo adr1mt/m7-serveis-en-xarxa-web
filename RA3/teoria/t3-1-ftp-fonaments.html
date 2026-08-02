@@ -545,7 +545,7 @@ RETR informe.pdf
   <p>
     Qualsevol que comparteixi xarxa amb el client —una wifi d'hotel, un cable a l'aula— pot llegir
     l'usuari i la contrasenya amb un capturador de trànsit i sense cap coneixement especial. A la
-    <strong>T3.4</strong> ho veuràs tu mateix amb <code>tcpdump</code>.
+    <strong>T3.3</strong> ho veuràs tu mateix amb <code>tcpdump</code>.
   </p>
   <p>
     Per això FTP en clar ja no es desplega mai cap a Internet. Sobreviu en xarxes internes i
@@ -554,70 +554,60 @@ RETR informe.pdf
   </p>
 </div>
 
-<!-- ============ 9 · PAS A PAS ============ -->
-<div class="cq-block" data-kind="pas a pas">
+<!-- ============ 9 · OBSERVACIÓ ============ -->
+<div class="cq-block" data-kind="observació">
   <h4>La teva primera sessió FTP</h4>
-  <p>
-    Sobre una màquina qualsevol amb Ubuntu Server. Encara no configures res: només instal·les el
-    servidor amb els valors de sèrie per veure el protocol funcionant.
-  </p>
+  <p>Instal·la el servidor amb els valors de sèrie i mira el protocol funcionant.</p>
 
   <ol class="cq-steps">
     <li>
-      <p><strong>Instal·la el servidor i un client de línia d'ordres:</strong></p>
+      <p><strong>Instal·la el servidor i un client de text:</strong></p>
 <pre>sudo apt update
 sudo apt install -y vsftpd ftp</pre>
     </li>
 
     <li>
-      <p><strong>Comprova que el servei escolta</strong> al port 21:</p>
+      <p><strong>Comprova que escolta</strong> al port 21:</p>
 <pre>systemctl status vsftpd
 sudo ss -lntp | grep :21</pre>
     </li>
 
     <li>
-      <p><strong>Deixa un fitxer de prova</strong> al teu directori personal:</p>
+      <p><strong>Deixa un fitxer de prova</strong> a la teva carpeta:</p>
 <pre>echo "hola" &gt; ~/prova.txt</pre>
     </li>
 
     <li>
-      <p><strong>Connecta't amb el teu propi usuari</strong> i mira els codis que van sortint:</p>
+      <p><strong>Connecta't</strong> i mira els codis que van sortint:</p>
 <pre>ftp localhost</pre>
-      <p>
-        Dins de la sessió: <code>ls</code> per veure el directori, <code>get prova.txt</code> per
-        baixar-lo i <code>bye</code> per sortir.
-      </p>
+      <p>Dins: <code>ls</code>, <code>get prova.txt</code> i <code>bye</code>.</p>
     </li>
 
     <li>
-      <p><strong>Prova de pujar-ne un.</strong> Ha de fallar:</p>
+      <p><strong>Prova de pujar-ne un</strong>, que ha de fallar:</p>
 <pre>put prova.txt copia.txt
 <span class="o">550 Permission denied.</span></pre>
       <p>
-        No és cap avaria: de sèrie <code>write_enable</code> està desactivat. L'activaràs a la
-        <strong>T3.2</strong>.
+        No és cap avaria: de sèrie no es pot escriure. Es canvia a la <strong>G3.1</strong>.
       </p>
     </li>
 
     <li>
-      <p><strong>Mira en quin mode estàs.</strong> Dins de la sessió, l'ordre <code>passive</code>
-      canvia d'un mode a l'altre i et diu com queda:</p>
+      <p><strong>Mira en quin mode estàs:</strong> l'ordre <code>passive</code> canvia d'un
+      mode a l'altre.</p>
 <pre>passive
 <span class="o">Passive mode: off; fallback to active mode: off.</span></pre>
       <p>
-        Repeteix el <code>ls</code> amb cada mode i compara la línia que respon el servidor: en
-        passiu és <code>229 Entering Extended Passive Mode</code>, i en actiu
-        <code>200 EPRT command successful. Consider using EPSV.</code>
+        Repeteix el <code>ls</code> amb cada mode: surt <code>229 Entering Extended Passive
+        Mode</code> o <code>200 EPRT command successful.</code>
       </p>
     </li>
   </ol>
 
   <div class="cq-note">
     <span class="lbl">Ubuntu 26.04</span>
-    El paquet és <code>vsftpd</code> i el servei també. El client de text es diu
-    <code>tnftp</code>: <code>apt install ftp</code> continua funcionant, però ja només és un
-    paquet pont que instal·la el <code>tnftp</code>. Arrenca en mode passiu i demana
-    <code>EPSV</code>.
+    El client de text es diu <code>tnftp</code>; <code>apt install ftp</code> continua
+    funcionant perquè és un paquet pont. Arrenca en mode passiu.
   </div>
 </div>
 
@@ -689,8 +679,8 @@ sudo ss -lntp | grep :21</pre>
   </div>
 
   <p style="margin-top:16px">
-    <strong>Següent:</strong> a <em>T3.2 · Servidor vsftpd amb usuaris locals</em> deixaràs de fer
-    servir els valors de sèrie i configuraràs el servidor de veritat.
+    <strong>Següent:</strong> a <em>T3.2 · Comptes, accés anònim i límits</em> veuràs qui pot
+    entrar al servidor i fins on.
   </p>
 </div>
 

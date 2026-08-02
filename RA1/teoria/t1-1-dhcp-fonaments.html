@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>T3.3 · Accés anònim i límits — Serveis en Xarxa (0227)</title>
+<title>T1.1 · Fonaments de DHCP — Serveis en Xarxa (0227)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -388,340 +388,412 @@
 </head>
 <body>
 <header class="cq-header">
-  <div class="eyebrow">0227 · Serveis en Xarxa · RA3 · T3.3</div>
-  <h1>Accés anònim i límits</h1>
-  <p class="lede">Obrir una part del servidor a qui no té compte, sense obrir-la del tot.</p>
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · T1.1</div>
+  <h1>Fonaments de DHCP</h1>
+  <p class="lede">Per què les xarxes no es configuren a mà, i què passa quan un equip demana adreça.</p>
 </header>
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
   <h4>Què sabràs fer en acabar</h4>
   <ul>
-    <li>Activar l'<strong>accés anònim</strong> i decidir què veu qui entra sense compte.</li>
-    <li>Preparar el directori públic amb els permisos correctes.</li>
-    <li>Posar <strong>límits</strong> de connexions, de velocitat i de temps d'inactivitat.</li>
-    <li>Distingir els límits de vsftpd de les <strong>quotes</strong> del sistema de fitxers.</li>
-    <li>Aplicar límits diferents als anònims i als usuaris amb compte.</li>
+    <li>Explicar per què les xarxes no es configuren a mà.</li>
+    <li>Descriure els quatre passos del procés <strong>DORA</strong>.</li>
+    <li>Entendre què és una concessió i per què caduca.</li>
+    <li>Capturar un intercanvi DHCP real amb <code>tcpdump</code>.</li>
+    <li>Diagnosticar per què un client no rep adreça.</li>
   </ul>
 </div>
 
-<!-- ============ 2 · QUÈ ÉS L'ANÒNIM ============ -->
+<!-- ============ 2 · ESTÀTICA O DINÀMICA ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Qui és l'usuari anònim</h4>
+  <h4>IP fixa o IP automàtica?</h4>
   <p>
-    L'accés anònim vol dir entrar sense compte: l'usuari escriu <code>anonymous</code> o
-    <code>ftp</code> i, com a contrasenya, el seu correu o el que li sembli. Ningú no el comprova.
+    Un equip pot rebre la configuració de dues maneres: <strong>automàtica</strong>, demanant-la
+    a un servidor DHCP, o <strong>fixa</strong> (estàtica), escrivint-la tu en un fitxer.
   </p>
+  <p>La regla pràctica és senzilla:</p>
+  <ul>
+    <li><strong>Automàtica</strong> per a tot allò que es connecta i es desconnecta: portàtils, mòbils, ordinadors d'aula.</li>
+    <li><strong>Fixa</strong> per a tot allò que ha d'estar sempre a la mateixa adreça perquè els altres el trobin: servidors, routers, impressores.</li>
+  </ul>
   <p>
-    Per dins no hi ha cap màgia. El servidor executa aquella sessió amb el compte del sistema
-    <code>ftp</code>, que el paquet crea en instal·lar-se amb el directori
-    <code>/srv/ftp</code>, i la tanca dins d'aquell directori sempre, sense haver de dir res.
-  </p>
-  <p>
-    Serveix per publicar: manuals, controladors, imatges d'instal·lació. Tot allò que vols que
-    qualsevol es pugui baixar sense demanar permís.
+    Un <strong>servidor DHCP té sempre IP fixa</strong> a la targeta per on dona servei. Té tot
+    el sentit: no es pot demanar l'adreça a si mateix, i els clients l'han de poder localitzar.
   </p>
 </div>
 
-<!-- ============ 3 · DIRECTIVES D'ANÒNIM ============ -->
+<!-- ============ 2 · INTRODUCCIÓ ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Les directives de l'accés anònim</h4>
-  <div class="cq-tablewrap">
-    <table class="cq-table">
-      <thead><tr><th>Directiva</th><th>Què decideix</th></tr></thead>
-      <tbody>
-        <tr><td><code>anonymous_enable</code></td><td>Si s'accepta l'accés sense compte</td></tr>
-        <tr><td><code>anon_root</code></td><td>Quin directori veu l'anònim</td></tr>
-        <tr><td><code>no_anon_password</code></td><td>Si ni tan sols demana contrasenya</td></tr>
-        <tr><td><code>anon_upload_enable</code></td><td>Si pot pujar fitxers</td></tr>
-        <tr><td><code>anon_mkdir_write_enable</code></td><td>Si pot crear carpetes</td></tr>
-        <tr><td><code>anon_world_readable_only</code></td><td>Si només es baixa el que és llegible per tothom</td></tr>
-      </tbody>
-    </table>
+  <h4>El problema que resol DHCP</h4>
+  <p>
+    Perquè un equip funcioni en xarxa necessita quatre dades: <strong>IP</strong>,
+    <strong>màscara</strong>, <strong>porta d'enllaç</strong> i <strong>DNS</strong>.
+    Posar-les a mà va bé amb tres màquines. Amb tres-centes, no.
+  </p>
+  <p>Configurar a mà una xarxa gran té tres problemes:</p>
+  <ul>
+    <li>Cal apuntar quina IP té cada equip per no repetir-ne cap.</li>
+    <li>Si un portàtil canvia d'aula, s'ha de reconfigurar.</li>
+    <li>Canviar el DNS del centre vol dir tocar totes les màquines.</li>
+  </ul>
+  <p>
+    <strong>DHCP</strong> (<em>Dynamic Host Configuration Protocol</em>) posa aquesta feina en
+    un servidor. Tu defineixes la configuració <em>una sola vegada</em> i cada equip que es
+    connecta la demana i la rep sol. És el que fa el router de casa teva i el Wi-Fi de
+    l'institut: canvia la mida, no el mecanisme.
+  </p>
+</div>
+
+<!-- ============ 3 · FUNCIONAMENT INTERN ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>Funcionament: el procés DORA</h4>
+  <p>
+    Hi ha una pregunta òbvia: si el client encara no té IP, com pot demanar res? Ho fa per
+    <strong>difusió</strong> (<em>broadcast</em>), un missatge que arriba a tothom del segment.
+    DHCP treballa sobre <strong>UDP</strong>: el servidor escolta al <strong>port 67</strong> i
+    el client al <strong>68</strong>.
+  </p>
+
+  <div class="dora-flow">
+    <div class="dora-step">
+      <div class="n">01</div>
+      <div class="t">DISCOVER</div>
+      <div class="d">El client crida: «hi ha algun servidor DHCP?»</div>
+    </div>
+    <div class="dora-arrow">→</div>
+    <div class="dora-step">
+      <div class="n">02</div>
+      <div class="t">OFFER</div>
+      <div class="d">El servidor ofereix una IP del seu rang.</div>
+    </div>
+    <div class="dora-arrow">→</div>
+    <div class="dora-step">
+      <div class="n">03</div>
+      <div class="t">REQUEST</div>
+      <div class="d">El client accepta aquella oferta.</div>
+    </div>
+    <div class="dora-arrow">→</div>
+    <div class="dora-step">
+      <div class="n">04</div>
+      <div class="t">ACK</div>
+      <div class="d">El servidor confirma. Ja pots fer servir l'adreça.</div>
+    </div>
   </div>
+
   <p>
-    Les tres primeres són per a un repositori normal de només lectura. Les dues següents obren la
-    porta a pujades anònimes, i gairebé mai les vols.
+    Són quatre passos i no dos perquè <strong>pot haver-hi més d'un servidor</strong>. Si dos
+    responen, el client tria un i ho diu al REQUEST; l'altre s'assabenta que l'han descartat i
+    allibera l'adreça que havia guardat. El servidor reconeix cada equip per la seva
+    <strong>adreça MAC</strong>.
   </p>
 </div>
 
-<!-- ============ 4 · LÍMITS ============ -->
-<div class="cq-block" data-kind="teoria">
-  <h4>Posar fre: connexions, velocitat i temps</h4>
-  <p>
-    Un servidor sense límits el tomba una sola persona amb un <em>script</em>. vsftpd els aplica
-    per separat als anònims i als usuaris amb compte.
-  </p>
-  <div class="cq-tablewrap">
-    <table class="cq-table">
-      <thead><tr><th>Directiva</th><th>Límit</th><th>De sèrie</th></tr></thead>
-      <tbody>
-        <tr><td><code>max_clients</code></td><td>Sessions simultànies al servidor</td><td>Sense límit</td></tr>
-        <tr><td><code>max_per_ip</code></td><td>Sessions des de la mateixa adreça</td><td>Sense límit</td></tr>
-        <tr><td><code>anon_max_rate</code></td><td>Bytes per segon per a un anònim</td><td>Sense límit</td></tr>
-        <tr><td><code>local_max_rate</code></td><td>Bytes per segon per a un usuari</td><td>Sense límit</td></tr>
-        <tr><td><code>idle_session_timeout</code></td><td>Segons sense escriure cap ordre</td><td>300</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <p>
-    Les velocitats van en <strong>bytes</strong> per segon, no en bits: <code>512000</code> són
-    500 KB/s.
-  </p>
-</div>
-
-<!-- ============ 5 · EXEMPLE ============ -->
+<!-- ============ 4 · EXEMPLE SENZILL ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h4>Repositori públic de només lectura, amb límits</h4>
-<pre><span class="c"># Anònim, només baixar</span>
-anonymous_enable=YES
-anon_root=/srv/ftp
-no_anon_password=YES
-anon_upload_enable=NO
-anon_mkdir_write_enable=NO
-
-<span class="c"># Els usuaris amb compte segueixen igual</span>
-local_enable=YES
-write_enable=YES
-
-<span class="c"># Límits: l'anònim va més just que l'usuari</span>
-max_clients=20
-max_per_ip=2
-anon_max_rate=512000
-local_max_rate=2048000
-idle_session_timeout=120</pre>
+  <h4>Un DORA, missatge a missatge</h4>
   <p>
-    Llegit en veu alta: qualsevol pot baixar el que hi ha a <code>/srv/ftp</code> a mig mega per
-    segon, com a molt dues sessions per adreça, i si es despista dos minuts, fora.
+    Servidor <code>10.0.0.1</code>, que reparteix a partir de la <code>10.0.0.100</code>.
+    Un portàtil s'acaba de connectar:
+  </p>
+<pre><span class="c"># 1 · DISCOVER — el client encara no té IP</span>
+0.0.0.0:68  →  255.255.255.255:67
+   MAC: 08:00:27:1f:a3:0c
+
+<span class="c"># 2 · OFFER — el servidor proposa</span>
+10.0.0.1:67  →  255.255.255.255:68
+   IP: 10.0.0.100/8   Gateway: 10.0.0.1
+   DNS: 9.9.9.9       Lease: 600 s
+
+<span class="c"># 3 · REQUEST — el client accepta</span>
+0.0.0.0:68  →  255.255.255.255:67
+   Vull la 10.0.0.100, del servidor 10.0.0.1
+
+<span class="c"># 4 · ACK — confirmat</span>
+10.0.0.1:67  →  255.255.255.255:68
+   IP concedida: 10.0.0.100/8</pre>
+  <p>Tot això passa en menys d'una dècima de segon.</p>
+</div>
+
+<!-- ============ 5 · LA CONCESSIÓ ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>L'adreça es presta, no es regala</h4>
+  <p>
+    El servidor concedeix l'adreça durant un temps limitat: és la <strong>concessió</strong>
+    (<em>lease</em>). Quan caduca, l'adreça torna al fons comú i pot anar a un altre equip.
+  </p>
+  <p>
+    Té sentit: els portàtils que hi ha al matí a l'institut no hi són a la tarda. Si les
+    adreces no caduquessin, el rang s'esgotaria en pocs dies amb màquines que ja no hi són.
+  </p>
+  <p>
+    El client no espera l'últim moment. <strong>Quan ha passat la meitat del temps, demana la
+    renovació</strong> directament al seu servidor, i el rellotge torna a començar sense que
+    l'usuari noti res. Només si ningú respon abans que caduqui, el client es queda sense
+    configuració i ha de tornar a fer tot el DORA.
   </p>
 </div>
 
-<!-- ============ 6 · QUOTES ============ -->
-<div class="cq-block" data-kind="observació">
-  <h4>Les quotes no són cosa de vsftpd</h4>
+<!-- ============ 6 · TIPUS D'ASSIGNACIÓ ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>Tres maneres d'assignar adreces</h4>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead>
+        <tr><th>Tipus</th><th>Com funciona</th><th>Per a què</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Dinàmica</strong></td>
+          <td>El servidor tria qualsevol adreça lliure del rang (<em>pool</em>).</td>
+          <td>Equips d'usuari</td>
+        </tr>
+        <tr>
+          <td><strong>Reserva</strong></td>
+          <td>El servidor té apuntat MAC ↔ IP i sempre dona la mateixa adreça.</td>
+          <td>Impressores, servidors</td>
+        </tr>
+        <tr>
+          <td><strong>Estàtica</strong></td>
+          <td>La IP està escrita a l'equip. DHCP no hi intervé.</td>
+          <td>El propi servidor, routers</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
   <p>
-    Cap directiva de vsftpd limita <em>l'espai en disc</em> que ocupa un usuari. Els límits del
-    servidor són de velocitat i de sessions; l'espai el controla el sistema de fitxers.
+    A més de la IP, el servidor envia <strong>opcions</strong>: la porta d'enllaç
+    (<code>routers</code>), el DNS (<code>domain-name-servers</code>) i el nom de domini
+    (<code>domain-name</code>). Aquests noms són els mateixos a tots els servidors DHCP.
   </p>
   <p>
-    Això es fa amb el paquet <code>quota</code>: es marca la partició amb l'opció
-    <code>usrquota</code> a <code>/etc/fstab</code>, i després s'assigna a cada usuari un màxim de
-    blocs amb <code>setquota</code>. <code>repquota</code> mostra com va cadascú.
-  </p>
-  <p>
-    És feina del sistema operatiu, no del servei, i val igual per a l'FTP, el correu o una carpeta
-    compartida.
+    <strong>Compte:</strong> una IP estàtica ha de quedar sempre <em>fora</em> del rang
+    dinàmic, o dos equips acabaran amb la mateixa adreça.
   </p>
 </div>
 
 <!-- ============ 7 · CAS REAL ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h4>El directori públic que va acabar sent un magatzem</h4>
+  <h4>El router que algú va endollar a l'aula</h4>
   <p>
-    Als anys en què tothom tenia FTP anònim era habitual deixar una carpeta <em>incoming</em>
-    perquè la gent hi deixés fitxers. La idea era rebre feina de fora sense donar comptes.
+    Un alumne connecta un router domèstic a una roseta. Aquell router porta el DHCP activat de
+    fàbrica i comença a respondre OFFERs amb la seva pròpia IP com a porta d'enllaç. És el que
+    s'anomena un <strong>servidor DHCP furtiu</strong> (<em>rogue DHCP</em>).
   </p>
   <p>
-    Els robots que rastregen Internet buscant carpetes anònimes escrivibles ho van convertir en un
-    negoci: pel·lícules i programari pirata emmagatzemats gratis, amb l'ample de banda i la
-    responsabilitat legal del propietari del servidor.
+    Com que cada client es queda amb el primer OFFER que li arriba, l'efecte és aleatori: uns
+    equips van i altres no. El símptoma clàssic és «a mi em funciona i al del costat no», i és
+    dels errors més difícils de trobar si no saps que això existeix.
   </p>
   <p>
-    Per això la regla és <strong>anònim de només lectura</strong>. Si has de rebre fitxers de fora,
-    fes un compte amb nom, encara que sigui temporal.
+    Per això, a les activitats, muntaràs el teu servidor DHCP sempre a la targeta
+    <code>personal1</code> i mai a <code>puigcastellar1</code>: si el poses a la xarxa del
+    centre, el servidor furtiu ets tu.
   </p>
 </div>
 
-<!-- ============ 8 · PAS A PAS ============ -->
-<div class="cq-block" data-kind="pas a pas">
-  <h4>Publicar un repositori anònim</h4>
+<!-- ============ 9 · OBSERVACIÓ ============ -->
+<div class="cq-block" data-kind="observació">
+  <h4>Veure el DORA amb els teus ulls</h4>
+  <p>
+    Captura els quatre missatges a <code>puigcastellar1</code>, que rep la configuració del
+    DHCP del centre.
+  </p>
 
   <ol class="cq-steps">
     <li>
-      <p><strong>Comprova el directori públic.</strong> Ha de ser de <code>root</code> i no
-      escrivible. Si no, el servei arrenca igualment, però cap anònim hi podrà entrar:</p>
-<pre>ls -ld /srv/ftp
-sudo chown root:root /srv/ftp
-sudo chmod 755 /srv/ftp</pre>
+      <p><strong>Mira quina concessió tens ara:</strong></p>
+<pre>networkctl status enp1s0</pre>
+
     </li>
 
     <li>
-      <p><strong>Posa-hi contingut</strong> llegible per tothom:</p>
-<pre>sudo mkdir /srv/ftp/public
-echo "manual" | sudo tee /srv/ftp/public/llegeix-me.txt
-sudo chmod -R a+r /srv/ftp/public</pre>
+      <p><strong>Deixa <code>tcpdump</code> escoltant</strong> els ports de DHCP:</p>
+<pre>sudo apt install -y tcpdump
+sudo tcpdump -i enp1s0 -n port 67 or port 68</pre>
     </li>
 
     <li>
-      <p><strong>Activa l'anònim i els límits</strong> a <code>/etc/vsftpd.conf</code>, amb
-      l'exemple d'aquesta pàgina com a model:</p>
-<pre>sudo nano /etc/vsftpd.conf
-sudo systemctl restart vsftpd</pre>
-    </li>
-
-    <li>
-      <p><strong>Prova-ho des del client</strong> amb l'usuari <code>anonymous</code>:</p>
-<pre>ftp 192.168.1.8
-<span class="c"># Name: anonymous</span></pre>
+      <p><strong>Des d'una altra consola</strong>, força una configuració des de zero:</p>
+<pre>sudo networkctl reconfigure enp1s0</pre>
       <p>
-        Amb <code>no_anon_password=YES</code> ni tan sols et demana la contrasenya: entres directe
-        amb <code>230 Login successful</code>. Has de poder fer <code>ls</code> i <code>get</code>,
-        i <code>put</code> ha de fallar amb <code>550 Permission denied</code>.
+        Ha de ser <code>reconfigure</code>: amb <code>renew</code> només es demana una pròrroga.
       </p>
     </li>
 
     <li>
-      <p><strong>Comprova el límit per adreça</strong>: obre tres sessions alhora des de la mateixa
-      màquina, sense tancar-ne cap. La tercera ha de dir:</p>
-<pre><span class="o">421 There are too many connections from your internet address.</span></pre>
+      <p><strong>Llegeix la captura:</strong></p>
+<pre><span class="o">IP 0.0.0.0.68 &gt; 255.255.255.255.67: BOOTP/DHCP, Request from 08:00:27:1f:a3:0c
+IP 10.0.0.1.67 &gt; 255.255.255.255.68: BOOTP/DHCP, Reply
+IP 0.0.0.0.68 &gt; 255.255.255.255.67: BOOTP/DHCP, Request from 08:00:27:1f:a3:0c
+IP 10.0.0.1.67 &gt; 255.255.255.255.68: BOOTP/DHCP, Reply</span></pre>
       <p>
-        Compten les sessions obertes, encara que estiguin aturades: fins que no les tanquis o
-        passin els segons d'<code>idle_session_timeout</code>, ocupen lloc.
+        Request, Reply, Request, Reply: DISCOVER, OFFER, REQUEST i ACK. El client parla des de
+        <code>0.0.0.0</code> perquè encara no té adreça.
       </p>
     </li>
 
     <li>
-      <p><strong>Comprova el límit de velocitat</strong> amb un fitxer prou gran:</p>
-<pre>sudo dd if=/dev/zero of=/srv/ftp/public/gran.bin bs=1M count=100
-sudo chmod a+r /srv/ftp/public/gran.bin</pre>
+      <p><strong>Compara-ho amb una renovació</strong>, amb la captura oberta:</p>
+<pre>sudo networkctl renew enp1s0</pre>
       <p>
-        Baixa'l i mira la velocitat que reporta el client: amb
-        <code>anon_max_rate=512000</code> ha de rondar els 500 KiB/s, ni que el servidor i el
-        client siguin la mateixa màquina.
+        Ara només en surten dues, i el client escriu directament al seu servidor.
       </p>
+<pre><span class="o">IP 10.0.0.55.68 &gt; 10.0.0.1.67: BOOTP/DHCP, Request from 08:00:27:1f:a3:0c
+IP 10.0.0.1.67 &gt; 10.0.0.55.68: BOOTP/DHCP, Reply</span></pre>
+    </li>
+
+    <li>
+      <p>Atura amb <kbd>Ctrl</kbd>+<kbd>C</kbd> i mira què t'ha quedat:</p>
+<pre>ip -c addr show enp1s0
+ip -c route
+resolvectl status enp1s0</pre>
+      <p>Tot ho ha decidit el servidor.</p>
     </li>
   </ol>
 
   <div class="cq-note">
     <span class="lbl">Ubuntu 26.04</span>
-    El paquet crea l'usuari de sistema <code>ftp</code> i el directori <code>/srv/ftp</code>, que ve
-    de <code>root:ftp</code> amb permisos <code>755</code>. Si el canvies amb <code>anon_root</code>,
-    el nou directori ha de complir la mateixa regla: de <code>root</code> i no escrivible.
+    A <code>networkctl status</code> la concessió surt entre parèntesis:
+    <code>Address: 10.0.0.55 (DHCPv4 via 10.0.0.1)</code>.
   </div>
 </div>
 
-<!-- ============ 9 · BONES PRÀCTIQUES ============ -->
+<!-- ============ 10 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
   <h4>Criteris professionals</h4>
   <ul>
-    <li><strong>Anònim de només lectura.</strong> Per rebre fitxers, compte amb nom.</li>
-    <li><strong>Límits sempre</strong>, encara que siguin generosos: la xifra important és <code>max_per_ip</code>.</li>
-    <li><strong>L'anònim, més just que l'usuari</strong>, tant de velocitat com de sessions.</li>
-    <li><strong>Res de personal a <code>/srv/ftp</code></strong>: tot el que hi deixis és públic.</li>
-    <li><strong>Quotes de disc</strong> amb el sistema de fitxers si els usuaris pugen fitxers.</li>
+    <li>
+      <strong>Infraestructura fora del rang dinàmic.</strong> Servidor, routers i punts d'accés
+      a la part baixa de la xarxa (<code>.1</code>–<code>.20</code>); el <em>pool</em> comença
+      per sobre.
+    </li>
+    <li>
+      <strong>Millor reserva que IP estàtica.</strong> Dona la mateixa previsibilitat, però es
+      gestiona des d'un únic lloc.
+    </li>
+    <li>
+      <strong>Dimensiona el <em>pool</em> amb marge:</strong> els dispositius reals més un
+      20–30 %.
+    </li>
+    <li>
+      <strong>Concessió curta</strong> en xarxes de pas (visitants) i <strong>llarga</strong>
+      en llocs de treball fixos.
+    </li>
+    <li><strong>Un sol servidor DHCP</strong> per xarxa.</li>
   </ul>
 </div>
 
-<!-- ============ 10 · PROBLEMES ============ -->
+<!-- ============ 11 · PROBLEMES HABITUALS ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h4>Errors habituals</h4>
+  <h4>Quan el client no rep adreça</h4>
   <dl class="cq-issues">
-    <dt><code>OOPS: vsftpd: refusing to run with writable root inside chroot()</code> en entrar com a anònim</dt>
+    <dt>El client té una adreça 169.254.x.x</dt>
     <dd>
-      <p><span class="lbl">Causa</span> <code>/srv/ftp</code> és escrivible pel grup o per l'usuari <code>ftp</code>. El servei arrenca, però la sessió cau just després del <code>230</code>.</p>
-      <p><span class="lbl">Solució</span> <code>chown root:root</code> i <code>chmod 755</code> sobre l'arrel; el que hagi de ser escrivible, en una carpeta de dins.</p>
+      <p><span class="lbl">Causa</span> No ha arribat cap OFFER. Aquesta adreça se l'ha posat ell sol en rendir-se.</p>
+      <p><span class="lbl">Solució</span> Al servidor, comprova que escolta: <code>sudo ss -ulnp | grep :67</code>. Si no surt res, el servei està aturat o no escolta per aquella targeta.</p>
     </dd>
 
-    <dt>L'anònim entra però no veu res</dt>
+    <dt>El servei no arrenca després d'editar la configuració</dt>
     <dd>
-      <p><span class="lbl">Causa</span> Els fitxers no són llegibles per tothom i <code>anon_world_readable_only</code> està actiu.</p>
-      <p><span class="lbl">Solució</span> <code>chmod -R a+r</code> sobre el contingut públic.</p>
+      <p><span class="lbl">Causa</span> Gairebé sempre, una coma de més al JSON. També pot ser que la targeta encara no tingui IP fixa: un servidor DHCP no pot escoltar per una interfície sense adreça.</p>
+      <p><span class="lbl">Solució</span> Mira l'estat del servei amb <code>systemctl status</code> i llegeix l'última línia de l'error.</p>
     </dd>
 
-    <dt><code>553 Could not create file</code></dt>
+    <dt>El client rep IP però no navega</dt>
     <dd>
-      <p><span class="lbl">Causa</span> Intent de pujada anònima sense <code>anon_upload_enable</code>, o sense una carpeta escrivible.</p>
-      <p><span class="lbl">Solució</span> Si és intencionat, deixa-ho així: és el comportament correcte.</p>
-    </dd>
-
-    <dt>El límit de velocitat no es nota</dt>
-    <dd>
-      <p><span class="lbl">Causa</span> El fitxer és massa petit, o s'està aplicant l'altre límit.</p>
-      <p><span class="lbl">Solució</span> Prova amb un fitxer de 100 MB i comprova si connectes com a anònim o com a usuari.</p>
+      <p><span class="lbl">Causa</span> DHCP ha funcionat; falla el que ha repartit (porta d'enllaç o DNS).</p>
+      <p><span class="lbl">Solució</span> <code>ping 9.9.9.9</code> prova l'encaminament i <code>ping www.upc.edu</code> prova el DNS. Si el primer va i el segon no, el problema és el DNS.</p>
     </dd>
   </dl>
 </div>
 
-<!-- ============ 11 · RESUM ============ -->
+<!-- ============ 12 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
   <h4>Resum</h4>
   <ul>
-    <li>L'anònim entra sense compte i el servidor l'executa com l'usuari de sistema <code>ftp</code>.</li>
-    <li>El seu directori és <strong><code>/srv/ftp</code></strong>, i ha de ser de <code>root</code> i no escrivible.</li>
-    <li>Publicar és <code>anonymous_enable=YES</code> i deixar les pujades desactivades.</li>
-    <li>Els límits es posen per separat: <code>anon_max_rate</code> i <code>local_max_rate</code>.</li>
-    <li>L'espai en disc es limita amb <strong>quotes</strong> del sistema de fitxers, no amb vsftpd.</li>
+    <li>DHCP reparteix IP, màscara, porta d'enllaç i DNS de manera automàtica.</li>
+    <li>Va sobre UDP: servidor al port <strong>67</strong>, client al <strong>68</strong>.</li>
+    <li>La negociació és <strong>DORA</strong>: Discover, Offer, Request, Ack.</li>
+    <li>L'adreça es presta amb una <strong>concessió</strong>, que el client renova a mitja vida.</li>
+    <li>Assignació <strong>dinàmica</strong>, <strong>reserva</strong> (MAC↔IP) o <strong>estàtica</strong>.</li>
   </ul>
 
   <div class="cq-tablewrap">
     <table class="cq-table">
-      <thead><tr><th>Comanda</th><th>Per a què serveix</th></tr></thead>
+      <thead>
+        <tr><th>Comanda</th><th>Per a què serveix</th></tr>
+      </thead>
       <tbody>
-        <tr><td><code>ls -ld /srv/ftp</code></td><td>Comprovar propietari i permisos de l'arrel</td></tr>
-        <tr><td><code>chmod -R a+r</code></td><td>Fer públic el contingut</td></tr>
-        <tr><td><code>setquota</code> · <code>repquota</code></td><td>Assignar i revisar quotes de disc</td></tr>
-        <tr><td><code>dd if=/dev/zero</code></td><td>Fabricar un fitxer gran per provar velocitats</td></tr>
+        <tr><td><code>ip -c addr show</code><br><code>ip -c a</code></td><td>Veure l'adreça rebuda</td></tr>
+        <tr><td><code>ip -c route</code><br><code>ip -c r</code></td><td>Veure la porta d'enllaç</td></tr>
+        <tr><td><code>resolvectl status</code></td><td>Veure el DNS actiu</td></tr>
+        <tr><td><code>networkctl status &lt;if&gt;</code></td><td>Estat i concessió de la targeta</td></tr>
+        <tr><td><code>networkctl renew &lt;if&gt;</code></td><td>Renovar: dos missatges, al mateix servidor</td></tr>
+        <tr><td><code>networkctl reconfigure &lt;if&gt;</code></td><td>Tornar a començar: el DORA sencer</td></tr>
+        <tr><td><code>tcpdump -n port 67 or port 68</code></td><td>Capturar l'intercanvi DHCP</td></tr>
+        <tr><td><code>ss -ulnp | grep :67</code></td><td>Veure si el servidor escolta</td></tr>
       </tbody>
     </table>
   </div>
 
   <p style="margin-top:16px">
-    <strong>Següent:</strong> a <em>T3.4 · FTPS i SFTP</em> taparàs l'únic forat que queda: que tot
-    això viatja en clar.
+    <strong>Següent:</strong> a <em>T1.2 · Encaminament i NAT</em> veuràs per què un client
+    amb adreça correcta encara no arriba a Internet.
   </p>
 </div>
 
-<!-- ============ 12 · QUIZ ============ -->
+<!-- ============ 13 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
   <h4>Comprova el que has après</h4>
 
-  <div class="cq-question" data-id="t3-3-usuari" data-type="single">
-    <div class="statement">Amb quin compte del sistema treballa una sessió anònima?</div>
-    <button class="cq-option" data-correct="false"><code>root</code></button>
-    <button class="cq-option" data-correct="false"><code>nobody</code></button>
-    <button class="cq-option" data-correct="true"><code>ftp</code></button>
-    <button class="cq-option" data-correct="false"><code>anonymous</code>, que es crea a cada connexió</button>
+  <div class="cq-question" data-id="t1-1-dora-ordre" data-type="single">
+    <div class="statement">Quin és el tercer pas del procés DORA?</div>
+    <button class="cq-option" data-correct="false">OFFER — el servidor ofereix una IP</button>
+    <button class="cq-option" data-correct="true">REQUEST — el client accepta l'oferta</button>
+    <button class="cq-option" data-correct="false">DISCOVER — el client busca un servidor</button>
+    <button class="cq-option" data-correct="false">ACK — el servidor confirma la concessió</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t3-3-arrel" data-type="single">
-    <div class="statement">Per què <code>/srv/ftp</code> no pot ser escrivible?</div>
-    <button class="cq-option" data-correct="false">Perquè si no, no es pot llegir</button>
-    <button class="cq-option" data-correct="true">Perquè vsftpd es nega a fer un chroot sobre una arrel escrivible</button>
-    <button class="cq-option" data-correct="false">Perquè el sistema de fitxers no ho permet</button>
-    <button class="cq-option" data-correct="false">Perquè aleshores caldria activar el mode passiu</button>
+  <div class="cq-question" data-id="t1-1-ports" data-type="single">
+    <div class="statement">Sobre quin protocol i ports treballa DHCP?</div>
+    <button class="cq-option" data-correct="false">TCP, ports 67 i 68</button>
+    <button class="cq-option" data-correct="true">UDP, port 67 al servidor i 68 al client</button>
+    <button class="cq-option" data-correct="false">UDP, port 53 al servidor i 68 al client</button>
+    <button class="cq-option" data-correct="false">TCP, port 80 als dos extrems</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t3-3-quota" data-type="single">
-    <div class="statement">Vols que cap usuari ocupi més d'1 GB al servidor. Què fas servir?</div>
-    <button class="cq-option" data-correct="false"><code>local_max_rate</code></button>
-    <button class="cq-option" data-correct="false"><code>max_per_ip</code></button>
-    <button class="cq-option" data-correct="true">Les quotes del sistema de fitxers</button>
-    <button class="cq-option" data-correct="false"><code>anon_umask</code></button>
+  <div class="cq-question" data-id="t1-1-discover-origen" data-type="single">
+    <div class="statement">Quina IP d'origen porta el missatge DISCOVER?</div>
+    <button class="cq-option" data-correct="false">La seva IP anterior, si en tenia</button>
+    <button class="cq-option" data-correct="true">0.0.0.0, perquè encara no en té cap</button>
+    <button class="cq-option" data-correct="false">255.255.255.255</button>
+    <button class="cq-option" data-correct="false">169.254.0.1</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t3-3-rate" data-type="single">
-    <div class="statement">Què significa <code>anon_max_rate=512000</code>?</div>
-    <button class="cq-option" data-correct="true">Uns 500 KB per segon per a cada sessió anònima</button>
-    <button class="cq-option" data-correct="false">512.000 bits per segon</button>
-    <button class="cq-option" data-correct="false">512.000 fitxers com a màxim</button>
-    <button class="cq-option" data-correct="false">512.000 segons de sessió màxima</button>
+  <div class="cq-question" data-id="t1-1-apipa" data-type="single">
+    <div class="statement">Un client acaba amb l'adreça 169.254.12.7. Què vol dir?</div>
+    <button class="cq-option" data-correct="false">Que el servidor DHCP li ha donat una adreça privada</button>
+    <button class="cq-option" data-correct="true">Que no ha rebut cap resposta DHCP i se l'ha posat ell sol</button>
+    <button class="cq-option" data-correct="false">Que la concessió ha caducat però encara funciona</button>
+    <button class="cq-option" data-correct="false">Que hi ha un conflicte amb un altre equip</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t3-3-afirmacions" data-type="multi">
-    <div class="statement">Selecciona totes les afirmacions certes</div>
-    <button class="cq-option" data-correct="true">Un directori anònim escrivible és un risc conegut i evitable.</button>
-    <button class="cq-option" data-correct="true">Els límits de velocitat s'expressen en bytes per segon.</button>
-    <button class="cq-option" data-correct="true">Es poden aplicar límits diferents als anònims i als usuaris amb compte.</button>
-    <button class="cq-option" data-correct="false">vsftpd pot limitar l'espai en disc de cada usuari.</button>
-    <button class="cq-option" data-correct="false">L'accés anònim comprova la contrasenya que escriu l'usuari.</button>
+  <div class="cq-question" data-id="t1-1-afirmacions" data-type="multi">
+    <div class="statement">Selecciona totes les afirmacions certes sobre DHCP</div>
+    <button class="cq-option" data-correct="true">Cada concessió té una durada limitada.</button>
+    <button class="cq-option" data-correct="false">El client tria lliurement la IP que vol.</button>
+    <button class="cq-option" data-correct="true">El client renova la concessió quan n'ha passat la meitat del temps.</button>
+    <button class="cq-option" data-correct="true">Una reserva associa una MAC concreta a una IP concreta.</button>
+    <button class="cq-option" data-correct="false">Una IP estàtica ha d'estar dins del rang dinàmic.</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>

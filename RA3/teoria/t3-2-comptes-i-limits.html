@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Serveis en Xarxa (0227) · RA1 — DHCP</title>
+<title>T3.2 · Comptes, accés anònim i límits — Serveis en Xarxa (0227)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -388,88 +388,197 @@
 </head>
 <body>
 <header class="cq-header">
-  <div class="eyebrow">CFGM SMX · Mòdul 0227</div>
-  <h1>Serveis en Xarxa</h1>
-  <p class="lede">RA1 · Instal·lació de serveis de configuració dinàmica (DHCP)</p>
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA3 · T3.2</div>
+  <h1>Comptes, accés anònim i límits</h1>
+  <p class="lede">Qui entra al servidor, fins on arriba i quant se'n pot endur.</p>
 </header>
 
+<!-- ============ 1 · OBJECTIUS ============ -->
+<div class="cq-block" data-kind="objectius">
+  <h4>Què sabràs fer en acabar</h4>
+  <ul>
+    <li>Explicar què guanyes <strong>enjaulant</strong> un usuari al seu directori.</li>
+    <li>Crear usuaris i grups pensats per a accés remot.</li>
+    <li>Tancar cada usuari al seu directori amb <strong>chroot</strong>.</li>
+    <li>Decidir <em>qui</em> pot entrar amb una llista blanca.</li>
+    <li>Comprovar el servei i llegir-ne el registre.</li>
+  </ul>
+</div>
+
+<!-- ============ 4 · CHROOT ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Teoria</h4>
-  <p>Expliquen com funciona el servei, sense lligar-lo a cap producte.</p>
-  <ul class="cq-index">
-    <li><a href="teoria/t1-0-repas-adrecament.html">
-      <span class="ref">T1.0</span>
-      <span class="ttl">Repàs d'adreçament
-        <span class="sub">IP, màscara, CIDR i rangs privats</span></span></a></li>
-    <li><a href="teoria/t1-1-dhcp-fonaments.html">
-      <span class="ref">T1.1</span>
-      <span class="ttl">Fonaments de DHCP
-        <span class="sub">El procés DORA i les concessions</span></span></a></li>
-    <li><a href="teoria/t1-2-encaminament-nat.html">
-      <span class="ref">T1.2</span>
-      <span class="ttl">Encaminament i NAT
-        <span class="sub">Per què un client amb IP encara no té Internet</span></span></a></li>
-  </ul>
-</div>
-
-<div class="cq-block" data-kind="guies">
-  <h4>Guies</h4>
-  <ul class="cq-index">
-    <li><a href="guies/g1-1-netplan.html">
-      <span class="ref">G1.1</span>
-      <span class="ttl">Guia: Netplan
-        <span class="sub">Les targetes de xarxa d'un Ubuntu Server</span></span></a></li>
-    <li><a href="guies/g1-2-kea.html">
-      <span class="ref">G1.2</span>
-      <span class="ttl">Guia: Kea
-        <span class="sub">Rang, opcions i reserves del servidor DHCP</span></span></a></li>
-    <li><a href="guies/g1-3-nftables.html">
-      <span class="ref">G1.3</span>
-      <span class="ttl">Guia: nftables
-        <span class="sub">Encaminament i NAT cap a Internet</span></span></a></li>
-  </ul>
-</div>
-
-<div class="cq-block" data-kind="activitats">
-  <h4>Activitats</h4>
+  <h4>Enjaular l'usuari: chroot</h4>
   <p>
-    Cada activitat es fa sobre una <strong>màquina nova</strong> a isardVDI, amb les targetes
-    <code>puigcastellar1</code> i <code>personal1</code>.
+    Sense <code>chroot_local_user</code>, qui entra per FTP es pot moure per <strong>tot el
+    sistema de fitxers</strong>: pot baixar-se <code>/etc/passwd</code> o llegir els directoris
+    dels companys. Té els permisos del seu compte, i això és massa.
   </p>
-  <ul class="cq-index">
-    <li><a href="activitats/a1-1-posada-a-punt.html">
-      <span class="ref">A1.1</span>
-      <span class="ttl">Posada a punt del servidor
-        <span class="sub">Nom, hora, actualitzacions i les dues targetes</span></span></a></li>
-    <li><a href="activitats/a1-2-dhcp-systemd-networkd.html">
-      <span class="ref">A1.2</span>
-      <span class="ttl">DHCP mínim amb systemd-networkd
-        <span class="sub">Un servidor de laboratori sense instal·lar res</span></span></a></li>
-    <li><a href="activitats/a1-3-dhcp-kea.html">
-      <span class="ref">A1.3</span>
-      <span class="ttl">Servidor DHCP amb Kea
-        <span class="sub">Reserves, IP forwarding i sortida a Internet</span></span></a></li>
-    <li><a href="activitats/a1-4-kea-escala-reserves.html">
-      <span class="ref">A1.4</span>
-      <span class="ttl">DHCP per a 2000 equips
-        <span class="sub">Dimensionar una xarxa /16 amb reserves</span></span></a></li>
-  </ul>
+  <p>
+    Un <strong>chroot</strong> canvia quin directori és l'arrel per a aquella sessió. L'usuari veu
+    el seu directori personal com si fos <code>/</code> i no en pot sortir: el
+    <code>cd ..</code> no el porta enlloc.
+  </p>
+  <p>
+    És la diferència entre un compte de servei i un compte de sistema. Un usuari d'FTP no ha de
+    poder passejar per la màquina.
+  </p>
 </div>
 
-<div class="cq-block" data-kind="ordre recomanat">
-  <h4>En quin ordre fer-ho</h4>
+<!-- ============ 7 · CAS REAL ============ -->
+<div class="cq-block" data-kind="cas real">
+  <h4>El compte compartit de la petita empresa</h4>
   <p>
-    Primer entens el servei, després tens el manual a mà per fer les activitats.</p>
+    Un muntatge que es veu molt: un sol compte d'FTP, la contrasenya apuntada en un correu antic,
+    i tothom hi entra. Proveïdors, clients i l'informàtic que va marxar fa dos anys.
+  </p>
+  <p>
+    El dia que apareix un fitxer esborrat no hi ha manera de saber qui ha estat: el registre diu
+    sempre el mateix nom. I quan algú deixa l'empresa, o es canvia la contrasenya a tothom o no es
+    canvia a ningú.
+  </p>
+  <p>
+    Un compte per persona no és burocràcia: és l'única cosa que fa que el registre serveixi per a
+    alguna cosa i que donar de baixa un usuari sigui una ordre i prou.
+  </p>
+</div>
+
+<!-- ============ 2 · QUÈ ÉS L'ANÒNIM ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>Qui és l'usuari anònim</h4>
+  <p>
+    L'accés anònim vol dir entrar sense compte: l'usuari escriu <code>anonymous</code> o
+    <code>ftp</code> i, com a contrasenya, el seu correu o el que li sembli. Ningú no el comprova.
+  </p>
+  <p>
+    Per dins no hi ha cap màgia. El servidor executa aquella sessió amb el compte del sistema
+    <code>ftp</code>, que el paquet crea en instal·lar-se amb el directori
+    <code>/srv/ftp</code>, i la tanca dins d'aquell directori sempre, sense haver de dir res.
+  </p>
+  <p>
+    Serveix per publicar: manuals, controladors, imatges d'instal·lació. Tot allò que vols que
+    qualsevol es pugui baixar sense demanar permís.
+  </p>
+</div>
+
+<!-- ============ 4 · LÍMITS ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>Posar fre: connexions, velocitat i temps</h4>
+  <p>
+    Un servidor sense límits el tomba una sola persona amb un <em>script</em>. El servei els aplica
+    per separat als anònims i als usuaris amb compte.
+  </p>
   <div class="cq-tablewrap">
     <table class="cq-table">
-      <thead><tr><th>Llegeix</th><th>Tingues a mà</th><th>Fes</th></tr></thead>
+      <thead><tr><th>Directiva</th><th>Límit</th><th>De sèrie</th></tr></thead>
       <tbody>
-        <tr><td>T1.0</td><td>G1.1</td><td>A1.1 — posada a punt</td></tr>
-        <tr><td>T1.1</td><td>G1.1</td><td>A1.2 — DHCP mínim</td></tr>
-        <tr><td>T1.2</td><td>G1.2 · G1.3</td><td>A1.3 — DHCP amb Kea</td></tr>
-        <tr><td>—</td><td>G1.2</td><td>A1.4 — DHCP a escala</td></tr>
+        <tr><td><code>max_clients</code></td><td>Sessions simultànies al servidor</td><td>Sense límit</td></tr>
+        <tr><td><code>max_per_ip</code></td><td>Sessions des de la mateixa adreça</td><td>Sense límit</td></tr>
+        <tr><td><code>anon_max_rate</code></td><td>Bytes per segon per a un anònim</td><td>Sense límit</td></tr>
+        <tr><td><code>local_max_rate</code></td><td>Bytes per segon per a un usuari</td><td>Sense límit</td></tr>
+        <tr><td><code>idle_session_timeout</code></td><td>Segons sense escriure cap ordre</td><td>300</td></tr>
       </tbody>
     </table>
+  </div>
+  <p>
+    Les velocitats van en <strong>bytes</strong> per segon, no en bits: <code>512000</code> són
+    500 KB/s.
+  </p>
+</div>
+
+<!-- ============ 6 · QUOTES ============ -->
+<div class="cq-block" data-kind="observació">
+  <h4>Les quotes no són cosa del servidor FTP</h4>
+  <p>
+    Cap opció del servidor FTP limita <em>l'espai en disc</em> que ocupa un usuari. Els límits del
+    servidor són de velocitat i de sessions; l'espai el controla el sistema de fitxers.
+  </p>
+  <p>
+    Això es fa amb el paquet <code>quota</code>: es marca la partició amb l'opció
+    <code>usrquota</code> a <code>/etc/fstab</code>, i després s'assigna a cada usuari un màxim de
+    blocs amb <code>setquota</code>. <code>repquota</code> mostra com va cadascú.
+  </p>
+  <p>
+    És feina del sistema operatiu, no del servei, i val igual per a l'FTP, el correu o una carpeta
+    compartida.
+  </p>
+</div>
+
+<!-- ============ 7 · CAS REAL ============ -->
+<div class="cq-block" data-kind="cas real">
+  <h4>El directori públic que va acabar sent un magatzem</h4>
+  <p>
+    Als anys en què tothom tenia FTP anònim era habitual deixar una carpeta <em>incoming</em>
+    perquè la gent hi deixés fitxers. La idea era rebre feina de fora sense donar comptes.
+  </p>
+  <p>
+    Els robots que rastregen Internet buscant carpetes anònimes escrivibles ho van convertir en un
+    negoci: pel·lícules i programari pirata emmagatzemats gratis, amb l'ample de banda i la
+    responsabilitat legal del propietari del servidor.
+  </p>
+  <p>
+    Per això la regla és <strong>anònim de només lectura</strong>. Si has de rebre fitxers de fora,
+    fes un compte amb nom, encara que sigui temporal.
+  </p>
+</div>
+
+<div class="cq-block" data-kind="resum">
+  <h4>Resum</h4>
+  <ul>
+    <li>El <strong>chroot</strong> tanca l'usuari dins de la seva carpeta: no en pot sortir.</li>
+    <li>L'arrel d'una jaula <strong>no pot ser escrivible</strong> per qui hi queda tancat.</li>
+    <li>L'accés <strong>anònim</strong> treballa amb un compte del sistema sense contrasenya.</li>
+    <li>Un directori públic ha de ser de <strong>només lectura</strong>, o s'omple de tot.</li>
+    <li>Els <strong>límits</strong> de connexions i velocitat són del servei; les
+    <strong>quotes</strong> de disc, del sistema de fitxers.</li>
+  </ul>
+
+  <p style="margin-top:16px">
+    <strong>Següent:</strong> a <em>T3.3 · FTPS i SFTP</em> veuràs com es deixa de transmetre
+    en clar.
+  </p>
+</div>
+
+<div class="cq-block" data-kind="quiz">
+  <h4>Comprova el que has après</h4>
+
+  <div class="cq-question" data-id="t3-2-chroot" data-type="single">
+    <div class="statement">Què aconsegueixes amb <code>chroot_local_user=YES</code>?</div>
+    <button class="cq-option" data-correct="false">Que els usuaris puguin pujar fitxers</button>
+    <button class="cq-option" data-correct="true">Que cada usuari vegi el seu directori com si fos l'arrel i no en pugui sortir</button>
+    <button class="cq-option" data-correct="false">Que la connexió es xifri</button>
+    <button class="cq-option" data-correct="false">Que només entrin els usuaris de la llista</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+
+  <div class="cq-question" data-id="t3-3-usuari" data-type="single">
+    <div class="statement">Amb quin compte del sistema treballa una sessió anònima?</div>
+    <button class="cq-option" data-correct="false"><code>root</code></button>
+    <button class="cq-option" data-correct="false"><code>nobody</code></button>
+    <button class="cq-option" data-correct="true"><code>ftp</code></button>
+    <button class="cq-option" data-correct="false"><code>anonymous</code>, que es crea a cada connexió</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+
+  <div class="cq-question" data-id="t3-3-arrel" data-type="single">
+    <div class="statement">Per què <code>/srv/ftp</code> no pot ser escrivible?</div>
+    <button class="cq-option" data-correct="false">Perquè si no, no es pot llegir</button>
+    <button class="cq-option" data-correct="true">Perquè el servei es nega a fer un chroot sobre una arrel escrivible</button>
+    <button class="cq-option" data-correct="false">Perquè el sistema de fitxers no ho permet</button>
+    <button class="cq-option" data-correct="false">Perquè aleshores caldria activar el mode passiu</button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
+  </div>
+
+  <div class="cq-question" data-id="t3-3-quota" data-type="single">
+    <div class="statement">Vols que cap usuari ocupi més d'1 GB al servidor. Què fas servir?</div>
+    <button class="cq-option" data-correct="false"><code>local_max_rate</code></button>
+    <button class="cq-option" data-correct="false"><code>max_per_ip</code></button>
+    <button class="cq-option" data-correct="true">Les quotes del sistema de fitxers</button>
+    <button class="cq-option" data-correct="false"><code>anon_umask</code></button>
+    <div><button class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback"></div>
   </div>
 </div>
 

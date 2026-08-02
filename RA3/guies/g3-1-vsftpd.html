@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>G3.1 · Guia: vsftpd — Serveis en Xarxa (0227)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* === SINAPSI-CSS INICI =======================================
+   0227 · Serveis en Xarxa — Identitat visual del mòdul
+   Blau estructural · taronja per als avisos · paper clar
+   per a la lectura · codi en fosc.
+   Aquest bloc és IDÈNTIC a totes les pàgines del mòdul.
+   No l'editis en una sola pàgina: edita'l a totes o extreu-lo
+   a un full compartit (_identitat/sinapsi.css).
+   ============================================================ */
+  :root {
+    --paper:        #FBFCFD;
+    --card:         #FFFFFF;
+    --ink:          #131A22;
+    --muted:        #5C6875;
+    --rule:         #E3E7EC;
+    --accent:       #1D4E89;
+    --accent-hover: #26639F;
+    --accent-soft:  #EFF5FB;
+    --accent-line:  #DCE7F3;
+    --warn:         #C2410C;
+    --warn-soft:    #FEF6EF;
+    --warn-line:    #F0CBAE;
+    --code-bg:      #16202E;
+    --code-ink:     #E2E9F1;
+    --ok:           #0E7A4B;
+    --ok-soft:      #F0FAF4;
+    --ok-line:      #C6E7D6;
+    --ko:           #B4232B;
+    --ko-soft:      #FEF4F4;
+    --ko-line:      #F2CFCF;
+    --font-display: "Ubuntu", -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-body:    "Source Sans 3", -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-mono:    "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+  }
+
+  body {
+    margin: 0;
+    padding: 40px 16px 72px;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ==== Capçalera de la pàgina ==== */
+  .cq-header {
+    max-width: 660px;
+    margin: 0 auto 26px;
+  }
+  .cq-header .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .cq-header h1 {
+    margin: 6px 0 4px;
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -.02em;
+    line-height: 1.15;
+  }
+  .cq-header .lede {
+    margin: 0;
+    color: var(--muted);
+    font-size: 1.05rem;
+  }
+
+  /* ==== Bloc de contingut: patró únic per a tots els tipus ==== */
+  .cq-block {
+    max-width: 660px;
+    margin: 0 auto 20px;
+    padding: 26px 30px 28px;
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    position: relative;
+  }
+
+  /* Etiqueta de secció: petita, monoespaiada, com la capçalera
+     d'una fitxa tècnica. El text surt de l'atribut data-kind. */
+  .cq-block::before {
+    content: attr(data-kind);
+    position: absolute;
+    top: -8px;
+    left: 26px;
+    padding: 1px 9px;
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 20px;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .cq-block h4 {
+    margin: 4px 0 14px;
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -.01em;
+    line-height: 1.3;
+    color: var(--ink);
+  }
+  .cq-block p { margin: 0 0 14px; }
+  .cq-block p:last-child { margin-bottom: 0; }
+  .cq-block em { font-style: italic; color: var(--muted); }
+  .cq-block strong { font-weight: 600; }
+  .cq-block ul, .cq-block ol { margin: 0 0 14px; padding-left: 22px; }
+  .cq-block li { margin-bottom: 6px; }
+  .cq-block li:last-child { margin-bottom: 0; }
+  .cq-block a { color: var(--accent); }
+
+  .cq-block code {
+    font-family: var(--font-mono);
+    font-size: .84em;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    border-radius: 4px;
+    padding: 1px 5px;
+    color: var(--accent);
+  }
+  .cq-block pre {
+    margin: 14px 0 18px;
+    padding: 16px 18px;
+    background: var(--code-bg);
+    color: var(--code-ink);
+    border-radius: 8px;
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: .82rem;
+    line-height: 1.6;
+  }
+  .cq-block pre code { all: unset; font: inherit; }
+  .cq-block pre .c { color: #7E93AB; }   /* comentari dins del codi */
+  .cq-block pre .o { color: #8FD0A5; }   /* sortida esperada */
+
+  /* ---- Variants de color per tipus de bloc ---- */
+  .cq-block[data-kind="objectius"],
+  .cq-block[data-kind="pas a pas"],
+  .cq-block[data-kind="lliurament"],
+  .cq-block[data-kind="resum"] { border-color: var(--accent-line); }
+  .cq-block[data-kind="objectius"]::before,
+  .cq-block[data-kind="pas a pas"]::before,
+  .cq-block[data-kind="lliurament"]::before,
+  .cq-block[data-kind="resum"]::before { border-color: var(--accent-line); color: var(--accent); }
+  .cq-block[data-kind="objectius"] h4,
+  .cq-block[data-kind="pas a pas"] h4,
+  .cq-block[data-kind="lliurament"] h4,
+  .cq-block[data-kind="resum"] h4 { color: var(--accent); }
+
+  .cq-block[data-kind="recordatori"] { background: var(--warn-soft); border-color: #F5DCC8; }
+  .cq-block[data-kind="recordatori"]::before { background: var(--warn-soft); border-color: var(--warn-line); color: var(--warn); }
+  .cq-block[data-kind="recordatori"] h4 { color: var(--warn); }
+
+  .cq-block[data-kind="bones pràctiques"] { background: var(--ok-soft); border-color: var(--ok-line); }
+  .cq-block[data-kind="bones pràctiques"]::before { background: var(--ok-soft); border-color: var(--ok-line); color: var(--ok); }
+  .cq-block[data-kind="bones pràctiques"] h4 { color: var(--ok); }
+
+  .cq-block[data-kind="problemes"] { background: var(--ko-soft); border-color: var(--ko-line); }
+  .cq-block[data-kind="problemes"]::before { background: var(--ko-soft); border-color: var(--ko-line); color: var(--ko); }
+  .cq-block[data-kind="problemes"] h4 { color: var(--ko); }
+
+  /* ==== Diagrama de passos en flux (DORA i similars) ==== */
+  .dora-flow {
+    display: flex;
+    align-items: stretch;
+    gap: 6px;
+    margin: 20px 0 22px;
+    flex-wrap: wrap;
+  }
+  .dora-step {
+    flex: 1 1 130px;
+    padding: 14px 12px 12px;
+    border: 1px solid var(--rule);
+    border-top: 2px solid var(--accent);
+    border-radius: 6px;
+    background: var(--paper);
+  }
+  .dora-step .n {
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: .08em;
+  }
+  .dora-step .t {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: .9rem;
+    letter-spacing: .02em;
+    margin: 2px 0 5px;
+  }
+  .dora-step .d { font-size: .8rem; line-height: 1.45; color: var(--muted); }
+  .dora-arrow { align-self: center; color: #B3C2D2; font-size: 1rem; }
+  @media (max-width: 620px) {
+    .dora-arrow { display: none; }
+    .dora-step { flex-basis: 100%; }
+  }
+
+  /* ==== Passos numerats de les guies pas a pas ==== */
+  .cq-steps { counter-reset: step; margin: 4px 0 0; padding: 0; list-style: none; }
+  .cq-steps > li {
+    counter-increment: step;
+    position: relative;
+    padding: 0 0 4px 34px;
+    margin-bottom: 18px;
+  }
+  .cq-steps > li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0; top: 1px;
+    width: 22px; height: 22px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    border-radius: 50%;
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    font-weight: 500;
+    color: var(--accent);
+  }
+  .cq-steps > li > :first-child { margin-top: 0; }
+
+  /* ==== Problemes: símptoma → causa → solució ==== */
+  .cq-issues { margin: 4px 0 0; }
+  .cq-issues dt {
+    font-weight: 600;
+    margin-top: 16px;
+    color: var(--ko);
+  }
+  .cq-issues dt:first-child { margin-top: 0; }
+  .cq-issues dd { margin: 4px 0 0 0; }
+  .cq-issues dd .lbl {
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-right: 6px;
+  }
+
+  /* ==== Taula de referència ==== */
+  .cq-tablewrap { overflow-x: auto; margin: 14px 0 4px; }
+  .cq-table { border-collapse: collapse; width: 100%; font-size: .9rem; }
+  .cq-table th, .cq-table td {
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+  }
+  .cq-table th {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: .78rem;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom-color: var(--accent-line);
+    white-space: nowrap;
+  }
+  .cq-table td:first-child { white-space: nowrap; }
+  .cq-table tr:last-child td { border-bottom: none; }
+
+  /* ==== Nota de versió de sistema (Ubuntu 26.04) ==== */
+  .cq-note {
+    margin: 14px 0 4px;
+    padding: 10px 14px;
+    border-left: 3px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 0 6px 6px 0;
+    font-size: .9rem;
+  }
+  .cq-note .lbl {
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 2px;
+  }
+
+
+  /* ==== Índex del mòdul (portada) ==== */
+  .cq-index { display: grid; gap: 10px; margin: 4px 0 0; padding: 0; list-style: none; }
+  .cq-index a {
+    display: flex; align-items: baseline; gap: 12px;
+    padding: 13px 16px;
+    border: 1px solid var(--rule); border-radius: 8px;
+    background: var(--paper); color: var(--ink); text-decoration: none;
+    transition: border-color .12s ease, background .12s ease;
+  }
+  .cq-index a:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .cq-index .ref {
+    font-family: var(--font-mono); font-size: .74rem; font-weight: 500;
+    color: var(--accent); letter-spacing: .06em; flex: 0 0 auto;
+  }
+  .cq-index .ttl { font-family: var(--font-display); font-weight: 700; font-size: .98rem; }
+  .cq-index .sub { display: block; font-size: .84rem; color: var(--muted); font-weight: 400; font-family: var(--font-body); margin-top: 1px; }
+
+  /* ==== Quiz ==== */
+  .cq-question { margin: 22px 0 0; }
+  .cq-question + .cq-question { padding-top: 22px; border-top: 1px solid var(--rule); }
+  .cq-question .statement { font-weight: 600; margin-bottom: 10px; }
+  .cq-option {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 10px 14px;
+    margin: 7px 0;
+    border: 1px solid var(--rule);
+    border-radius: 7px;
+    background: var(--card);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: .95rem;
+    color: var(--ink);
+    transition: border-color .12s ease, background .12s ease;
+  }
+  .cq-option:hover:not(:disabled) { border-color: #B3C2D2; }
+  .cq-option:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .cq-option.cq-selected { border-color: var(--accent); background: var(--accent-soft); }
+  .cq-option.cq-correct { border-color: var(--ok); background: var(--ok-soft); color: var(--ok); }
+  .cq-option.cq-incorrect { border-color: var(--ko); background: var(--ko-soft); color: var(--ko); }
+  .cq-check-btn {
+    margin-top: 10px;
+    padding: 9px 20px;
+    border: none;
+    border-radius: 7px;
+    background: var(--accent);
+    color: #FFFFFF;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: .88rem;
+    cursor: pointer;
+  }
+  .cq-check-btn:hover:not(:disabled) { background: var(--accent-hover); }
+  .cq-check-btn:disabled { background: #B3C2D2; cursor: default; }
+  .cq-feedback { margin-top: 10px; font-size: .88rem; font-weight: 600; }
+  .cq-feedback.ok { color: var(--ok); }
+  .cq-feedback.ko { color: var(--ko); }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+  /* ==== Impressió: els alumnes imprimeixen la teoria ==== */
+  @media print {
+    body { background: #FFF; padding: 0; font-size: 11pt; }
+    .cq-block { border-color: #CCC; page-break-inside: avoid; margin-bottom: 12px; }
+    .cq-block pre { background: #F4F4F4; color: #000; border: 1px solid #DDD; }
+    .cq-block pre .c, .cq-block pre .o { color: #555; }
+    .cq-check-btn { display: none; }
+  }
+  /* ==== Contingut no copiable ====
+     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
+     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
+     queda exclòs. */
+  .cq-header, .cq-block {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  [contenteditable="true"], [contenteditable="true"] * {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    user-select: text;
+  }
+
+/* === SINAPSI-CSS FI ======================================== */
+</style>
+</head>
+<body>
+<header class="cq-header">
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA3 · G3.1</div>
+  <h1>Guia: vsftpd</h1>
+  <p class="lede">Usuaris locals enjaulats, accés anònim, límits i FTPS.</p>
+</header>
+
+<div class="cq-block" data-kind="objectius">
+  <h4>Què hi ha en aquesta guia</h4>
+  <p>Documentació oficial: https://security.appspot.com/vsftpd.html</p>
+  <ul>
+    <li>Punt de partida: Ubuntu Server amb IP fixa a la targeta interna.</li>
+    <li>Tot es configura en un sol fitxer: <code>/etc/vsftpd.conf</code>.</li>
+  </ul>
+</div>
+
+<!-- ============ 2 · UN SOL FITXER ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>Un paquet, un servei, un fitxer</h4>
+  <p>
+    <strong>vsftpd</strong> (<em>Very Secure FTP Daemon</em>) és el servidor FTP estàndard a
+    Debian i Ubuntu des de fa vint anys, i el que fan servir servidors públics grans. Tota la
+    configuració viu en un únic fitxer.
+  </p>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>On</th><th>Què hi ha</th></tr></thead>
+      <tbody>
+        <tr><td><code>/etc/vsftpd.conf</code></td><td>Tota la configuració, una directiva per línia</td></tr>
+        <tr><td><code>/etc/ftpusers</code></td><td>Comptes que tenen l'FTP prohibit</td></tr>
+        <tr><td><code>/etc/vsftpd.userlist</code></td><td>La llista que crearàs tu</td></tr>
+        <tr><td><code>/var/log/vsftpd.log</code></td><td>Registre de connexions i transferències</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    El format és estricte: <code>directiva=valor</code>, sense espais al voltant de l'igual. Un
+    espai de més i el servei no arrenca.
+  </p>
+</div>
+
+<!-- ============ 3 · LES DIRECTIVES ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>Les directives que has de decidir</h4>
+  <p>
+    De sèrie, vsftpd deixa entrar els usuaris del sistema però <strong>no</strong> els deixa
+    escriure ni els tanca enlloc. Aquestes són les que has de tocar:
+  </p>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Directiva</th><th>Què decideix</th></tr></thead>
+      <tbody>
+        <tr><td><code>local_enable</code></td><td>Si els usuaris del sistema poden entrar</td></tr>
+        <tr><td><code>write_enable</code></td><td>Si poden pujar, esborrar o crear carpetes</td></tr>
+        <tr><td><code>local_umask</code></td><td>Amb quins permisos arriben els fitxers pujats</td></tr>
+        <tr><td><code>chroot_local_user</code></td><td>Si queden tancats al seu directori</td></tr>
+        <tr><td><code>userlist_enable</code></td><td>Si es consulta una llista d'usuaris</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    <code>local_umask=022</code> deixa els fitxers llegibles per tothom;
+    <code>077</code>, el valor de sèrie, només per al propietari.
+  </p>
+</div>
+
+<!-- ============ 5 · EXEMPLE ============ -->
+<div class="cq-block" data-kind="exemple">
+  <h4>Configuració per a usuaris locals enjaulats</h4>
+  <p>Aquestes són les línies que canvies o afegeixes a <code>/etc/vsftpd.conf</code>:</p>
+<pre><span class="c"># Qui entra</span>
+anonymous_enable=NO
+local_enable=YES
+
+<span class="c"># Què pot fer</span>
+write_enable=YES
+local_umask=022
+
+<span class="c"># On queda tancat</span>
+chroot_local_user=YES
+local_root=/home/$USER
+user_sub_token=$USER
+
+<span class="c"># Llista blanca: només aquests usuaris</span>
+userlist_enable=YES
+userlist_file=/etc/vsftpd.userlist
+userlist_deny=NO</pre>
+  <p>
+    Amb <code>user_sub_token</code>, el <code>$USER</code> de <code>local_root</code> se substitueix
+    pel nom de qui entra: cadascú aterra al seu directori personal i no en pot sortir.
+  </p>
+  <p>
+    Fixa't que <code>local_root</code> apunta a <code>/home/$USER</code> i <strong>no</strong> a
+    <code>/home/$USER/fitxers</code>. El que hi posis serà l'arrel de la gàbia, i una arrel on
+    l'usuari pugui escriure fa que vsftpd es negui a servir-lo. Ho tens al bloc següent.
+  </p>
+</div>
+
+<!-- ============ 6 · LA TRAMPA DEL CHROOT ============ -->
+<div class="cq-block" data-kind="observació">
+  <h4>L'arrel del chroot no pot ser escrivible</h4>
+  <p>
+    L'arrel de la gàbia és el directori que digui <code>local_root</code>. Si l'usuari hi pot
+    escriure, vsftpd no el deixa entrar i li respon
+    <code>500 OOPS: vsftpd: refusing to run with writable root inside chroot()</code>. No és un
+    error teu: és una protecció.
+  </p>
+  <p>Tens dues sortides, i no valen el mateix:</p>
+  <ul>
+    <li><strong>La bona:</strong> l'arrel del chroot és de <code>root</code> i no s'hi pot escriure; a dins hi ha una carpeta <code>fitxers</code> que sí que és de l'usuari, i és on farà els <code>put</code>.</li>
+    <li><strong>La ràpida:</strong> afegir <code>allow_writeable_chroot=YES</code>. Funciona, però renuncies a la protecció.</li>
+  </ul>
+</div>
+
+<!-- ============ 8 · PAS A PAS ============ -->
+<div class="cq-block" data-kind="pas a pas">
+  <h4>Muntar el servidor amb usuaris enjaulats</h4>
+
+  <ol class="cq-steps">
+    <li>
+      <p><strong>Instal·la i desa una còpia</strong> del fitxer original:</p>
+<pre>sudo apt install -y vsftpd
+sudo cp /etc/vsftpd.conf /etc/vsftpd.conf.original</pre>
+    </li>
+
+    <li>
+      <p><strong>Crea el grup i l'usuari.</strong> El compte necessita una <em>shell</em> vàlida,
+      o no podrà autenticar-se:</p>
+<pre>sudo groupadd ftpusers
+sudo useradd -m -g ftpusers -s /bin/bash alumne1
+sudo passwd alumne1</pre>
+    </li>
+
+    <li>
+      <p><strong>Prepara el directori</strong>: arrel de <code>root</code>, i a dins la carpeta on
+      sí que podrà escriure:</p>
+<pre>sudo chown root:root /home/alumne1
+sudo chmod 755 /home/alumne1
+sudo mkdir /home/alumne1/fitxers
+sudo chown alumne1:ftpusers /home/alumne1/fitxers</pre>
+    </li>
+
+    <li>
+      <p><strong>Escriu la configuració</strong> amb l'exemple d'aquesta pàgina:</p>
+<pre>sudo nano /etc/vsftpd.conf</pre>
+    </li>
+
+    <li>
+      <p><strong>Crea la llista blanca</strong>, un nom d'usuari per línia:</p>
+<pre>echo "alumne1" | sudo tee /etc/vsftpd.userlist</pre>
+    </li>
+
+    <li>
+      <p><strong>Reinicia i comprova</strong> que ha arrencat:</p>
+<pre>sudo systemctl restart vsftpd
+systemctl status vsftpd</pre>
+    </li>
+
+    <li>
+      <p><strong>Prova-ho des del client</strong>, i mira que el <code>cd ..</code> no el tregui
+      d'on és:</p>
+<pre>ftp 192.168.1.8</pre>
+      <p>
+        Un cop dins, <code>pwd</code> ha de dir <code>/</code> i <code>cd ..</code> l'ha de deixar
+        al mateix lloc. El <code>put</code> a l'arrel fallarà: has d'entrar primer a
+        <code>cd fitxers</code>, que és l'única carpeta on l'usuari escriu.
+      </p>
+    </li>
+  </ol>
+
+  <div class="cq-note">
+    <span class="lbl">Ubuntu 26.04</span>
+    Si vols que l'usuari no pugui obrir sessió a la màquina, li pots posar
+    <code>-s /usr/sbin/nologin</code>, però aleshores has d'afegir aquesta línia a
+    <code>/etc/shells</code>: vsftpd comprova la <em>shell</em> a través de PAM. Si te'n descuides,
+    el client només veu <code>530 Login incorrect</code>, i qui t'ho explica és el registre:
+    <code>pam_shells(vsftpd:auth): User has an invalid shell</code>.
+  </div>
+</div>
+
+<!-- ============ 3 · DIRECTIVES D'ANÒNIM ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>Les directives de l'accés anònim</h4>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Directiva</th><th>Què decideix</th></tr></thead>
+      <tbody>
+        <tr><td><code>anonymous_enable</code></td><td>Si s'accepta l'accés sense compte</td></tr>
+        <tr><td><code>anon_root</code></td><td>Quin directori veu l'anònim</td></tr>
+        <tr><td><code>no_anon_password</code></td><td>Si ni tan sols demana contrasenya</td></tr>
+        <tr><td><code>anon_upload_enable</code></td><td>Si pot pujar fitxers</td></tr>
+        <tr><td><code>anon_mkdir_write_enable</code></td><td>Si pot crear carpetes</td></tr>
+        <tr><td><code>anon_world_readable_only</code></td><td>Si només es baixa el que és llegible per tothom</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    Les tres primeres són per a un repositori normal de només lectura. Les dues següents obren la
+    porta a pujades anònimes, i gairebé mai les vols.
+  </p>
+</div>
+
+<!-- ============ 5 · EXEMPLE ============ -->
+<div class="cq-block" data-kind="exemple">
+  <h4>Repositori públic de només lectura, amb límits</h4>
+<pre><span class="c"># Anònim, només baixar</span>
+anonymous_enable=YES
+anon_root=/srv/ftp
+no_anon_password=YES
+anon_upload_enable=NO
+anon_mkdir_write_enable=NO
+
+<span class="c"># Els usuaris amb compte segueixen igual</span>
+local_enable=YES
+write_enable=YES
+
+<span class="c"># Límits: l'anònim va més just que l'usuari</span>
+max_clients=20
+max_per_ip=2
+anon_max_rate=512000
+local_max_rate=2048000
+idle_session_timeout=120</pre>
+  <p>
+    Llegit en veu alta: qualsevol pot baixar el que hi ha a <code>/srv/ftp</code> a mig mega per
+    segon, com a molt dues sessions per adreça, i si es despista dos minuts, fora.
+  </p>
+</div>
+
+<!-- ============ 8 · PAS A PAS ============ -->
+<div class="cq-block" data-kind="pas a pas">
+  <h4>Publicar un repositori anònim</h4>
+
+  <ol class="cq-steps">
+    <li>
+      <p><strong>Comprova el directori públic.</strong> Ha de ser de <code>root</code> i no
+      escrivible. Si no, el servei arrenca igualment, però cap anònim hi podrà entrar:</p>
+<pre>ls -ld /srv/ftp
+sudo chown root:root /srv/ftp
+sudo chmod 755 /srv/ftp</pre>
+    </li>
+
+    <li>
+      <p><strong>Posa-hi contingut</strong> llegible per tothom:</p>
+<pre>sudo mkdir /srv/ftp/public
+echo "manual" | sudo tee /srv/ftp/public/llegeix-me.txt
+sudo chmod -R a+r /srv/ftp/public</pre>
+    </li>
+
+    <li>
+      <p><strong>Activa l'anònim i els límits</strong> a <code>/etc/vsftpd.conf</code>, amb
+      l'exemple d'aquesta pàgina com a model:</p>
+<pre>sudo nano /etc/vsftpd.conf
+sudo systemctl restart vsftpd</pre>
+    </li>
+
+    <li>
+      <p><strong>Prova-ho des del client</strong> amb l'usuari <code>anonymous</code>:</p>
+<pre>ftp 192.168.1.8
+<span class="c"># Name: anonymous</span></pre>
+      <p>
+        Amb <code>no_anon_password=YES</code> ni tan sols et demana la contrasenya: entres directe
+        amb <code>230 Login successful</code>. Has de poder fer <code>ls</code> i <code>get</code>,
+        i <code>put</code> ha de fallar amb <code>550 Permission denied</code>.
+      </p>
+    </li>
+
+    <li>
+      <p><strong>Comprova el límit per adreça</strong>: obre tres sessions alhora des de la mateixa
+      màquina, sense tancar-ne cap. La tercera ha de dir:</p>
+<pre><span class="o">421 There are too many connections from your internet address.</span></pre>
+      <p>
+        Compten les sessions obertes, encara que estiguin aturades: fins que no les tanquis o
+        passin els segons d'<code>idle_session_timeout</code>, ocupen lloc.
+      </p>
+    </li>
+
+    <li>
+      <p><strong>Comprova el límit de velocitat</strong> amb un fitxer prou gran:</p>
+<pre>sudo dd if=/dev/zero of=/srv/ftp/public/gran.bin bs=1M count=100
+sudo chmod a+r /srv/ftp/public/gran.bin</pre>
+      <p>
+        Baixa'l i mira la velocitat que reporta el client: amb
+        <code>anon_max_rate=512000</code> ha de rondar els 500 KiB/s, ni que el servidor i el
+        client siguin la mateixa màquina.
+      </p>
+    </li>
+  </ol>
+
+  <div class="cq-note">
+    <span class="lbl">Ubuntu 26.04</span>
+    El paquet crea l'usuari de sistema <code>ftp</code> i el directori <code>/srv/ftp</code>, que ve
+    de <code>root:ftp</code> amb permisos <code>755</code>. Si el canvies amb <code>anon_root</code>,
+    el nou directori ha de complir la mateixa regla: de <code>root</code> i no escrivible.
+  </div>
+</div>
+
+<!-- ============ 5 · EXEMPLE ============ -->
+<div class="cq-block" data-kind="exemple">
+  <h4>Les directives de FTPS</h4>
+  <p>FTPS, a <code>/etc/vsftpd.conf</code>, amb el certificat que ja porta el sistema:</p>
+<pre>ssl_enable=YES
+force_local_logins_ssl=YES
+force_local_data_ssl=YES
+ssl_tlsv1=NO
+ssl_tlsv11=NO
+ssl_tlsv12=YES
+allow_anon_ssl=NO
+rsa_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem
+rsa_private_key_file=/etc/ssl/private/ssl-cert-snakeoil.key</pre>
+  <p>
+    Compte amb els noms: són <code>ssl_tlsv11</code> i <code>ssl_tlsv12</code>, sense el guió baix
+    del final. El manual els escriu <code>ssl_tlsv1_1</code> i <code>ssl_tlsv1_2</code>, i molts
+    tutorials també, però vsftpd no els reconeix i es nega a arrencar.
+  </p>
+</div>
+
+<div class="cq-block" data-kind="pas a pas">
+  <h4>Xifrar les sessions amb FTPS</h4>
+  <p>Amb el servidor d'usuaris locals ja muntat:</p>
+
+  <ol class="cq-steps">
+<li>
+      <p><strong>Activa el TLS</strong> a <code>/etc/vsftpd.conf</code> amb l'exemple d'aquesta
+      pàgina, i reinicia:</p>
+<pre>sudo systemctl restart vsftpd</pre>
+    </li>
+
+<li>
+      <p><strong>Comprova que ara el clar no passa.</strong> El client <code>ftp</code> no fa TLS:
+      ha de fallar. Fes servir <code>lftp</code>, que sí que en fa:</p>
+<pre>sudo apt install -y lftp
+lftp -u alumne1 -e "set ssl:verify-certificate no" \
+     localhost</pre>
+      <p>
+        El client <code>ftp</code> ha de rebre <code>530 Non-anonymous sessions must use
+        encryption</code>. Repeteix la captura del pas 1 amb <code>lftp</code>: l'única cosa
+        llegible que hi queda és l'<code>AUTH TLS</code> del principi.
+      </p>
+    </li>
+  </ol>
+  <div class="cq-note">
+    <span class="lbl">Ubuntu 26.04</span>
+    El certificat <em>snakeoil</em> que fa servir l'exemple ve amb el paquet
+    <code>ssl-cert</code>, ja instal·lat, i és autosignat: els clients es queixaran fins que
+    l'acceptis a mà, i per això <code>lftp</code> hi va amb
+    <code>set ssl:verify-certificate no</code>. En producció s'hi posa un certificat de veritat.
+  </div>
+</div>
+
+<div class="cq-block" data-kind="bones pràctiques">
+  <h4>Criteris professionals</h4>
+  <ul>
+    <li><strong>Còpia del fitxer original</strong> abans de la primera edició.</li>
+    <li><strong>L'arrel del chroot, mai escrivible</strong>: el servei es nega a arrencar.</li>
+    <li><strong>Llista blanca d'usuaris</strong>, no llista negra.</li>
+    <li><strong>L'anònim, només de lectura</strong>, i amb límits de velocitat i connexions.</li>
+    <li><strong>Res en clar</strong>: o FTPS, o SFTP.</li>
+  </ul>
+</div>
+
+<div class="cq-block" data-kind="problemes">
+  <h4>Errors habituals</h4>
+  <dl class="cq-issues">
+<dt><code>500 OOPS: refusing to run with writable root inside chroot()</code></dt>
+    <dd>
+      <p><span class="lbl">Causa</span> El directori on aterra l'usuari és seu i hi pot escriure.</p>
+      <p><span class="lbl">Solució</span> Fes que l'arrel sigui de <code>root</code> i sense permís d'escriptura, amb una subcarpeta seva a dins.</p>
+    </dd>
+
+    <dt><code>530 Login incorrect</code> amb la contrasenya bona</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> L'usuari no és a <code>/etc/vsftpd.userlist</code>, o té una <em>shell</em> que no és a <code>/etc/shells</code>.</p>
+      <p><span class="lbl">Solució</span> Revisa la llista i la <em>shell</em> del compte amb <code>getent passwd alumne1</code>.</p>
+    </dd>
+
+    <dt><code>550 Permission denied</code> en pujar</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Falta <code>write_enable=YES</code>, o la carpeta de destinació no és de l'usuari.</p>
+      <p><span class="lbl">Solució</span> Comprova la directiva i després <code>ls -ld</code> de la carpeta.</p>
+    </dd>
+
+    <dt>El servei no arrenca després d'editar</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Un espai al voltant de l'<code>=</code>, o una directiva mal escrita.</p>
+      <p><span class="lbl">Solució</span> vsftpd plega sense dir res: al registre només hi veuràs
+      <code>status=2/INVALIDARGUMENT</code>. Comenta les línies que has tocat, arrenca, i torna-les
+      a posar d'una en una fins que caigui.</p>
+    </dd>
+
+<dt><code>OOPS: vsftpd: refusing to run with writable root inside chroot()</code> en entrar com a anònim</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> <code>/srv/ftp</code> és escrivible pel grup o per l'usuari <code>ftp</code>. El servei arrenca, però la sessió cau just després del <code>230</code>.</p>
+      <p><span class="lbl">Solució</span> <code>chown root:root</code> i <code>chmod 755</code> sobre l'arrel; el que hagi de ser escrivible, en una carpeta de dins.</p>
+    </dd>
+
+    <dt>L'anònim entra però no veu res</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Els fitxers no són llegibles per tothom i <code>anon_world_readable_only</code> està actiu.</p>
+      <p><span class="lbl">Solució</span> <code>chmod -R a+r</code> sobre el contingut públic.</p>
+    </dd>
+
+    <dt><code>553 Could not create file</code></dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Intent de pujada anònima sense <code>anon_upload_enable</code>, o sense una carpeta escrivible.</p>
+      <p><span class="lbl">Solució</span> Si és intencionat, deixa-ho així: és el comportament correcte.</p>
+    </dd>
+
+    <dt>El límit de velocitat no es nota</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> El fitxer és massa petit, o s'està aplicant l'altre límit.</p>
+      <p><span class="lbl">Solució</span> Prova amb un fitxer de 100 MB i comprova si connectes com a anònim o com a usuari.</p>
+    </dd>
+  </dl>
+</div>
+
+<div class="cq-block" data-kind="resum">
+  <h4>Fitxa ràpida</h4>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Comanda</th><th>Per a què serveix</th></tr></thead>
+      <tbody>
+<tr><td><code>systemctl restart vsftpd</code></td><td>Aplicar els canvis</td></tr>
+        <tr><td><code>journalctl -u vsftpd -n 20</code></td><td>Veure per què no arrenca</td></tr>
+        <tr><td><code>getent passwd alumne1</code></td><td>Comprovar directori i <em>shell</em></td></tr>
+        <tr><td><code>ls -ld /home/alumne1</code></td><td>Comprovar propietari i permisos</td></tr>
+        <tr><td><code>tail -f /var/log/vsftpd.log</code></td><td>Seguir les connexions en directe</td></tr>
+<tr><td><code>ls -ld /srv/ftp</code></td><td>Comprovar propietari i permisos de l'arrel</td></tr>
+        <tr><td><code>chmod -R a+r</code></td><td>Fer públic el contingut</td></tr>
+        <tr><td><code>setquota</code> · <code>repquota</code></td><td>Assignar i revisar quotes de disc</td></tr>
+        <tr><td><code>dd if=/dev/zero</code></td><td>Fabricar un fitxer gran per provar velocitats</td></tr>
+<tr><td><code>tcpdump -i lo -A port 21</code></td><td>Veure què viatja en clar</td></tr>
+        <tr><td><code>sshd -t</code></td><td>Validar el <code>sshd_config</code></td></tr>
+        <tr><td><code>sftp usuari@servidor</code></td><td>Provar l'SFTP</td></tr>
+        <tr><td><code>lftp -u usuari servidor</code></td><td>Client amb suport d'FTPS</td></tr>
+        <tr><td><code>journalctl -u ssh -n 20</code></td><td>Saber per què es talla la sessió</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  (function () {
+    function editant(node) {
+      return node && node.closest && node.closest('[contenteditable="true"]');
+    }
+    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+      document.addEventListener(nom, function (e) {
+        if (!editant(e.target)) { e.preventDefault(); }
+      });
+    });
+  })();
+
+  // Motor únic per a totes les preguntes single i multi.
+  document.querySelectorAll('.cq-question').forEach(function (question) {
+    var id = question.dataset.id;
+    if (!id) {
+      throw new Error('Falta data-id a una pregunta del quiz.');
+    }
+    var type = question.dataset.type;
+    if (type !== 'single' && type !== 'multi') {
+      throw new Error('data-type invàlid ("' + type + '") a la pregunta "' + id + '".');
+    }
+
+    var options = question.querySelectorAll('.cq-option');
+    var checkBtn = question.querySelector('.cq-check-btn');
+    var feedback = question.querySelector('.cq-feedback');
+
+    options.forEach(function (opt) {
+      opt.addEventListener('click', function () {
+        if (type === 'single') {
+          options.forEach(function (o) { o.classList.remove('cq-selected'); });
+          opt.classList.add('cq-selected');
+        } else {
+          opt.classList.toggle('cq-selected');
+        }
+      });
+    });
+
+    checkBtn.addEventListener('click', function () {
+      var allCorrect = true;
+      options.forEach(function (opt) {
+        var isCorrect = opt.dataset.correct === 'true';
+        var isSelected = opt.classList.contains('cq-selected');
+        opt.classList.remove('cq-selected');
+        if (isCorrect) {
+          opt.classList.add('cq-correct');
+        } else if (isSelected) {
+          opt.classList.add('cq-incorrect');
+        }
+        opt.disabled = true;
+        if (isCorrect !== isSelected) {
+          allCorrect = false;
+        }
+      });
+      feedback.textContent = allCorrect ? 'Correcte!' : 'Incorrecte, revisa les respostes marcades.';
+      feedback.className = 'cq-feedback ' + (allCorrect ? 'ok' : 'ko');
+      checkBtn.disabled = true;
+    });
+  });
+</script>
+
+</body>
+</html>

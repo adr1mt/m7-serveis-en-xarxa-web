@@ -506,8 +506,8 @@ search .</pre>
   </p>
 </div>
 
-<!-- ============ 7 · PAS A PAS ============ -->
-<div class="cq-block" data-kind="pas a pas">
+<!-- ============ 7 · OBSERVACIÓ ============ -->
+<div class="cq-block" data-kind="observació">
   <h4>Mirar com resol la teva màquina</h4>
   <p>Amb qualsevol Ubuntu connectat a la xarxa del centre:</p>
 
@@ -522,9 +522,8 @@ search .</pre>
       <p><strong>Resol un nom</strong> i mira d'on surt la resposta:</p>
 <pre>resolvectl query www.upc.edu</pre>
       <p>
-        Mira l'última línia. La primera vegada acaba amb <code>Data from: network</code> i triga
-        centenars de mil·lisegons; repeteix-ho i dirà <code>Data from: cache</code> en un o dos:
-        ja no ha preguntat a ningú.
+        L'última línia diu <code>Data from: network</code> la primera vegada i
+        <code>Data from: cache</code> la segona, molt més ràpida.
       </p>
     </li>
 
@@ -544,15 +543,14 @@ dig upc.edu NS +short      <span class="c"># servidors de noms</span></pre>
       <p><strong>Fes trampa amb <code>/etc/hosts</code></strong> per comprovar l'ordre de resolució:</p>
 <pre>echo "127.0.0.1 provaordre.test" | sudo tee -a /etc/hosts
 getent hosts provaordre.test</pre>
-      <p>Esborra la línia quan ho hagis vist. Aquesta és la manera de comprovar-ho, no de treballar.</p>
+      <p>Esborra la línia quan ho hagis vist.</p>
     </li>
   </ol>
 
   <div class="cq-note">
     <span class="lbl">Ubuntu 26.04</span>
-    <code>dig</code> i <code>host</code> ja vénen instal·lats amb el sistema: són dels paquets
-    <code>bind9-dnsutils</code> i <code>bind9-host</code>. Si et falten en una màquina retallada,
-    els portes tots amb <code>sudo apt install dnsutils</code>.
+    <code>dig</code> i <code>host</code> ja vénen instal·lats. Si et falten:
+    <code>sudo apt install bind9-dnsutils</code>.
   </div>
 </div>
 

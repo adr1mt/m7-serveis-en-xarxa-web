@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>T1.4 · Encaminament i NAT — Serveis en Xarxa (0227)</title>
+<title>G1.1 · Guia: Netplan — Serveis en Xarxa (0227)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -388,228 +388,183 @@
 </head>
 <body>
 <header class="cq-header">
-  <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · T1.4</div>
-  <h1>Encaminament i NAT</h1>
-  <p class="lede">Convertir el servidor en la porta d'enllaç que dona Internet als seus clients.</p>
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · G1.1</div>
+  <h1>Guia: Netplan</h1>
+  <p class="lede">Configurar les targetes de xarxa d'un Ubuntu Server.</p>
 </header>
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h4>Què sabràs fer en acabar</h4>
+  <h4>Què hi ha en aquesta guia</h4>
+  <p>Documentació oficial: https://netplan.readthedocs.io</p>
   <ul>
-    <li>Explicar per què un client amb IP correcta encara no té Internet.</li>
-    <li>Activar l'encaminament de paquets de forma permanent.</li>
-    <li>Configurar NAT amb <code>nftables</code>.</li>
-    <li>Comprovar on falla la connexió quan no funciona.</li>
+    <li>Punt de partida: Ubuntu Server amb dues targetes, <code>enp1s0</code> i <code>enp2s0</code>.</li>
+    <li>A Ubuntu Server el <em>renderer</em> és sempre <code>networkd</code>.</li>
   </ul>
 </div>
 
-<!-- ============ 2 · EL PROBLEMA ============ -->
+<!-- ============ 3 · NETPLAN ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Tinc IP, però no tinc Internet</h4>
+  <h4>Netplan: on s'escriu la configuració</h4>
   <p>
-    El client ha rebut la seva configuració per DHCP i la porta d'enllaç apunta al teu servidor.
-    Fa <code>ping</code> a Internet i no passa res. DHCP ha funcionat perfectament: el que falla
-    és el pas següent.
+    A Ubuntu Server la xarxa es configura amb <strong>Netplan</strong>. Tu escrius un fitxer
+    <strong>YAML</strong> a <code>/etc/netplan/</code> i Netplan tradueix aquestes instruccions
+    al programa que realment gestiona la xarxa, que a Ubuntu Server és
+    <strong>systemd-networkd</strong>.
   </p>
-  <p>Perquè aquell paquet arribi a Internet i torni, calen <strong>dues coses</strong>:</p>
-  <ul>
-    <li><strong>Encaminament</strong> — que el servidor accepti passar paquets d'una targeta a l'altra.</li>
-    <li><strong>NAT</strong> — que canviï l'adreça d'origen per la seva, perquè la resposta sàpiga tornar.</li>
-  </ul>
-  <p>Cap de les dues està activada per defecte a Linux. Les has d'activar tu.</p>
-</div>
-
-<!-- ============ 3 · ENCAMINAMENT ============ -->
-<div class="cq-block" data-kind="teoria">
-  <h4>Encaminament: deixar passar els paquets</h4>
   <p>
-    Un Linux amb dues targetes de xarxa <strong>no reenvia res</strong> entre elles. Per
-    seguretat, ve desactivat de fàbrica: si no ho actives, cada targeta viu la seva vida.
+    És a dir: Netplan no és qui gestiona la xarxa, és qui <em>dona les ordres</em>. Aquesta és
+    la línia <code>renderer:</code> del fitxer — <code>networkd</code> als servidors,
+    <code>NetworkManager</code> als escriptoris.
   </p>
-  <p>L'interruptor és un únic valor del nucli, que pots consultar així:</p>
-<pre>cat /proc/sys/net/ipv4/ip_forward</pre>
   <p>
-    Si respon <code>0</code>, està desactivat. Amb <code>1</code>, el servidor ja fa d'encaminador
-    (<em>router</em>) entre les seves xarxes.
+    Els fitxers es llegeixen per ordre alfabètic, per això se'ls posa un número al davant:
+    <code>90-xarxa.yaml</code>. El nom concret és igual, però l'extensió ha de ser
+    <code>.yaml</code>.
   </p>
 </div>
 
-<!-- ============ 4 · NAT ============ -->
-<div class="cq-block" data-kind="teoria">
-  <h4>NAT: qui signa la carta</h4>
-  <p>
-    Els clients tenen adreces privades, per exemple <code>192.168.1.50</code>. Aquestes adreces
-    <strong>no existeixen a Internet</strong>: cap servidor de fora sabria com respondre-hi.
-  </p>
-  <p>
-    <strong>NAT</strong> (<em>Network Address Translation</em>) ho resol canviant l'adreça
-    d'origen del paquet per la del servidor abans d'enviar-lo, i apuntant-se qui l'havia
-    demanat. Quan arriba la resposta, la torna al client correcte.
-  </p>
-  <p>
-    És el mateix que fa el router de casa teva amb tots els mòbils i ordinadors: de portes
-    enfora, tots surten amb una única adreça. La variant que farem servir s'anomena
-    <strong><em>masquerade</em></strong>.
-  </p>
-</div>
-
-<!-- ============ 5 · L'ESCENARI ============ -->
+<!-- ============ 4 · EXEMPLE ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h4>L'escenari de les activitats</h4>
-  <div class="cq-tablewrap">
-    <table class="cq-table">
-      <thead><tr><th>Targeta</th><th>Xarxa</th><th>Paper</th></tr></thead>
-      <tbody>
-        <tr><td><code>enp1s0</code></td><td>puigcastellar1</td><td>Sortida a Internet</td></tr>
-        <tr><td><code>enp2s0</code></td><td>personal1</td><td>Xarxa interna: DHCP i clients</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <p>El recorregut d'un paquet del client fins a Internet és aquest:</p>
-  <div class="dora-flow">
-    <div class="dora-step">
-      <div class="n">01</div>
-      <div class="t">CLIENT</div>
-      <div class="d">Envia el paquet a la seva porta d'enllaç: el servidor.</div>
-    </div>
-    <div class="dora-arrow">→</div>
-    <div class="dora-step">
-      <div class="n">02</div>
-      <div class="t">FORWARD</div>
-      <div class="d">El servidor el passa de <code>enp2s0</code> a <code>enp1s0</code>.</div>
-    </div>
-    <div class="dora-arrow">→</div>
-    <div class="dora-step">
-      <div class="n">03</div>
-      <div class="t">NAT</div>
-      <div class="d">Canvia l'origen per l'adreça del servidor i el treu a fora.</div>
-    </div>
-  </div>
+  <h4>Un fitxer amb les dues targetes</h4>
+  <p>
+    <code>enp1s0</code> per DHCP i <code>enp2s0</code> amb IP fixa. És exactament l'escenari
+    que faràs servir a totes les activitats:
+  </p>
+<pre>network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    enp1s0:                        <span class="c"># puigcastellar1 — automàtica</span>
+      dhcp4: true
+
+    enp2s0:                        <span class="c"># personal1 — fixa</span>
+      dhcp4: false
+      addresses:
+        - 192.168.1.1/24
+      nameservers:
+        addresses: [9.9.9.9]</pre>
+  <p>
+    Tres coses del YAML que has de vigilar: la <strong>indentació és amb espais</strong> (mai
+    tabuladors), cada nivell són <strong>2 espais</strong> més, i els dos punts van
+    <strong>enganxats</strong> a la paraula.
+  </p>
+</div>
+
+<!-- ============ 4b · MÉS D'UN FITXER ============ -->
+<div class="cq-block" data-kind="observació">
+  <h4>Si a /etc/netplan/ ja hi ha un fitxer, què passa amb el teu?</h4>
+  <p>
+    El nom del que hi trobis depèn de la instal·lació:
+    <code>00-installer-config.yaml</code> el deixa l'instal·lador d'Ubuntu Server,
+    <code>01-network-manager-all.yaml</code> l'escriptori i <code>50-cloud-init.yaml</code> les
+    màquines de núvol.
+  </p>
+  <p>
+    Netplan els llegeix <strong>tots</strong> per ordre alfabètic i els <strong>fusiona</strong>.
+    El que és nou se suma; si dos diuen coses diferents de la mateixa clau, mana el que va
+    <strong>després</strong>. Les llistes, com <code>addresses</code>, no se substitueixen:
+    s'acumulen, i la targeta acaba amb totes dues adreces.
+  </p>
+  <p>
+    Per això val més afegir un fitxer propi amb un número alt, <code>90-xarxa.yaml</code>, que
+    editar el que hi havia: el teu mana i l'original queda intacte. Mira com ha quedat la barreja
+    amb <code>sudo netplan get</code>.
+  </p>
+</div>
+
+<!-- ============ 5 · LA PORTA D'ENLLAÇ ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>La porta d'enllaç va en un sol lloc</h4>
+  <p>
+    T'hauràs fixat que a <code>enp2s0</code> no hi ha cap porta d'enllaç. No és cap oblit:
+    <strong>un equip només té una ruta per defecte</strong>, i aquí ja la dona el DHCP per
+    <code>enp1s0</code>, que és per on hi ha Internet.
+  </p>
+  <p>Si en algun cas l'has d'escriure a mà, la sintaxi actual és aquesta:</p>
+<pre>      routes:
+        - to: default
+          via: 192.168.1.254</pre>
+  <p>
+    La forma antiga <code>gateway4:</code> encara la trobaràs a molta documentació d'Internet,
+    però està obsoleta i Netplan t'avisarà. Fes servir sempre <code>routes:</code>.
+  </p>
 </div>
 
 <!-- ============ 6 · RECORDATORI ============ -->
 <div class="cq-block" data-kind="recordatori">
-  <h4>Una regla mal escrita et tanca la porta</h4>
+  <h4>Canviar la xarxa en remot és arriscat</h4>
   <p>
-    Estàs escrivint un tallafoc. Si poses <code>policy drop</code> a la cadena
-    <code>input</code> sense permetre SSH, perdràs la connexió en carregar les regles. En aquesta
-    pràctica deixem <code>input</code> amb <code>policy accept</code> justament per evitar-ho:
-    filtrem el trànsit que <em>travessa</em> el servidor, no el que hi arriba.
+    Si configures la xarxa per SSH, un error et pot tallar la connexió i deixar-te fora sense
+    manera de tornar a entrar. Fes servir sempre <code>sudo netplan try</code>: aplica els
+    canvis temporalment i, si en 120 segons no confirmes prement <kbd>Enter</kbd>, els desfà
+    sols i et retorna la connexió.
   </p>
 </div>
 
 <!-- ============ 7 · PAS A PAS ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h4>Convertir el servidor en porta d'enllaç</h4>
+  <h4>Configurar les dues targetes</h4>
 
   <ol class="cq-steps">
     <li>
-      <p><strong>Mira com està ara</strong> l'encaminament:</p>
-<pre>cat /proc/sys/net/ipv4/ip_forward</pre>
-      <p>Sortirà <code>0</code>.</p>
-    </li>
-
-    <li>
-      <p><strong>Activa'l de manera permanent</strong> amb un fitxer propi, que és més net que tocar el fitxer general:</p>
-<pre>echo "net.ipv4.ip_forward=1" | sudo tee /etc/sysctl.d/99-encaminament.conf
-sudo sysctl --system</pre>
-      <p>Torna a comprovar-ho: ara ha de sortir <code>1</code>. I sobreviurà a un reinici.</p>
-    </li>
-
-    <li>
-      <p><strong>Escriu les regles</strong> de tallafoc i NAT:</p>
-<pre>sudo nano /etc/nftables.conf</pre>
-      <p>Deixa el fitxer amb aquest contingut, canviant els noms de les targetes pels teus:</p>
-<pre>#!/usr/sbin/nft -f
-flush ruleset
-
-table inet filter {
-    chain input {
-        type filter hook input priority 0;
-        policy accept;
-    }
-    chain forward {
-        type filter hook forward priority 0;
-        policy drop;
-
-        <span class="c"># de la xarxa interna cap a Internet</span>
-        iif "enp2s0" oif "enp1s0" accept
-
-        <span class="c"># només les respostes de tornada</span>
-        iif "enp1s0" oif "enp2s0" ct state related,established accept
-    }
-    chain output {
-        type filter hook output priority 0;
-        policy accept;
-    }
-}
-
-table ip nat {
-    chain postrouting {
-        type nat hook postrouting priority 100;
-        <span class="c"># NAT a la targeta que surt a Internet</span>
-        oif "enp1s0" masquerade
-    }
-}</pre>
-    </li>
-
-    <li>
-      <p><strong>Activa el servei</strong> perquè carregui les regles ara i a cada arrencada:</p>
-<pre>sudo systemctl enable --now nftables</pre>
-      <div class="cq-note">
-        <span class="lbl">Compte</span>
-        <code>enable --now</code> fa les dues coses alhora. No facis
-        <code>enable &amp; start</code> amb un sol <code>&amp;</code>: això envia la primera
-        comanda a segon pla i sembla que funciona quan no ho ha fet.
-      </div>
-    </li>
-
-    <li>
-      <p><strong>Comprova que les regles s'han carregat:</strong></p>
-<pre>sudo nft list ruleset</pre>
-      <p>Ha de sortir exactament el que has escrit. Si surt buit, hi ha un error de sintaxi al fitxer.</p>
-    </li>
-
-    <li>
-      <p><strong>Prova-ho des del client</strong>, per capes, en aquest ordre:</p>
-<pre>ip route              <span class="c"># la porta d'enllaç és el servidor?</span>
-ping -c3 192.168.1.1  <span class="c"># arribo al servidor?</span>
-ping -c3 9.9.9.9      <span class="c"># surto a Internet?</span>
-ping -c3 www.upc.edu  <span class="c"># funciona el DNS?</span></pre>
+      <p><strong>Mira quines targetes tens</strong> i com es diuen:</p>
+<pre>ip -c link show</pre>
       <p>
-        La gràcia és l'ordre: la primera que falli et diu exactament on és el problema. No cal
-        endevinar res.
+        A IsardVDI, la primera sol ser <code>enp1s0</code> (<em>puigcastellar1</em>) i la
+        segona <code>enp2s0</code> (<em>personal1</em>). No ho donis per fet: comprova-ho.
+      </p>
+    </li>
+
+    <li>
+      <p><strong>Edita el fitxer</strong> de Netplan:</p>
+<pre>sudo nano /etc/netplan/90-xarxa.yaml</pre>
+      <p>Escriu-hi la configuració de l'exemple, canviant els noms de les targetes pels teus.</p>
+    </li>
+
+    <li>
+      <p><strong>Posa-hi els permisos correctes.</strong> Si no ho fas, Netplan et renyarà cada vegada:</p>
+<pre>sudo chmod 600 /etc/netplan/90-xarxa.yaml</pre>
+    </li>
+
+    <li>
+      <p><strong>Comprova la sintaxi i aplica</strong> amb la xarxa de seguretat:</p>
+<pre>sudo netplan try</pre>
+      <p>
+        Si hi ha un error de sintaxi, t'ho dirà i no aplicarà res. Si tot va bé, prem
+        <kbd>Enter</kbd> per confirmar.
+      </p>
+    </li>
+
+    <li>
+      <p><strong>Comprova el resultat</strong> amb les tres comandes de sempre:</p>
+<pre>ip -c addr show
+ip -c route
+resolvectl status</pre>
+      <p>
+        <code>enp1s0</code> ha de tenir una adreça del centre; <code>enp2s0</code>, la
+        <code>192.168.1.1/24</code>; i ha d'haver-hi una sola ruta <code>default</code>, la de
+        <code>enp1s0</code>.
       </p>
     </li>
   </ol>
-
-  <div class="cq-note">
-    <span class="lbl">Ubuntu 26.04</span>
-    Al <code>nft list ruleset</code> les prioritats no surten com les has escrit: on tu poses
-    <code>priority 0</code> hi llegiràs <code>priority filter</code>, i on poses
-    <code>priority 100</code>, <code>priority srcnat</code>. Són els noms dels mateixos números:
-    la regla s'ha carregat bé.
-  </div>
 </div>
 
-<!-- ============ 8 · IPTABLES ============ -->
+<!-- ============ 8 · SOTA NETPLAN ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h4>Per què no fem servir iptables</h4>
+  <h4>Què hi ha sota Netplan</h4>
   <p>
-    Tota la documentació d'Internet parla d'<code>iptables</code>, amb comandes com
-    <code>iptables -t nat -A POSTROUTING -o enp1s0 -j MASQUERADE</code>. Encara funcionen, però
-    és una capa de compatibilitat: per sota, avui, hi ha <code>nftables</code>.
+    Netplan no fa la feina: la reparteix. Quan executes <code>netplan apply</code>, genera
+    fitxers <code>.network</code> dins de <code>/run/systemd/network/</code> i qui els llegeix
+    és <strong>systemd-networkd</strong>.
   </p>
+  <p>Pots veure'ls tu mateix, i entendràs molt millor què fa cada línia del teu YAML:</p>
+<pre>ls /run/systemd/network/
+cat /run/systemd/network/*enp2s0*</pre>
   <p>
-    <code>nftables</code> és el sistema de tallafoc de Linux des de fa anys i el que trobaràs a
-    qualsevol servidor nou. Té una sintaxi unificada i les regles es desen en un fitxer que pots
-    llegir i versionar.
-  </p>
-  <p>
-    <strong>No barregis els dos.</strong> Si escrius regles amb <code>iptables</code> i les
-    consultes amb <code>nft list ruleset</code> les veuràs traduïdes, i al revés no. Tria un i
-    queda-t'hi.
+    Això importa perquè <strong>Netplan no ho sap fer tot</strong>. Muntar un servidor DHCP,
+    per exemple, no està entre les seves opcions. En aquests casos s'aparta Netplan i
+    s'escriuen els <code>.network</code> directament — és el que faràs a l'activitat 2.
   </p>
 </div>
 
@@ -617,11 +572,11 @@ ping -c3 www.upc.edu  <span class="c"># funciona el DNS?</span></pre>
 <div class="cq-block" data-kind="bones pràctiques">
   <h4>Criteris professionals</h4>
   <ul>
-    <li><strong><code>policy drop</code> a <code>forward</code></strong> i obre només el que cal. El que no s'ha permès, no passa.</li>
-    <li><strong>Fes servir <code>ct state related,established</code></strong> per al trànsit de tornada, en lloc d'obrir el sentit contrari sencer.</li>
-    <li><strong>Configuració permanent, no de sessió.</strong> Un <code>sysctl -w</code> o un <code>nft add rule</code> desapareixen en reiniciar.</li>
-    <li><strong>Activa NAT només a la targeta externa.</strong> Un <code>masquerade</code> a la interna amaga qui és qui i complica qualsevol diagnòstic.</li>
-    <li><strong>Prova per capes</strong> (ruta → servidor → IP externa → nom) abans de tocar res.</li>
+    <li><strong>Un sol fitxer</strong> de Netplan per màquina, amb totes les targetes. Diversos fitxers es trepitgen entre ells.</li>
+    <li><strong><code>netplan try</code>, mai <code>netplan apply</code></strong>, quan treballis per SSH.</li>
+    <li><strong>Permisos 600.</strong> El fitxer pot contenir claus de Wi-Fi.</li>
+    <li><strong>Còpia de seguretat</strong> abans de tocar-lo: <code>sudo cp 90-xarxa.yaml 90-xarxa.yaml.bak</code>.</li>
+    <li><strong>Documenta amb comentaris</strong> (<code>#</code>) quina targeta és quina. D'aquí a tres mesos no te'n recordaràs.</li>
   </ul>
 </div>
 
@@ -629,28 +584,28 @@ ping -c3 www.upc.edu  <span class="c"># funciona el DNS?</span></pre>
 <div class="cq-block" data-kind="problemes">
   <h4>Errors habituals</h4>
   <dl class="cq-issues">
-    <dt>Funcionava i després de reiniciar ja no</dt>
+    <dt>Error de sintaxi en aplicar</dt>
     <dd>
-      <p><span class="lbl">Causa</span> Ho vas activar només per a la sessió: amb <code>sysctl -w</code> o afegint regles a mà.</p>
-      <p><span class="lbl">Solució</span> El fitxer a <code>/etc/sysctl.d/</code> i les regles a <code>/etc/nftables.conf</code>, amb el servei habilitat.</p>
+      <p><span class="lbl">Causa</span> Gairebé sempre, indentació. Un tabulador enganxat en copiar i enganxar, o un nivell mal alineat.</p>
+      <p><span class="lbl">Solució</span> <code>sudo netplan get</code> et mostra com ha entès Netplan el fitxer. Si la sortida no és la que esperaves, ja saps on mirar.</p>
     </dd>
 
-    <dt><code>nft list ruleset</code> surt buit</dt>
+    <dt>La targeta no agafa la IP fixa</dt>
     <dd>
-      <p><span class="lbl">Causa</span> Error de sintaxi al fitxer: el <code>flush ruleset</code> s'executa i la resta falla.</p>
-      <p><span class="lbl">Solució</span> <code>sudo nft -c -f /etc/nftables.conf</code> comprova el fitxer sense aplicar-lo i et diu la línia.</p>
+      <p><span class="lbl">Causa</span> Falta <code>dhcp4: false</code>, i el DHCP li està sobreescrivint la teva adreça.</p>
+      <p><span class="lbl">Solució</span> Afegeix-lo i torna a aplicar. Comprova-ho amb <code>networkctl status enp2s0</code>.</p>
     </dd>
 
-    <dt>El client arriba al servidor però no a Internet</dt>
+    <dt><code>netplan apply</code> diu <code>'netplan try' is restoring configuration</code></dt>
     <dd>
-      <p><span class="lbl">Causa</span> Falta l'encaminament o falta el NAT.</p>
-      <p><span class="lbl">Solució</span> Comprova <code>cat /proc/sys/net/ipv4/ip_forward</code> i que la taula <code>nat</code> apareix a <code>nft list ruleset</code>.</p>
+      <p><span class="lbl">Causa</span> Un <code>netplan try</code> anterior es va quedar a mitges: vas tancar la consola sense prémer <kbd>Enter</kbd> ni esperar els 120 segons.</p>
+      <p><span class="lbl">Solució</span> <code>sudo rm /run/netplan/netplan-try.ready</code> i torna a aplicar.</p>
     </dd>
 
-    <dt><code>ping 9.9.9.9</code> va, però <code>ping www.upc.edu</code> no</dt>
+    <dt>Es perd la connexió SSH en aplicar</dt>
     <dd>
-      <p><span class="lbl">Causa</span> L'encaminament i el NAT funcionen. El problema és el DNS que reparteix el teu servidor DHCP.</p>
-      <p><span class="lbl">Solució</span> Revisa <code>domain-name-servers</code> al fitxer de Kea i, al client, <code>resolvectl status</code>.</p>
+      <p><span class="lbl">Causa</span> Has canviat la configuració de la targeta per on estaves connectat.</p>
+      <p><span class="lbl">Solució</span> Si has fet servir <code>netplan try</code>, espera 120 segons i tornaràs a entrar. Si has fet <code>apply</code>, hauràs d'anar a la consola de la VM a IsardVDI.</p>
     </dd>
   </dl>
 </div>
@@ -659,87 +614,31 @@ ping -c3 www.upc.edu  <span class="c"># funciona el DNS?</span></pre>
 <div class="cq-block" data-kind="resum">
   <h4>Resum</h4>
   <ul>
-    <li>Un client amb IP correcta encara necessita <strong>encaminament</strong> i <strong>NAT</strong> per sortir a Internet.</li>
-    <li>L'encaminament s'activa amb <code>net.ipv4.ip_forward=1</code>, permanent a <code>/etc/sysctl.d/</code>.</li>
-    <li>El NAT es fa amb <code>masquerade</code> a la targeta externa, dins de <code>/etc/nftables.conf</code>.</li>
-    <li>Es fa servir <strong>nftables</strong>, no <code>iptables</code>. I mai els dos alhora.</li>
-    <li>Per diagnosticar, prova <strong>per capes</strong>: ruta, servidor, IP externa, nom.</li>
+    <li>Configuració <strong>fixa</strong> per a servidors i impressores; <strong>automàtica</strong> per a la resta.</li>
+    <li>Netplan escriu a <code>/etc/netplan/*.yaml</code>; qui gestiona la xarxa és <strong>systemd-networkd</strong>.</li>
+    <li>Indentació amb <strong>espais</strong>, mai tabuladors.</li>
+    <li>La ruta <strong>per defecte és única</strong> per màquina.</li>
+    <li>Per SSH, sempre <code>netplan try</code>.</li>
   </ul>
 
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Comanda</th><th>Per a què serveix</th></tr></thead>
       <tbody>
-        <tr><td><code>cat /proc/sys/net/ipv4/ip_forward</code></td><td>Veure si l'encaminament està actiu</td></tr>
-        <tr><td><code>sudo sysctl --system</code></td><td>Aplicar els fitxers de <code>/etc/sysctl.d/</code></td></tr>
-        <tr><td><code>sudo nft -c -f /etc/nftables.conf</code></td><td>Validar les regles sense aplicar-les</td></tr>
-        <tr><td><code>sudo systemctl enable --now nftables</code></td><td>Carregar les regles i fer-les permanents</td></tr>
-        <tr><td><code>sudo nft list ruleset</code></td><td>Veure les regles carregades</td></tr>
-        <tr><td><code>ip route</code></td><td>Comprovar la porta d'enllaç al client</td></tr>
+        <tr><td><code>ip -c link show</code><br><code>ip -c l</code></td><td>Veure les targetes i els seus noms</td></tr>
+        <tr><td><code>netplan try</code></td><td>Aplicar amb reversió automàtica</td></tr>
+        <tr><td><code>netplan apply</code></td><td>Aplicar directament (només a consola)</td></tr>
+        <tr><td><code>netplan get</code></td><td>Veure com s'ha interpretat el fitxer</td></tr>
+        <tr><td><code>netplan status</code></td><td>Estat general de la xarxa</td></tr>
+        <tr><td><code>networkctl status &lt;if&gt;</code></td><td>Detall d'una targeta</td></tr>
       </tbody>
     </table>
   </div>
 
   <p style="margin-top:16px">
-    <strong>Amb això tanques el RA1:</strong> ja saps configurar la xarxa, muntar un servidor
-    DHCP i donar Internet als seus clients.
+    <strong>Continua:</strong> amb la <em>G1.2 · Kea</em> muntaràs el servidor que respon quan
+    una targeta té <code>dhcp4: true</code>.
   </p>
-</div>
-
-<!-- ============ 12 · QUIZ ============ -->
-<div class="cq-block" data-kind="quiz">
-  <h4>Comprova el que has après</h4>
-
-  <div class="cq-question" data-id="t1-4-forward" data-type="single">
-    <div class="statement">Què significa que <code>/proc/sys/net/ipv4/ip_forward</code> valgui <code>0</code>?</div>
-    <button class="cq-option" data-correct="true">El servidor no passa paquets d'una targeta a l'altra</button>
-    <button class="cq-option" data-correct="false">El servidor no té cap targeta de xarxa activa</button>
-    <button class="cq-option" data-correct="false">El NAT està desactivat</button>
-    <button class="cq-option" data-correct="false">No hi ha cap regla de tallafoc</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
-  </div>
-
-  <div class="cq-question" data-id="t1-4-nat" data-type="single">
-    <div class="statement">Per a què serveix el NAT (<em>masquerade</em>)?</div>
-    <button class="cq-option" data-correct="false">Per repartir adreces IP als clients</button>
-    <button class="cq-option" data-correct="true">Per canviar l'adreça privada d'origen per la del servidor, i que la resposta pugui tornar</button>
-    <button class="cq-option" data-correct="false">Per resoldre noms de domini</button>
-    <button class="cq-option" data-correct="false">Per xifrar el trànsit cap a Internet</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
-  </div>
-
-  <div class="cq-question" data-id="t1-4-permanent" data-type="single">
-    <div class="statement">Després de reiniciar, el client torna a quedar-se sense Internet. Què ha passat?</div>
-    <button class="cq-option" data-correct="false">La concessió DHCP ha caducat</button>
-    <button class="cq-option" data-correct="true">La configuració es va fer només per a la sessió i no s'ha desat en fitxers</button>
-    <button class="cq-option" data-correct="false">El servidor ha canviat d'adreça MAC</button>
-    <button class="cq-option" data-correct="false">S'ha esgotat el rang d'adreces</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
-  </div>
-
-  <div class="cq-question" data-id="t1-4-diagnostic" data-type="single">
-    <div class="statement">Al client, <code>ping 9.9.9.9</code> funciona però <code>ping www.upc.edu</code> no. Què falla?</div>
-    <button class="cq-option" data-correct="false">L'encaminament</button>
-    <button class="cq-option" data-correct="false">El NAT</button>
-    <button class="cq-option" data-correct="true">El DNS que reparteix el servidor DHCP</button>
-    <button class="cq-option" data-correct="false">La porta d'enllaç</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
-  </div>
-
-  <div class="cq-question" data-id="t1-4-certes" data-type="multi">
-    <div class="statement">Selecciona totes les afirmacions certes</div>
-    <button class="cq-option" data-correct="true">L'encaminament ve desactivat per defecte a Linux.</button>
-    <button class="cq-option" data-correct="true">El <em>masquerade</em> s'aplica a la targeta que surt a Internet.</button>
-    <button class="cq-option" data-correct="true">Les regles de <code>/etc/nftables.conf</code> es carreguen a cada arrencada si el servei està habilitat.</button>
-    <button class="cq-option" data-correct="false">Convé escriure les regles amb <code>iptables</code> i amb <code>nftables</code> alhora.</button>
-    <button class="cq-option" data-correct="false">Amb el DHCP ben configurat, el client ja té Internet.</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
-  </div>
 </div>
 
 <script>

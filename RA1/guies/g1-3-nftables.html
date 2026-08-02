@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Serveis en Xarxa (0227) · RA1 — DHCP</title>
+<title>G1.3 · Guia: nftables — Serveis en Xarxa (0227)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -388,89 +388,217 @@
 </head>
 <body>
 <header class="cq-header">
-  <div class="eyebrow">CFGM SMX · Mòdul 0227</div>
-  <h1>Serveis en Xarxa</h1>
-  <p class="lede">RA1 · Instal·lació de serveis de configuració dinàmica (DHCP)</p>
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · G1.3</div>
+  <h1>Guia: nftables</h1>
+  <p class="lede">Encaminament i NAT: convertir el servidor en porta d'enllaç.</p>
 </header>
 
-<div class="cq-block" data-kind="teoria">
-  <h4>Teoria</h4>
-  <p>Expliquen com funciona el servei, sense lligar-lo a cap producte.</p>
-  <ul class="cq-index">
-    <li><a href="teoria/t1-0-repas-adrecament.html">
-      <span class="ref">T1.0</span>
-      <span class="ttl">Repàs d'adreçament
-        <span class="sub">IP, màscara, CIDR i rangs privats</span></span></a></li>
-    <li><a href="teoria/t1-1-dhcp-fonaments.html">
-      <span class="ref">T1.1</span>
-      <span class="ttl">Fonaments de DHCP
-        <span class="sub">El procés DORA i les concessions</span></span></a></li>
-    <li><a href="teoria/t1-2-encaminament-nat.html">
-      <span class="ref">T1.2</span>
-      <span class="ttl">Encaminament i NAT
-        <span class="sub">Per què un client amb IP encara no té Internet</span></span></a></li>
+<!-- ============ 1 · OBJECTIUS ============ -->
+<div class="cq-block" data-kind="objectius">
+  <h4>Què hi ha en aquesta guia</h4>
+  <p>Documentació oficial: https://wiki.nftables.org</p>
+  <ul>
+    <li>Punt de partida: el servidor ja reparteix adreces per la targeta interna.</li>
+    <li>Les regles viuen a <code>/etc/nftables.conf</code> i les carrega el servei <code>nftables</code>.</li>
   </ul>
 </div>
 
-<div class="cq-block" data-kind="guies">
-  <h4>Guies</h4>
-  <ul class="cq-index">
-    <li><a href="guies/g1-1-netplan.html">
-      <span class="ref">G1.1</span>
-      <span class="ttl">Guia: Netplan
-        <span class="sub">Les targetes de xarxa d'un Ubuntu Server</span></span></a></li>
-    <li><a href="guies/g1-2-kea.html">
-      <span class="ref">G1.2</span>
-      <span class="ttl">Guia: Kea
-        <span class="sub">Rang, opcions i reserves del servidor DHCP</span></span></a></li>
-    <li><a href="guies/g1-3-nftables.html">
-      <span class="ref">G1.3</span>
-      <span class="ttl">Guia: nftables
-        <span class="sub">Encaminament i NAT cap a Internet</span></span></a></li>
-  </ul>
-</div>
-
-<div class="cq-block" data-kind="activitats">
-  <h4>Activitats</h4>
+<!-- ============ 8 · IPTABLES ============ -->
+<div class="cq-block" data-kind="cas real">
+  <h4>Per què no fem servir iptables</h4>
   <p>
-    Cada activitat es fa sobre una <strong>màquina nova</strong> a isardVDI, amb les targetes
-    <code>puigcastellar1</code> i <code>personal1</code>.
+    Tota la documentació d'Internet parla d'<code>iptables</code>, amb comandes com
+    <code>iptables -t nat -A POSTROUTING -o enp1s0 -j MASQUERADE</code>. Encara funcionen, però
+    és una capa de compatibilitat: per sota, avui, hi ha <code>nftables</code>.
   </p>
-  <ul class="cq-index">
-    <li><a href="activitats/a1-1-posada-a-punt.html">
-      <span class="ref">A1.1</span>
-      <span class="ttl">Posada a punt del servidor
-        <span class="sub">Nom, hora, actualitzacions i les dues targetes</span></span></a></li>
-    <li><a href="activitats/a1-2-dhcp-systemd-networkd.html">
-      <span class="ref">A1.2</span>
-      <span class="ttl">DHCP mínim amb systemd-networkd
-        <span class="sub">Un servidor de laboratori sense instal·lar res</span></span></a></li>
-    <li><a href="activitats/a1-3-dhcp-kea.html">
-      <span class="ref">A1.3</span>
-      <span class="ttl">Servidor DHCP amb Kea
-        <span class="sub">Reserves, IP forwarding i sortida a Internet</span></span></a></li>
-    <li><a href="activitats/a1-4-kea-escala-reserves.html">
-      <span class="ref">A1.4</span>
-      <span class="ttl">DHCP per a 2000 equips
-        <span class="sub">Dimensionar una xarxa /16 amb reserves</span></span></a></li>
+  <p>
+    <code>nftables</code> és el sistema de tallafoc de Linux des de fa anys i el que trobaràs a
+    qualsevol servidor nou. Té una sintaxi unificada i les regles es desen en un fitxer que pots
+    llegir i versionar.
+  </p>
+  <p>
+    <strong>No barregis els dos.</strong> Si escrius regles amb <code>iptables</code> i les
+    consultes amb <code>nft list ruleset</code> les veuràs traduïdes, i al revés no. Tria un i
+    queda-t'hi.
+  </p>
+</div>
+
+<!-- ============ 6 · RECORDATORI ============ -->
+<div class="cq-block" data-kind="recordatori">
+  <h4>Una regla mal escrita et tanca la porta</h4>
+  <p>
+    Estàs escrivint un tallafoc. Si poses <code>policy drop</code> a la cadena
+    <code>input</code> sense permetre SSH, perdràs la connexió en carregar les regles. En aquesta
+    pràctica deixem <code>input</code> amb <code>policy accept</code> justament per evitar-ho:
+    filtrem el trànsit que <em>travessa</em> el servidor, no el que hi arriba.
+  </p>
+</div>
+
+<!-- ============ 7 · PAS A PAS ============ -->
+<div class="cq-block" data-kind="pas a pas">
+  <h4>Convertir el servidor en porta d'enllaç</h4>
+
+  <ol class="cq-steps">
+    <li>
+      <p><strong>Mira com està ara</strong> l'encaminament:</p>
+<pre>cat /proc/sys/net/ipv4/ip_forward</pre>
+      <p>Sortirà <code>0</code>.</p>
+    </li>
+
+    <li>
+      <p><strong>Activa'l de manera permanent</strong> amb un fitxer propi, que és més net que tocar el fitxer general:</p>
+<pre>echo "net.ipv4.ip_forward=1" | sudo tee /etc/sysctl.d/99-encaminament.conf
+sudo sysctl --system</pre>
+      <p>Torna a comprovar-ho: ara ha de sortir <code>1</code>. I sobreviurà a un reinici.</p>
+    </li>
+
+    <li>
+      <p><strong>Escriu les regles</strong> de tallafoc i NAT:</p>
+<pre>sudo nano /etc/nftables.conf</pre>
+      <p>Deixa el fitxer amb aquest contingut, canviant els noms de les targetes pels teus:</p>
+<pre>#!/usr/sbin/nft -f
+flush ruleset
+
+table inet filter {
+    chain input {
+        type filter hook input priority 0;
+        policy accept;
+    }
+    chain forward {
+        type filter hook forward priority 0;
+        policy drop;
+
+        <span class="c"># de la xarxa interna cap a Internet</span>
+        iif "enp2s0" oif "enp1s0" accept
+
+        <span class="c"># només les respostes de tornada</span>
+        iif "enp1s0" oif "enp2s0" ct state related,established accept
+    }
+    chain output {
+        type filter hook output priority 0;
+        policy accept;
+    }
+}
+
+table ip nat {
+    chain postrouting {
+        type nat hook postrouting priority 100;
+        <span class="c"># NAT a la targeta que surt a Internet</span>
+        oif "enp1s0" masquerade
+    }
+}</pre>
+    </li>
+
+    <li>
+      <p><strong>Activa el servei</strong> perquè carregui les regles ara i a cada arrencada:</p>
+<pre>sudo systemctl enable --now nftables</pre>
+      <div class="cq-note">
+        <span class="lbl">Compte</span>
+        <code>enable --now</code> fa les dues coses alhora. No facis
+        <code>enable &amp; start</code> amb un sol <code>&amp;</code>: això envia la primera
+        comanda a segon pla i sembla que funciona quan no ho ha fet.
+      </div>
+    </li>
+
+    <li>
+      <p><strong>Comprova que les regles s'han carregat:</strong></p>
+<pre>sudo nft list ruleset</pre>
+      <p>Ha de sortir exactament el que has escrit. Si surt buit, hi ha un error de sintaxi al fitxer.</p>
+    </li>
+
+    <li>
+      <p><strong>Prova-ho des del client</strong>, per capes, en aquest ordre:</p>
+<pre>ip route              <span class="c"># la porta d'enllaç és el servidor?</span>
+ping -c3 192.168.1.1  <span class="c"># arribo al servidor?</span>
+ping -c3 9.9.9.9      <span class="c"># surto a Internet?</span>
+ping -c3 www.upc.edu  <span class="c"># funciona el DNS?</span></pre>
+      <p>
+        La gràcia és l'ordre: la primera que falli et diu exactament on és el problema. No cal
+        endevinar res.
+      </p>
+    </li>
+  </ol>
+
+  <div class="cq-note">
+    <span class="lbl">Ubuntu 26.04</span>
+    Al <code>nft list ruleset</code> les prioritats no surten com les has escrit: on tu poses
+    <code>priority 0</code> hi llegiràs <code>priority filter</code>, i on poses
+    <code>priority 100</code>, <code>priority srcnat</code>. Són els noms dels mateixos números:
+    la regla s'ha carregat bé.
+  </div>
+</div>
+
+<!-- ============ 9 · BONES PRÀCTIQUES ============ -->
+<div class="cq-block" data-kind="bones pràctiques">
+  <h4>Criteris professionals</h4>
+  <ul>
+    <li><strong><code>policy drop</code> a <code>forward</code></strong> i obre només el que cal. El que no s'ha permès, no passa.</li>
+    <li><strong>Fes servir <code>ct state related,established</code></strong> per al trànsit de tornada, en lloc d'obrir el sentit contrari sencer.</li>
+    <li><strong>Configuració permanent, no de sessió.</strong> Un <code>sysctl -w</code> o un <code>nft add rule</code> desapareixen en reiniciar.</li>
+    <li><strong>Activa NAT només a la targeta externa.</strong> Un <code>masquerade</code> a la interna amaga qui és qui i complica qualsevol diagnòstic.</li>
+    <li><strong>Prova per capes</strong> (ruta → servidor → IP externa → nom) abans de tocar res.</li>
   </ul>
 </div>
 
-<div class="cq-block" data-kind="ordre recomanat">
-  <h4>En quin ordre fer-ho</h4>
-  <p>
-    Primer entens el servei, després tens el manual a mà per fer les activitats.</p>
+<!-- ============ 10 · PROBLEMES ============ -->
+<div class="cq-block" data-kind="problemes">
+  <h4>Errors habituals</h4>
+  <dl class="cq-issues">
+    <dt>Funcionava i després de reiniciar ja no</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Ho vas activar només per a la sessió: amb <code>sysctl -w</code> o afegint regles a mà.</p>
+      <p><span class="lbl">Solució</span> El fitxer a <code>/etc/sysctl.d/</code> i les regles a <code>/etc/nftables.conf</code>, amb el servei habilitat.</p>
+    </dd>
+
+    <dt><code>nft list ruleset</code> surt buit</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Error de sintaxi al fitxer: el <code>flush ruleset</code> s'executa i la resta falla.</p>
+      <p><span class="lbl">Solució</span> <code>sudo nft -c -f /etc/nftables.conf</code> comprova el fitxer sense aplicar-lo i et diu la línia.</p>
+    </dd>
+
+    <dt>El client arriba al servidor però no a Internet</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Falta l'encaminament o falta el NAT.</p>
+      <p><span class="lbl">Solució</span> Comprova <code>cat /proc/sys/net/ipv4/ip_forward</code> i que la taula <code>nat</code> apareix a <code>nft list ruleset</code>.</p>
+    </dd>
+
+    <dt><code>ping 9.9.9.9</code> va, però <code>ping www.upc.edu</code> no</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> L'encaminament i el NAT funcionen. El problema és el DNS que reparteix el teu servidor DHCP.</p>
+      <p><span class="lbl">Solució</span> Revisa <code>domain-name-servers</code> al fitxer de Kea i, al client, <code>resolvectl status</code>.</p>
+    </dd>
+  </dl>
+</div>
+
+<!-- ============ 11 · RESUM ============ -->
+<div class="cq-block" data-kind="resum">
+  <h4>Resum</h4>
+  <ul>
+    <li>Un client amb IP correcta encara necessita <strong>encaminament</strong> i <strong>NAT</strong> per sortir a Internet.</li>
+    <li>L'encaminament s'activa amb <code>net.ipv4.ip_forward=1</code>, permanent a <code>/etc/sysctl.d/</code>.</li>
+    <li>El NAT es fa amb <code>masquerade</code> a la targeta externa, dins de <code>/etc/nftables.conf</code>.</li>
+    <li>Es fa servir <strong>nftables</strong>, no <code>iptables</code>. I mai els dos alhora.</li>
+    <li>Per diagnosticar, prova <strong>per capes</strong>: ruta, servidor, IP externa, nom.</li>
+  </ul>
+
   <div class="cq-tablewrap">
     <table class="cq-table">
-      <thead><tr><th>Llegeix</th><th>Tingues a mà</th><th>Fes</th></tr></thead>
+      <thead><tr><th>Comanda</th><th>Per a què serveix</th></tr></thead>
       <tbody>
-        <tr><td>T1.0</td><td>G1.1</td><td>A1.1 — posada a punt</td></tr>
-        <tr><td>T1.1</td><td>G1.1</td><td>A1.2 — DHCP mínim</td></tr>
-        <tr><td>T1.2</td><td>G1.2 · G1.3</td><td>A1.3 — DHCP amb Kea</td></tr>
-        <tr><td>—</td><td>G1.2</td><td>A1.4 — DHCP a escala</td></tr>
+        <tr><td><code>cat /proc/sys/net/ipv4/ip_forward</code></td><td>Veure si l'encaminament està actiu</td></tr>
+        <tr><td><code>sudo sysctl --system</code></td><td>Aplicar els fitxers de <code>/etc/sysctl.d/</code></td></tr>
+        <tr><td><code>sudo nft -c -f /etc/nftables.conf</code></td><td>Validar les regles sense aplicar-les</td></tr>
+        <tr><td><code>sudo systemctl enable --now nftables</code></td><td>Carregar les regles i fer-les permanents</td></tr>
+        <tr><td><code>sudo nft list ruleset</code></td><td>Veure les regles carregades</td></tr>
+        <tr><td><code>ip route</code></td><td>Comprovar la porta d'enllaç al client</td></tr>
       </tbody>
     </table>
   </div>
+
+  <p style="margin-top:16px">
+    <strong>Amb això tanques el RA1:</strong> ja saps configurar la xarxa, muntar un servidor
+    DHCP i donar Internet als seus clients.
+  </p>
 </div>
 
 <script>
