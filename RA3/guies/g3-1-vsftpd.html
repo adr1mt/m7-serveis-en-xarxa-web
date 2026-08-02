@@ -53,6 +53,89 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  /* ==== Navegació: barra de dalt i pas a la pàgina següent ==== */
+  .cq-nav {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    margin: -40px -16px 26px;
+    padding: 9px 16px;
+    background: rgba(251, 252, 253, .93);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--rule);
+  }
+  .cq-nav .inner {
+    max-width: 660px;
+    margin: 0 auto;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 14px;
+  }
+  .cq-nav a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: .9rem;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .cq-nav a:hover { text-decoration: underline; }
+  .cq-nav .pos {
+    flex: 0 0 auto;
+    font-family: var(--font-mono);
+    font-size: .7rem;
+    letter-spacing: .1em;
+    color: var(--muted);
+  }
+
+  .cq-pager {
+    max-width: 660px;
+    margin: 26px auto 0;
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 1fr 1fr;
+  }
+  .cq-pager a {
+    display: block;
+    padding: 13px 16px;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    background: var(--card);
+    color: var(--ink);
+    text-decoration: none;
+    transition: border-color .12s ease, background .12s ease;
+  }
+  .cq-pager a:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .cq-pager .dir {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: .67rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 3px;
+  }
+  .cq-pager .ttl {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: .92rem;
+    line-height: 1.3;
+  }
+  .cq-pager .next { grid-column: 2; text-align: right; }
+
+  /* Referència a una altra pàgina del mòdul (T2.4, G4.1, A3.2…) */
+  a.cq-ref {
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent-line);
+  }
+  a.cq-ref:hover { border-bottom-color: var(--accent); }
+
   /* ==== Capçalera de la pàgina ==== */
   .cq-header {
     max-width: 660px;
@@ -126,7 +209,7 @@
   .cq-block ul, .cq-block ol { margin: 0 0 14px; padding-left: 22px; }
   .cq-block li { margin-bottom: 6px; }
   .cq-block li:last-child { margin-bottom: 0; }
-  .cq-block a { color: var(--accent); }
+  .cq-block a { color: var(--accent); overflow-wrap: anywhere; }
 
   .cq-block code {
     font-family: var(--font-mono);
@@ -276,7 +359,9 @@
     border-bottom-color: var(--accent-line);
     white-space: nowrap;
   }
-  .cq-table td:first-child { white-space: nowrap; }
+  /* La primera columna sol ser una ordre curta i queda millor sencera, però
+     quan és prosa ha de poder partir-se: si no, la taula no cap al mòbil. */
+  .cq-table td:first-child > code:only-child { white-space: nowrap; }
   .cq-table tr:last-child td { border-bottom: none; }
 
   /* ==== Nota de versió de sistema (Ubuntu 26.04) ==== */
@@ -360,6 +445,19 @@
 
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 
+  /* ==== Mòbil: la pantalla de 375 px és la mida de treball real ==== */
+  @media (max-width: 620px) {
+    body { padding: 26px 10px 56px; }
+    .cq-nav { margin: -26px -10px 22px; padding: 9px 10px; }
+    .cq-block { padding: 22px 16px 24px; }
+    .cq-block::before { left: 14px; }
+    .cq-table { font-size: .84rem; }
+    .cq-table th, .cq-table td { padding: 8px 8px; }
+    .cq-table th { white-space: normal; }
+    .cq-pager { grid-template-columns: 1fr; }
+    .cq-pager .next { grid-column: 1; text-align: left; }
+  }
+
   /* ==== Impressió: els alumnes imprimeixen la teoria ==== */
   @media print {
     body { background: #FFF; padding: 0; font-size: 11pt; }
@@ -367,6 +465,8 @@
     .cq-block pre { background: #F4F4F4; color: #000; border: 1px solid #DDD; }
     .cq-block pre .c, .cq-block pre .o { color: #555; }
     .cq-check-btn { display: none; }
+    .cq-nav, .cq-pager { display: none; }
+    a.cq-ref { border-bottom: none; color: inherit; }
   }
   /* ==== Contingut no copiable ====
      Dissuasiu, no una protecció: el material és per llegir-lo al web o a
@@ -387,6 +487,15 @@
 </style>
 </head>
 <body>
+<!-- === NAVEGACIÓ INICI === -->
+<nav class="cq-nav">
+  <div class="inner">
+    <a href="../index.html">‹ RA3 · Instal·lació de serveis de transferència de fitxers</a>
+    <span class="pos">G3.1 · 4/8</span>
+  </div>
+</nav>
+<!-- === NAVEGACIÓ FI === -->
+
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA3 · G3.1</div>
   <h1>Guia: vsftpd</h1>
@@ -395,7 +504,7 @@
 
 <div class="cq-block" data-kind="objectius">
   <h4>Què hi ha en aquesta guia</h4>
-  <p>Documentació oficial: https://security.appspot.com/vsftpd.html</p>
+  <p>Documentació oficial: <a href="https://security.appspot.com/vsftpd.html">security.appspot.com/vsftpd.html</a></p>
   <ul>
     <li>Punt de partida: Ubuntu Server amb IP fixa a la targeta interna.</li>
     <li>Tot es configura en un sol fitxer: <code>/etc/vsftpd.conf</code>.</li>
@@ -403,7 +512,7 @@
 </div>
 
 <!-- ============ 2 · UN SOL FITXER ============ -->
-<div class="cq-block" data-kind="teoria">
+<div class="cq-block" data-kind="referència">
   <h4>Un paquet, un servei, un fitxer</h4>
   <p>
     <strong>vsftpd</strong> (<em>Very Secure FTP Daemon</em>) és el servidor FTP estàndard a
@@ -428,7 +537,7 @@
 </div>
 
 <!-- ============ 3 · LES DIRECTIVES ============ -->
-<div class="cq-block" data-kind="teoria">
+<div class="cq-block" data-kind="referència">
   <h4>Les directives que has de decidir</h4>
   <p>
     De sèrie, vsftpd deixa entrar els usuaris del sistema però <strong>no</strong> els deixa
@@ -567,7 +676,7 @@ systemctl status vsftpd</pre>
 </div>
 
 <!-- ============ 3 · DIRECTIVES D'ANÒNIM ============ -->
-<div class="cq-block" data-kind="teoria">
+<div class="cq-block" data-kind="referència">
   <h4>Les directives de l'accés anònim</h4>
   <div class="cq-tablewrap">
     <table class="cq-table">
@@ -735,6 +844,29 @@ lftp -u alumne1 -e "set ssl:verify-certificate no" \
   </div>
 </div>
 
+<!-- ============ COMPROVACIÓ ============ -->
+<div class="cq-block" data-kind="comprovació">
+  <h4>Comprovar-ho des del client</h4>
+  <ol class="cq-steps">
+    <li>
+      <p><strong>El servei ha arrencat de debò.</strong> Amb una directiva desconeguda,
+      vsftpd surt sense dir res: no n'hi ha prou de no veure errors.</p>
+<pre>systemctl status vsftpd</pre>
+      <p>Ha de dir <code>active (running)</code>.</p>
+    </li>
+    <li>
+      <p><strong>L'usuari entra i es queda a casa seva.</strong> Des d'una altra màquina:</p>
+<pre>ftp 192.168.1.8</pre>
+      <p>Ha de respondre <code>230 Login successful</code>, i <code>pwd</code> ha de dir
+      <code>/</code>: és la gàbia, no l'arrel del servidor.</p>
+    </li>
+    <li>
+      <p><strong>Mira qui es connecta</strong> mentre proves, des del servidor:</p>
+<pre>tail -f /var/log/vsftpd.log</pre>
+    </li>
+  </ol>
+</div>
+
 <div class="cq-block" data-kind="bones pràctiques">
   <h4>Criteris professionals</h4>
   <ul>
@@ -825,6 +957,18 @@ lftp -u alumne1 -e "set ssl:verify-certificate no" \
     </table>
   </div>
 </div>
+
+
+<!-- === PEU DE NAVEGACIÓ INICI === -->
+<nav class="cq-pager">
+  <a class="prev" href="../teoria/t3-3-ftps-i-sftp.html">
+    <span class="dir">Anterior · T3.3</span>
+    <span class="ttl">FTPS i SFTP</span></a>
+  <a class="next" href="g3-2-sftp.html">
+    <span class="dir">Següent · G3.2</span>
+    <span class="ttl">Guia: SFTP d'OpenSSH</span></a>
+</nav>
+<!-- === PEU DE NAVEGACIÓ FI === -->
 
 <script>
   // Dissuasió de la còpia: no s'aplica mai dins de l'editor.

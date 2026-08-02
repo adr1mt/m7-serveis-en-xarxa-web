@@ -53,6 +53,89 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  /* ==== Navegació: barra de dalt i pas a la pàgina següent ==== */
+  .cq-nav {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    margin: -40px -16px 26px;
+    padding: 9px 16px;
+    background: rgba(251, 252, 253, .93);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--rule);
+  }
+  .cq-nav .inner {
+    max-width: 660px;
+    margin: 0 auto;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 14px;
+  }
+  .cq-nav a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: .9rem;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .cq-nav a:hover { text-decoration: underline; }
+  .cq-nav .pos {
+    flex: 0 0 auto;
+    font-family: var(--font-mono);
+    font-size: .7rem;
+    letter-spacing: .1em;
+    color: var(--muted);
+  }
+
+  .cq-pager {
+    max-width: 660px;
+    margin: 26px auto 0;
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 1fr 1fr;
+  }
+  .cq-pager a {
+    display: block;
+    padding: 13px 16px;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    background: var(--card);
+    color: var(--ink);
+    text-decoration: none;
+    transition: border-color .12s ease, background .12s ease;
+  }
+  .cq-pager a:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .cq-pager .dir {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: .67rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 3px;
+  }
+  .cq-pager .ttl {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: .92rem;
+    line-height: 1.3;
+  }
+  .cq-pager .next { grid-column: 2; text-align: right; }
+
+  /* Referència a una altra pàgina del mòdul (T2.4, G4.1, A3.2…) */
+  a.cq-ref {
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent-line);
+  }
+  a.cq-ref:hover { border-bottom-color: var(--accent); }
+
   /* ==== Capçalera de la pàgina ==== */
   .cq-header {
     max-width: 660px;
@@ -126,7 +209,7 @@
   .cq-block ul, .cq-block ol { margin: 0 0 14px; padding-left: 22px; }
   .cq-block li { margin-bottom: 6px; }
   .cq-block li:last-child { margin-bottom: 0; }
-  .cq-block a { color: var(--accent); }
+  .cq-block a { color: var(--accent); overflow-wrap: anywhere; }
 
   .cq-block code {
     font-family: var(--font-mono);
@@ -276,7 +359,9 @@
     border-bottom-color: var(--accent-line);
     white-space: nowrap;
   }
-  .cq-table td:first-child { white-space: nowrap; }
+  /* La primera columna sol ser una ordre curta i queda millor sencera, però
+     quan és prosa ha de poder partir-se: si no, la taula no cap al mòbil. */
+  .cq-table td:first-child > code:only-child { white-space: nowrap; }
   .cq-table tr:last-child td { border-bottom: none; }
 
   /* ==== Nota de versió de sistema (Ubuntu 26.04) ==== */
@@ -360,6 +445,19 @@
 
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 
+  /* ==== Mòbil: la pantalla de 375 px és la mida de treball real ==== */
+  @media (max-width: 620px) {
+    body { padding: 26px 10px 56px; }
+    .cq-nav { margin: -26px -10px 22px; padding: 9px 10px; }
+    .cq-block { padding: 22px 16px 24px; }
+    .cq-block::before { left: 14px; }
+    .cq-table { font-size: .84rem; }
+    .cq-table th, .cq-table td { padding: 8px 8px; }
+    .cq-table th { white-space: normal; }
+    .cq-pager { grid-template-columns: 1fr; }
+    .cq-pager .next { grid-column: 1; text-align: left; }
+  }
+
   /* ==== Impressió: els alumnes imprimeixen la teoria ==== */
   @media print {
     body { background: #FFF; padding: 0; font-size: 11pt; }
@@ -367,6 +465,8 @@
     .cq-block pre { background: #F4F4F4; color: #000; border: 1px solid #DDD; }
     .cq-block pre .c, .cq-block pre .o { color: #555; }
     .cq-check-btn { display: none; }
+    .cq-nav, .cq-pager { display: none; }
+    a.cq-ref { border-bottom: none; color: inherit; }
   }
   /* ==== Contingut no copiable ====
      Dissuasiu, no una protecció: el material és per llegir-lo al web o a
@@ -387,6 +487,15 @@
 </style>
 </head>
 <body>
+<!-- === NAVEGACIÓ INICI === -->
+<nav class="cq-nav">
+  <div class="inner">
+    <a href="../index.html">‹ Serveis en Xarxa (0227)</a>
+    <span class="pos">RA4 · 4/4</span>
+  </div>
+</nav>
+<!-- === NAVEGACIÓ FI === -->
+
 <header class="cq-header">
   <div class="eyebrow">CFGM SMX · Mòdul 0227</div>
   <h1>Serveis en Xarxa</h1>
@@ -414,7 +523,9 @@
 
 <div class="cq-block" data-kind="guies">
   <h4>Guies</h4>
-  <ul class="cq-index"><li><a href="guies/g4-1-stalwart.html"><span class="ref">G4.1</span>
+  <ul class="cq-index">
+    <li><a href="guies/g4-1-stalwart.html">
+      <span class="ref">G4.1</span>
       <span class="ttl">Guia: Stalwart
         <span class="sub">Instal·lació, assistent, comptes i àlies</span></span></a></li>
     <li><a href="guies/g4-2-thunderbird.html">
@@ -451,8 +562,8 @@
     <table class="cq-table">
       <thead><tr><th>Llegeix</th><th>Tingues a mà</th><th>Fes</th></tr></thead>
       <tbody>
-        <tr><td>T4.1 · T4.2</td><td>G4.1 · G4.2</td><td>A4.1 — el correu intern del centre</td></tr>
-        <tr><td>T4.3</td><td>G4.1 · G4.2</td><td>A4.2 — bústia compartida i porta tancada</td></tr>
+        <tr><td><a class="cq-ref" href="teoria/t4-1-com-viatja-un-correu.html">T4.1</a> · <a class="cq-ref" href="teoria/t4-2-servidor-de-correu.html">T4.2</a></td><td><a class="cq-ref" href="guies/g4-1-stalwart.html">G4.1</a> · <a class="cq-ref" href="guies/g4-2-thunderbird.html">G4.2</a></td><td><a class="cq-ref" href="activitats/a4-1-servidor-de-correu.html">A4.1</a> — el correu intern del centre</td></tr>
+        <tr><td><a class="cq-ref" href="teoria/t4-3-alies-imap-i-abus.html">T4.3</a></td><td><a class="cq-ref" href="guies/g4-1-stalwart.html">G4.1</a> · <a class="cq-ref" href="guies/g4-2-thunderbird.html">G4.2</a></td><td><a class="cq-ref" href="activitats/a4-2-alies-i-abus.html">A4.2</a> — bústia compartida i porta tancada</td></tr>
       </tbody>
     </table>
   </div>
@@ -461,11 +572,23 @@
 <div class="cq-block" data-kind="recordatori">
   <h4>Sense DNS no hi ha correu</h4>
   <p>
-    Aquest RA es recolza en el <strong>RA2</strong>: un servidor de correu només rep missatges
+    Aquest RA es recolza en el <a class="cq-ref" href="../RA2/index.html">RA2</a>: un servidor de correu només rep missatges
     d'altres dominis si el DNS anuncia el seu <strong>registre MX</strong>. Si tens dubtes de
-    com es publica un registre en una zona, torna a la <strong>T2.4</strong> abans de començar.
+    com es publica un registre en una zona, torna a la <a class="cq-ref" href="../RA2/teoria/t2-4-primari-secundari.html">T2.4</a> abans de començar.
   </p>
 </div>
+
+
+<!-- === PEU DE NAVEGACIÓ INICI === -->
+<nav class="cq-pager">
+  <a class="prev" href="../RA3/index.html">
+    <span class="dir">Anterior · RA3</span>
+    <span class="ttl">RA3 · Instal·lació de serveis de transferència de fitxers</span></a>
+  <a class="next" href="../index.html">
+    <span class="dir">Torna a l'</span>
+    <span class="ttl">Índex del mòdul</span></a>
+</nav>
+<!-- === PEU DE NAVEGACIÓ FI === -->
 
 <script>
   // Dissuasió de la còpia: no s'aplica mai dins de l'editor.

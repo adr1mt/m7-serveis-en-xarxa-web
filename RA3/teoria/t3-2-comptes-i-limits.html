@@ -53,6 +53,89 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  /* ==== Navegació: barra de dalt i pas a la pàgina següent ==== */
+  .cq-nav {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    margin: -40px -16px 26px;
+    padding: 9px 16px;
+    background: rgba(251, 252, 253, .93);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--rule);
+  }
+  .cq-nav .inner {
+    max-width: 660px;
+    margin: 0 auto;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 14px;
+  }
+  .cq-nav a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: .9rem;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .cq-nav a:hover { text-decoration: underline; }
+  .cq-nav .pos {
+    flex: 0 0 auto;
+    font-family: var(--font-mono);
+    font-size: .7rem;
+    letter-spacing: .1em;
+    color: var(--muted);
+  }
+
+  .cq-pager {
+    max-width: 660px;
+    margin: 26px auto 0;
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 1fr 1fr;
+  }
+  .cq-pager a {
+    display: block;
+    padding: 13px 16px;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    background: var(--card);
+    color: var(--ink);
+    text-decoration: none;
+    transition: border-color .12s ease, background .12s ease;
+  }
+  .cq-pager a:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .cq-pager .dir {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: .67rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 3px;
+  }
+  .cq-pager .ttl {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: .92rem;
+    line-height: 1.3;
+  }
+  .cq-pager .next { grid-column: 2; text-align: right; }
+
+  /* Referència a una altra pàgina del mòdul (T2.4, G4.1, A3.2…) */
+  a.cq-ref {
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent-line);
+  }
+  a.cq-ref:hover { border-bottom-color: var(--accent); }
+
   /* ==== Capçalera de la pàgina ==== */
   .cq-header {
     max-width: 660px;
@@ -126,7 +209,7 @@
   .cq-block ul, .cq-block ol { margin: 0 0 14px; padding-left: 22px; }
   .cq-block li { margin-bottom: 6px; }
   .cq-block li:last-child { margin-bottom: 0; }
-  .cq-block a { color: var(--accent); }
+  .cq-block a { color: var(--accent); overflow-wrap: anywhere; }
 
   .cq-block code {
     font-family: var(--font-mono);
@@ -276,7 +359,9 @@
     border-bottom-color: var(--accent-line);
     white-space: nowrap;
   }
-  .cq-table td:first-child { white-space: nowrap; }
+  /* La primera columna sol ser una ordre curta i queda millor sencera, però
+     quan és prosa ha de poder partir-se: si no, la taula no cap al mòbil. */
+  .cq-table td:first-child > code:only-child { white-space: nowrap; }
   .cq-table tr:last-child td { border-bottom: none; }
 
   /* ==== Nota de versió de sistema (Ubuntu 26.04) ==== */
@@ -360,6 +445,19 @@
 
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 
+  /* ==== Mòbil: la pantalla de 375 px és la mida de treball real ==== */
+  @media (max-width: 620px) {
+    body { padding: 26px 10px 56px; }
+    .cq-nav { margin: -26px -10px 22px; padding: 9px 10px; }
+    .cq-block { padding: 22px 16px 24px; }
+    .cq-block::before { left: 14px; }
+    .cq-table { font-size: .84rem; }
+    .cq-table th, .cq-table td { padding: 8px 8px; }
+    .cq-table th { white-space: normal; }
+    .cq-pager { grid-template-columns: 1fr; }
+    .cq-pager .next { grid-column: 1; text-align: left; }
+  }
+
   /* ==== Impressió: els alumnes imprimeixen la teoria ==== */
   @media print {
     body { background: #FFF; padding: 0; font-size: 11pt; }
@@ -367,6 +465,8 @@
     .cq-block pre { background: #F4F4F4; color: #000; border: 1px solid #DDD; }
     .cq-block pre .c, .cq-block pre .o { color: #555; }
     .cq-check-btn { display: none; }
+    .cq-nav, .cq-pager { display: none; }
+    a.cq-ref { border-bottom: none; color: inherit; }
   }
   /* ==== Contingut no copiable ====
      Dissuasiu, no una protecció: el material és per llegir-lo al web o a
@@ -387,6 +487,15 @@
 </style>
 </head>
 <body>
+<!-- === NAVEGACIÓ INICI === -->
+<nav class="cq-nav">
+  <div class="inner">
+    <a href="../index.html">‹ RA3 · Instal·lació de serveis de transferència de fitxers</a>
+    <span class="pos">T3.2 · 2/8</span>
+  </div>
+</nav>
+<!-- === NAVEGACIÓ FI === -->
+
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA3 · T3.2</div>
   <h1>Comptes, accés anònim i límits</h1>
@@ -521,6 +630,48 @@
   </p>
 </div>
 
+<!-- ============ BONES PRÀCTIQUES ============ -->
+<div class="cq-block" data-kind="bones pràctiques">
+  <h4>Criteris professionals</h4>
+  <ul>
+    <li><strong>Un compte per persona</strong>: amb un compte compartit no se sap mai qui ha esborrat què.</li>
+    <li><strong>L'arrel de la gàbia, de només lectura</strong>; qui hi entra escriu en una carpeta de dins.</li>
+    <li><strong>L'anònim, només de lectura</strong> si no vols que et facin de magatzem.</li>
+    <li><strong>Posa límits des del primer dia</strong>: connexions, velocitat i temps d'inactivitat.</li>
+    <li><strong>Les quotes de disc són del sistema</strong>, no del servei: si no vols que s'ompli, posa-les-hi.</li>
+  </ul>
+</div>
+
+<!-- ============ PROBLEMES ============ -->
+<div class="cq-block" data-kind="problemes">
+  <h4>Errors habituals</h4>
+  <dl class="cq-issues">
+    <dt>L'usuari veu tot el sistema de fitxers</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> No s'ha enjaulat: entra al seu directori però en pot pujar.</p>
+      <p><span class="lbl">Solució</span> Activa la gàbia i comprova-ho des del client amb un canvi de directori cap amunt.</p>
+    </dd>
+
+    <dt>El servei no arrenca després d'activar la gàbia</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> L'arrel de la gàbia és escrivible per l'usuari que hi queda tancat, i això no s'accepta.</p>
+      <p><span class="lbl">Solució</span> Deixa l'arrel de només lectura i dona-li una subcarpeta on escriure.</p>
+    </dd>
+
+    <dt>El directori públic s'omple de fitxers de tothom</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> L'accés anònim s'ha deixat amb permís d'escriptura.</p>
+      <p><span class="lbl">Solució</span> Públic vol dir de lectura; si algú hi ha de deixar coses, que ho faci amb compte propi.</p>
+    </dd>
+
+    <dt>Una sola persona ocupa tot l'ample de banda</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> No hi ha cap límit de velocitat ni de connexions simultànies.</p>
+      <p><span class="lbl">Solució</span> Limita les sessions per IP i la velocitat per sessió.</p>
+    </dd>
+  </dl>
+</div>
+
 <div class="cq-block" data-kind="resum">
   <h4>Resum</h4>
   <ul>
@@ -533,7 +684,7 @@
   </ul>
 
   <p style="margin-top:16px">
-    <strong>Següent:</strong> a <em>T3.3 · FTPS i SFTP</em> veuràs com es deixa de transmetre
+    <strong>Següent:</strong> a <em><a class="cq-ref" href="t3-3-ftps-i-sftp.html">T3.3</a> · FTPS i SFTP</em> veuràs com es deixa de transmetre
     en clar.
   </p>
 </div>
@@ -581,6 +732,18 @@
     <div class="cq-feedback"></div>
   </div>
 </div>
+
+
+<!-- === PEU DE NAVEGACIÓ INICI === -->
+<nav class="cq-pager">
+  <a class="prev" href="t3-1-ftp-fonaments.html">
+    <span class="dir">Anterior · T3.1</span>
+    <span class="ttl">Transferència de fitxers i FTP</span></a>
+  <a class="next" href="t3-3-ftps-i-sftp.html">
+    <span class="dir">Següent · T3.3</span>
+    <span class="ttl">FTPS i SFTP</span></a>
+</nav>
+<!-- === PEU DE NAVEGACIÓ FI === -->
 
 <script>
   // Dissuasió de la còpia: no s'aplica mai dins de l'editor.

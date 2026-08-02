@@ -53,6 +53,89 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  /* ==== Navegació: barra de dalt i pas a la pàgina següent ==== */
+  .cq-nav {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    margin: -40px -16px 26px;
+    padding: 9px 16px;
+    background: rgba(251, 252, 253, .93);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--rule);
+  }
+  .cq-nav .inner {
+    max-width: 660px;
+    margin: 0 auto;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 14px;
+  }
+  .cq-nav a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: .9rem;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .cq-nav a:hover { text-decoration: underline; }
+  .cq-nav .pos {
+    flex: 0 0 auto;
+    font-family: var(--font-mono);
+    font-size: .7rem;
+    letter-spacing: .1em;
+    color: var(--muted);
+  }
+
+  .cq-pager {
+    max-width: 660px;
+    margin: 26px auto 0;
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 1fr 1fr;
+  }
+  .cq-pager a {
+    display: block;
+    padding: 13px 16px;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    background: var(--card);
+    color: var(--ink);
+    text-decoration: none;
+    transition: border-color .12s ease, background .12s ease;
+  }
+  .cq-pager a:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .cq-pager .dir {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: .67rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 3px;
+  }
+  .cq-pager .ttl {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: .92rem;
+    line-height: 1.3;
+  }
+  .cq-pager .next { grid-column: 2; text-align: right; }
+
+  /* Referència a una altra pàgina del mòdul (T2.4, G4.1, A3.2…) */
+  a.cq-ref {
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent-line);
+  }
+  a.cq-ref:hover { border-bottom-color: var(--accent); }
+
   /* ==== Capçalera de la pàgina ==== */
   .cq-header {
     max-width: 660px;
@@ -126,7 +209,7 @@
   .cq-block ul, .cq-block ol { margin: 0 0 14px; padding-left: 22px; }
   .cq-block li { margin-bottom: 6px; }
   .cq-block li:last-child { margin-bottom: 0; }
-  .cq-block a { color: var(--accent); }
+  .cq-block a { color: var(--accent); overflow-wrap: anywhere; }
 
   .cq-block code {
     font-family: var(--font-mono);
@@ -276,7 +359,9 @@
     border-bottom-color: var(--accent-line);
     white-space: nowrap;
   }
-  .cq-table td:first-child { white-space: nowrap; }
+  /* La primera columna sol ser una ordre curta i queda millor sencera, però
+     quan és prosa ha de poder partir-se: si no, la taula no cap al mòbil. */
+  .cq-table td:first-child > code:only-child { white-space: nowrap; }
   .cq-table tr:last-child td { border-bottom: none; }
 
   /* ==== Nota de versió de sistema (Ubuntu 26.04) ==== */
@@ -360,6 +445,19 @@
 
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 
+  /* ==== Mòbil: la pantalla de 375 px és la mida de treball real ==== */
+  @media (max-width: 620px) {
+    body { padding: 26px 10px 56px; }
+    .cq-nav { margin: -26px -10px 22px; padding: 9px 10px; }
+    .cq-block { padding: 22px 16px 24px; }
+    .cq-block::before { left: 14px; }
+    .cq-table { font-size: .84rem; }
+    .cq-table th, .cq-table td { padding: 8px 8px; }
+    .cq-table th { white-space: normal; }
+    .cq-pager { grid-template-columns: 1fr; }
+    .cq-pager .next { grid-column: 1; text-align: left; }
+  }
+
   /* ==== Impressió: els alumnes imprimeixen la teoria ==== */
   @media print {
     body { background: #FFF; padding: 0; font-size: 11pt; }
@@ -367,6 +465,8 @@
     .cq-block pre { background: #F4F4F4; color: #000; border: 1px solid #DDD; }
     .cq-block pre .c, .cq-block pre .o { color: #555; }
     .cq-check-btn { display: none; }
+    .cq-nav, .cq-pager { display: none; }
+    a.cq-ref { border-bottom: none; color: inherit; }
   }
   /* ==== Contingut no copiable ====
      Dissuasiu, no una protecció: el material és per llegir-lo al web o a
@@ -387,6 +487,15 @@
 </style>
 </head>
 <body>
+<!-- === NAVEGACIÓ INICI === -->
+<nav class="cq-nav">
+  <div class="inner">
+    <a href="../index.html">‹ RA3 · Instal·lació de serveis de transferència de fitxers</a>
+    <span class="pos">T3.1 · 1/8</span>
+  </div>
+</nav>
+<!-- === NAVEGACIÓ FI === -->
+
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA3 · T3.1</div>
   <h1>Transferència de fitxers i FTP</h1>
@@ -465,6 +574,37 @@
     En actiu el servidor truca a la porta del client, i el router del client no sap a qui l'ha de
     passar. Per això tots els clients d'avui arrenquen en <strong>passiu</strong>.
   </p>
+  <div class="dora-flow">
+    <div class="dora-step">
+      <div class="n">01</div>
+      <div class="t">CONTROL</div>
+      <div class="d">El client obre el port 21 i s'hi queda tota la sessió.</div>
+    </div>
+    <div class="dora-arrow">→</div>
+    <div class="dora-step">
+      <div class="n">02</div>
+      <div class="t">LOGIN</div>
+      <div class="d">Hi envia l'usuari i la contrasenya.</div>
+    </div>
+    <div class="dora-arrow">→</div>
+    <div class="dora-step">
+      <div class="n">03</div>
+      <div class="t">PASV</div>
+      <div class="d">Demana un port de dades i el servidor n'hi diu un.</div>
+    </div>
+    <div class="dora-arrow">→</div>
+    <div class="dora-step">
+      <div class="n">04</div>
+      <div class="t">DADES</div>
+      <div class="d">Hi obre una segona connexió i el fitxer hi viatja.</div>
+    </div>
+    <div class="dora-arrow">→</div>
+    <div class="dora-step">
+      <div class="n">05</div>
+      <div class="t">TANCA</div>
+      <div class="d">El canal de dades es tanca; el de control segueix.</div>
+    </div>
+  </div>
 </div>
 
 <!-- ============ 5 · EXEMPLE ============ -->
@@ -545,7 +685,7 @@ RETR informe.pdf
   <p>
     Qualsevol que comparteixi xarxa amb el client —una wifi d'hotel, un cable a l'aula— pot llegir
     l'usuari i la contrasenya amb un capturador de trànsit i sense cap coneixement especial. A la
-    <strong>T3.3</strong> ho veuràs tu mateix amb <code>tcpdump</code>.
+    <a class="cq-ref" href="t3-3-ftps-i-sftp.html">T3.3</a> ho veuràs tu mateix amb <code>tcpdump</code>.
   </p>
   <p>
     Per això FTP en clar ja no es desplega mai cap a Internet. Sobreviu en xarxes internes i
@@ -588,7 +728,7 @@ sudo ss -lntp | grep :21</pre>
 <pre>put prova.txt copia.txt
 <span class="o">550 Permission denied.</span></pre>
       <p>
-        No és cap avaria: de sèrie no es pot escriure. Es canvia a la <strong>G3.1</strong>.
+        No és cap avaria: de sèrie no es pot escriure. Es canvia a la <a class="cq-ref" href="../guies/g3-1-vsftpd.html">G3.1</a>.
       </p>
     </li>
 
@@ -679,7 +819,7 @@ sudo ss -lntp | grep :21</pre>
   </div>
 
   <p style="margin-top:16px">
-    <strong>Següent:</strong> a <em>T3.2 · Comptes, accés anònim i límits</em> veuràs qui pot
+    <strong>Següent:</strong> a <em><a class="cq-ref" href="t3-2-comptes-i-limits.html">T3.2</a> · Comptes, accés anònim i límits</em> veuràs qui pot
     entrar al servidor i fins on.
   </p>
 </div>
@@ -739,6 +879,18 @@ sudo ss -lntp | grep :21</pre>
     <div class="cq-feedback"></div>
   </div>
 </div>
+
+
+<!-- === PEU DE NAVEGACIÓ INICI === -->
+<nav class="cq-pager">
+  <a class="prev" href="../index.html">
+    <span class="dir">Torna a · RA3</span>
+    <span class="ttl">RA3 · Instal·lació de serveis de transferència de fitxers</span></a>
+  <a class="next" href="t3-2-comptes-i-limits.html">
+    <span class="dir">Següent · T3.2</span>
+    <span class="ttl">Comptes, accés anònim i límits</span></a>
+</nav>
+<!-- === PEU DE NAVEGACIÓ FI === -->
 
 <script>
   // Dissuasió de la còpia: no s'aplica mai dins de l'editor.

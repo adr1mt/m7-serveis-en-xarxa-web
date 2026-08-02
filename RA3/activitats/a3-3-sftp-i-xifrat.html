@@ -53,6 +53,89 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  /* ==== Navegació: barra de dalt i pas a la pàgina següent ==== */
+  .cq-nav {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    margin: -40px -16px 26px;
+    padding: 9px 16px;
+    background: rgba(251, 252, 253, .93);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--rule);
+  }
+  .cq-nav .inner {
+    max-width: 660px;
+    margin: 0 auto;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 14px;
+  }
+  .cq-nav a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: .9rem;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .cq-nav a:hover { text-decoration: underline; }
+  .cq-nav .pos {
+    flex: 0 0 auto;
+    font-family: var(--font-mono);
+    font-size: .7rem;
+    letter-spacing: .1em;
+    color: var(--muted);
+  }
+
+  .cq-pager {
+    max-width: 660px;
+    margin: 26px auto 0;
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 1fr 1fr;
+  }
+  .cq-pager a {
+    display: block;
+    padding: 13px 16px;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    background: var(--card);
+    color: var(--ink);
+    text-decoration: none;
+    transition: border-color .12s ease, background .12s ease;
+  }
+  .cq-pager a:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .cq-pager .dir {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: .67rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 3px;
+  }
+  .cq-pager .ttl {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: .92rem;
+    line-height: 1.3;
+  }
+  .cq-pager .next { grid-column: 2; text-align: right; }
+
+  /* Referència a una altra pàgina del mòdul (T2.4, G4.1, A3.2…) */
+  a.cq-ref {
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent-line);
+  }
+  a.cq-ref:hover { border-bottom-color: var(--accent); }
+
   /* ==== Capçalera de la pàgina ==== */
   .cq-header {
     max-width: 660px;
@@ -126,7 +209,7 @@
   .cq-block ul, .cq-block ol { margin: 0 0 14px; padding-left: 22px; }
   .cq-block li { margin-bottom: 6px; }
   .cq-block li:last-child { margin-bottom: 0; }
-  .cq-block a { color: var(--accent); }
+  .cq-block a { color: var(--accent); overflow-wrap: anywhere; }
 
   .cq-block code {
     font-family: var(--font-mono);
@@ -276,7 +359,9 @@
     border-bottom-color: var(--accent-line);
     white-space: nowrap;
   }
-  .cq-table td:first-child { white-space: nowrap; }
+  /* La primera columna sol ser una ordre curta i queda millor sencera, però
+     quan és prosa ha de poder partir-se: si no, la taula no cap al mòbil. */
+  .cq-table td:first-child > code:only-child { white-space: nowrap; }
   .cq-table tr:last-child td { border-bottom: none; }
 
   /* ==== Nota de versió de sistema (Ubuntu 26.04) ==== */
@@ -360,6 +445,19 @@
 
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 
+  /* ==== Mòbil: la pantalla de 375 px és la mida de treball real ==== */
+  @media (max-width: 620px) {
+    body { padding: 26px 10px 56px; }
+    .cq-nav { margin: -26px -10px 22px; padding: 9px 10px; }
+    .cq-block { padding: 22px 16px 24px; }
+    .cq-block::before { left: 14px; }
+    .cq-table { font-size: .84rem; }
+    .cq-table th, .cq-table td { padding: 8px 8px; }
+    .cq-table th { white-space: normal; }
+    .cq-pager { grid-template-columns: 1fr; }
+    .cq-pager .next { grid-column: 1; text-align: left; }
+  }
+
   /* ==== Impressió: els alumnes imprimeixen la teoria ==== */
   @media print {
     body { background: #FFF; padding: 0; font-size: 11pt; }
@@ -367,6 +465,8 @@
     .cq-block pre { background: #F4F4F4; color: #000; border: 1px solid #DDD; }
     .cq-block pre .c, .cq-block pre .o { color: #555; }
     .cq-check-btn { display: none; }
+    .cq-nav, .cq-pager { display: none; }
+    a.cq-ref { border-bottom: none; color: inherit; }
   }
   /* ==== Contingut no copiable ====
      Dissuasiu, no una protecció: el material és per llegir-lo al web o a
@@ -387,6 +487,15 @@
 </style>
 </head>
 <body>
+<!-- === NAVEGACIÓ INICI === -->
+<nav class="cq-nav">
+  <div class="inner">
+    <a href="../index.html">‹ RA3 · Instal·lació de serveis de transferència de fitxers</a>
+    <span class="pos">A3.3 · 8/8</span>
+  </div>
+</nav>
+<!-- === NAVEGACIÓ FI === -->
+
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA3 · A3.3</div>
   <h1>Tancar l'FTP en clar</h1>
@@ -397,8 +506,8 @@
 <div class="cq-block" data-kind="objectius">
   <h4>Què has de saber abans de començar</h4>
   <p>
-    Teories <strong>T3.2</strong> (comptes i jaules) i <strong>T3.3</strong> (FTPS i SFTP), i les guies <strong>G3.1</strong> i <strong>G3.2</strong>. Et
-    convé tenir fresca la captura de trànsit del RA1.
+    Teories <a class="cq-ref" href="../teoria/t3-2-comptes-i-limits.html">T3.2</a> (comptes i jaules) i <a class="cq-ref" href="../teoria/t3-3-ftps-i-sftp.html">T3.3</a> (FTPS i SFTP), i les guies <a class="cq-ref" href="../guies/g3-1-vsftpd.html">G3.1</a> i <a class="cq-ref" href="../guies/g3-2-sftp.html">G3.2</a>. Et
+    convé tenir fresca la captura de trànsit del <a class="cq-ref" href="../../RA1/index.html">RA1</a>.
   </p>
   <p>
     Amb aquesta activitat demostraràs amb una prova pròpia que l'FTP en clar exposa les
@@ -420,7 +529,7 @@
     </table>
   </div>
   <p>
-    Aquesta activitat <strong>continua l'A3.1</strong>: treballa sobre la mateixa màquina, amb el
+    Aquesta activitat <strong>continua l'<a class="cq-ref" href="a3-1-servidor-ftp.html">A3.1</a></strong>: treballa sobre la mateixa màquina, amb el
     servidor d'usuaris locals ja muntat i funcionant. És l'excepció del mòdul, i és a posta:
     l'objectiu és veure el mateix servei abans i després de xifrar-lo.
   </p>
@@ -430,7 +539,7 @@
 <div class="cq-block" data-kind="enunciat">
   <h4>Què has de fer</h4>
   <ol>
-    <li>Partir del servidor de l'<strong>A3.1</strong>, amb l'usuari local enjaulat funcionant.</li>
+    <li>Partir del servidor de l'<a class="cq-ref" href="a3-1-servidor-ftp.html">A3.1</a>, amb l'usuari local enjaulat funcionant.</li>
     <li><strong>Capturar</strong> una sessió des del servidor i localitzar l'usuari i la contrasenya al trànsit.</li>
     <li>Activar <strong>FTPS</strong> i forçar-lo, de manera que ja no s'accepti cap sessió en clar.</li>
     <li>Repetir la captura i demostrar que ara no s'hi llegeix res.</li>
@@ -455,11 +564,11 @@
     <table class="cq-table">
       <thead><tr><th>Què has de fer</th><th>On ho tens</th></tr></thead>
       <tbody>
-        <tr><td>Servidor amb usuari enjaulat</td><td>Ja el tens de l'activitat <strong>A3.1</strong></td></tr>
-        <tr><td>Capturar el trànsit del port 21</td><td>Teoria <strong>T3.3</strong>, observació</td></tr>
-        <tr><td>Activar i forçar el TLS</td><td>Guia <strong>G3.1</strong>, FTPS</td></tr>
-        <tr><td>Client amb suport d'FTPS</td><td>Guia <strong>G3.1</strong>: <code>lftp</code> o un client gràfic</td></tr>
-        <tr><td>Bloc <code>Match</code> i permisos del chroot</td><td>Guia <strong>G3.2</strong></td></tr>
+        <tr><td>Servidor amb usuari enjaulat</td><td>Ja el tens de l'activitat <a class="cq-ref" href="a3-1-servidor-ftp.html">A3.1</a></td></tr>
+        <tr><td>Capturar el trànsit del port 21</td><td>Teoria <a class="cq-ref" href="../teoria/t3-3-ftps-i-sftp.html">T3.3</a>, observació</td></tr>
+        <tr><td>Activar i forçar el TLS</td><td>Guia <a class="cq-ref" href="../guies/g3-1-vsftpd.html">G3.1</a>, FTPS</td></tr>
+        <tr><td>Client amb suport d'FTPS</td><td>Guia <a class="cq-ref" href="../guies/g3-1-vsftpd.html">G3.1</a>: <code>lftp</code> o un client gràfic</td></tr>
+        <tr><td>Bloc <code>Match</code> i permisos del chroot</td><td>Guia <a class="cq-ref" href="../guies/g3-2-sftp.html">G3.2</a></td></tr>
       </tbody>
     </table>
   </div>
@@ -549,6 +658,18 @@
     màquina, no amb el que has llegit.</strong>
   </p>
 </div>
+
+
+<!-- === PEU DE NAVEGACIÓ INICI === -->
+<nav class="cq-pager">
+  <a class="prev" href="a3-2-ftp-public-i-limits.html">
+    <span class="dir">Anterior · A3.2</span>
+    <span class="ttl">Repositori públic i límits</span></a>
+  <a class="next" href="../index.html">
+    <span class="dir">Has acabat el · RA3</span>
+    <span class="ttl">RA3 · Instal·lació de serveis de transferència de fitxers</span></a>
+</nav>
+<!-- === PEU DE NAVEGACIÓ FI === -->
 
 <script>
   // Dissuasió de la còpia: no s'aplica mai dins de l'editor.

@@ -53,6 +53,89 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  /* ==== Navegació: barra de dalt i pas a la pàgina següent ==== */
+  .cq-nav {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    margin: -40px -16px 26px;
+    padding: 9px 16px;
+    background: rgba(251, 252, 253, .93);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--rule);
+  }
+  .cq-nav .inner {
+    max-width: 660px;
+    margin: 0 auto;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 14px;
+  }
+  .cq-nav a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: .9rem;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .cq-nav a:hover { text-decoration: underline; }
+  .cq-nav .pos {
+    flex: 0 0 auto;
+    font-family: var(--font-mono);
+    font-size: .7rem;
+    letter-spacing: .1em;
+    color: var(--muted);
+  }
+
+  .cq-pager {
+    max-width: 660px;
+    margin: 26px auto 0;
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 1fr 1fr;
+  }
+  .cq-pager a {
+    display: block;
+    padding: 13px 16px;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    background: var(--card);
+    color: var(--ink);
+    text-decoration: none;
+    transition: border-color .12s ease, background .12s ease;
+  }
+  .cq-pager a:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .cq-pager .dir {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: .67rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 3px;
+  }
+  .cq-pager .ttl {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: .92rem;
+    line-height: 1.3;
+  }
+  .cq-pager .next { grid-column: 2; text-align: right; }
+
+  /* Referència a una altra pàgina del mòdul (T2.4, G4.1, A3.2…) */
+  a.cq-ref {
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent-line);
+  }
+  a.cq-ref:hover { border-bottom-color: var(--accent); }
+
   /* ==== Capçalera de la pàgina ==== */
   .cq-header {
     max-width: 660px;
@@ -126,7 +209,7 @@
   .cq-block ul, .cq-block ol { margin: 0 0 14px; padding-left: 22px; }
   .cq-block li { margin-bottom: 6px; }
   .cq-block li:last-child { margin-bottom: 0; }
-  .cq-block a { color: var(--accent); }
+  .cq-block a { color: var(--accent); overflow-wrap: anywhere; }
 
   .cq-block code {
     font-family: var(--font-mono);
@@ -276,7 +359,9 @@
     border-bottom-color: var(--accent-line);
     white-space: nowrap;
   }
-  .cq-table td:first-child { white-space: nowrap; }
+  /* La primera columna sol ser una ordre curta i queda millor sencera, però
+     quan és prosa ha de poder partir-se: si no, la taula no cap al mòbil. */
+  .cq-table td:first-child > code:only-child { white-space: nowrap; }
   .cq-table tr:last-child td { border-bottom: none; }
 
   /* ==== Nota de versió de sistema (Ubuntu 26.04) ==== */
@@ -360,6 +445,19 @@
 
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 
+  /* ==== Mòbil: la pantalla de 375 px és la mida de treball real ==== */
+  @media (max-width: 620px) {
+    body { padding: 26px 10px 56px; }
+    .cq-nav { margin: -26px -10px 22px; padding: 9px 10px; }
+    .cq-block { padding: 22px 16px 24px; }
+    .cq-block::before { left: 14px; }
+    .cq-table { font-size: .84rem; }
+    .cq-table th, .cq-table td { padding: 8px 8px; }
+    .cq-table th { white-space: normal; }
+    .cq-pager { grid-template-columns: 1fr; }
+    .cq-pager .next { grid-column: 1; text-align: left; }
+  }
+
   /* ==== Impressió: els alumnes imprimeixen la teoria ==== */
   @media print {
     body { background: #FFF; padding: 0; font-size: 11pt; }
@@ -367,6 +465,8 @@
     .cq-block pre { background: #F4F4F4; color: #000; border: 1px solid #DDD; }
     .cq-block pre .c, .cq-block pre .o { color: #555; }
     .cq-check-btn { display: none; }
+    .cq-nav, .cq-pager { display: none; }
+    a.cq-ref { border-bottom: none; color: inherit; }
   }
   /* ==== Contingut no copiable ====
      Dissuasiu, no una protecció: el material és per llegir-lo al web o a
@@ -387,6 +487,15 @@
 </style>
 </head>
 <body>
+<!-- === NAVEGACIÓ INICI === -->
+<nav class="cq-nav">
+  <div class="inner">
+    <a href="../index.html">‹ RA1 · Instal·lació de serveis de configuració dinàmica (DHCP)</a>
+    <span class="pos">A1.4 · 10/10</span>
+  </div>
+</nav>
+<!-- === NAVEGACIÓ FI === -->
+
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · A1.4</div>
   <h1>DHCP per a una empresa de 2000 equips</h1>
@@ -397,13 +506,31 @@
 <div class="cq-block" data-kind="objectius">
   <h4>Què has de saber abans de començar</h4>
   <p>
-    Guies <strong>G1.2</strong> (Kea) i <strong>G1.3</strong> (nftables), i tenir feta
-    l'activitat <strong>A1.3</strong>.
+    Guies <a class="cq-ref" href="../guies/g1-2-kea.html">G1.2</a> (Kea) i <a class="cq-ref" href="../guies/g1-3-nftables.html">G1.3</a> (nftables), i tenir feta
+    l'activitat <a class="cq-ref" href="a1-3-dhcp-kea.html">A1.3</a>.
   </p>
   <p>
     Amb aquesta activitat aprendràs a <strong>dissenyar</strong> l'adreçament d'una xarxa gran:
     on col·loques el rang automàtic, on les reserves d'infraestructura i com dimensiones. La
-    tècnica és la mateixa que a l'activitat <strong>A1.3</strong>; el que canvia és la decisió.
+    tècnica és la mateixa que a l'activitat <a class="cq-ref" href="a1-3-dhcp-kea.html">A1.3</a>; el que canvia és la decisió.
+  </p>
+</div>
+
+<!-- ============ ESCENARI ============ -->
+<div class="cq-block" data-kind="escenari">
+  <h4>Amb què treballaràs</h4>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Màquina</th><th>Targetes</th><th>Paper</th></tr></thead>
+      <tbody>
+        <tr><td>Ubuntu <strong>Server</strong></td><td>puigcastellar1 + personal1</td><td>Servidor DHCP i porta d'enllaç</td></tr>
+        <tr><td>Ubuntu <strong>Desktop</strong></td><td>només personal1</td><td>Client</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    <strong>Màquina nova</strong> a isardVDI. La xarxa interna d'aquesta activitat no és la de
+    sempre: aquí la subxarxa és la <code>172.16.0.0/16</code>.
   </p>
 </div>
 
@@ -450,6 +577,19 @@
     <li>On queda el rang respecte de les quatre reserves i de la IP del servidor.</li>
     <li>Per què amb una <code>/24</code>, com a les activitats anteriors, aquest encàrrec no es podria fer.</li>
   </ol>
+</div>
+
+<!-- ============ RECORDATORI ============ -->
+<div class="cq-block" data-kind="recordatori">
+  <h4>El disseny va abans que el teclat</h4>
+  <p>
+    Aquesta activitat no es resol escrivint més línies de configuració, sinó
+    <strong>decidint bé els rangs</strong>. Si comences pel fitxer, acabaràs amb reserves
+    dins del rang automàtic i adreces repetides.
+  </p>
+  <p>
+    Escriu primer el repartiment al document d'entrega, i després munta'l.
+  </p>
 </div>
 
 <!-- ============ OBSERVACIÓ TÈCNICA ============ -->
@@ -520,6 +660,18 @@
     reserves han de quedar fora?</strong>
   </p>
 </div>
+
+
+<!-- === PEU DE NAVEGACIÓ INICI === -->
+<nav class="cq-pager">
+  <a class="prev" href="a1-3-dhcp-kea.html">
+    <span class="dir">Anterior · A1.3</span>
+    <span class="ttl">Servidor DHCP amb Kea</span></a>
+  <a class="next" href="../index.html">
+    <span class="dir">Has acabat el · RA1</span>
+    <span class="ttl">RA1 · Instal·lació de serveis de configuració dinàmica (DHCP)</span></a>
+</nav>
+<!-- === PEU DE NAVEGACIÓ FI === -->
 
 <script>
   // Dissuasió de la còpia: no s'aplica mai dins de l'editor.

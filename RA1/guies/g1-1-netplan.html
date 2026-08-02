@@ -53,6 +53,89 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  /* ==== Navegació: barra de dalt i pas a la pàgina següent ==== */
+  .cq-nav {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    margin: -40px -16px 26px;
+    padding: 9px 16px;
+    background: rgba(251, 252, 253, .93);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--rule);
+  }
+  .cq-nav .inner {
+    max-width: 660px;
+    margin: 0 auto;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 14px;
+  }
+  .cq-nav a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: .9rem;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .cq-nav a:hover { text-decoration: underline; }
+  .cq-nav .pos {
+    flex: 0 0 auto;
+    font-family: var(--font-mono);
+    font-size: .7rem;
+    letter-spacing: .1em;
+    color: var(--muted);
+  }
+
+  .cq-pager {
+    max-width: 660px;
+    margin: 26px auto 0;
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 1fr 1fr;
+  }
+  .cq-pager a {
+    display: block;
+    padding: 13px 16px;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    background: var(--card);
+    color: var(--ink);
+    text-decoration: none;
+    transition: border-color .12s ease, background .12s ease;
+  }
+  .cq-pager a:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .cq-pager .dir {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: .67rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 3px;
+  }
+  .cq-pager .ttl {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: .92rem;
+    line-height: 1.3;
+  }
+  .cq-pager .next { grid-column: 2; text-align: right; }
+
+  /* Referència a una altra pàgina del mòdul (T2.4, G4.1, A3.2…) */
+  a.cq-ref {
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent-line);
+  }
+  a.cq-ref:hover { border-bottom-color: var(--accent); }
+
   /* ==== Capçalera de la pàgina ==== */
   .cq-header {
     max-width: 660px;
@@ -126,7 +209,7 @@
   .cq-block ul, .cq-block ol { margin: 0 0 14px; padding-left: 22px; }
   .cq-block li { margin-bottom: 6px; }
   .cq-block li:last-child { margin-bottom: 0; }
-  .cq-block a { color: var(--accent); }
+  .cq-block a { color: var(--accent); overflow-wrap: anywhere; }
 
   .cq-block code {
     font-family: var(--font-mono);
@@ -276,7 +359,9 @@
     border-bottom-color: var(--accent-line);
     white-space: nowrap;
   }
-  .cq-table td:first-child { white-space: nowrap; }
+  /* La primera columna sol ser una ordre curta i queda millor sencera, però
+     quan és prosa ha de poder partir-se: si no, la taula no cap al mòbil. */
+  .cq-table td:first-child > code:only-child { white-space: nowrap; }
   .cq-table tr:last-child td { border-bottom: none; }
 
   /* ==== Nota de versió de sistema (Ubuntu 26.04) ==== */
@@ -360,6 +445,19 @@
 
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 
+  /* ==== Mòbil: la pantalla de 375 px és la mida de treball real ==== */
+  @media (max-width: 620px) {
+    body { padding: 26px 10px 56px; }
+    .cq-nav { margin: -26px -10px 22px; padding: 9px 10px; }
+    .cq-block { padding: 22px 16px 24px; }
+    .cq-block::before { left: 14px; }
+    .cq-table { font-size: .84rem; }
+    .cq-table th, .cq-table td { padding: 8px 8px; }
+    .cq-table th { white-space: normal; }
+    .cq-pager { grid-template-columns: 1fr; }
+    .cq-pager .next { grid-column: 1; text-align: left; }
+  }
+
   /* ==== Impressió: els alumnes imprimeixen la teoria ==== */
   @media print {
     body { background: #FFF; padding: 0; font-size: 11pt; }
@@ -367,6 +465,8 @@
     .cq-block pre { background: #F4F4F4; color: #000; border: 1px solid #DDD; }
     .cq-block pre .c, .cq-block pre .o { color: #555; }
     .cq-check-btn { display: none; }
+    .cq-nav, .cq-pager { display: none; }
+    a.cq-ref { border-bottom: none; color: inherit; }
   }
   /* ==== Contingut no copiable ====
      Dissuasiu, no una protecció: el material és per llegir-lo al web o a
@@ -387,6 +487,15 @@
 </style>
 </head>
 <body>
+<!-- === NAVEGACIÓ INICI === -->
+<nav class="cq-nav">
+  <div class="inner">
+    <a href="../index.html">‹ RA1 · Instal·lació de serveis de configuració dinàmica (DHCP)</a>
+    <span class="pos">G1.1 · 4/10</span>
+  </div>
+</nav>
+<!-- === NAVEGACIÓ FI === -->
+
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · G1.1</div>
   <h1>Guia: Netplan</h1>
@@ -396,7 +505,7 @@
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
   <h4>Què hi ha en aquesta guia</h4>
-  <p>Documentació oficial: https://netplan.readthedocs.io</p>
+  <p>Documentació oficial: <a href="https://netplan.readthedocs.io">netplan.readthedocs.io</a></p>
   <ul>
     <li>Punt de partida: Ubuntu Server amb dues targetes, <code>enp1s0</code> i <code>enp2s0</code>.</li>
     <li>A Ubuntu Server el <em>renderer</em> és sempre <code>networkd</code>.</li>
@@ -404,7 +513,7 @@
 </div>
 
 <!-- ============ 3 · NETPLAN ============ -->
-<div class="cq-block" data-kind="teoria">
+<div class="cq-block" data-kind="referència">
   <h4>Netplan: on s'escriu la configuració</h4>
   <p>
     A Ubuntu Server la xarxa es configura amb <strong>Netplan</strong>. Tu escrius un fitxer
@@ -474,7 +583,7 @@
 </div>
 
 <!-- ============ 5 · LA PORTA D'ENLLAÇ ============ -->
-<div class="cq-block" data-kind="teoria">
+<div class="cq-block" data-kind="referència">
   <h4>La porta d'enllaç va en un sol lloc</h4>
   <p>
     T'hauràs fixat que a <code>enp2s0</code> no hi ha cap porta d'enllaç. No és cap oblit:
@@ -499,6 +608,24 @@
     manera de tornar a entrar. Fes servir sempre <code>sudo netplan try</code>: aplica els
     canvis temporalment i, si en 120 segons no confirmes prement <kbd>Enter</kbd>, els desfà
     sols i et retorna la connexió.
+  </p>
+</div>
+
+<!-- ============ 8 · SOTA NETPLAN ============ -->
+<div class="cq-block" data-kind="cas real">
+  <h4>Què hi ha sota Netplan</h4>
+  <p>
+    Netplan no fa la feina: la reparteix. Quan executes <code>netplan apply</code>, genera
+    fitxers <code>.network</code> dins de <code>/run/systemd/network/</code> i qui els llegeix
+    és <strong>systemd-networkd</strong>.
+  </p>
+  <p>Pots veure'ls tu mateix, i entendràs molt millor què fa cada línia del teu YAML:</p>
+<pre>ls /run/systemd/network/
+cat /run/systemd/network/*enp2s0*</pre>
+  <p>
+    Això importa perquè <strong>Netplan no ho sap fer tot</strong>. Muntar un servidor DHCP,
+    per exemple, no està entre les seves opcions. En aquests casos s'aparta Netplan i
+    s'escriuen els <code>.network</code> directament — és el que faràs a l'activitat 2.
   </p>
 </div>
 
@@ -550,22 +677,27 @@ resolvectl status</pre>
   </ol>
 </div>
 
-<!-- ============ 8 · SOTA NETPLAN ============ -->
-<div class="cq-block" data-kind="cas real">
-  <h4>Què hi ha sota Netplan</h4>
-  <p>
-    Netplan no fa la feina: la reparteix. Quan executes <code>netplan apply</code>, genera
-    fitxers <code>.network</code> dins de <code>/run/systemd/network/</code> i qui els llegeix
-    és <strong>systemd-networkd</strong>.
-  </p>
-  <p>Pots veure'ls tu mateix, i entendràs molt millor què fa cada línia del teu YAML:</p>
-<pre>ls /run/systemd/network/
-cat /run/systemd/network/*enp2s0*</pre>
-  <p>
-    Això importa perquè <strong>Netplan no ho sap fer tot</strong>. Muntar un servidor DHCP,
-    per exemple, no està entre les seves opcions. En aquests casos s'aparta Netplan i
-    s'escriuen els <code>.network</code> directament — és el que faràs a l'activitat 2.
-  </p>
+<!-- ============ COMPROVACIÓ ============ -->
+<div class="cq-block" data-kind="comprovació">
+  <h4>Comprovar que la xarxa ha quedat com volies</h4>
+  <p>Tres ordres, i cadascuna respon una pregunta diferent.</p>
+  <ol class="cq-steps">
+    <li>
+      <p><strong>El fitxer diu el que et penses.</strong></p>
+<pre>netplan get</pre>
+      <p>Torna la configuració ja interpretada: si t'has equivocat d'indentació,
+      aquí veuràs una cosa diferent del que has escrit.</p>
+    </li>
+    <li>
+      <p><strong>Les targetes tenen l'adreça que toca.</strong></p>
+<pre>ip -brief a</pre>
+      <p>La interna, amb la IP fixa que li has posat. L'externa, amb la seva.</p>
+    </li>
+    <li>
+      <p><strong>Hi ha una sola ruta per defecte</strong>, i surt per la targeta externa:</p>
+<pre>ip route</pre>
+    </li>
+  </ol>
 </div>
 
 <!-- ============ 9 · BONES PRÀCTIQUES ============ -->
@@ -636,10 +768,22 @@ cat /run/systemd/network/*enp2s0*</pre>
   </div>
 
   <p style="margin-top:16px">
-    <strong>Continua:</strong> amb la <em>G1.2 · Kea</em> muntaràs el servidor que respon quan
+    <strong>Continua:</strong> amb la <em><a class="cq-ref" href="g1-2-kea.html">G1.2</a> · Kea</em> muntaràs el servidor que respon quan
     una targeta té <code>dhcp4: true</code>.
   </p>
 </div>
+
+
+<!-- === PEU DE NAVEGACIÓ INICI === -->
+<nav class="cq-pager">
+  <a class="prev" href="../teoria/t1-2-encaminament-nat.html">
+    <span class="dir">Anterior · T1.2</span>
+    <span class="ttl">Encaminament i NAT</span></a>
+  <a class="next" href="g1-2-kea.html">
+    <span class="dir">Següent · G1.2</span>
+    <span class="ttl">Guia: Kea</span></a>
+</nav>
+<!-- === PEU DE NAVEGACIÓ FI === -->
 
 <script>
   // Dissuasió de la còpia: no s'aplica mai dins de l'editor.

@@ -53,6 +53,89 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  /* ==== Navegació: barra de dalt i pas a la pàgina següent ==== */
+  .cq-nav {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    margin: -40px -16px 26px;
+    padding: 9px 16px;
+    background: rgba(251, 252, 253, .93);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--rule);
+  }
+  .cq-nav .inner {
+    max-width: 660px;
+    margin: 0 auto;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 14px;
+  }
+  .cq-nav a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: .9rem;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .cq-nav a:hover { text-decoration: underline; }
+  .cq-nav .pos {
+    flex: 0 0 auto;
+    font-family: var(--font-mono);
+    font-size: .7rem;
+    letter-spacing: .1em;
+    color: var(--muted);
+  }
+
+  .cq-pager {
+    max-width: 660px;
+    margin: 26px auto 0;
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 1fr 1fr;
+  }
+  .cq-pager a {
+    display: block;
+    padding: 13px 16px;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    background: var(--card);
+    color: var(--ink);
+    text-decoration: none;
+    transition: border-color .12s ease, background .12s ease;
+  }
+  .cq-pager a:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .cq-pager .dir {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: .67rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 3px;
+  }
+  .cq-pager .ttl {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: .92rem;
+    line-height: 1.3;
+  }
+  .cq-pager .next { grid-column: 2; text-align: right; }
+
+  /* Referència a una altra pàgina del mòdul (T2.4, G4.1, A3.2…) */
+  a.cq-ref {
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent-line);
+  }
+  a.cq-ref:hover { border-bottom-color: var(--accent); }
+
   /* ==== Capçalera de la pàgina ==== */
   .cq-header {
     max-width: 660px;
@@ -126,7 +209,7 @@
   .cq-block ul, .cq-block ol { margin: 0 0 14px; padding-left: 22px; }
   .cq-block li { margin-bottom: 6px; }
   .cq-block li:last-child { margin-bottom: 0; }
-  .cq-block a { color: var(--accent); }
+  .cq-block a { color: var(--accent); overflow-wrap: anywhere; }
 
   .cq-block code {
     font-family: var(--font-mono);
@@ -276,7 +359,9 @@
     border-bottom-color: var(--accent-line);
     white-space: nowrap;
   }
-  .cq-table td:first-child { white-space: nowrap; }
+  /* La primera columna sol ser una ordre curta i queda millor sencera, però
+     quan és prosa ha de poder partir-se: si no, la taula no cap al mòbil. */
+  .cq-table td:first-child > code:only-child { white-space: nowrap; }
   .cq-table tr:last-child td { border-bottom: none; }
 
   /* ==== Nota de versió de sistema (Ubuntu 26.04) ==== */
@@ -360,6 +445,19 @@
 
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 
+  /* ==== Mòbil: la pantalla de 375 px és la mida de treball real ==== */
+  @media (max-width: 620px) {
+    body { padding: 26px 10px 56px; }
+    .cq-nav { margin: -26px -10px 22px; padding: 9px 10px; }
+    .cq-block { padding: 22px 16px 24px; }
+    .cq-block::before { left: 14px; }
+    .cq-table { font-size: .84rem; }
+    .cq-table th, .cq-table td { padding: 8px 8px; }
+    .cq-table th { white-space: normal; }
+    .cq-pager { grid-template-columns: 1fr; }
+    .cq-pager .next { grid-column: 1; text-align: left; }
+  }
+
   /* ==== Impressió: els alumnes imprimeixen la teoria ==== */
   @media print {
     body { background: #FFF; padding: 0; font-size: 11pt; }
@@ -367,6 +465,8 @@
     .cq-block pre { background: #F4F4F4; color: #000; border: 1px solid #DDD; }
     .cq-block pre .c, .cq-block pre .o { color: #555; }
     .cq-check-btn { display: none; }
+    .cq-nav, .cq-pager { display: none; }
+    a.cq-ref { border-bottom: none; color: inherit; }
   }
   /* ==== Contingut no copiable ====
      Dissuasiu, no una protecció: el material és per llegir-lo al web o a
@@ -387,6 +487,15 @@
 </style>
 </head>
 <body>
+<!-- === NAVEGACIÓ INICI === -->
+<nav class="cq-nav">
+  <div class="inner">
+    <a href="../index.html">‹ RA2 · Instal·lació de serveis de resolució de noms (DNS)</a>
+    <span class="pos">G2.1 · 5/9</span>
+  </div>
+</nav>
+<!-- === NAVEGACIÓ FI === -->
+
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA2 · G2.1</div>
   <h1>Guia: BIND 9</h1>
@@ -396,7 +505,7 @@
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
   <h4>Què hi ha en aquesta guia</h4>
-  <p>Documentació oficial: https://bind9.readthedocs.io</p>
+  <p>Documentació oficial: <a href="https://bind9.readthedocs.io">bind9.readthedocs.io</a></p>
   <ul>
     <li>Punt de partida: Ubuntu Server amb IP fixa a la targeta interna.</li>
     <li>El paquet es diu <code>bind9</code> i el servei, <code>named</code>.</li>
@@ -405,7 +514,7 @@
 </div>
 
 <!-- ============ 2 · QUÈ ÉS BIND ============ -->
-<div class="cq-block" data-kind="teoria">
+<div class="cq-block" data-kind="referència">
   <h4>Per què BIND</h4>
   <p>
     <strong>BIND</strong> (<em>Berkeley Internet Name Domain</em>) és el servidor DNS més
@@ -425,7 +534,7 @@
 </div>
 
 <!-- ============ 3 · ELS FITXERS ============ -->
-<div class="cq-block" data-kind="teoria">
+<div class="cq-block" data-kind="referència">
   <h4>On és cada cosa</h4>
   <p>
     Tot viu a <code>/etc/bind/</code>. El fitxer principal, <code>named.conf</code>, gairebé no
@@ -449,7 +558,7 @@
 </div>
 
 <!-- ============ 4 · LES OPCIONS ============ -->
-<div class="cq-block" data-kind="teoria">
+<div class="cq-block" data-kind="referència">
   <h4>Les cinc directives que has de decidir</h4>
   <p>
     Tot això va dins del bloc <code>options</code> de <code>named.conf.options</code>. Són poques
@@ -576,7 +685,7 @@ dig @192.168.1.8 www.upc.edu +short</pre>
 </div>
 
 <!-- ============ 3 · DECLARAR-LES ============ -->
-<div class="cq-block" data-kind="teoria">
+<div class="cq-block" data-kind="referència">
   <h4>Declarar les zones</h4>
   <p>
     Les zones es declaren a <code>named.conf.local</code>. Cada declaració diu tres coses: com es
@@ -771,6 +880,35 @@ dig @192.168.1.9 www.adria.internal +short</pre>
   </ol>
 </div>
 
+<!-- ============ COMPROVACIÓ ============ -->
+<div class="cq-block" data-kind="comprovació">
+  <h4>Comprovar-ho des d'un client, no des del servidor</h4>
+  <p>
+    Que el servidor es respongui a si mateix no vol dir que doni servei. Aquesta prova es fa
+    des d'una altra màquina de la xarxa.
+  </p>
+  <ol class="cq-steps">
+    <li>
+      <p><strong>Respon a qui li pregunta:</strong></p>
+<pre>dig @192.168.1.8 www.adria.internal +short</pre>
+      <p>Si no torna res, mira l'<code>allow-query</code> i el
+      <code>listen-on</code> abans de tocar la zona.</p>
+    </li>
+    <li>
+      <p><strong>És ell qui mana a la zona.</strong> Sense <code>+short</code>, la
+      resposta ha de portar la marca <code>aa</code> i <code>status: NOERROR</code>:</p>
+<pre>dig @192.168.1.8 adria.internal SOA</pre>
+    </li>
+    <li>
+      <p><strong>Els dos servidors diuen el mateix.</strong> Si has muntat el secundari,
+      compara'n els serials:</p>
+<pre>dig @192.168.1.8 adria.internal SOA +short
+dig @192.168.1.9 adria.internal SOA +short</pre>
+      <p>Han de coincidir. Si el del secundari va endarrerit, la transferència no s'ha fet.</p>
+    </li>
+  </ol>
+</div>
+
 <!-- ============ BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
   <h4>Criteris professionals</h4>
@@ -869,6 +1007,18 @@ dig @192.168.1.9 www.adria.internal +short</pre>
     </table>
   </div>
 </div>
+
+
+<!-- === PEU DE NAVEGACIÓ INICI === -->
+<nav class="cq-pager">
+  <a class="prev" href="../teoria/t2-4-primari-secundari.html">
+    <span class="dir">Anterior · T2.4</span>
+    <span class="ttl">Primari i secundari</span></a>
+  <a class="next" href="../activitats/a2-1-client-dns.html">
+    <span class="dir">Següent · A2.1</span>
+    <span class="ttl">El client davant dels noms</span></a>
+</nav>
+<!-- === PEU DE NAVEGACIÓ FI === -->
 
 <script>
   // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
