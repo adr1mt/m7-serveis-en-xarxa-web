@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>T4.2 · Un servidor de correu amb Stalwart — Serveis en Xarxa (0227)</title>
+<title>T4.2 · Com és per dins un servidor de correu — Serveis en Xarxa (0227)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -389,77 +389,90 @@
 <body>
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA4 · T4.2</div>
-  <h1>Un servidor de correu amb Stalwart</h1>
-  <p class="lede">MTA i MDA en un sol servei: instal·lació, assistent web i els comptes d'anna i bruno.</p>
+  <h1>Com és per dins un servidor de correu</h1>
+  <p class="lede">Peces separades o servei únic, ports que ha d'obrir i on viu la configuració.</p>
 </header>
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
   <h4>Què sabràs fer en acabar</h4>
   <ul>
-    <li>Explicar per què aquest RA fa servir Stalwart i no Postfix+Dovecot per separat.</li>
-    <li>Situar cada port que obre l'assistent i saber quin fa servir el client.</li>
-    <li>Recuperar la contrasenya de bootstrap dels logs sense perdre-la.</li>
-    <li>Completar l'assistent de configuració inicial amb els valors del domini <code>puigcastellar.internal</code>.</li>
-    <li>Crear comptes d'usuari des de la consola web.</li>
+    <li>Distingir un servidor fet de <strong>peces separades</strong> d'un de <strong>servei únic</strong>, i dir-ne exemples.</li>
+    <li>Enumerar els ports que ha d'obrir un servidor de correu i saber quins fa servir el client.</li>
+    <li>Explicar per què avui es prefereix el 465 al 587.</li>
+    <li>Distingir un certificat autofirmat d'un de signat per una autoritat.</li>
+    <li>Reconèixer les dues maneres de guardar la configuració: fitxers de text o base de dades.</li>
   </ul>
 </div>
 
-<!-- ============ 2 · UN SOL SERVEI, UN PREU DIFERENT ============ -->
+<!-- ============ 2 · PECES SEPARADES O SERVEI ÚNIC ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Un sol servei, un preu diferent</h4>
+  <h4>Peces separades o un sol servei</h4>
   <p>
-    Stalwart és un únic programa que fa alhora de <strong>MTA</strong> i de <strong>MDA</strong>:
-    on el material de producció fa servir Postfix per transportar i Dovecot per entregar, aquí
-    un sol servei fa les dues feines.
-  </p>
-  <p>
-    El preu és el contrari del que ja coneixes: <code>named.conf</code> al RA2 i
-    <code>vsftpd.conf</code> al RA3 eren fitxers de text que editaves amb <code>nano</code>.
-    Stalwart no en té cap: la configuració es fa des d'una consola web i es desa en una base de
-    dades (RocksDB), no en text pla.
-  </p>
-  <p>
-    L'únic fitxer real, <code>/etc/stalwart/config.json</code>, només diu on és aquesta base de
-    dades. Dominis, comptes i àlies es creen sempre per la web, mai obrint un editor de text.
-  </p>
-</div>
-
-<!-- ============ 3 · PORTS ============ -->
-<div class="cq-block" data-kind="teoria">
-  <h4>Els ports que obre l'assistent</h4>
-  <p>
-    En instal·lar-se, l'assistent de configuració inicial obre aquests ports sense que calgui
-    tocar res més:
+    A la T4.1 has vist que el correu necessita un MTA que transporti i un MDA que guardi la
+    bústia. Són dos <em>papers</em>, i cada producte tria si els reparteix o els ajunta.
   </p>
   <div class="cq-tablewrap">
     <table class="cq-table">
-      <thead><tr><th>Port</th><th>Protocol</th><th>Per a què serveix</th></tr></thead>
+      <thead><tr><th></th><th>Peces separades</th><th>Servei únic</th></tr></thead>
       <tbody>
-        <tr><td>25</td><td>SMTP</td><td>Entrega entre servidors (MTA↔MTA)</td></tr>
-        <tr><td>465</td><td>SMTP submission, TLS implícit</td><td>El client envia correu al servidor</td></tr>
-        <tr><td>993</td><td>IMAPS</td><td>El client consulta el correu, que es queda al servidor</td></tr>
-        <tr><td>995</td><td>POP3S</td><td>El client baixa el correu al dispositiu</td></tr>
-        <tr><td>8080</td><td>HTTP</td><td>Consola web d'administració</td></tr>
+        <tr><td>Exemples</td><td>Postfix + Dovecot</td><td>Stalwart, Mailcow</td></tr>
+        <tr><td>Es configura</td><td>Cada peça pel seu compte</td><td>Un sol lloc per a tot</td></tr>
       </tbody>
     </table>
   </div>
   <p>
-    A la T4.1 vas veure que la submission té dos ports possibles: el 587 (<code>STARTTLS</code>)
-    i el 465 (TLS implícit). Stalwart només obre el 465 de sèrie, el que recomana avui l'RFC
-    8314: el client xifra des del primer byte. Per això el correu es configura amb
-    <strong>465 i 993</strong>, no amb 587 i 143.
+    Les peces separades són el que trobaràs a la majoria d'empreses. El servei únic, el que
+    munta qui no té ningú dedicat a mantenir-ho.
   </p>
 </div>
 
-<!-- ============ 4 · EXEMPLE: CERTIFICAT AUTOFIRMAT ============ -->
+<!-- ============ 3 · ELS PORTS QUE HA D'OBRIR ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>Els ports que ha d'obrir</h4>
+  <p>
+    Un servidor de correu no escolta per un sol port: n'obre un per cada conversa diferent
+    que ha d'atendre.
+  </p>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Port</th><th>Protocol</th><th>Qui hi truca</th></tr></thead>
+      <tbody>
+        <tr><td>25</td><td>SMTP</td><td>Altres servidors, per entregar correu</td></tr>
+        <tr><td>465</td><td>SMTP submission, TLS implícit</td><td>El client, per enviar</td></tr>
+        <tr><td>993</td><td>IMAPS</td><td>El client, per consultar</td></tr>
+        <tr><td>995</td><td>POP3S</td><td>El client, per baixar</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    El client pot enviar pel <strong>587</strong>, que comença en clar i puja a TLS amb
+    <code>STARTTLS</code>, o pel <strong>465</strong>, xifrat des del primer byte. Avui es
+    prefereix el 465, i és el que obren els servidors moderns.
+  </p>
+</div>
+
+<!-- ============ 4 · ON VIU LA CONFIGURACIÓ ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h4>On viu la configuració</h4>
+  <p>
+    Al RA2 i al RA3 la configuració era un fitxer de text —<code>named.conf</code>,
+    <code>vsftpd.conf</code>— que obries amb <code>nano</code>. No tots els serveis ho fan així.
+  </p>
+  <ul>
+    <li><strong>Fitxer de text</strong>: l'obres amb un editor i el copies a una altra màquina.</li>
+    <li><strong>Consola web</strong>: ho fas tot des del navegador i no hi ha cap fitxer per obrir.</li>
+  </ul>
+</div>
+
+<!-- ============ 5 · EXEMPLE: CERTIFICAT AUTOFIRMAT ============ -->
 <div class="cq-block" data-kind="exemple">
   <h4>El certificat que ningú ha signat</h4>
   <p>
-    Sense domini públic ni ACME/Let's Encrypt actiu, Stalwart genera sol un certificat
-    autofirmat (amb la llibreria <code>rcgen</code>) la primera vegada que arrenca. És vàlid per
-    xifrar la connexió, però cap entitat de confiança l'ha signat, i per això el client hi
-    protestarà o l'haurà d'acceptar amb una excepció manual:
+    Sense domini públic ni ACME/Let's Encrypt actiu, un servidor de correu es genera un
+    certificat <strong>autofirmat</strong> la primera vegada que arrenca. És vàlid per xifrar la
+    connexió, però cap entitat de confiança l'ha signat, i per això el client hi protestarà o
+    l'haurà d'acceptar amb una excepció manual:
   </p>
 <pre>echo | openssl s_client -connect mail.puigcastellar.internal:993 -quiet
 <span class="o">depth=0 CN=rcgen self signed cert</span>
@@ -469,9 +482,9 @@
   </p>
 </div>
 
-<!-- ============ 5 · CAS REAL ============ -->
+<!-- ============ 6 · CAS REAL ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h4>Per a qui existeixen eines com aquesta</h4>
+  <h4>Per a qui existeixen les eines tot-en-un</h4>
   <p>
     Stalwart, Mailcow o Mail-in-a-Box existeixen per a qui no té equip per mantenir
     Postfix+Dovecot+Rspamd com a peces separades: petites organitzacions i departaments IT
@@ -483,101 +496,14 @@
   </p>
 </div>
 
-<!-- ============ 6 · PAS A PAS ============ -->
-<div class="cq-block" data-kind="pas a pas">
-  <h4>Instal·lar Stalwart i deixar-lo llest per als comptes</h4>
-
-  <ol class="cq-steps">
-    <li>
-      <p><strong>Baixa l'script d'instal·lació i, després, executa'l</strong> (mai en una sola
-      canonada <code>curl | sh</code>: primer es baixa, s'hi pot fer un cop d'ull, i llavors
-      s'executa):</p>
-<pre>curl --proto "=https" --tlsv1.2 -sSf \
-  https://get.stalw.art/install.sh -o install.sh
-sudo sh install.sh</pre>
-      <p>
-        Crea l'usuari de sistema <code>stalwart</code>, instal·la el binari, escriu la unitat
-        systemd i arrenca el servei en <em>bootstrap mode</em>.
-      </p>
-    </li>
-
-    <li>
-      <p><strong>Recupera la contrasenya temporal d'administrador.</strong> Només es mostra
-      aquesta vegada, als logs: si la perds, no hi ha manera de recuperar-la i cal esborrar la
-      configuració perquè Stalwart torni a generar-ne una altra.</p>
-<pre>sudo journalctl -u stalwart -n 200 --no-pager \
-  | grep -A8 "bootstrap mode"</pre>
-      <p>
-        Surt l'usuari <code>admin</code> i una contrasenya a l'atzar. Apunta-la abans de
-        continuar.
-      </p>
-    </li>
-
-    <li>
-      <p><strong>Obre l'assistent de configuració inicial</strong> a
-      <code>http://mail.puigcastellar.internal:8080/admin</code> (o l'adreça del servidor) i
-      completa'l amb aquests valors:</p>
-      <ul>
-        <li><strong>Server Identity</strong>: Hostname <code>mail.puigcastellar.internal</code>,
-        Default Email Domain <code>puigcastellar.internal</code>, «Automatically Obtain TLS
-        Certificate» desactivat, «Generate Email Signing Keys (DKIM)» activat.</li>
-        <li><strong>Storage</strong>: RocksDB, valors per defecte.</li>
-        <li><strong>Account Directory</strong>: «Use the internal directory».</li>
-        <li><strong>Logging</strong>: valors per defecte.</li>
-        <li><strong>Automatic DNS Management</strong>: «Manual DNS server management».</li>
-      </ul>
-      <p>
-        En clicar «Finish setup» es genera l'administrador definitiu, amb correu i contrasenya
-        que només es mostren un cop a la pantalla final: apunta-la també.
-      </p>
-    </li>
-
-    <li>
-      <p><strong>Reinicia</strong> perquè el servei apliqui la configuració que acaba de generar
-      l'assistent:</p>
-<pre>sudo systemctl restart stalwart</pre>
-    </li>
-
-    <li>
-      <p><strong>Afegeix el nom a <code>/etc/hosts</code></strong>: sense DNS extern (al RA4 no
-      es munta BIND), el nom es resol amb una línia manual. En un desplegament real seria el
-      registre MX que ja vas veure al RA2:</p>
-<pre>echo "127.0.0.1 mail.puigcastellar.internal" | sudo tee -a /etc/hosts</pre>
-      <p>Al servidor mateix hi val el <code>127.0.0.1</code>. A qualsevol altra màquina que
-      hi hagi de connectar, la línia porta la <strong>IP del servidor</strong> a la xarxa
-      interna, no la de loopback.</p>
-    </li>
-
-    <li>
-      <p><strong>Comprova que els ports escolten:</strong></p>
-<pre>sudo ss -tlnp | grep -E ":(25|465|993|995|8080) "</pre>
-      <p>Han de sortir les cinc línies, una per cada port de la taula del bloc anterior.</p>
-    </li>
-
-    <li>
-      <p><strong>Crea els comptes <code>anna</code> i <code>bruno</code></strong> a Directory →
-      Accounts → Create user, un cop per cada compte:</p>
-      <ul>
-        <li><strong>Username</strong>: <code>anna</code> (i després <code>bruno</code>).</li>
-        <li><strong>Domain</strong>: clica el botó que obre el cercador i tria
-        <code>puigcastellar.internal</code> de la llista; no s'hi escriu text lliure.</li>
-        <li><strong>Credentials → Add item → Password</strong>: una contrasenya de 8 caràcters
-        com a mínim.</li>
-        <li>Botó <strong>Create</strong>.</li>
-      </ul>
-    </li>
-  </ol>
-</div>
-
 <!-- ============ 7 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
   <h4>Criteris professionals</h4>
   <ul>
-    <li><strong>Apunta les dues contrasenyes</strong> (bootstrap i admin final) en un lloc segur: no es tornen a mostrar.</li>
-    <li><strong>Cap fitxer a editar a mà</strong>: dominis, comptes i àlies, sempre per la consola web.</li>
-    <li><strong>Reinicia després de qualsevol canvi</strong> de configuració: no hi ha recàrrega en calent.</li>
-    <li><strong>Contrasenyes de compte de 8 caràcters com a mínim</strong>, sempre.</li>
-    <li><strong>No obris cap port que no calgui</strong>: 587 i 143 queden tancats a posta.</li>
+    <li><strong>465 abans que 587</strong> per a l'enviament del client.</li>
+    <li><strong>No obris cap port que no calgui</strong>: cada port obert és una porta a vigilar.</li>
+    <li><strong>Certificat signat en producció</strong>: l'autofirmat només val al laboratori.</li>
+    <li><strong>Mira on es configura un servei</strong> abans de posar-t'hi.</li>
   </ul>
 </div>
 
@@ -585,34 +511,28 @@ sudo sh install.sh</pre>
 <div class="cq-block" data-kind="problemes">
   <h4>Errors habituals</h4>
   <dl class="cq-issues">
-    <dt>No trobo cap fitxer de configuració per editar</dt>
+    <dt>Buscar un fitxer de configuració que no existeix</dt>
     <dd>
-      <p><span class="lbl">Causa</span> S'espera un fitxer com <code>named.conf</code> o <code>vsftpd.conf</code>.</p>
-      <p><span class="lbl">Solució</span> Amb aquest instal·lador la configuració de debò viu a RocksDB; el <code>.json</code> només diu on és la base de dades. Es gestiona des de la consola web.</p>
+      <p><span class="lbl">Causa</span> Es dona per fet que tot servei s'edita amb <code>nano</code>, com <code>named.conf</code> o <code>vsftpd.conf</code>.</p>
+      <p><span class="lbl">Solució</span> Hi ha productes que guarden la configuració en una base de dades i només es toquen des de la seva consola.</p>
     </dd>
 
-    <dt>El formulari diu «This field is required» al camp Domain, tot i tenir-hi text</dt>
+    <dt>Donar per fet que un servidor sense el 587 està mal configurat</dt>
     <dd>
-      <p><span class="lbl">Causa</span> El camp no és una caixa de text lliure: és un botó que obre un cercador.</p>
-      <p><span class="lbl">Solució</span> Clica el camp, escriu per filtrar i clica l'opció de la llista.</p>
+      <p><span class="lbl">Causa</span> Els manuals antics només parlen del 587 amb STARTTLS.</p>
+      <p><span class="lbl">Solució</span> El 465 fa la mateixa feina i xifra abans. Un servidor que només obre el 465 segueix la recomanació vigent.</p>
     </dd>
 
-    <dt>La contrasenya de bootstrap ja no surt enlloc</dt>
+    <dt>Confondre «certificat autofirmat» amb «connexió sense xifrar»</dt>
     <dd>
-      <p><span class="lbl">Causa</span> Només es mostra un cop als logs, i s'ha perdut o el bootstrap ja ha expirat.</p>
-      <p><span class="lbl">Solució</span> Esborra la configuració i deixa que Stalwart en generi una altra en tornar a arrencar en bootstrap mode.</p>
+      <p><span class="lbl">Causa</span> El client avisa i sembla que no hi hagi seguretat.</p>
+      <p><span class="lbl">Solució</span> La connexió va xifrada igual; el que falla és la <em>identitat</em>: ningú de confiança respon de qui diu ser el servidor.</p>
     </dd>
 
-    <dt>Els canvis no es noten després de tocar la configuració</dt>
+    <dt>Esperar que un canvi de port s'apliqui tot sol</dt>
     <dd>
-      <p><span class="lbl">Causa</span> Un canvi de configuració no s'aplica en calent.</p>
-      <p><span class="lbl">Solució</span> <code>sudo systemctl restart stalwart</code>.</p>
-    </dd>
-
-    <dt>No trobo cap fitxer de registre</dt>
-    <dd>
-      <p><span class="lbl">Causa</span> Es busca un <code>.log</code>, com el de vsftpd al RA3.</p>
-      <p><span class="lbl">Solució</span> Els logs de Stalwart van al journal de systemd: <code>journalctl -u stalwart</code>.</p>
+      <p><span class="lbl">Causa</span> Obrir un listener nou vol dir posar-se a escoltar en un altre lloc.</p>
+      <p><span class="lbl">Solució</span> Amb la majoria de servidors cal reiniciar el servei perquè el port nou s'obri.</p>
     </dd>
   </dl>
 </div>
@@ -621,45 +541,41 @@ sudo sh install.sh</pre>
 <div class="cq-block" data-kind="resum">
   <h4>Resum</h4>
   <ul>
-    <li><strong>Stalwart</strong> fa d'MTA i d'MDA alhora: substitueix Postfix+Dovecot en aquest RA.</li>
-    <li>Configuració <strong>tota per la consola web</strong>: dades a RocksDB, no en fitxers de text.</li>
-    <li>Ports de sèrie: <strong>25, 465, 993, 995</strong> i <strong>8080</strong> (consola). El client fa servir 465 i 993.</li>
-    <li>La contrasenya de bootstrap només es mostra <strong>un cop</strong>, als logs.</li>
-    <li>Certificat <strong>autofirmat</strong>: el client hi protestarà fins que hi facis una excepció.</li>
+    <li>Els papers d'MTA i MDA els poden fer <strong>dos programes</strong> (Postfix+Dovecot) o <strong>un de sol</strong> (Stalwart, Mailcow).</li>
+    <li>Ports del servidor: <strong>25</strong> entre servidors, <strong>465</strong> i <strong>993</strong>/<strong>995</strong> per al client.</li>
+    <li>Submission: es prefereix el <strong>465</strong>, xifrat des del principi, al 587 amb STARTTLS.</li>
+    <li>Un <strong>certificat autofirmat</strong> xifra però no acredita: el client demana una excepció.</li>
+    <li>La configuració viu en <strong>fitxers de text</strong> o dins una <strong>base de dades</strong> amb consola web.</li>
+    <li>Següent: a la <strong>G4.1</strong> muntes el servidor amb Stalwart; a T4.3, els àlies i el relay.</li>
   </ul>
-
-  <p style="margin-top:16px">
-    <strong>Següent:</strong> a <em>T4.3</em> crearàs un àlies, llegiràs el correu per IMAP i
-    comprovaràs que el servidor no és cap open relay.
-  </p>
 </div>
 
 <!-- ============ 10 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
   <h4>Comprova el que has après</h4>
 
-  <div class="cq-question" data-id="t4-2-substitueix" data-type="single">
-    <div class="statement">Per què Stalwart substitueix Postfix+Dovecot en aquest RA?</div>
-    <button class="cq-option" data-correct="true">Perquè fa d'MTA i d'MDA alhora en un sol servei</button>
-    <button class="cq-option" data-correct="false">Perquè és més ràpid transportant correu</button>
-    <button class="cq-option" data-correct="false">Perquè no necessita cap tipus de xifratge</button>
-    <button class="cq-option" data-correct="false">Perquè no té cap consola d'administració</button>
+  <div class="cq-question" data-id="t4-2-peces" data-type="single">
+    <div class="statement">Què vol dir que un servidor de correu sigui de «servei únic»?</div>
+    <button class="cq-option" data-correct="true">Que un sol programa fa d'MTA i d'MDA alhora</button>
+    <button class="cq-option" data-correct="false">Que només admet un compte d'usuari</button>
+    <button class="cq-option" data-correct="false">Que només obre un port</button>
+    <button class="cq-option" data-correct="false">Que no necessita cap tipus de xifratge</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
   <div class="cq-question" data-id="t4-2-config" data-type="single">
-    <div class="statement">On es guarda "de veritat" la configuració de Stalwart amb aquest instal·lador?</div>
-    <button class="cq-option" data-correct="false">A <code>/etc/stalwart/config.json</code>, sencera</button>
-    <button class="cq-option" data-correct="true">Dins una base de dades RocksDB</button>
-    <button class="cq-option" data-correct="false">A <code>/etc/stalwart/stalwart.conf</code></button>
-    <button class="cq-option" data-correct="false">No es guarda enlloc: cal repetir l'assistent cada cop</button>
+    <div class="statement">Un servei guarda la configuració en una base de dades i es toca des d'una consola web. Quina conseqüència té?</div>
+    <button class="cq-option" data-correct="false">Que la configuració es perd en reiniciar</button>
+    <button class="cq-option" data-correct="true">Que no hi ha cap fitxer de text per obrir amb un editor</button>
+    <button class="cq-option" data-correct="false">Que no es pot fer cap còpia de seguretat</button>
+    <button class="cq-option" data-correct="false">Que deixa de necessitar contrasenya d'administrador</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t4-2-ports-client" data-type="single">
-    <div class="statement">Quins ports fa servir el client de correu per connectar-se a aquest servidor?</div>
+  <div class="cq-question" data-id="t4-2-ports" data-type="single">
+    <div class="statement">Quins ports fa servir un client de correu contra un servidor modern?</div>
     <button class="cq-option" data-correct="false">587 i 143</button>
     <button class="cq-option" data-correct="false">25 i 110</button>
     <button class="cq-option" data-correct="true">465 i 993</button>
@@ -668,12 +584,12 @@ sudo sh install.sh</pre>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t4-2-bootstrap" data-type="single">
-    <div class="statement">On trobes la contrasenya temporal d'administrador després d'instal·lar Stalwart?</div>
-    <button class="cq-option" data-correct="false">A <code>/etc/stalwart/config.json</code></button>
-    <button class="cq-option" data-correct="false">En un correu que envia el propi servidor</button>
-    <button class="cq-option" data-correct="true">Als logs, amb <code>journalctl -u stalwart</code></button>
-    <button class="cq-option" data-correct="false">No cal contrasenya: l'assistent no en demana cap</button>
+  <div class="cq-question" data-id="t4-2-autofirmat" data-type="single">
+    <div class="statement">El client avisa que el certificat del servidor és autofirmat. Què vol dir exactament?</div>
+    <button class="cq-option" data-correct="false">Que la connexió viatja en clar</button>
+    <button class="cq-option" data-correct="true">Que la connexió va xifrada, però cap autoritat de confiança acredita qui és el servidor</button>
+    <button class="cq-option" data-correct="false">Que el certificat ha caducat</button>
+    <button class="cq-option" data-correct="false">Que el servidor no admet TLS</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>

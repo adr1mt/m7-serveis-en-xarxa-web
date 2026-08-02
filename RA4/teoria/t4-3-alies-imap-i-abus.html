@@ -398,9 +398,8 @@
   <h4>Què sabràs fer en acabar</h4>
   <ul>
     <li>Diferenciar un <strong>àlies</strong> d'un compte i d'una llista de distribució.</li>
-    <li>Crear l'àlies <code>suport@</code> des de la consola web de Stalwart.</li>
-    <li>Llegir per IMAP el correu que arriba a un àlies.</li>
-    <li>Explicar què és un <strong>open relay</strong> i com el tanca Stalwart.</li>
+    <li>Explicar per què el correu d'un àlies s'acaba llegint a la bústia d'un altre.</li>
+    <li>Explicar què és un <strong>open relay</strong> i com el tanca un servidor ben configurat.</li>
     <li>Interpretar el codi <code>550 5.1.2 Relay not allowed.</code></li>
   </ul>
 </div>
@@ -409,34 +408,24 @@
 <div class="cq-block" data-kind="teoria">
   <h4>Àlies: un redirector, no una bústia</h4>
   <p>
-    Un àlies és una adreça sense bústia pròpia: tot el que hi arriba es reenvia a una bústia
-    real. <code>suport@puigcastellar.internal</code> no acumula missatges propis; els que hi
-    arriben acaben directament a la bústia d'anna, com si els hi haguessin enviat a ella.
+    Un àlies és una adreça <strong>sense bústia pròpia</strong>: tot el que hi arriba va a la
+    bústia d'un compte real.
   </p>
-  <p>
-    Es diferencia d'un <strong>compte</strong> perquè no té contrasenya ni es pot connectar per
-    IMAP amb el seu nom; i d'una <strong>llista de distribució</strong> perquè normalment
-    reenvia a una única persona, mentre que una llista gestiona subscripcions.
-  </p>
-  <p>
-    L'ús típic són adreces de cara al públic que no depenen de qui les atén:
-    <code>suport@</code>, <code>direccio@</code>. Si la persona canvia, es reassigna l'àlies i
-    l'adreça pública no canvia mai.
-  </p>
+  <ul>
+    <li>No té contrasenya: no t'hi pots connectar amb el seu nom.</li>
+    <li>Serveix per a adreces públiques com <code>suport@</code> o <code>direccio@</code>.</li>
+    <li>Si canvia qui l'atén, s'apunta a una altra bústia i l'adreça no canvia.</li>
+  </ul>
 </div>
 
 <!-- ============ 3 · RECOLLIDA REMOTA ============ -->
 <div class="cq-block" data-kind="teoria">
   <h4>Recollir el correu d'un àlies des de fora</h4>
   <p>
-    Els ports IMAPS (993) i POP3S (995) que vas veure oberts a la T4.2 ja escolten sense fer res
-    més: qualsevol client configurat amb aquests dos ports i les credencials d'un compte hi pot
-    connectar. La diferència entre tots dos ja la vas veure a la T4.1: amb IMAP el correu es
-    queda al servidor; amb POP3 es baixa i, de sèrie, s'esborra.
+    El correu d'un àlies es llegeix amb el compte real, pel port 993, com qualsevol altre.
   </p>
   <p>
-    Per a un àlies com <code>suport@</code> això vol dir que qui hi accedeix -en aquest cas
-    anna- veu els missatges rebuts a l'àlies barrejats amb els propis, perquè és exactament la
+    Anna, doncs, veu els missatges de <code>suport@</code> barrejats amb els seus: és la
     mateixa bústia.
   </p>
 </div>
@@ -445,110 +434,93 @@
 <div class="cq-block" data-kind="teoria">
   <h4>Open relay: la porta que mai s'ha de deixar oberta</h4>
   <p>
-    Un <strong>open relay</strong> és un servidor SMTP que accepta reenviar correu de qualsevol
-    origen cap a qualsevol destinació, sense que remitent ni destinatari siguin seus. És greu:
-    qui l'explota l'omple de spam en el teu nom, i el domini acaba en llistes negres.
+    Un <strong>open relay</strong> és un servidor que accepta enviar correu de qualsevol
+    persona cap a qualsevol lloc. Els spammers el busquen: l'omplen de brossa en el teu nom i
+    el domini acaba en llistes negres.
   </p>
   <p>
-    Stalwart el tanca exigint autenticació per a qualsevol enviament cap a fora: sense login
-    vàlid, un intent de <code>RCPT TO</code> cap a un domini extern rep exactament
-    <code>550 5.1.2 Relay not allowed.</code>
-  </p>
-  <p>
-    A més, Stalwart signa automàticament cada missatge sortint amb <strong>DKIM</strong>, una
-    signatura que el destinatari pot verificar. No és criteri d'aquest mòdul, però per això un
-    correu ben configurat no acaba tan fàcilment a la carpeta de brossa.
+    Es tanca demanant <strong>login</strong> per a tot el que surti cap a fora. Sense
+    autenticar-se, la resposta és <code>550 5.1.2 Relay not allowed.</code>
   </p>
 </div>
 
-<!-- ============ 5 · PAS A PAS ============ -->
-<div class="cq-block" data-kind="pas a pas">
-  <h4>Crear l'àlies i comprovar-lo de cap a cap</h4>
+<!-- ============ 5 · EXEMPLE ============ -->
+<div class="cq-block" data-kind="exemple">
+  <h4>Dos noms per a un sol missatge</h4>
+  <p>
+    Bruno escriu a <code>suport@puigcastellar.internal</code> i el missatge acaba a la bústia
+    d'anna. Bruno no ho sap: per a ell, l'ha enviat a <code>suport@</code> i prou.
+  </p>
+  <p>
+    Aquesta és la gràcia de l'àlies: qui escriu no ha de saber qui hi ha darrere.
+  </p>
+</div>
 
-  <ol class="cq-steps">
-    <li>
-      <p><strong>Crea l'àlies a la consola web.</strong> Dins Directory → Accounts →
-      <code>anna@puigcastellar.internal</code>, secció Email → Email Aliases → Add item:</p>
-      <ul>
-        <li><strong>Local Part</strong>: <code>suport</code>.</li>
-        <li><strong>Domain</strong>: clica el cercador i tria <code>puigcastellar.internal</code>.</li>
-        <li><strong>Enabled</strong>: activat.</li>
-        <li>Botó <strong>Save</strong>.</li>
-      </ul>
-    </li>
+<!-- ============ 6 · CAS REAL ============ -->
+<div class="cq-block" data-kind="cas real">
+  <h4>L'adreça que sobreviu a qui la respon</h4>
+  <p>
+    A la secretaria d'un institut, <code>matricula@</code> l'atén una persona diferent cada
+    curs. Si fos un compte, cada canvi voldria dir contrasenya nova i avisar tothom.
+  </p>
+  <p>
+    Sent un àlies, el canvi és apuntar-lo a una altra bústia. L'adreça dels fullets no canvia
+    mai.
+  </p>
+</div>
 
-    <li>
-      <p><strong>Envia un correu a l'àlies</strong>, autenticat pel port 465:</p>
-<pre>import smtplib, ssl
-c = ssl.create_default_context()
-c.check_hostname = False; c.verify_mode = ssl.CERT_NONE
-H = "mail.puigcastellar.internal"
-s = smtplib.SMTP_SSL(H, 465, context=c)
-s.login("bruno@puigcastellar.internal", "Bruno_2026pw!")
-s.sendmail("bruno@puigcastellar.internal",
-    ["suport@puigcastellar.internal"], "Subject: hola\n\nProva")
-s.quit()</pre>
-    </li>
-
-    <li>
-      <p><strong>Llegeix-lo per IMAP</strong> amb el compte d'anna, la bústia real:</p>
-<pre>import imaplib
-m = imaplib.IMAP4_SSL(H, 993, ssl_context=c)
-m.login("anna@puigcastellar.internal", "Anna_2026pw!")
-m.select("INBOX")
-print(m.search(None, "ALL"))</pre>
-      <p>El missatge hi és, encara que l'hagis enviat a <code>suport@</code>. A les
-      capçaleres, <code>Delivered-To</code> conserva l'adreça de l'àlies: així es veu per
-      quina porta va entrar el correu.</p>
-    </li>
-
-    <li>
-      <p><strong>Intenta un relay sense autenticar-te</strong>, pel port 25:</p>
+<!-- ============ 7 · OBSERVACIÓ ============ -->
+<div class="cq-block" data-kind="observació">
+  <h4>Comprova tu mateix que no és un open relay</h4>
+  <p>
+    La prova no configura res: obre una conversa SMTP pel port 25 <strong>sense
+    autenticar-se</strong> i demana entregar a un domini de fora. Un servidor sa ho ha de
+    negar amb un codi d'error, no acceptar-ho en silenci.
+  </p>
 <pre>import smtplib
 s = smtplib.SMTP("mail.puigcastellar.internal", 25, timeout=10)
 s.ehlo()
 s.mail("random@puigcastellar.internal")
 print(s.rcpt("victim@gmail.com"))</pre>
-      <p>
-        El resultat és <code>(550, b'5.1.2 Relay not allowed.')</code>: la prova que el servidor
-        no és un open relay.
-      </p>
-    </li>
-  </ol>
+  <p>
+    La resposta és <code>(550, b'5.1.2 Relay not allowed.')</code>. Fixa't que el remitent és
+    del domini propi i tot i així el rebutja: sense sessió autenticada, dir-se de casa no
+    val de res.
+  </p>
 </div>
 
-<!-- ============ 6 · BONES PRÀCTIQUES ============ -->
+<!-- ============ 8 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
   <h4>Criteris professionals</h4>
   <ul>
     <li><strong>Àlies per a adreces públiques</strong> (<code>suport@</code>, <code>direccio@</code>), no dupliquis comptes reals.</li>
-    <li>El camp <strong>Domain sempre es cerca i es clica</strong>, mai s'escriu lliure.</li>
+    <li><strong>Un àlies no és un compte de reserva</strong>: si dues persones han de llegir
+    per separat, calen dues bústies.</li>
     <li><strong>Verifica el relay tancat</strong> cada cop que toquis l'autenticació SMTP.</li>
-    <li>Un <strong>DKIM</strong> a les capçaleres és senyal que l'enviament està ben configurat.</li>
     <li>Recorda quina eina fa servir cadascú: <strong>IMAP</strong> es queda, <strong>POP3</strong> baixa.</li>
   </ul>
 </div>
 
-<!-- ============ 7 · PROBLEMES ============ -->
+<!-- ============ 9 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
   <h4>Errors habituals</h4>
   <dl class="cq-issues">
-    <dt>El correu enviat a <code>suport@</code> no apareix enlloc</dt>
+    <dt>Voler connectar-se per IMAP amb l'adreça de l'àlies</dt>
     <dd>
-      <p><span class="lbl">Causa</span> L'àlies no s'ha desat perquè el camp Domain es va escriure com a text lliure.</p>
-      <p><span class="lbl">Solució</span> Torna a l'edició de l'àlies i clica el cercador per triar l'opció de la llista.</p>
+      <p><span class="lbl">Causa</span> Un àlies no té ni bústia ni contrasenya pròpies.</p>
+      <p><span class="lbl">Solució</span> El client es configura sempre amb el compte real de destí.</p>
     </dd>
 
     <dt>El script de Python falla amb un error de certificat</dt>
     <dd>
-      <p><span class="lbl">Causa</span> Per defecte, <code>ssl</code> verifica el certificat, i Stalwart en té un autofirmat.</p>
+      <p><span class="lbl">Causa</span> Per defecte, <code>ssl</code> verifica el certificat, i el del servidor és autofirmat.</p>
       <p><span class="lbl">Solució</span> <code>ssl.CERT_NONE</code> només per a proves; en producció seria un certificat de debò.</p>
     </dd>
 
-    <dt>El login IMAP falla amb la contrasenya que sembla correcta</dt>
+    <dt>La prova de relay respon 250, no 550</dt>
     <dd>
-      <p><span class="lbl">Causa</span> El compte es va crear amb una contrasenya de menys de 8 caràcters i no es va arribar a desar.</p>
-      <p><span class="lbl">Solució</span> Revisa a la consola web que el compte existeix amb una contrasenya vàlida.</p>
+      <p><span class="lbl">Causa</span> S'ha fet contra un destinatari del domini propi: acceptar-lo és el que ha de fer, i no demostra res.</p>
+      <p><span class="lbl">Solució</span> El destinatari de la prova ha de ser d'un domini extern.</p>
     </dd>
 
     <dt>No sé si el correu ha arribat a l'àlies o al compte real</dt>
@@ -559,24 +531,23 @@ print(s.rcpt("victim@gmail.com"))</pre>
   </dl>
 </div>
 
-<!-- ============ 8 · RESUM ============ -->
+<!-- ============ 10 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
   <h4>Resum</h4>
   <ul>
     <li>Un <strong>àlies</strong> no té bústia pròpia: reenvia a un compte real, i es pot canviar sense tocar l'adreça pública.</li>
     <li>IMAPS (993) i POP3S (995) ja escolten: qualsevol client amb credencials vàlides hi pot connectar.</li>
     <li>Un <strong>open relay</strong> accepta reenviar correu extern sense autenticar-se: risc de llistes negres.</li>
-    <li>Stalwart el tanca exigint login; la prova és <code>550 5.1.2 Relay not allowed.</code></li>
-    <li><strong>DKIM</strong> signa cada missatge sortint i ajuda a evitar la carpeta de brossa.</li>
+    <li>Es tanca exigint login per a qualsevol enviament cap a fora; la prova és <code>550 5.1.2 Relay not allowed.</code></li>
   </ul>
 
   <p style="margin-top:16px">
-    <strong>Següent:</strong> les activitats d'aquest RA, on posaràs en pràctica tot el que has
-    après a les tres teories.
+    <strong>Següent:</strong> les guies <strong>G4.1</strong> i <strong>G4.2</strong>, que
+    expliquen com es fa tot això amb Stalwart i amb Thunderbird, i després les activitats.
   </p>
 </div>
 
-<!-- ============ 9 · QUIZ ============ -->
+<!-- ============ 11 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
   <h4>Comprova el que has après</h4>
 
@@ -601,7 +572,7 @@ print(s.rcpt("victim@gmail.com"))</pre>
   </div>
 
   <div class="cq-question" data-id="t4-3-relay" data-type="single">
-    <div class="statement">Un client sense autenticar-se intenta enviar correu a un domini extern. Què respon Stalwart?</div>
+    <div class="statement">Un client sense autenticar-se intenta enviar correu a un domini extern. Què ha de respondre el servidor?</div>
     <button class="cq-option" data-correct="false"><code>250 2.0.0 Ok</code></button>
     <button class="cq-option" data-correct="true"><code>550 5.1.2 Relay not allowed.</code></button>
     <button class="cq-option" data-correct="false"><code>421 Service unavailable</code></button>
@@ -610,12 +581,12 @@ print(s.rcpt("victim@gmail.com"))</pre>
     <div class="cq-feedback"></div>
   </div>
 
-  <div class="cq-question" data-id="t4-3-dkim" data-type="single">
-    <div class="statement">Per què ajuda el DKIM que Stalwart signa automàticament?</div>
-    <button class="cq-option" data-correct="false">Xifra la connexió SMTP</button>
-    <button class="cq-option" data-correct="false">Permet crear àlies nous</button>
-    <button class="cq-option" data-correct="true">El destinatari pot verificar que el correu ve del domini que diu, i això redueix que caigui a spam</button>
-    <button class="cq-option" data-correct="false">Substitueix la contrasenya del compte</button>
+  <div class="cq-question" data-id="t4-3-imap-port" data-type="single">
+    <div class="statement">Amb quin port i quin compte llegeixes el correu que ha arribat a un àlies?</div>
+    <button class="cq-option" data-correct="false">Pel 993, amb l'adreça de l'àlies</button>
+    <button class="cq-option" data-correct="true">Pel 993, amb el compte real al qual apunta l'àlies</button>
+    <button class="cq-option" data-correct="false">Pel 25, amb el compte d'administrador</button>
+    <button class="cq-option" data-correct="false">Pel 8080, des de la consola web</button>
     <div><button class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback"></div>
   </div>

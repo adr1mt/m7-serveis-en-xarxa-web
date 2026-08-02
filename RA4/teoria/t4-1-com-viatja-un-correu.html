@@ -526,17 +526,17 @@ QUIT
   </p>
 </div>
 
-<!-- ============ 7 · PAS A PAS ============ -->
-<div class="cq-block" data-kind="pas a pas">
+<!-- ============ 7 · OBSERVACIÓ ============ -->
+<div class="cq-block" data-kind="observació">
   <h4>Observa el viatge sense muntar res</h4>
   <p>
-    Encara no instal·les cap servidor —això és la T4.2. Aquí només mires, amb eines de consulta,
-    com un domini real anuncia el seu servei de correu.
+    Aquí no configures res: només mires, amb eines de consulta, com un domini real anuncia
+    el seu servei de correu. Muntar-ne un és feina de les guies del RA.
   </p>
 
   <ol class="cq-steps">
     <li>
-      <p><strong>Instal·la les eines de consulta DNS</strong> si encara no hi són:</p>
+      <p><strong>Instal·la les eines de consulta DNS:</strong></p>
 <pre>sudo apt update
 sudo apt install -y bind9-dnsutils</pre>
     </li>
@@ -554,23 +554,21 @@ sudo apt install -y bind9-dnsutils</pre>
       <p><strong>Prova un domini amb diverses prioritats</strong>, per veure l'ordre de reserva:</p>
 <pre>dig MX gmail.com</pre>
       <p>
-        Surten cinc servidors amb prioritats diferents: primer s'intenta el de prioritat més
-        baixa, i els altres queden com a reserva si el primer no respon.
+        Surten cinc servidors: s'intenta el de prioritat més baixa i la resta queden de reserva.
       </p>
     </li>
 
     <li>
-      <p><strong>Comprova el registre A</strong> del nom que ha sortit al MX: sense IP, cap
-      MTA hi pot connectar encara que el MX existeixi.</p>
+      <p><strong>Comprova el registre A</strong> del nom del MX: sense IP no s'hi pot
+      connectar.</p>
 <pre>dig A gmail-smtp-in.l.google.com</pre>
     </li>
   </ol>
 
   <div class="cq-note">
     <span class="lbl">Ubuntu 26.04</span>
-    Les eines <code>dig</code> i <code>host</code> vénen totes dues al paquet
-    <code>bind9-dnsutils</code>. No hi ha cap paquet <code>dnsutils</code> propi: és un
-    metapaquet que ja apunta a aquest.
+    <code>dig</code> i <code>host</code> són al paquet <code>bind9-dnsutils</code>. El vell
+    <code>dnsutils</code> només és un metapaquet que hi apunta.
   </div>
 </div>
 

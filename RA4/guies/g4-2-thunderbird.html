@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>A4.2 · Bústia compartida i porta tancada — Serveis en Xarxa (0227)</title>
+<title>G4.2 · Guia: Thunderbird — Serveis en Xarxa (0227)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -388,157 +388,127 @@
 </head>
 <body>
 <header class="cq-header">
-  <div class="eyebrow">0227 · Serveis en Xarxa · RA4 · A4.2</div>
-  <h1>Bústia compartida i porta tancada</h1>
-  <p class="lede">Un àlies, accés remot amb Thunderbird i la prova que el servidor no és un colador.</p>
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA4 · G4.2</div>
+  <h1>Guia: Thunderbird</h1>
+  <p class="lede">Configurar un client de correu contra un servidor propi, amb 465, 993 i certificat autofirmat.</p>
 </header>
 
-<!-- ============ OBJECTIUS ============ -->
+<!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h4>Què has de saber abans de començar</h4>
-  <p>
-    Teoria <strong>T4.3</strong> (àlies, IMAP remot i tancar el relay obert). Tornes a muntar
-    el servidor de zero amb la guia <strong>G4.1</strong>, i configures el client amb la
-    <strong>G4.2</strong>.
-  </p>
-  <p>
-    Afegiràs un àlies de bústia compartida, hi accediràs des de Thunderbird per IMAP i
-    demostraràs que el servidor <strong>no</strong> és un open relay.
-  </p>
-</div>
-
-<!-- ============ ESCENARI ============ -->
-<div class="cq-block" data-kind="escenari">
-  <h4>Amb què treballaràs</h4>
-  <div class="cq-tablewrap">
-    <table class="cq-table">
-      <thead><tr><th>Màquina</th><th>Targetes</th><th>Adreça</th></tr></thead>
-      <tbody>
-        <tr><td>Ubuntu <strong>Server</strong></td><td>puigcastellar1 + personal1</td><td><code>192.168.1.8/24</code> a personal1</td></tr>
-        <tr><td>Ubuntu <strong>Desktop</strong></td><td>només personal1</td><td><code>192.168.1.100/24</code>, fixa</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <p>
-    <strong>Màquina nova</strong> a isardVDI: torna a instal·lar Stalwart i a crear els comptes
-    seguint el pas a pas de la T4.2.
-  </p>
-</div>
-
-<!-- ============ ENUNCIAT ============ -->
-<div class="cq-block" data-kind="enunciat">
-  <h4>Què has de fer</h4>
-  <ol>
-    <li>Muntar el servidor des de zero: domini, hostname i almenys dos comptes amb nom.</li>
-    <li>Crear un àlies del tipus <code>suport@puigcastellar.internal</code> que entregui a un
-      dels comptes reals.</li>
-    <li>Instal·lar <strong>Thunderbird</strong> a la Desktop i configurar-lo amb els ports
-      correctes per llegir la bústia en remot.</li>
-    <li>Demostrar que un client <strong>sense autenticar</strong> no pot fer servir el servidor
-      per reenviar correu cap a fora.</li>
-  </ol>
-</div>
-
-<!-- ============ ON BUSCAR ============ -->
-<div class="cq-block" data-kind="enunciat">
-  <h4>D'on has de treure cada cosa</h4>
-  <div class="cq-tablewrap">
-    <table class="cq-table">
-      <thead><tr><th>Què has de fer</th><th>On ho tens</th></tr></thead>
-      <tbody>
-        <tr><td>Tornar a muntar el servidor i els comptes</td><td>Guia <strong>G4.1</strong>, pas a pas</td></tr>
-        <tr><td>Crear un àlies des de la consola web</td><td>Guia <strong>G4.1</strong>, comptes i àlies</td></tr>
-        <tr><td>Configurar Thunderbird amb IMAP remot</td><td>Guia <strong>G4.2</strong>, pas a pas</td></tr>
-        <tr><td>Provar el relay sense autenticar</td><td>Teoria <strong>T4.3</strong>, observació</td></tr>
-        <tr><td>Què és un àlies i què és un open relay</td><td>Teoria <strong>T4.3</strong></td></tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-
-<!-- ============ RECORDATORI ============ -->
-<div class="cq-block" data-kind="recordatori">
-  <h4>Thunderbird va pels ports 465 i 993, mai pel 587 ni pel 143</h4>
-  <p>
-    El servidor obre de sèrie el <strong>465</strong> (submission amb TLS implícit)
-    i el <strong>993</strong> (IMAPS): són els que ha de fer servir Thunderbird. No calen ni
-    s'obren el 587 ni el 143.
-  </p>
-  <p>
-    Al formulari de comptes, el camp «Domain» no és una caixa de text: obre un cercador on
-    escrius i cliques l'opció de la llista.
-  </p>
-</div>
-
-<!-- ============ OBSERVACIÓ ============ -->
-<div class="cq-block" data-kind="observació">
-  <h4>Un servidor de correu ha de negar-se a reenviar</h4>
-  <p>
-    Un <em>open relay</em> és un servidor que accepta correu de qualsevol origen i el reenvia a
-    qualsevol destí, encara que ni el remitent ni el destinatari siguin seus. Stalwart, per
-    defecte, només entrega a dominis externs el correu que ve d'un usuari autenticat.
-  </p>
-  <p>
-    La prova consisteix a connectar-se al port 25 <strong>sense</strong> identificar-se i
-    intentar enviar a un domini que no és el propi. El servidor ha de tallar-ho amb un codi
-    d'error, no acceptar-ho en silenci.
-  </p>
-</div>
-
-<!-- ============ COMPROVACIÓ ============ -->
-<div class="cq-block" data-kind="comprovació">
-  <h4>Com sabràs que ho has fet bé</h4>
+  <h4>Què hi ha en aquesta guia</h4>
+  <p>Documentació oficial: https://support.mozilla.org/products/thunderbird</p>
   <ul>
-    <li>Un correu enviat a <code>suport@puigcastellar.internal</code> arriba a la bústia del
-      compte real al qual apunta l'àlies.</li>
-    <li>Thunderbird llegeix la bústia per IMAP al port 993 i envia pel 465, sense
-      fitxers locals de correu.</li>
-    <li>L'intent de relay sense autenticar respon exactament
-      <code>550 5.1.2 Relay not allowed.</code>, capturat com a evidència.</li>
+    <li>Es fa a la màquina <strong>Desktop</strong>, amb el servidor de la G4.1 ja funcionant.</li>
+    <li>Cal l'adreça completa d'un compte i la seva contrasenya.</li>
   </ul>
 </div>
 
-<!-- ============ PROBLEMES ============ -->
+<!-- ============ 2 · PAS A PAS ============ -->
+<div class="cq-block" data-kind="pas a pas">
+  <h4>Instal·lar i configurar el compte</h4>
+
+  <ol class="cq-steps">
+    <li>
+      <p><strong>Resol el nom del servidor.</strong> Sense DNS, el client no sap on és
+      <code>mail.puigcastellar.internal</code>: cal la línia a <code>/etc/hosts</code>, aquí
+      amb la <strong>IP del servidor</strong> a la xarxa interna, no amb <code>127.0.0.1</code>:</p>
+<pre>echo "192.168.1.8 mail.puigcastellar.internal" | sudo tee -a /etc/hosts</pre>
+    </li>
+
+    <li>
+      <p><strong>Instal·la Thunderbird</strong> i obre'l:</p>
+<pre>sudo apt update
+sudo apt install -y thunderbird</pre>
+    </li>
+
+    <li>
+      <p><strong>Introdueix el compte</strong> a la pantalla d'alta: nom que vols que es vegi,
+      adreça completa (<code>anna@puigcastellar.internal</code>) i contrasenya. Thunderbird
+      intentarà endevinar la configuració i <strong>no ho aconseguirà</strong>: el domini és
+      intern i no publica cap autoconfiguració. Clica <strong>Configura manualment</strong>.</p>
+    </li>
+
+    <li>
+      <p><strong>Omple els dos blocs</strong> amb aquests valors, els ports que obre Stalwart
+      de sèrie:</p>
+      <div class="cq-tablewrap">
+        <table class="cq-table">
+          <thead><tr><th></th><th>Entrant</th><th>Sortint</th></tr></thead>
+          <tbody>
+            <tr><td>Protocol</td><td>IMAP</td><td>SMTP</td></tr>
+            <tr><td>Servidor</td><td colspan="2"><code>mail.puigcastellar.internal</code></td></tr>
+            <tr><td>Port</td><td>993</td><td>465</td></tr>
+            <tr><td>Seguretat</td><td colspan="2">SSL/TLS</td></tr>
+            <tr><td>Autenticació</td><td colspan="2">Contrasenya normal</td></tr>
+            <tr><td>Usuari</td><td colspan="2">l'adreça sencera, amb el domini</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        L'usuari és l'adreça completa, no només el que va davant de l'arrova.
+      </p>
+    </li>
+
+    <li>
+      <p><strong>Accepta l'excepció del certificat.</strong> En clicar Fet, Thunderbird avisa
+      que no coneix qui ha signat el certificat: és l'autofirmat que genera Stalwart. Confirma
+      l'excepció de seguretat per als dos servidors, l'entrant i el sortint.</p>
+    </li>
+  </ol>
+</div>
+
+<!-- ============ 3 · COMPROVACIÓ ============ -->
+<div class="cq-block" data-kind="comprovació">
+  <h4>Com saber que el compte funciona</h4>
+  <ul>
+    <li>La safata d'entrada es carrega sense cap error de connexió.</li>
+    <li>Un correu enviat des d'aquest compte cap a l'altre compte del servidor arriba i es
+    pot llegir.</li>
+    <li>Els missatges es continuen veient després de tancar i tornar a obrir Thunderbird:
+    amb IMAP viuen al servidor.</li>
+  </ul>
+</div>
+
+<!-- ============ 4 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h4>Si alguna cosa no va</h4>
+  <h4>Errors habituals</h4>
   <dl class="cq-issues">
-    <dt>L'àlies no entrega a ningú</dt>
+    <dt>Thunderbird no troba el servidor</dt>
     <dd>
-      <p><span class="lbl">Causa</span> S'ha creat sobre un domini o un compte equivocat, o ha
-        quedat desactivat.</p>
-      <p><span class="lbl">Solució</span> Revisa'l dins la fitxa del compte de destí, a
-        Email → Email Aliases.</p>
+      <p><span class="lbl">Causa</span> El nom no es resol des de la màquina client: falta la línia a <code>/etc/hosts</code> o hi porta la IP de loopback copiada del servidor.</p>
+      <p><span class="lbl">Solució</span> Hi ha d'anar la IP del servidor a la xarxa interna. Comprova-ho amb <code>ping mail.puigcastellar.internal</code>.</p>
     </dd>
 
-    <dt>Thunderbird no es connecta o rebutja el certificat</dt>
+    <dt>La configuració automàtica no acaba mai o proposa ports estranys</dt>
     <dd>
-      <p><span class="lbl">Causa</span> El certificat de Stalwart és <strong>autofirmat</strong>;
-        Thunderbird no en confia per defecte.</p>
-      <p><span class="lbl">Solució</span> Accepta l'excepció de seguretat en configurar el
-        compte, com ja vas veure a l'A4.1.</p>
+      <p><span class="lbl">Causa</span> Thunderbird busca l'autoconfiguració del domini, que en un domini intern no existeix.</p>
+      <p><span class="lbl">Solució</span> No l'esperis: clica «Configura manualment» i posa els valors de la taula.</p>
     </dd>
 
-    <dt>El relay es rebutja fins i tot autenticat</dt>
+    <dt>L'enviament falla però la lectura funciona</dt>
     <dd>
-      <p><span class="lbl">Causa</span> Has provat des del port equivocat, o el compte no és
-        vàlid.</p>
-      <p><span class="lbl">Solució</span> Autenticat i pel port de submission, un usuari real sí
-        que pot enviar cap a fora: la prova és amb un client anònim pel 25.</p>
+      <p><span class="lbl">Causa</span> El servidor de sortida ha quedat amb el 587 i STARTTLS, els valors que Thunderbird proposa per defecte.</p>
+      <p><span class="lbl">Solució</span> Canvia'l a 465 amb SSL/TLS a la configuració del servidor de sortida.</p>
+    </dd>
+
+    <dt>Torna a demanar la contrasenya sense parar</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> L'usuari s'ha escrit sense el domini, o l'autenticació no és «Contrasenya normal».</p>
+      <p><span class="lbl">Solució</span> L'usuari és l'adreça sencera. Revisa també que el compte existeixi a la consola web del servidor.</p>
     </dd>
   </dl>
 </div>
 
-<!-- ============ LLIURAMENT ============ -->
-<div class="cq-block" data-kind="lliurament">
-  <h4>Què has d'entregar</h4>
-  <p>
-    Un <strong>document tècnic</strong> amb l'àlies creat, una captura de Thunderbird mostrant
-    el correu arribat i el text exacte de la resposta <code>550</code> a l'intent de relay.
-  </p>
-  <p>
-    Respon-hi també: <strong>per què un open relay és un problema per a persones alienes al
-    centre, i no només per a qui gestiona el servidor?</strong>
-  </p>
+<!-- ============ 5 · RESUM ============ -->
+<div class="cq-block" data-kind="resum">
+  <h4>Fitxa ràpida</h4>
+  <ul>
+    <li>Entrant: <strong>IMAP, 993, SSL/TLS</strong>. Sortint: <strong>SMTP, 465, SSL/TLS</strong>.</li>
+    <li>Usuari: sempre l'<strong>adreça sencera</strong>; autenticació, contrasenya normal.</li>
+    <li>Configuració <strong>manual</strong>: en un domini intern no hi ha autoconfiguració.</li>
+    <li>El certificat autofirmat demana una <strong>excepció</strong>, una per servidor.</li>
+    <li>Sense resolució del nom al client, no hi ha res a fer: primer <code>/etc/hosts</code>.</li>
+  </ul>
 </div>
 
 <script>

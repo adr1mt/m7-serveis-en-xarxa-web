@@ -398,7 +398,8 @@
   <h4>Què has de saber abans de començar</h4>
   <p>
     Teories <strong>T4.1</strong> (actors i protocols del correu) i <strong>T4.2</strong>
-    (instal·lació de Stalwart, domini i comptes).
+    (com és per dins un servidor de correu). Les guies <strong>G4.1</strong> i
+    <strong>G4.2</strong> són el manual que consultaràs mentre treballes.
   </p>
   <p>
     Muntaràs el servidor de correu del centre amb el domini
@@ -448,12 +449,12 @@
     <table class="cq-table">
       <thead><tr><th>Què has de fer</th><th>On ho tens</th></tr></thead>
       <tbody>
-        <tr><td>Instal·lar Stalwart en dos passos</td><td>Teoria <strong>T4.2</strong>, pas a pas</td></tr>
-        <tr><td>Recuperar la contrasenya de bootstrap</td><td>Teoria <strong>T4.2</strong>, problemes</td></tr>
-        <tr><td>Domini, hostname i certificat a l'assistent</td><td>Teoria <strong>T4.2</strong>, pas a pas</td></tr>
-        <tr><td>Crear comptes des de la consola web</td><td>Teoria <strong>T4.2</strong>, pas a pas</td></tr>
-        <tr><td>Resoldre el nom sense DNS extern</td><td>Teoria <strong>T4.2</strong>, observació</td></tr>
-        <tr><td>Ports que fa servir el client de correu</td><td>Teoria <strong>T4.1</strong>, taula de protocols</td></tr>
+        <tr><td>Instal·lar el servidor i completar l'assistent</td><td>Guia <strong>G4.1</strong>, pas a pas</td></tr>
+        <tr><td>Recuperar la contrasenya de bootstrap</td><td>Guia <strong>G4.1</strong>, pas a pas i problemes</td></tr>
+        <tr><td>Crear comptes des de la consola web</td><td>Guia <strong>G4.1</strong>, comptes i àlies</td></tr>
+        <tr><td>Resoldre el nom sense DNS extern</td><td>Guia <strong>G4.1</strong> (servidor) i <strong>G4.2</strong> (client)</td></tr>
+        <tr><td>Configurar el client de correu</td><td>Guia <strong>G4.2</strong>, pas a pas</td></tr>
+        <tr><td>Per què cada port, i no un altre</td><td>Teories <strong>T4.1</strong> i <strong>T4.2</strong></td></tr>
       </tbody>
     </table>
   </div>
@@ -468,7 +469,7 @@
     l'has perduda.
   </p>
   <p>
-    Si això et passa, no és cap error: la teoria T4.2 explica com tornar a començar l'assistent
+    Si això et passa, no és cap error: la guia G4.1 explica com tornar a començar l'assistent
     des de zero.
   </p>
 </div>
@@ -484,6 +485,11 @@
   <p>
     Si canvies un port des de la consola, el canvi no s'aplica en calent: cal reiniciar el
     servei perquè el nou listener s'obri.
+  </p>
+  <p>
+    El servidor no té navegador. La consola s'obre des del teu ordinador de classe, amb la IP
+    que tingui el servidor a <code>puigcastellar1</code> i el port 8080:
+    <code>http://IP-DEL-SERVIDOR:8080/admin</code>. La IP te la diu <code>ip -brief a</code>.
   </p>
 </div>
 
@@ -509,7 +515,7 @@
     <dt>Has perdut la contrasenya de bootstrap</dt>
     <dd>
       <p><span class="lbl">Causa</span> Només es mostra un cop als registres i no l'has copiada.</p>
-      <p><span class="lbl">Solució</span> Torna a l'assistent des de zero, tal com explica la T4.2.</p>
+      <p><span class="lbl">Solució</span> Torna a l'assistent des de zero, tal com explica la guia G4.1.</p>
     </dd>
 
     <dt>El client no troba <code>mail.puigcastellar.internal</code></dt>
@@ -539,8 +545,8 @@
     llegit des del client.
   </p>
   <p>
-    Respon-hi també: <strong>per què Stalwart pot fer de MTA i de MDA alhora, mentre que a la
-    T4.1 Postfix i Dovecot són programes separats? Quin avantatge i quin risc hi veus en tenir-ho
+    Respon-hi també: <strong>per què un sol servei pot fer de MTA i de MDA alhora, mentre que
+    Postfix i Dovecot són programes separats? Quin avantatge i quin risc hi veus en tenir-ho
     tot en un sol servei?</strong>
   </p>
 </div>
