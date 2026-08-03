@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>RA2 · Serveis en Xarxa (0227) — Serveis en Xarxa (0227)</title>
+<title>A6.3 · L'escriptori de lluny — Serveis en Xarxa (0227)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -490,113 +490,131 @@
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
-    <a href="../index.html">‹ Serveis en Xarxa (0227)</a>
-    <span class="pos">RA2 · 2/7</span>
+    <a href="../index.html">‹ RA6 · Gestió de mètodes d'accés remot</a>
+    <span class="pos">A6.3 · 11/14</span>
   </div>
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
 <header class="cq-header">
-  <div class="eyebrow">CFGM SMX · Mòdul 0227</div>
-  <h1>Serveis en Xarxa</h1>
-  <p class="lede">RA2 · Instal·lació de serveis de resolució de noms (DNS)</p>
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA6 · A6.3</div>
+  <h1>L'escriptori de lluny</h1>
+  <p class="lede">Munta l'escriptori remot i compara'l amb la consola de text.</p>
 </header>
 
-<div class="cq-block" data-kind="teoria">
-  <h4>Teoria</h4>
-  <p>Expliquen com funciona el servei, sense lligar-lo a cap producte.</p>
-  <ul class="cq-index">
-    <li><a href="teoria/t2-1-noms-i-resolucio.html">
-      <span class="ref">T2.1</span>
-      <span class="ttl">Noms i resolució al client
-        <span class="sub">De /etc/hosts a systemd-resolved</span></span></a></li>
-    <li><a href="teoria/t2-2-arbre-dns.html">
-      <span class="ref">T2.2</span>
-      <span class="ttl">L'arbre del DNS
-        <span class="sub">Jerarquia, zones, delegació i TTL</span></span></a></li>
-    <li><a href="teoria/t2-3-zones-i-registres.html">
-      <span class="ref">T2.3</span>
-      <span class="ttl">Zones i registres
-        <span class="sub">Zona directa, inversa i tipus de registre</span></span></a></li>
-    <li><a href="teoria/t2-4-primari-secundari.html">
-      <span class="ref">T2.4</span>
-      <span class="ttl">Primari i secundari
-        <span class="sub">Transferències de zona i redundància</span></span></a></li>
-  </ul>
-</div>
-
-<div class="cq-block" data-kind="guies">
-  <h4>Guies</h4>
-  <ul class="cq-index">
-    <li><a href="guies/g2-1-bind9.html">
-      <span class="ref">G2.1</span>
-      <span class="ttl">Guia: BIND 9
-        <span class="sub">Resolutor, zones pròpies i servidor secundari</span></span></a></li>
-  </ul>
-</div>
-
-<div class="cq-block" data-kind="activitats">
-  <h4>Activitats</h4>
+<!-- ============ OBJECTIUS ============ -->
+<div class="cq-block" data-kind="objectius">
+  <h4>Què has de saber abans de començar</h4>
   <p>
-    Cada activitat es fa sobre una <strong>màquina nova</strong> a isardVDI, amb les targetes
-    <code>puigcastellar1</code> i <code>personal1</code>. La xarxa interna d'aquest RA és la
-    <code>192.168.1.0/24</code>.
+    Teoria <a class="cq-ref" href="../teoria/t6-1-administrar-de-lluny.html">T6.1</a> (consola o escriptori, i per què RDP és l'excepció).
+    Guia <a class="cq-ref" href="../guies/g6-3-xrdp.html">G6.3</a>: és el manual que consultaràs mentre treballes.
   </p>
-  <ul class="cq-index">
-    <li><a href="activitats/a2-1-client-dns.html">
-      <span class="ref">A2.1</span>
-      <span class="ttl">El client davant dels noms
-        <span class="sub">Investigar com resol la teva màquina</span></span></a></li>
-    <li><a href="activitats/a2-2-servidor-bind.html">
-      <span class="ref">A2.2</span>
-      <span class="ttl">Servidor DNS amb BIND 9
-        <span class="sub">Resolutor i zona pròpia, directa i inversa</span></span></a></li>
-    <li><a href="activitats/a2-3-kea-i-bind.html">
-      <span class="ref">A2.3</span>
-      <span class="ttl">DHCP i DNS treballant junts
-        <span class="sub">Kea reparteix el teu DNS i el client navega</span></span></a></li>
-    <li><a href="activitats/a2-4-zona-secundaria.html">
-      <span class="ref">A2.4</span>
-      <span class="ttl">Zona secundària per parelles
-        <span class="sub">Transferència de zona entre dos servidors</span></span></a></li>
-  </ul>
 </div>
 
-<div class="cq-block" data-kind="ordre recomanat">
-  <h4>En quin ordre fer-ho</h4>
+<!-- ============ ESCENARI ============ -->
+<div class="cq-block" data-kind="escenari">
+  <h4>Amb què treballaràs</h4>
   <p>
-    Primer entens el servei, després tens el manual a mà per fer les activitats.</p>
+    <strong>Màquina nova</strong> Ubuntu <strong>Desktop</strong> a isardVDI, amb
+    targeta <code>puigcastellar1</code>: una màquina Server no té escriptori que
+    compartir.
+  </p>
+</div>
+
+<!-- ============ ENUNCIAT ============ -->
+<div class="cq-block" data-kind="enunciat">
+  <h4>Què has de fer</h4>
+  <ol>
+    <li>Instal·la el servei d'escriptori remot a la màquina Desktop.</li>
+    <li>Obre una sessió gràfica des d'una altra màquina i fes-ne una captura que ho
+      demostri.</li>
+    <li>Compara amb honestedat: quina tasca concreta t'ha resultat més còmoda per
+      escriptori, i quina hauria estat més ràpida per consola.</li>
+  </ol>
+</div>
+
+<!-- ============ ON BUSCAR ============ -->
+<div class="cq-block" data-kind="enunciat">
+  <h4>D'on has de treure cada cosa</h4>
   <div class="cq-tablewrap">
     <table class="cq-table">
-      <thead><tr><th>Llegeix</th><th>Tingues a mà</th><th>Fes</th></tr></thead>
+      <thead><tr><th>Què has de fer</th><th>On ho tens</th></tr></thead>
       <tbody>
-        <tr><td><a class="cq-ref" href="teoria/t2-1-noms-i-resolucio.html">T2.1</a> · <a class="cq-ref" href="teoria/t2-2-arbre-dns.html">T2.2</a></td><td>—</td><td><a class="cq-ref" href="activitats/a2-1-client-dns.html">A2.1</a> — el client davant dels noms</td></tr>
-        <tr><td><a class="cq-ref" href="teoria/t2-3-zones-i-registres.html">T2.3</a></td><td><a class="cq-ref" href="guies/g2-1-bind9.html">G2.1</a></td><td><a class="cq-ref" href="activitats/a2-2-servidor-bind.html">A2.2</a> — servidor DNS amb BIND</td></tr>
-        <tr><td>—</td><td><a class="cq-ref" href="guies/g2-1-bind9.html">G2.1</a></td><td><a class="cq-ref" href="activitats/a2-3-kea-i-bind.html">A2.3</a> — DHCP i DNS junts</td></tr>
-        <tr><td><a class="cq-ref" href="teoria/t2-4-primari-secundari.html">T2.4</a></td><td><a class="cq-ref" href="guies/g2-1-bind9.html">G2.1</a></td><td><a class="cq-ref" href="activitats/a2-4-zona-secundaria.html">A2.4</a> — zona secundària, per parelles</td></tr>
+        <tr><td>Instal·lar i connectar-hi</td><td>Guia <a class="cq-ref" href="../guies/g6-3-xrdp.html">G6.3</a></td></tr>
+        <tr><td>Per què el mode gràfic és l'excepció</td>
+        <td>Teoria <a class="cq-ref" href="../teoria/t6-1-administrar-de-lluny.html">T6.1</a></td></tr>
       </tbody>
     </table>
   </div>
 </div>
 
+<!-- ============ RECORDATORI ============ -->
 <div class="cq-block" data-kind="recordatori">
-  <h4>El domini de la teva xarxa acaba en .internal</h4>
+  <h4>No hi entris també per la consola local</h4>
   <p>
-    A tot el RA2 els dominis interns es diuen <code>elteunom.internal</code>. Evita
-    <code>.local</code>: està reservat per a mDNS i fa que els clients no arribin a preguntar al
-    teu servidor. Ho tens explicat a la <a class="cq-ref" href="teoria/t2-1-noms-i-resolucio.html">T2.1</a>.
+    Si obres una sessió a la consola local d'isardVDI amb el mateix usuari abans de
+    connectar-hi per RDP, la connexió remota sol fallar. Tanca la consola local abans
+    de provar l'accés remot.
+  </p>
+</div>
+
+<!-- ============ OBSERVACIÓ ============ -->
+<div class="cq-block" data-kind="observació">
+  <h4>Qui escolta al port</h4>
+  <p>
+    Abans de connectar-t'hi, comprova amb <code>ss -lntp</code> al servidor que el
+    port del servei d'escriptori remot ja apareix en <code>LISTEN</code>: és la mateixa
+    ordre amb què <a class="cq-ref" href="../teoria/t6-1-administrar-de-lluny.html">T6.1</a> distingeix quin servei d'accés remot té
+    obert una màquina, sense obrir cap fitxer de configuració.
+  </p>
+</div>
+
+<!-- ============ COMPROVACIÓ ============ -->
+<div class="cq-block" data-kind="comprovació">
+  <h4>Com sabràs que ho has fet bé</h4>
+  <ul>
+    <li>El client d'escriptori remot mostra l'escriptori de la màquina Desktop.</li>
+    <li>Es pot obrir un terminal dins d'aquesta sessió gràfica i navegar-hi amb
+      normalitat.</li>
+  </ul>
+</div>
+
+<!-- ============ PROBLEMES ============ -->
+<div class="cq-block" data-kind="problemes">
+  <h4>Si alguna cosa no va</h4>
+  <dl class="cq-issues">
+    <dt>La pantalla es queda en negre en connectar</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Ja hi ha una sessió gràfica oberta a la
+        consola local amb el mateix usuari.</p>
+      <p><span class="lbl">Solució</span> Tanca-la abans de connectar-hi per
+        escriptori remot, com explica <a class="cq-ref" href="../guies/g6-3-xrdp.html">G6.3</a>.</p>
+    </dd>
+  </dl>
+</div>
+
+<!-- ============ LLIURAMENT ============ -->
+<div class="cq-block" data-kind="lliurament">
+  <h4>Què has d'entregar</h4>
+  <p>
+    Una captura de la sessió gràfica oberta des d'una altra màquina, i la
+    comparació honesta que demana l'enunciat.
+  </p>
+  <p>
+    Respon-hi també: per què l'escriptori remot no s'obre mai directament a
+    Internet?
   </p>
 </div>
 
 
 <!-- === PEU DE NAVEGACIÓ INICI === -->
 <nav class="cq-pager">
-  <a class="prev" href="../RA1/index.html">
-    <span class="dir">Anterior · RA1</span>
-    <span class="ttl">RA1 · Instal·lació de serveis de configuració dinàmica (DHCP)</span></a>
-  <a class="next" href="../RA3/index.html">
-    <span class="dir">Següent · RA3</span>
-    <span class="ttl">RA3 · Instal·lació de serveis de transferència de fitxers</span></a>
+  <a class="prev" href="a6-2-endurir-el-servei.html">
+    <span class="dir">Anterior · A6.2</span>
+    <span class="ttl">Endurir el servei SSH</span></a>
+  <a class="next" href="a6-4-ansible-dhcp.html">
+    <span class="dir">Següent · A6.4</span>
+    <span class="ttl">Ansible I · El servidor DHCP</span></a>
 </nav>
 <!-- === PEU DE NAVEGACIÓ FI === -->
 

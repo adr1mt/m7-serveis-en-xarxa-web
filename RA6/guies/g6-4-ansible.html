@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>RA2 · Serveis en Xarxa (0227) — Serveis en Xarxa (0227)</title>
+<title>G6.4 · Guia: Ansible — Serveis en Xarxa (0227)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -490,113 +490,301 @@
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
-    <a href="../index.html">‹ Serveis en Xarxa (0227)</a>
-    <span class="pos">RA2 · 2/7</span>
+    <a href="../index.html">‹ RA6 · Gestió de mètodes d'accés remot</a>
+    <span class="pos">G6.4 · 8/14</span>
   </div>
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
 <header class="cq-header">
-  <div class="eyebrow">CFGM SMX · Mòdul 0227</div>
-  <h1>Serveis en Xarxa</h1>
-  <p class="lede">RA2 · Instal·lació de serveis de resolució de noms (DNS)</p>
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA6 · G6.4</div>
+  <h1>Guia: Ansible</h1>
+  <p class="lede">Manual d'Ansible: inventari, playbooks, variables, plantilles i handlers.</p>
 </header>
 
-<div class="cq-block" data-kind="teoria">
-  <h4>Teoria</h4>
-  <p>Expliquen com funciona el servei, sense lligar-lo a cap producte.</p>
-  <ul class="cq-index">
-    <li><a href="teoria/t2-1-noms-i-resolucio.html">
-      <span class="ref">T2.1</span>
-      <span class="ttl">Noms i resolució al client
-        <span class="sub">De /etc/hosts a systemd-resolved</span></span></a></li>
-    <li><a href="teoria/t2-2-arbre-dns.html">
-      <span class="ref">T2.2</span>
-      <span class="ttl">L'arbre del DNS
-        <span class="sub">Jerarquia, zones, delegació i TTL</span></span></a></li>
-    <li><a href="teoria/t2-3-zones-i-registres.html">
-      <span class="ref">T2.3</span>
-      <span class="ttl">Zones i registres
-        <span class="sub">Zona directa, inversa i tipus de registre</span></span></a></li>
-    <li><a href="teoria/t2-4-primari-secundari.html">
-      <span class="ref">T2.4</span>
-      <span class="ttl">Primari i secundari
-        <span class="sub">Transferències de zona i redundància</span></span></a></li>
+<!-- ============ 1 · OBJECTIUS ============ -->
+<div class="cq-block" data-kind="objectius">
+  <h4>Què hi ha en aquesta guia</h4>
+  <p>Documentació oficial: <a href="https://docs.ansible.com/ansible/latest/">docs.ansible.com/ansible/latest</a>.</p>
+  <ul>
+    <li>Punt de partida: una màquina de control amb Ansible instal·lat i accés per clau
+    SSH a les màquines que administrarà. L'accés per clau es munta amb
+    <a class="cq-ref" href="g6-1-openssh.html">G6.1</a>: no es repeteix aquí.</li>
+    <li>Les màquines administrades no necessiten cap paquet d'Ansible: només SSH i
+    Python.</li>
   </ul>
 </div>
 
-<div class="cq-block" data-kind="guies">
-  <h4>Guies</h4>
-  <ul class="cq-index">
-    <li><a href="guies/g2-1-bind9.html">
-      <span class="ref">G2.1</span>
-      <span class="ttl">Guia: BIND 9
-        <span class="sub">Resolutor, zones pròpies i servidor secundari</span></span></a></li>
-  </ul>
+<!-- ============ 2 · PAS A PAS · INSTAL·LACIÓ ============ -->
+<div class="cq-block" data-kind="pas a pas">
+  <h4>Instal·lar Ansible a la màquina de control</h4>
+  <ol class="cq-steps">
+    <li>
+      <p><strong>Instal·la el paquet</strong> i comprova la versió:</p>
+<pre>sudo apt update
+sudo apt install -y ansible
+ansible --version</pre>
+    </li>
+  </ol>
 </div>
 
-<div class="cq-block" data-kind="activitats">
-  <h4>Activitats</h4>
+<!-- ============ 3 · PAS A PAS · INVENTARI ============ -->
+<div class="cq-block" data-kind="pas a pas">
+  <h4>L'inventari i la primera prova</h4>
+  <ol class="cq-steps">
+    <li>
+      <p><strong>Crea el fitxer <code>hosts</code></strong> amb un grup i l'usuari amb què
+      Ansible es connecta per SSH:</p>
+<pre>[servidors]
+192.168.1.10
+
+[servidors:vars]
+ansible_user=usuari</pre>
+    </li>
+    <li>
+      <p><strong>Comprova que hi arriba</strong> amb el mòdul <code>ping</code>, que no fa
+      cap ping ICMP: comprova que Ansible pot connectar i executar-hi Python:</p>
+<pre>ansible -i hosts servidors -m ping</pre>
+      <p>Resposta esperada: <code>SUCCESS</code> per a cada màquina del grup.</p>
+    </li>
+  </ol>
+</div>
+
+<!-- ============ 4 · REFERÈNCIA · ANATOMIA D'UN PLAYBOOK ============ -->
+<div class="cq-block" data-kind="referència">
+  <h4>Anatomia d'un playbook</h4>
   <p>
-    Cada activitat es fa sobre una <strong>màquina nova</strong> a isardVDI, amb les targetes
-    <code>puigcastellar1</code> i <code>personal1</code>. La xarxa interna d'aquest RA és la
-    <code>192.168.1.0/24</code>.
+    Un playbook és un fitxer YAML amb una llista de <em>plays</em>. Cada play indica
+    <code>hosts</code> (a quin grup de l'inventari s'aplica), <code>become</code> (si cal
+    elevar privilegis) i una llista de <code>tasks</code>. Cada tasca té un nom descriptiu,
+    un mòdul i els seus paràmetres.
   </p>
-  <ul class="cq-index">
-    <li><a href="activitats/a2-1-client-dns.html">
-      <span class="ref">A2.1</span>
-      <span class="ttl">El client davant dels noms
-        <span class="sub">Investigar com resol la teva màquina</span></span></a></li>
-    <li><a href="activitats/a2-2-servidor-bind.html">
-      <span class="ref">A2.2</span>
-      <span class="ttl">Servidor DNS amb BIND 9
-        <span class="sub">Resolutor i zona pròpia, directa i inversa</span></span></a></li>
-    <li><a href="activitats/a2-3-kea-i-bind.html">
-      <span class="ref">A2.3</span>
-      <span class="ttl">DHCP i DNS treballant junts
-        <span class="sub">Kea reparteix el teu DNS i el client navega</span></span></a></li>
-    <li><a href="activitats/a2-4-zona-secundaria.html">
-      <span class="ref">A2.4</span>
-      <span class="ttl">Zona secundària per parelles
-        <span class="sub">Transferència de zona entre dos servidors</span></span></a></li>
-  </ul>
+<pre>- hosts: servidors
+  become: true
+  tasks:
+    - name: instal·la el paquet curl
+      apt:
+        name: curl
+        state: present</pre>
+  <p>
+    YAML es sagna amb <strong>espais</strong>, mai tabuladors, i el nivell de sagnat és el
+    que marca a quin bloc pertany cada línia: un espai de més o de menys trenca el
+    playbook o li canvia el significat sense avisar.
+  </p>
 </div>
 
-<div class="cq-block" data-kind="ordre recomanat">
-  <h4>En quin ordre fer-ho</h4>
-  <p>
-    Primer entens el servei, després tens el manual a mà per fer les activitats.</p>
+<!-- ============ 5 · REFERÈNCIA · MÒDULS ============ -->
+<div class="cq-block" data-kind="referència">
+  <h4>Mòduls habituals</h4>
   <div class="cq-tablewrap">
     <table class="cq-table">
-      <thead><tr><th>Llegeix</th><th>Tingues a mà</th><th>Fes</th></tr></thead>
+      <thead><tr><th>Mòdul</th><th>Paràmetre clau</th></tr></thead>
       <tbody>
-        <tr><td><a class="cq-ref" href="teoria/t2-1-noms-i-resolucio.html">T2.1</a> · <a class="cq-ref" href="teoria/t2-2-arbre-dns.html">T2.2</a></td><td>—</td><td><a class="cq-ref" href="activitats/a2-1-client-dns.html">A2.1</a> — el client davant dels noms</td></tr>
-        <tr><td><a class="cq-ref" href="teoria/t2-3-zones-i-registres.html">T2.3</a></td><td><a class="cq-ref" href="guies/g2-1-bind9.html">G2.1</a></td><td><a class="cq-ref" href="activitats/a2-2-servidor-bind.html">A2.2</a> — servidor DNS amb BIND</td></tr>
-        <tr><td>—</td><td><a class="cq-ref" href="guies/g2-1-bind9.html">G2.1</a></td><td><a class="cq-ref" href="activitats/a2-3-kea-i-bind.html">A2.3</a> — DHCP i DNS junts</td></tr>
-        <tr><td><a class="cq-ref" href="teoria/t2-4-primari-secundari.html">T2.4</a></td><td><a class="cq-ref" href="guies/g2-1-bind9.html">G2.1</a></td><td><a class="cq-ref" href="activitats/a2-4-zona-secundaria.html">A2.4</a> — zona secundària, per parelles</td></tr>
+        <tr><td><code>apt</code></td><td><code>name</code>, <code>state</code>: instal·la
+        o esborra paquets.</td></tr>
+        <tr><td><code>copy</code></td><td><code>src</code> / <code>dest</code>: copia un
+        fitxer tal qual.</td></tr>
+        <tr><td><code>template</code></td><td><code>src</code> / <code>dest</code>: com
+        <code>copy</code>, però processant Jinja2.</td></tr>
+        <tr><td><code>service</code></td><td><code>name</code>, <code>state</code>: arrenca,
+        atura o reinicia un servei.</td></tr>
+        <tr><td><code>user</code></td><td><code>name</code>, <code>groups</code>: crea o
+        modifica un usuari.</td></tr>
+        <tr><td><code>hostname</code></td><td><code>name</code>: fixa el nom de la
+        màquina.</td></tr>
+        <tr><td><code>lineinfile</code></td><td><code>path</code>, <code>line</code>: afegeix
+        o assegura una línia dins d'un fitxer.</td></tr>
+        <tr><td><code>file</code></td><td><code>path</code>, <code>state</code>: crea
+        directoris o fixa permisos.</td></tr>
       </tbody>
     </table>
   </div>
 </div>
 
-<div class="cq-block" data-kind="recordatori">
-  <h4>El domini de la teva xarxa acaba en .internal</h4>
+<!-- ============ 6 · PAS A PAS · EXECUTAR ============ -->
+<div class="cq-block" data-kind="pas a pas">
+  <h4>Executar el playbook</h4>
+  <ol class="cq-steps">
+    <li>
+      <p><strong>Executa'l</strong>:</p>
+<pre>ansible-playbook -i hosts site.yml</pre>
+      <p>Si l'usuari no té <code>sudo</code> sense contrasenya, cal afegir
+      <code>--ask-become-pass</code> perquè la demani.</p>
+    </li>
+    <li>
+      <p><strong>Llegeix el resum final</strong>: <code>ok</code> compta les tasques que ja
+      estaven bé, <code>changed</code> les que han fet un canvi de debò, i
+      <code>failed</code> les que han fallat.</p>
+    </li>
+    <li>
+      <p><strong>Torna'l a executar</strong>. Si el playbook és idempotent, la segona
+      vegada tot surt <code>ok</code> i cap tasca surt <code>changed</code>.</p>
+    </li>
+    <li>
+      <p><strong>Simula sense aplicar</strong> amb <code>--check</code>: diu què canviaria
+      sense tocar res.</p>
+<pre>ansible-playbook -i hosts site.yml --check</pre>
+    </li>
+  </ol>
+</div>
+
+<!-- ============ 7 · VARIABLES ============ -->
+<div class="cq-block" data-kind="referència">
+  <h4>Variables per grup</h4>
   <p>
-    A tot el RA2 els dominis interns es diuen <code>elteunom.internal</code>. Evita
-    <code>.local</code>: està reservat per a mDNS i fa que els clients no arribin a preguntar al
-    teu servidor. Ho tens explicat a la <a class="cq-ref" href="teoria/t2-1-noms-i-resolucio.html">T2.1</a>.
+    Un fitxer <code>group_vars/&lt;grup&gt;.yml</code> es carrega sol quan el seu nom
+    coincideix amb el d'un grup de l'inventari: <code>group_vars/servidors.yml</code> per al
+    grup <code>[servidors]</code>. No cal important-lo enlloc del playbook.
   </p>
+<pre>paquet_web: apache2</pre>
+  <p>Dins d'una tasca es fa servir entre claus dobles:</p>
+<pre>- name: instal·la el servidor web
+  apt:
+    name: "{{ paquet_web }}"
+    state: present</pre>
+</div>
+
+<!-- ============ 8 · PLANTILLES ============ -->
+<div class="cq-block" data-kind="referència">
+  <h4>Plantilles Jinja2</h4>
+  <p>
+    Un fitxer a <code>templates/*.j2</code> és com qualsevol fitxer de configuració, però
+    amb variables entre <code>{{ }}</code>. El mòdul <code>template</code> el processa i
+    en desa el resultat a la màquina administrada. A més de les variables pròpies,
+    Ansible ja coneix dades de cada màquina, com <code>ansible_default_ipv4.address</code>
+    (la seva IP) o <code>ansible_hostname</code> (el seu nom).
+  </p>
+<pre>Servidor: {{ ansible_hostname }} ({{ ansible_default_ipv4.address }})</pre>
+<pre>- name: genera la pàgina d'inici
+  template:
+    src: templates/index.html.j2
+    dest: /var/www/html/index.html</pre>
+</div>
+
+<!-- ============ 9 · PAS A PAS · HANDLERS ============ -->
+<div class="cq-block" data-kind="pas a pas">
+  <h4>Reiniciar un servei només si cal</h4>
+  <ol class="cq-steps">
+    <li>
+      <p><strong>Declara el handler</strong> al final del playbook:</p>
+<pre>handlers:
+  - name: reinicia apache
+    service:
+      name: apache2
+      state: restarted</pre>
+    </li>
+    <li>
+      <p><strong>Notifica'l</strong> des de la tasca que pot canviar la configuració:</p>
+<pre>- name: genera la pàgina d'inici
+  template:
+    src: templates/index.html.j2
+    dest: /var/www/html/index.html
+  notify: reinicia apache</pre>
+      <p>El handler només s'executa si la tasca que el notifica acaba en
+      <code>changed</code>, i sempre al final del play, encara que l'hagin notificat
+      diverses tasques.</p>
+    </li>
+  </ol>
+</div>
+
+<!-- ============ 10 · COMPROVACIÓ ============ -->
+<div class="cq-block" data-kind="comprovació">
+  <h4>Comprovar-ho de conjunt</h4>
+  <ol class="cq-steps">
+    <li><p>Executa el playbook dues vegades seguides.</p></li>
+    <li><p>A la segona, el resum final no mostra cap tasca <code>changed</code>: tot ha
+      quedat <code>ok</code>.</p></li>
+  </ol>
+</div>
+
+<!-- ============ 11 · BONES PRÀCTIQUES ============ -->
+<div class="cq-block" data-kind="bones pràctiques">
+  <h4>Criteris professionals</h4>
+  <ul>
+    <li><strong>Mai root per SSH</strong>: connexió amb un usuari normal i
+    <code>become: true</code> només on cal elevar privilegis.</li>
+    <li><strong>Una tasca per cosa</strong>, no una tasca per paquet: un sol
+    <code>apt</code> amb una llista de paquets, en lloc de repetir la tasca.</li>
+    <li><strong>Tot idempotent</strong>: executar el playbook dues vegades ha de donar el
+    mateix resultat que una.</li>
+    <li>Els handlers, només per a canvis que de debò requereixen reiniciar algun
+    servei.</li>
+  </ul>
+</div>
+
+<!-- ============ 12 · PROBLEMES ============ -->
+<div class="cq-block" data-kind="problemes">
+  <h4>Errors habituals</h4>
+  <dl class="cq-issues">
+    <dt>El playbook falla amb un error de sintaxi imprecís</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Sagnat incorrecte al YAML: un espai de més o de
+      menys, o un tabulador colat.</p>
+      <p><span class="lbl">Solució</span> Revisa el nivell de sagnat de la línia que
+      assenyala l'error; YAML és sensible a espais, no a tabuladors.</p>
+    </dd>
+    <dt>Ansible demana contrasenya de SSH a cada execució</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> No hi ha clau pública copiada a la màquina
+      administrada.</p>
+      <p><span class="lbl">Solució</span> Munta l'accés per clau amb <a class="cq-ref" href="g6-1-openssh.html">G6.1</a>
+      abans de continuar.</p>
+    </dd>
+    <dt>Una tasca falla per permisos, tot i que l'usuari sembla correcte</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Falta <code>become: true</code> al play o a la
+      tasca, i s'intenta amb un usuari sense privilegis.</p>
+      <p><span class="lbl">Solució</span> Afegeix <code>become: true</code> on calgui
+      elevar privilegis.</p>
+    </dd>
+    <dt>El handler no s'executa</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> La tasca que l'hauria de notificar no ha produït
+      cap canvi (<code>ok</code>, no <code>changed</code>).</p>
+      <p><span class="lbl">Solució</span> És el comportament esperat: si no hi ha canvi,
+      no cal reiniciar res.</p>
+    </dd>
+    <dt>Les variables de group_vars no s'apliquen</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> El nom del fitxer no coincideix exactament amb el
+      del grup de l'inventari.</p>
+      <p><span class="lbl">Solució</span> Renombra'l perquè coincideixi
+      (<code>group_vars/servidors.yml</code> per al grup <code>[servidors]</code>).</p>
+    </dd>
+  </dl>
+</div>
+
+<!-- ============ 13 · RESUM ============ -->
+<div class="cq-block" data-kind="resum">
+  <h4>Fitxa ràpida</h4>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Què</th><th>On</th></tr></thead>
+      <tbody>
+        <tr><td>Inventari</td><td><code>hosts</code></td></tr>
+        <tr><td>Playbook</td><td><code>site.yml</code></td></tr>
+        <tr><td>Variables per grup</td>
+        <td><code>group_vars/&lt;grup&gt;.yml</code></td></tr>
+        <tr><td>Plantilles</td><td><code>templates/*.j2</code></td></tr>
+        <tr><td>Prova de connexió</td><td><code>ansible -m ping</code></td></tr>
+        <tr><td>Executar</td>
+        <td><code>ansible-playbook -i hosts site.yml</code></td></tr>
+        <tr><td>Simular sense aplicar</td><td><code>--check</code></td></tr>
+        <tr><td>Demanar contrasenya de sudo</td><td><code>--ask-become-pass</code></td></tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 
 
 <!-- === PEU DE NAVEGACIÓ INICI === -->
 <nav class="cq-pager">
-  <a class="prev" href="../RA1/index.html">
-    <span class="dir">Anterior · RA1</span>
-    <span class="ttl">RA1 · Instal·lació de serveis de configuració dinàmica (DHCP)</span></a>
-  <a class="next" href="../RA3/index.html">
-    <span class="dir">Següent · RA3</span>
-    <span class="ttl">RA3 · Instal·lació de serveis de transferència de fitxers</span></a>
+  <a class="prev" href="g6-3-xrdp.html">
+    <span class="dir">Anterior · G6.3</span>
+    <span class="ttl">Guia: xrdp</span></a>
+  <a class="next" href="../activitats/a6-1-entrar-sense-contrasenya.html">
+    <span class="dir">Següent · A6.1</span>
+    <span class="ttl">Entrar sense contrasenya</span></a>
 </nav>
 <!-- === PEU DE NAVEGACIÓ FI === -->
 

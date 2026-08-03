@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>G1.3 · Guia: nftables — Serveis en Xarxa (0227)</title>
+<title>G5.1 · Guia: Apache HTTP Server — Serveis en Xarxa (0227)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -490,329 +490,509 @@
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
-    <a href="../index.html">‹ RA1 · Instal·lació de serveis de configuració dinàmica (DHCP)</a>
-    <span class="pos">G1.3 · 6/10</span>
+    <a href="../index.html">‹ RA5 · Gestió de servidors web</a>
+    <span class="pos">G5.1 · 6/11</span>
   </div>
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
 <header class="cq-header">
-  <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · G1.3</div>
-  <h1>Guia: nftables</h1>
-  <p class="lede">Encaminament i NAT: convertir el servidor en porta d'enllaç.</p>
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA5 · G5.1</div>
+  <h1>Guia: Apache HTTP Server</h1>
+  <p class="lede">Manual de configuració d'Apache, de la instal·lació al proxy invers.</p>
 </header>
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
   <h4>Què hi ha en aquesta guia</h4>
-  <p>Documentació oficial: <a href="https://wiki.nftables.org">wiki.nftables.org</a></p>
+  <p>Documentació oficial: <a href="https://httpd.apache.org/docs/2.4/es/">httpd.apache.org/docs/2.4/es</a></p>
   <ul>
-    <li>Punt de partida: el servidor ja reparteix adreces per la targeta interna.</li>
-    <li>Les regles viuen a <code>/etc/nftables.conf</code> i les carrega el servei <code>nftables</code>.</li>
+    <li>Punt de partida: Ubuntu Server 26.04 acabat d'instal·lar, amb la
+    targeta <code>puigcastellar1</code>.</li>
+    <li>Dos noms d'exemple: <code>web1.internal</code> i
+    <code>web2.internal</code>.</li>
+    <li>Cobreix hosts virtuals, HTTPS, control d'accés, mòduls i proxy
+    invers. Per fer el mateix lloc amb un altre servidor, <a class="cq-ref" href="g5-2-nginx.html">G5.2</a>.</li>
   </ul>
 </div>
 
-<!-- ============ 8 · IPTABLES ============ -->
-<div class="cq-block" data-kind="cas real">
-  <h4>Per què no fem servir iptables</h4>
+<!-- ============ 2 · REFERÈNCIA · ESTRUCTURA ============ -->
+<div class="cq-block" data-kind="referència">
+  <h4>Estructura de /etc/apache2</h4>
   <p>
-    Tota la documentació d'Internet parla d'<code>iptables</code>, amb comandes com
-    <code>iptables -t nat -A POSTROUTING -o enp1s0 -j MASQUERADE</code>. Encara funcionen, però
-    és una capa de compatibilitat: per sota, avui, hi ha <code>nftables</code>.
+    Apache guarda cada tipus de configuració en un parell de directoris: un
+    de <code>-available</code> amb totes les opcions que existeixen i un de
+    <code>-enabled</code> amb enllaços simbòlics només a les actives.
+    <code>apache2.conf</code> és el fitxer principal i inclou la resta;
+    <code>ports.conf</code> diu en quins ports escolta (80 i 443 per
+    defecte).
   </p>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Directori</th><th>Conté</th></tr></thead>
+      <tbody>
+        <tr><td><code>mods-available</code> / <code>mods-enabled</code></td>
+          <td>Mòduls instal·lats i actius</td></tr>
+        <tr><td><code>sites-available</code> / <code>sites-enabled</code></td>
+          <td>Hosts virtuals declarats i actius</td></tr>
+        <tr><td><code>conf-available</code> / <code>conf-enabled</code></td>
+          <td>Fragments de configuració global</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Ordre</th><th>Fa</th></tr></thead>
+      <tbody>
+        <tr><td><code>a2enmod</code> / <code>a2dismod</code></td>
+          <td>Activa o desactiva un mòdul</td></tr>
+        <tr><td><code>a2ensite</code> / <code>a2dissite</code></td>
+          <td>Activa o desactiva un lloc</td></tr>
+        <tr><td><code>a2enconf</code> / <code>a2disconf</code></td>
+          <td>Activa o desactiva un fragment de configuració</td></tr>
+      </tbody>
+    </table>
+  </div>
   <p>
-    <code>nftables</code> és el sistema de tallafoc de Linux des de fa anys i el que trobaràs a
-    qualsevol servidor nou. Té una sintaxi unificada i les regles es desen en un fitxer que pots
-    llegir i versionar.
-  </p>
-  <p>
-    <strong>No barregis els dos.</strong> Si escrius regles amb <code>iptables</code> i les
-    consultes amb <code>nft list ruleset</code> les veuràs traduïdes, i al revés no. Tria un i
-    queda-t'hi.
+    Els registres viuen a <code>/var/log/apache2</code>: <code>access.log</code>
+    és el del lloc per defecte, <code>other_vhosts_access.log</code> el de
+    la resta d'hosts virtuals i <code>error.log</code> els errors de tots.
   </p>
 </div>
 
-<!-- ============ 6 · RECORDATORI ============ -->
-<div class="cq-block" data-kind="recordatori">
-  <h4>Una regla mal escrita et tanca la porta</h4>
-  <p>
-    Estàs escrivint un tallafoc. Si poses <code>policy drop</code> a la cadena
-    <code>input</code> sense permetre SSH, perdràs la connexió en carregar les regles. En aquesta
-    pràctica deixem <code>input</code> amb <code>policy accept</code> justament per evitar-ho:
-    filtrem el trànsit que <em>travessa</em> el servidor, no el que hi arriba.
-  </p>
-</div>
-
-<!-- ============ 7 · PAS A PAS ============ -->
+<!-- ============ 3 · PAS A PAS · INSTAL·LACIÓ ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h4>Convertir el servidor en porta d'enllaç</h4>
-
+  <h4>Instal·lar Apache i fer la primera comprovació</h4>
   <ol class="cq-steps">
     <li>
-      <p><strong>Mira com està ara</strong> l'encaminament:</p>
-<pre>cat /proc/sys/net/ipv4/ip_forward</pre>
-      <p>Sortirà <code>0</code>.</p>
-    </li>
-
-    <li>
-      <p><strong>Activa'l de manera permanent</strong> amb un fitxer propi, que és més net que tocar el fitxer general:</p>
-<pre>echo "net.ipv4.ip_forward=1" | sudo tee /etc/sysctl.d/99-encaminament.conf
-sudo sysctl --system</pre>
-      <p>Torna a comprovar-ho: ara ha de sortir <code>1</code>. I sobreviurà a un reinici.</p>
-    </li>
-
-    <li>
-      <p><strong>Escriu les regles</strong> de tallafoc i NAT:</p>
-<pre>sudo nano /etc/nftables.conf</pre>
-      <p>Deixa el fitxer amb aquest contingut, canviant els noms de les targetes pels teus:</p>
-<pre>#!/usr/sbin/nft -f
-flush ruleset
-
-table inet filter {
-    chain input {
-        type filter hook input priority 0;
-        policy accept;
-    }
-    chain forward {
-        type filter hook forward priority 0;
-        policy drop;
-
-        <span class="c"># de la xarxa interna cap a Internet</span>
-        iif "enp2s0" oif "enp1s0" accept
-
-        <span class="c"># només les respostes de tornada</span>
-        iif "enp1s0" oif "enp2s0" ct state related,established accept
-    }
-    chain output {
-        type filter hook output priority 0;
-        policy accept;
-    }
-}
-
-table ip nat {
-    chain postrouting {
-        type nat hook postrouting priority 100;
-        <span class="c"># NAT a la targeta que surt a Internet</span>
-        oif "enp1s0" masquerade
-    }
-}</pre>
-    </li>
-
-    <li>
-      <p><strong>Activa el servei</strong> perquè carregui les regles ara i a cada arrencada:</p>
-<pre>sudo systemctl enable --now nftables</pre>
-      <div class="cq-note">
-        <span class="lbl">Compte</span>
-        <code>enable --now</code> fa les dues coses alhora. No facis
-        <code>enable &amp; start</code> amb un sol <code>&amp;</code>: això envia la primera
-        comanda a segon pla i sembla que funciona quan no ho ha fet.
-      </div>
-    </li>
-
-    <li>
-      <p><strong>Comprova que les regles s'han carregat:</strong></p>
-<pre>sudo nft list ruleset</pre>
-      <p>Ha de sortir exactament el que has escrit. Si surt buit, hi ha un error de sintaxi al fitxer.</p>
-    </li>
-
-    <li>
-      <p><strong>Prova-ho des del client</strong>, per capes, en aquest ordre:</p>
-<pre>ip route              <span class="c"># la porta d'enllaç és el servidor?</span>
-ping -c3 192.168.1.1  <span class="c"># arribo al servidor?</span>
-ping -c3 9.9.9.9      <span class="c"># surto a Internet?</span>
-ping -c3 www.upc.edu  <span class="c"># funciona el DNS?</span></pre>
+      <p><strong>Instal·la el paquet:</strong></p>
+<pre>sudo apt update
+sudo apt install apache2</pre>
       <p>
-        La gràcia és l'ordre: la primera que falli et diu exactament on és el problema. No cal
-        endevinar res.
+        S'inicia sol i queda actiu al port 80 de totes les targetes, amb
+        el lloc <code>000-default.conf</code> ja habilitat.
+      </p>
+    </li>
+    <li>
+      <p><strong>Comprova el servei:</strong></p>
+<pre>systemctl status apache2</pre>
+      <p>Ha de sortir <span class="o">active (running)</span>.</p>
+    </li>
+    <li>
+      <p><strong>Des del client</strong>, esbrina la IP del servidor a
+      <code>puigcastellar1</code>:</p>
+<pre>ip -brief a</pre>
+      <p>
+        I obre <code>http://IP-DEL-SERVIDOR</code> al navegador: ha de
+        sortir la pàgina «Apache2 Default Page».
       </p>
     </li>
   </ol>
+</div>
 
-  <div class="cq-note">
-    <span class="lbl">Ubuntu 26.04</span>
-    Al <code>nft list ruleset</code> les prioritats no surten com les has escrit: on tu poses
-    <code>priority 0</code> hi llegiràs <code>priority filter</code>, i on poses
-    <code>priority 100</code>, <code>priority srcnat</code>. Són els noms dels mateixos números:
-    la regla s'ha carregat bé.
+<!-- ============ 4 · PAS A PAS · CONTINGUT PROPI ============ -->
+<div class="cq-block" data-kind="pas a pas">
+  <h4>Publicar contingut propi</h4>
+  <ol class="cq-steps">
+    <li>
+      <p><strong>Crea el directori</strong> del lloc, fora del
+      <code>DocumentRoot</code> per defecte:</p>
+<pre>sudo mkdir -p /var/www/web1.internal/public_html</pre>
+    </li>
+    <li>
+      <p><strong>Escriu una pàgina de prova</strong> a dins, per exemple
+      <code>index.html</code> amb un missatge identificatiu.</p>
+    </li>
+    <li>
+      <p><strong>Ajusta propietari i permisos:</strong> propietari
+      l'administrador i grup <code>www-data</code>, directoris 755 i
+      fitxers 644. <strong>Mai 777.</strong></p>
+<pre>sudo chown -R adr1:www-data \
+  /var/www/web1.internal
+sudo find /var/www/web1.internal \
+  -type d -exec chmod 755 {} \;
+sudo find /var/www/web1.internal \
+  -type f -exec chmod 644 {} \;</pre>
+    </li>
+  </ol>
+</div>
+
+<!-- ============ 5 · PAS A PAS · HOST VIRTUAL PER NOM ============ -->
+<div class="cq-block" data-kind="pas a pas">
+  <h4>Publicar-lo amb un host virtual per nom</h4>
+  <ol class="cq-steps">
+    <li>
+      <p><strong>Crea el fitxer del lloc:</strong></p>
+<pre>sudo nano /etc/apache2/sites-available/web1.internal.conf</pre>
+<pre>&lt;VirtualHost *:80&gt;
+    ServerName web1.internal
+    ServerAlias www.web1.internal
+    DocumentRoot /var/www/web1.internal/public_html
+&lt;/VirtualHost&gt;</pre>
+    </li>
+    <li>
+      <p><strong>Activa el lloc i comprova la sintaxi</strong> abans de
+      recarregar (mai recarreguis a cegues):</p>
+<pre>sudo a2ensite web1.internal.conf
+sudo apache2ctl -t
+sudo systemctl reload apache2</pre>
+    </li>
+    <li>
+      <p><strong>Al client</strong>, afegeix el nom a <code>/etc/hosts</code>
+      amb la IP del servidor:</p>
+<pre>IP-DEL-SERVIDOR web1.internal</pre>
+      <p>I obre <code>http://web1.internal</code>.</p>
+    </li>
+  </ol>
+</div>
+
+<!-- ============ 6 · REFERÈNCIA · DIRECTIVES VIRTUALHOST ============ -->
+<div class="cq-block" data-kind="referència">
+  <h4>Directives dins &lt;VirtualHost&gt;</h4>
+  <p>
+    Dins d'un bloc <code>&lt;VirtualHost&gt;</code> es redefineixen només
+    els valors que han de canviar respecte a la configuració global. El
+    primer lloc que es carrega —per ordre alfabètic dels fitxers— es
+    converteix en el lloc per defecte i respon a qualsevol petició que no
+    coincideixi amb cap <code>ServerName</code>.
+  </p>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Directiva</th><th>Fa</th></tr></thead>
+      <tbody>
+        <tr><td><code>ServerName</code></td>
+          <td>Nom pel qual respon aquest lloc</td></tr>
+        <tr><td><code>ServerAlias</code></td>
+          <td>Noms addicionals que també serveix</td></tr>
+        <tr><td><code>DocumentRoot</code></td>
+          <td>Directori amb els fitxers del lloc</td></tr>
+        <tr><td><code>SSLEngine</code></td>
+          <td>Activa TLS en aquest bloc</td></tr>
+        <tr><td><code>SSLCertificateFile</code></td>
+          <td>Ruta del certificat</td></tr>
+        <tr><td><code>SSLCertificateKeyFile</code></td>
+          <td>Ruta de la clau privada</td></tr>
+        <tr><td><code>Redirect permanent</code></td>
+          <td>Envia el trànsit a una altra URL</td></tr>
+      </tbody>
+    </table>
   </div>
 </div>
 
-<!-- ============ 7b · REFERÈNCIA · DNAT ============ -->
-<div class="cq-block" data-kind="referència">
-  <h4>DNAT: canviar la destinació abans d'encaminar</h4>
-  <p>
-    <code>dnat to</code> reescriu l'adreça (i el port, si cal) de destinació d'un
-    paquet abans que el nucli decideixi cap a on l'encamina. Per això viu al ganxo
-    <code>prerouting</code>, amb la prioritat <code>dstnat</code>: és el primer punt
-    del recorregut, abans de la decisió d'encaminament.
-  </p>
-  <p>
-    Canviar la destinació no obre pas tot sol: la cadena <code>forward</code>
-    continua decidint si el paquet, ja amb la nova adreça, pot travessar el
-    servidor. Amb <code>policy drop</code> a <code>forward</code>, cal afegir-hi
-    una regla que ho permeti explícitament, igual que ja calia permetre la
-    sortida cap a Internet.
-  </p>
-</div>
-
-<!-- ============ 7c · PAS A PAS · PUBLICAR UN SERVEI INTERN ============ -->
+<!-- ============ 7 · PAS A PAS · HTTPS ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h4>Publicar cap a fora un servei de la xarxa interna</h4>
-
+  <h4>HTTPS amb certificat autofirmat</h4>
   <ol class="cq-steps">
     <li>
-      <p><strong>Afegeix una cadena <code>prerouting</code></strong> dins la
-      taula <code>ip nat</code> que ja tens, abans de
-      <code>chain postrouting</code>:</p>
-<pre>chain prerouting {
-    type nat hook prerouting priority dstnat;
-    <span class="c"># trànsit extern cap al servidor intern, port 80</span>
-    iif "enp1s0" tcp dport 80 dnat to 192.168.1.10:80
-}</pre>
+      <p><strong>Activa el mòdul SSL:</strong></p>
+<pre>sudo a2enmod ssl</pre>
     </li>
-
     <li>
-      <p><strong>Permet que aquest trànsit travessi el <code>forward</code></strong>,
-      dins la taula <code>inet filter</code>. El dnat ja ha canviat la
-      destinació abans d'arribar aquí, així que el port que es mira és el
-      <strong>del servidor intern</strong>:</p>
-<pre>iif "enp1s0" oif "enp2s0" tcp dport 80 accept</pre>
-      <p>Afegeix-la dins <code>chain forward</code>, abans de la regla de
-      <code>ct state related,established</code>.</p>
+      <p><strong>Prepara un fitxer de configuració</strong> amb els dos
+      noms al <code>subjectAltName</code> (SAN): els navegadors
+      comproven el SAN, no el <em>Common Name</em>.</p>
+<pre>sudo mkdir /etc/apache2/ssl
+sudo nano /etc/apache2/ssl/openssl.cnf</pre>
+<pre>[req]
+distinguished_name = req_distinguished_name
+x509_extensions = v3_req
+prompt = no
+[req_distinguished_name]
+CN = web1.internal
+[v3_req]
+keyUsage = keyEncipherment, dataEncipherment
+extendedKeyUsage = serverAuth
+subjectAltName = @alt_names
+[alt_names]
+DNS.1 = web1.internal
+DNS.2 = web2.internal</pre>
+      <div class="cq-note"><span class="lbl">Compte</span>
+        Ha de dir <code>x509_extensions</code>. Amb
+        <code>req_extensions</code>, que és el que posen molts manuals,
+        el certificat surt <strong>sense SAN</strong> i el navegador el
+        rebutja pel nom encara que el <em>Common Name</em> sigui correcte.</div>
     </li>
-
     <li>
-      <p><strong>Valida i recarrega</strong>, igual que sempre:</p>
-<pre>sudo nft -c -f /etc/nftables.conf
-sudo systemctl restart nftables</pre>
-      <p>És el mateix fitxer i el mateix servei <code>enable</code> d'abans: no
-      cal repetir res perquè es carregui a cada arrencada.</p>
+      <p><strong>Genera la clau i el certificat</strong> a partir
+      d'aquest fitxer:</p>
+<pre>sudo openssl req -x509 -nodes -days 365 \
+  -newkey rsa:2048 \
+  -keyout /etc/apache2/ssl/apache.key \
+  -out /etc/apache2/ssl/apache.crt \
+  -config /etc/apache2/ssl/openssl.cnf</pre>
     </li>
-
     <li>
-      <p><strong>Comprova-ho al servidor:</strong></p>
-<pre>sudo nft list ruleset | grep -A3 prerouting</pre>
-      <p>Hi ha de sortir la regla amb <code>dnat to</code>.</p>
+      <p><strong>Afegeix el bloc de port 443</strong> al mateix fitxer
+      del lloc:</p>
+<pre>&lt;VirtualHost *:443&gt;
+    ServerName web1.internal
+    ServerAlias www.web1.internal
+    DocumentRoot /var/www/web1.internal/public_html
+    SSLEngine on
+    SSLCertificateFile /etc/apache2/ssl/apache.crt
+    SSLCertificateKeyFile /etc/apache2/ssl/apache.key
+&lt;/VirtualHost&gt;</pre>
     </li>
-
     <li>
-      <p><strong>Comprova-ho des de fora</strong>, des d'un client de
-      <code>puigcastellar1</code>:</p>
-<pre>ip -brief a          <span class="c"># al servidor, la IP externa</span>
-curl http://IP-EXTERNA-DEL-SERVIDOR/</pre>
-      <p>Ha de respondre el servei que corre a <code>192.168.1.10</code>, tot i
-      que el client només coneix l'adreça externa del servidor.</p>
+      <p><strong>Redirigeix el 80 al 443</strong>, dins del bloc de port
+      80 del mateix fitxer:</p>
+<pre>&lt;VirtualHost *:80&gt;
+    ServerName web1.internal
+    ServerAlias www.web1.internal
+    Redirect permanent / https://web1.internal/
+&lt;/VirtualHost&gt;</pre>
+<pre>sudo apache2ctl -t
+sudo systemctl reload apache2</pre>
     </li>
   </ol>
 </div>
 
-<!-- ============ COMPROVACIÓ ============ -->
+<!-- ============ 8 · PAS A PAS · CONTROL D'ACCÉS ============ -->
+<div class="cq-block" data-kind="pas a pas">
+  <h4>Control d'accés</h4>
+  <ol class="cq-steps">
+    <li>
+      <p><strong>Crea el fitxer de contrasenyes</strong>, sempre fora del
+      <code>DocumentRoot</code>:</p>
+<pre>sudo htpasswd -c /etc/apache2/.htpasswd admin
+sudo htpasswd /etc/apache2/.htpasswd visitant</pre>
+      <p><code>-c</code> només al primer usuari: crea el fitxer i
+      l'esborraria si tornessis a fer-lo servir.</p>
+    </li>
+    <li>
+      <p><strong>Crea el fitxer de grups:</strong></p>
+<pre>sudo nano /etc/apache2/.htgroup</pre>
+<pre>administradors: admin
+convidats: visitant</pre>
+    </li>
+    <li>
+      <p><strong>Afegeix els tres casos</strong> dins el bloc
+      <code>&lt;VirtualHost *:443&gt;</code>, cadascun sobre un
+      <code>&lt;Directory&gt;</code> propi:</p>
+<pre>&lt;Directory /var/www/web1.internal/public_html/privat&gt;
+    AuthType Basic
+    AuthName "Zona restringida"
+    AuthUserFile /etc/apache2/.htpasswd
+    Require valid-user
+&lt;/Directory&gt;
+
+&lt;Directory /var/www/web1.internal/public_html/bloqueig&gt;
+    &lt;RequireAll&gt;
+        Require all granted
+        Require not ip 192.168.1.50
+    &lt;/RequireAll&gt;
+&lt;/Directory&gt;
+
+&lt;Directory /var/www/web1.internal/public_html/admins&gt;
+    AuthType Basic
+    AuthName "Només administradors"
+    AuthUserFile /etc/apache2/.htpasswd
+    AuthGroupFile /etc/apache2/.htgroup
+    Require group administradors
+&lt;/Directory&gt;</pre>
+    </li>
+    <li>
+      <p><strong>Activa el mòdul de grups</strong> —no és actiu de
+      sèrie— i recarrega:</p>
+<pre>sudo a2enmod authz_groupfile
+sudo apache2ctl -t
+sudo systemctl reload apache2</pre>
+    </li>
+  </ol>
+</div>
+
+<!-- ============ 9 · PAS A PAS · MÒDULS ============ -->
+<div class="cq-block" data-kind="pas a pas">
+  <h4>Estat del servidor i PHP</h4>
+  <ol class="cq-steps">
+    <li>
+      <p><strong>mod_status</strong> sol venir actiu de sèrie, restringit
+      a l'ordinador local. Comprova-ho i, si cal, edita
+      <code>/etc/apache2/mods-available/status.conf</code> perquè el
+      <code>&lt;Location "/server-status"&gt;</code> tingui
+      <code>Require ip 127.0.0.1</code>:</p>
+<pre>apache2ctl -M | grep status
+sudo systemctl reload apache2</pre>
+      <p>Visita <code>/server-status</code> des del servidor mateix.</p>
+    </li>
+    <li>
+      <p><strong>PHP</strong>: instal·la el mòdul i escriu una pàgina de
+      prova.</p>
+<pre>sudo apt install libapache2-mod-php
+echo "&lt;?php phpinfo(); ?&gt;" | sudo tee \
+  /var/www/web1.internal/public_html/info.php</pre>
+    </li>
+  </ol>
+</div>
+
+<!-- ============ 10 · PAS A PAS · PROXY INVERS ============ -->
+<div class="cq-block" data-kind="pas a pas">
+  <h4>Proxy invers cap a un servidor intern</h4>
+  <p>
+    Aquest lloc no serveix fitxers propis: reenvia cada petició a un
+    servidor de la xarxa interna i en retorna la resposta.
+  </p>
+  <ol class="cq-steps">
+    <li>
+      <p><strong>Activa els mòduls de proxy:</strong></p>
+<pre>sudo a2enmod proxy proxy_http</pre>
+    </li>
+    <li>
+      <p><strong>Crea el lloc</strong>, sense <code>DocumentRoot</code>:</p>
+<pre>sudo nano /etc/apache2/sites-available/proxy.internal.conf</pre>
+<pre>&lt;VirtualHost *:80&gt;
+    ServerName proxy.internal
+    ProxyPreserveHost On
+    ProxyPass / http://IP-SERVIDOR-INTERN/
+    ProxyPassReverse / http://IP-SERVIDOR-INTERN/
+&lt;/VirtualHost&gt;</pre>
+    </li>
+    <li>
+      <p><strong>Activa i comprova:</strong></p>
+<pre>sudo a2ensite proxy.internal.conf
+sudo apache2ctl -t
+sudo systemctl reload apache2</pre>
+      <p>
+        <code>IP-SERVIDOR-INTERN</code> és la IP del servidor de darrere,
+        esbrinada amb <code>ip -brief a</code> en aquella màquina.
+        <code>ProxyPreserveHost</code> manté la capçalera <code>Host</code>
+        original en comptes de substituir-la per la del servidor intern.
+      </p>
+    </li>
+  </ol>
+</div>
+
+<!-- ============ 11 · COMPROVACIÓ ============ -->
 <div class="cq-block" data-kind="comprovació">
-  <h4>Comprovar que els clients surten a Internet</h4>
-  <p>Les dues primeres ordres van al servidor; les dues últimes, al client.</p>
+  <h4>Comprovació de conjunt, des del client</h4>
   <ol class="cq-steps">
     <li>
-      <p><strong>L'encaminament està actiu</strong> i les regles carregades:</p>
-<pre>cat /proc/sys/net/ipv4/ip_forward
-sudo nft list ruleset</pre>
-      <p>La primera ha de dir <code>1</code>; a la segona hi ha de sortir la regla
-      <code>masquerade</code> a la taula de NAT.</p>
+      <p><code>http://web1.internal</code> i
+      <code>http://web2.internal</code> responen cadascun amb
+      el seu contingut, i redirigeixen a <code>https://</code>.</p>
     </li>
     <li>
-      <p><strong>El client té porta d'enllaç</strong>, i és el teu servidor:</p>
-<pre>ip route</pre>
+      <p>Entrar a la carpeta protegida demana usuari i contrasenya, i
+      el navegador avisa que el certificat és autofirmat.</p>
     </li>
     <li>
-      <p><strong>El client arriba fora.</strong> Primer per IP, després per nom: si la primera
-      va i la segona no, el problema és de DNS, no de NAT.</p>
-<pre>ping -c3 9.9.9.9
-ping -c3 www.upc.edu</pre>
+      <p>Al servidor, <code>apache2ctl -M</code> llista els mòduls
+      actius: hi han de sortir <code>ssl</code>,
+      <code>authz_groupfile</code> i, si s'ha fet el pas 10,
+      <code>proxy</code> i <code>proxy_http</code>.</p>
+<pre>apache2ctl -M | grep -E "ssl|proxy|groupfile"</pre>
     </li>
   </ol>
 </div>
 
-<!-- ============ 9 · BONES PRÀCTIQUES ============ -->
+<!-- ============ 12 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
   <h4>Criteris professionals</h4>
   <ul>
-    <li><strong><code>policy drop</code> a <code>forward</code></strong> i obre només el que cal. El que no s'ha permès, no passa.</li>
-    <li><strong>Fes servir <code>ct state related,established</code></strong> per al trànsit de tornada, en lloc d'obrir el sentit contrari sencer.</li>
-    <li><strong>Configuració permanent, no de sessió.</strong> Un <code>sysctl -w</code> o un <code>nft add rule</code> desapareixen en reiniciar.</li>
-    <li><strong>Activa NAT només a la targeta externa.</strong> Un <code>masquerade</code> a la interna amaga qui és qui i complica qualsevol diagnòstic.</li>
-    <li><strong>Prova per capes</strong> (ruta → servidor → IP externa → nom) abans de tocar res.</li>
+    <li><strong>Mai 777</strong>: directoris 755, fitxers 644.</li>
+    <li>El fitxer de contrasenyes, <strong>sempre fora del
+    DocumentRoot</strong>.</li>
+    <li><code>apache2ctl -t</code> abans de qualsevol
+    <code>reload</code>.</li>
+    <li>Desactiva <code>000-default</code> quan el servidor és d'un sol
+    lloc concret.</li>
+    <li>Activa només els mòduls que facis servir.</li>
+    <li>El certificat autofirmat és per a laboratori; en producció, un
+    de signat per una autoritat reconeguda.</li>
   </ul>
 </div>
 
-<!-- ============ 10 · PROBLEMES ============ -->
+<!-- ============ 13 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
   <h4>Errors habituals</h4>
   <dl class="cq-issues">
-    <dt>Funcionava i després de reiniciar ja no</dt>
+    <dt>Entro per la IP i surt un lloc que no és el que esperava</dt>
     <dd>
-      <p><span class="lbl">Causa</span> Ho vas activar només per a la sessió: amb <code>sysctl -w</code> o afegint regles a mà.</p>
-      <p><span class="lbl">Solució</span> El fitxer a <code>/etc/sysctl.d/</code> i les regles a <code>/etc/nftables.conf</code>, amb el servei habilitat.</p>
+      <p><span class="lbl">Causa</span> Sense capçalera <code>Host</code>
+      coneguda, respon el primer lloc carregat: el per defecte.</p>
+      <p><span class="lbl">Solució</span> Desactiva
+      <code>000-default</code> amb <code>a2dissite</code> o entra pel
+      nom, no per la IP.</p>
     </dd>
-
-    <dt><code>nft list ruleset</code> surt buit</dt>
+    <dt>Actives el lloc amb a2ensite i no canvia res</dt>
     <dd>
-      <p><span class="lbl">Causa</span> Error de sintaxi al fitxer: el <code>flush ruleset</code> s'executa i la resta falla.</p>
-      <p><span class="lbl">Solució</span> <code>sudo nft -c -f /etc/nftables.conf</code> comprova el fitxer sense aplicar-lo i et diu la línia.</p>
+      <p><span class="lbl">Causa</span> <code>a2ensite</code> només crea
+      l'enllaç a <code>sites-enabled</code>; Apache no rellegeix la
+      configuració sol.</p>
+      <p><span class="lbl">Solució</span>
+      <code>sudo systemctl reload apache2</code>.</p>
     </dd>
-
-    <dt>El client arriba al servidor però no a Internet</dt>
+    <dt>El navegador avisa que la connexió no és privada</dt>
     <dd>
-      <p><span class="lbl">Causa</span> Falta l'encaminament o falta el NAT.</p>
-      <p><span class="lbl">Solució</span> Comprova <code>cat /proc/sys/net/ipv4/ip_forward</code> i que la taula <code>nat</code> apareix a <code>nft list ruleset</code>.</p>
+      <p><span class="lbl">Causa</span> El certificat és autofirmat: cap
+      navegador el reconeix, però la comunicació sí que va xifrada.</p>
+      <p><span class="lbl">Solució</span> Accepta l'excepció en un
+      laboratori; en producció cal un certificat signat.</p>
     </dd>
-
-    <dt><code>ping 9.9.9.9</code> va, però <code>ping www.upc.edu</code> no</dt>
+    <dt>Apache respon 403 Forbidden</dt>
     <dd>
-      <p><span class="lbl">Causa</span> L'encaminament i el NAT funcionen. El problema és el DNS que reparteix el teu servidor DHCP.</p>
-      <p><span class="lbl">Solució</span> Revisa <code>domain-name-servers</code> al fitxer de Kea i, al client, <code>resolvectl status</code>.</p>
+      <p><span class="lbl">Causa</span> Permisos del
+      <code>DocumentRoot</code> massa restrictius o propietari
+      equivocat.</p>
+      <p><span class="lbl">Solució</span> Comprova que els directoris
+      són 755 i el grup és <code>www-data</code>.</p>
+    </dd>
+    <dt>El nom no resol al client</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Falta la línia a
+      <code>/etc/hosts</code> del client, o té la IP equivocada.</p>
+      <p><span class="lbl">Solució</span> Afegeix-la amb la IP que doni
+      <code>ip -brief a</code> al servidor.</p>
+    </dd>
+    <dt>Apache no arrenca després d'editar un fitxer</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Error de sintaxi al fitxer que
+      s'acaba de tocar.</p>
+      <p><span class="lbl">Solució</span> <code>apache2ctl -t</code>
+      abans de recarregar sempre indica la línia amb el problema.</p>
     </dd>
   </dl>
 </div>
 
-<!-- ============ 11 · RESUM ============ -->
+<!-- ============ 14 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h4>Resum</h4>
-  <ul>
-    <li>Un client amb IP correcta encara necessita <strong>encaminament</strong> i <strong>NAT</strong> per sortir a Internet.</li>
-    <li>L'encaminament s'activa amb <code>net.ipv4.ip_forward=1</code>, permanent a <code>/etc/sysctl.d/</code>.</li>
-    <li>El NAT es fa amb <code>masquerade</code> a la targeta externa, dins de <code>/etc/nftables.conf</code>.</li>
-    <li>Es fa servir <strong>nftables</strong>, no <code>iptables</code>. I mai els dos alhora.</li>
-    <li>Per diagnosticar, prova <strong>per capes</strong>: ruta, servidor, IP externa, nom.</li>
-  </ul>
-
+  <h4>Fitxa ràpida</h4>
   <div class="cq-tablewrap">
     <table class="cq-table">
-      <thead><tr><th>Comanda</th><th>Per a què serveix</th></tr></thead>
+      <thead><tr><th>Què</th><th>On</th></tr></thead>
       <tbody>
-        <tr><td><code>cat /proc/sys/net/ipv4/ip_forward</code></td><td>Veure si l'encaminament està actiu</td></tr>
-        <tr><td><code>sudo sysctl --system</code></td><td>Aplicar els fitxers de <code>/etc/sysctl.d/</code></td></tr>
-        <tr><td><code>sudo nft -c -f /etc/nftables.conf</code></td><td>Validar les regles sense aplicar-les</td></tr>
-        <tr><td><code>sudo systemctl enable --now nftables</code></td><td>Carregar les regles i fer-les permanents</td></tr>
-        <tr><td><code>sudo nft list ruleset</code></td><td>Veure les regles carregades</td></tr>
-        <tr><td><code>ip route</code></td><td>Comprovar la porta d'enllaç al client</td></tr>
+        <tr><td>Fitxer principal</td><td><code>/etc/apache2/apache2.conf</code></td></tr>
+        <tr><td>Ports</td><td><code>/etc/apache2/ports.conf</code></td></tr>
+        <tr><td>Llocs</td><td><code>sites-available</code> / <code>sites-enabled</code></td></tr>
+        <tr><td>Mòduls</td><td><code>mods-available</code> / <code>mods-enabled</code></td></tr>
+        <tr><td>Registres</td><td><code>/var/log/apache2</code></td></tr>
+        <tr><td>Contrasenyes</td><td><code>/etc/apache2/.htpasswd</code></td></tr>
       </tbody>
     </table>
   </div>
-
-  <p style="margin-top:16px">
-    <strong>Amb això tanques el <a class="cq-ref" href="../index.html">RA1</a>:</strong> ja saps configurar la xarxa, muntar un servidor
-    DHCP i donar Internet als seus clients.
-  </p>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Ordre</th><th>Fa</th></tr></thead>
+      <tbody>
+        <tr><td><code>a2ensite</code> / <code>a2dissite</code></td><td>Activa o desactiva un lloc</td></tr>
+        <tr><td><code>a2enmod</code> / <code>a2dismod</code></td><td>Activa o desactiva un mòdul</td></tr>
+        <tr><td><code>apache2ctl -t</code></td><td>Comprova la sintaxi</td></tr>
+        <tr><td><code>systemctl reload apache2</code></td><td>Aplica els canvis</td></tr>
+        <tr><td><code>apache2ctl -M</code></td><td>Llista els mòduls actius</td></tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 
 
 <!-- === PEU DE NAVEGACIÓ INICI === -->
 <nav class="cq-pager">
-  <a class="prev" href="g1-2-kea.html">
-    <span class="dir">Anterior · G1.2</span>
-    <span class="ttl">Guia: Kea</span></a>
-  <a class="next" href="../activitats/a1-1-posada-a-punt.html">
-    <span class="dir">Següent · A1.1</span>
-    <span class="ttl">Posada a punt del servidor</span></a>
+  <a class="prev" href="../teoria/t5-5-moduls-i-codi.html">
+    <span class="dir">Anterior · T5.5</span>
+    <span class="ttl">Mòduls i codi</span></a>
+  <a class="next" href="g5-2-nginx.html">
+    <span class="dir">Següent · G5.2</span>
+    <span class="ttl">Guia: Nginx</span></a>
 </nav>
 <!-- === PEU DE NAVEGACIÓ FI === -->
 
