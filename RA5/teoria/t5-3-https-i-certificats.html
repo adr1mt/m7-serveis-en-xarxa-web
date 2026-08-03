@@ -261,6 +261,24 @@
   .cq-block[data-kind="problemes"]::before { background: var(--ko-soft); border-color: var(--ko-line); color: var(--ko); }
   .cq-block[data-kind="problemes"] h4 { color: var(--ko); }
 
+  /* ==== Traçabilitat amb el currículum ==== */
+  .cq-block[data-kind="currículum"] { background: transparent; }
+  .cq-block[data-kind="currículum"] h4 { color: var(--muted); }
+  .cq-block[data-kind="currículum"] p {
+    margin: 0 0 6px;
+    font-size: .86rem;
+    color: var(--muted);
+  }
+  .cq-block[data-kind="currículum"] p:last-child { margin-bottom: 0; }
+  .cq-block[data-kind="currículum"] .lbl {
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    margin-right: 6px;
+    white-space: nowrap;
+  }
+
   /* ==== Diagrama de passos en flux (DORA i similars) ==== */
   .dora-flow {
     display: flex;
@@ -680,6 +698,13 @@
   </div>
 </div>
 
+
+<!-- ============ CURRÍCULUM ============ -->
+<div class="cq-block" data-kind="currículum">
+  <h4>Al currículum</h4>
+  <p><span class="lbl">CA 5.1</span> Descriu els fonaments i protocols en què es basa el funcionament d'un servidor web.</p>
+  <p><span class="lbl">CA 5.9</span> Estableix mecanismes per assegurar les comunicacions entre el client i el servidor.</p>
+</div>
 
 <!-- === PEU DE NAVEGACIÓ INICI === -->
 <nav class="cq-pager">

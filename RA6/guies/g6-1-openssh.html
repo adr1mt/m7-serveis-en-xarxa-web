@@ -261,6 +261,24 @@
   .cq-block[data-kind="problemes"]::before { background: var(--ko-soft); border-color: var(--ko-line); color: var(--ko); }
   .cq-block[data-kind="problemes"] h4 { color: var(--ko); }
 
+  /* ==== Traçabilitat amb el currículum ==== */
+  .cq-block[data-kind="currículum"] { background: transparent; }
+  .cq-block[data-kind="currículum"] h4 { color: var(--muted); }
+  .cq-block[data-kind="currículum"] p {
+    margin: 0 0 6px;
+    font-size: .86rem;
+    color: var(--muted);
+  }
+  .cq-block[data-kind="currículum"] p:last-child { margin-bottom: 0; }
+  .cq-block[data-kind="currículum"] .lbl {
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    margin-right: 6px;
+    white-space: nowrap;
+  }
+
   /* ==== Diagrama de passos en flux (DORA i similars) ==== */
   .dora-flow {
     display: flex;
@@ -667,10 +685,14 @@ chmod 600 ~/.ssh/authorized_keys</pre>
 sudo tee /etc/systemd/system/ssh.socket.d/port.conf &lt;&lt;'EOF'
 [Socket]
 ListenStream=
-ListenStream=2222
+ListenStream=0.0.0.0:2222
+ListenStream=[::]:2222
 EOF</pre>
       <p>La línia <code>ListenStream=</code> buida és imprescindible: neteja la llista prèvia.
-      Sense ella, el servei acaba escoltant al 22 <strong>i</strong> al port nou alhora.</p>
+      Sense ella, el servei acaba escoltant al 22 <strong>i</strong> al port nou alhora.
+      Les dues següents han de portar l'adreça: el fitxer original du
+      <code>BindIPv6Only=ipv6-only</code>, i un <code>ListenStream=2222</code> sol deixa
+      el servei escoltant només per IPv6.</p>
     </li>
     <li>
       <p><strong>Aplica-ho</strong> i comprova que ha canviat:</p>
