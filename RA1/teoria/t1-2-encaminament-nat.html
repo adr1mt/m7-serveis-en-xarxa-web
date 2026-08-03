@@ -193,7 +193,7 @@
     color: var(--muted);
   }
 
-  .cq-block h4 {
+  .cq-block h2 {
     margin: 4px 0 14px;
     font-family: var(--font-display);
     font-size: 1.4rem;
@@ -244,26 +244,26 @@
   .cq-block[data-kind="pas a pas"]::before,
   .cq-block[data-kind="lliurament"]::before,
   .cq-block[data-kind="resum"]::before { border-color: var(--accent-line); color: var(--accent); }
-  .cq-block[data-kind="objectius"] h4,
-  .cq-block[data-kind="pas a pas"] h4,
-  .cq-block[data-kind="lliurament"] h4,
-  .cq-block[data-kind="resum"] h4 { color: var(--accent); }
+  .cq-block[data-kind="objectius"] h2,
+  .cq-block[data-kind="pas a pas"] h2,
+  .cq-block[data-kind="lliurament"] h2,
+  .cq-block[data-kind="resum"] h2 { color: var(--accent); }
 
   .cq-block[data-kind="recordatori"] { background: var(--warn-soft); border-color: #F5DCC8; }
   .cq-block[data-kind="recordatori"]::before { background: var(--warn-soft); border-color: var(--warn-line); color: var(--warn); }
-  .cq-block[data-kind="recordatori"] h4 { color: var(--warn); }
+  .cq-block[data-kind="recordatori"] h2 { color: var(--warn); }
 
   .cq-block[data-kind="bones pràctiques"] { background: var(--ok-soft); border-color: var(--ok-line); }
   .cq-block[data-kind="bones pràctiques"]::before { background: var(--ok-soft); border-color: var(--ok-line); color: var(--ok); }
-  .cq-block[data-kind="bones pràctiques"] h4 { color: var(--ok); }
+  .cq-block[data-kind="bones pràctiques"] h2 { color: var(--ok); }
 
   .cq-block[data-kind="problemes"] { background: var(--ko-soft); border-color: var(--ko-line); }
   .cq-block[data-kind="problemes"]::before { background: var(--ko-soft); border-color: var(--ko-line); color: var(--ko); }
-  .cq-block[data-kind="problemes"] h4 { color: var(--ko); }
+  .cq-block[data-kind="problemes"] h2 { color: var(--ko); }
 
   /* ==== Traçabilitat amb el currículum ==== */
   .cq-block[data-kind="currículum"] { background: transparent; }
-  .cq-block[data-kind="currículum"] h4 { color: var(--muted); }
+  .cq-block[data-kind="currículum"] h2 { color: var(--muted); }
   .cq-block[data-kind="currículum"] p {
     margin: 0 0 6px;
     font-size: .86rem;
@@ -487,14 +487,17 @@
     a.cq-ref { border-bottom: none; color: inherit; }
   }
   /* ==== Contingut no copiable ====
-     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
-     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
-     queda exclòs. */
+     Dissuasiu, no una protecció: la prosa és per llegir-la al web o a
+     Moodle, no per copiar-la. El codi, les ordres i les taules SÍ que es
+     copien: l'alumnat treballa per SSH i les ha d'enganxar. L'editor
+     treballa amb contenteditable i queda exclòs. */
   .cq-header, .cq-block {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
   }
+  .cq-block pre, .cq-block pre *,
+  .cq-block code, .cq-table, .cq-table *,
   [contenteditable="true"], [contenteditable="true"] * {
     -webkit-user-select: text;
     -moz-user-select: text;
@@ -522,7 +525,7 @@
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h4>Què sabràs fer en acabar</h4>
+  <h2>Què sabràs fer en acabar</h2>
   <ul>
     <li>Explicar per què un client amb IP correcta encara no té Internet.</li>
     <li>Activar l'encaminament de paquets de forma permanent.</li>
@@ -533,7 +536,7 @@
 
 <!-- ============ 2 · EL PROBLEMA ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Tinc IP, però no tinc Internet</h4>
+  <h2>Tinc IP, però no tinc Internet</h2>
   <p>
     El client ha rebut la seva configuració per DHCP i la porta d'enllaç apunta al teu servidor.
     Fa <code>ping</code> a Internet i no passa res. DHCP ha funcionat perfectament: el que falla
@@ -549,7 +552,7 @@
 
 <!-- ============ 3 · ENCAMINAMENT ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Encaminament: deixar passar els paquets</h4>
+  <h2>Encaminament: deixar passar els paquets</h2>
   <p>
     Un Linux amb dues targetes de xarxa <strong>no reenvia res</strong> entre elles. Per
     seguretat, ve desactivat de fàbrica: si no ho actives, cada targeta viu la seva vida.
@@ -564,7 +567,7 @@
 
 <!-- ============ 4 · NAT ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>NAT: qui signa la carta</h4>
+  <h2>NAT: qui signa la carta</h2>
   <p>
     Els clients tenen adreces privades, per exemple <code>192.168.1.50</code>. Aquestes adreces
     <strong>no existeixen a Internet</strong>: cap servidor de fora sabria com respondre-hi.
@@ -583,7 +586,7 @@
 
 <!-- ============ 5 · L'ESCENARI ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h4>L'escenari de les activitats</h4>
+  <h2>L'escenari de les activitats</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Targeta</th><th>Xarxa</th><th>Paper</th></tr></thead>
@@ -617,7 +620,7 @@
 
 <!-- ============ BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h4>Criteris professionals</h4>
+  <h2>Criteris professionals</h2>
   <ul>
     <li><strong>Diagnostica per capes</strong>, de dins cap a fora: ruta al client, el servidor, una IP d'Internet i, l'últim de tot, un nom.</li>
     <li><strong>Encaminar i traduir són dues coses</strong>: activar-ne una i oblidar l'altra és la fallada més freqüent d'aquest RA.</li>
@@ -629,7 +632,7 @@
 
 <!-- ============ PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h4>Errors habituals</h4>
+  <h2>Errors habituals</h2>
   <dl class="cq-issues">
     <dt>El client té IP i porta d'enllaç, però no surt</dt>
     <dd>
@@ -659,7 +662,7 @@
 
 <!-- ============ 11 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h4>Resum</h4>
+  <h2>Resum</h2>
   <ul>
     <li>Un client amb IP correcta encara necessita <strong>encaminament</strong> i <strong>NAT</strong> per sortir a Internet.</li>
     <li>L'encaminament s'activa amb <code>net.ipv4.ip_forward=1</code>, permanent a <code>/etc/sysctl.d/</code>.</li>
@@ -675,64 +678,64 @@
 
 <!-- ============ 12 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h4>Comprova el que has après</h4>
+  <h2>Comprova el que has après</h2>
 
   <div class="cq-question" data-id="t1-2-forward" data-type="single">
     <div class="statement">Què significa que <code>/proc/sys/net/ipv4/ip_forward</code> valgui <code>0</code>?</div>
-    <button class="cq-option" data-correct="true">El servidor no passa paquets d'una targeta a l'altra</button>
-    <button class="cq-option" data-correct="false">El servidor no té cap targeta de xarxa activa</button>
-    <button class="cq-option" data-correct="false">El NAT està desactivat</button>
-    <button class="cq-option" data-correct="false">No hi ha cap regla de tallafoc</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">El servidor no passa paquets d'una targeta a l'altra</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El servidor no té cap targeta de xarxa activa</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El NAT està desactivat</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">No hi ha cap regla de tallafoc</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t1-2-nat" data-type="single">
     <div class="statement">Per a què serveix el NAT (<em>masquerade</em>)?</div>
-    <button class="cq-option" data-correct="false">Per repartir adreces IP als clients</button>
-    <button class="cq-option" data-correct="true">Per canviar l'adreça privada d'origen per la del servidor, i que la resposta pugui tornar</button>
-    <button class="cq-option" data-correct="false">Per resoldre noms de domini</button>
-    <button class="cq-option" data-correct="false">Per xifrar el trànsit cap a Internet</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Per repartir adreces IP als clients</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Per canviar l'adreça privada d'origen per la del servidor, i que la resposta pugui tornar</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Per resoldre noms de domini</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Per xifrar el trànsit cap a Internet</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t1-2-permanent" data-type="single">
     <div class="statement">Després de reiniciar, el client torna a quedar-se sense Internet. Què ha passat?</div>
-    <button class="cq-option" data-correct="false">La concessió DHCP ha caducat</button>
-    <button class="cq-option" data-correct="true">La configuració es va fer només per a la sessió i no s'ha desat en fitxers</button>
-    <button class="cq-option" data-correct="false">El servidor ha canviat d'adreça MAC</button>
-    <button class="cq-option" data-correct="false">S'ha esgotat el rang d'adreces</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">La concessió DHCP ha caducat</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">La configuració es va fer només per a la sessió i no s'ha desat en fitxers</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El servidor ha canviat d'adreça MAC</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">S'ha esgotat el rang d'adreces</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t1-2-diagnostic" data-type="single">
     <div class="statement">Al client, <code>ping 9.9.9.9</code> funciona però <code>ping www.upc.edu</code> no. Què falla?</div>
-    <button class="cq-option" data-correct="false">L'encaminament</button>
-    <button class="cq-option" data-correct="false">El NAT</button>
-    <button class="cq-option" data-correct="true">El DNS que reparteix el servidor DHCP</button>
-    <button class="cq-option" data-correct="false">La porta d'enllaç</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">L'encaminament</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El NAT</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">El DNS que reparteix el servidor DHCP</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">La porta d'enllaç</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t1-2-certes" data-type="multi">
     <div class="statement">Selecciona totes les afirmacions certes</div>
-    <button class="cq-option" data-correct="true">L'encaminament ve desactivat per defecte a Linux.</button>
-    <button class="cq-option" data-correct="true">El <em>masquerade</em> s'aplica a la targeta que surt a Internet.</button>
-    <button class="cq-option" data-correct="true">Les regles del tallafoc s'han de desar en un fitxer perquè sobrevisquin a un reinici.</button>
-    <button class="cq-option" data-correct="false">Convé escriure les regles amb <code>iptables</code> i amb <code>nftables</code> alhora.</button>
-    <button class="cq-option" data-correct="false">Amb el DHCP ben configurat, el client ja té Internet.</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">L'encaminament ve desactivat per defecte a Linux.</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">El <em>masquerade</em> s'aplica a la targeta que surt a Internet.</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Les regles del tallafoc s'han de desar en un fitxer perquè sobrevisquin a un reinici.</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Convé escriure les regles amb <code>iptables</code> i amb <code>nftables</code> alhora.</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Amb el DHCP ben configurat, el client ja té Internet.</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 </div>
 
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h4>Al currículum</h4>
+  <h2>Al currículum</h2>
   <p><span class="lbl">Contingut 8.3</span> Encaminament de trànsit entre interfícies de xarxa.</p>
   <p><span class="lbl">CA 8.8</span> Estableix un mecanisme que permeti reenviar trànsit entre dues o més interfícies d'un mateix sistema.</p>
 </div>
@@ -749,15 +752,26 @@
 <!-- === PEU DE NAVEGACIÓ FI === -->
 
 <script>
-  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  // Dissuasió de la còpia: mai al codi, a les taules ni dins de l'editor.
+  // L'alumnat treballa per SSH i ha de poder enganxar les ordres.
   (function () {
-    function editant(node) {
-      return node && node.closest && node.closest('[contenteditable="true"]');
+    var LLIURE = 'pre, code, .cq-table, [contenteditable="true"]';
+    function copiable(node) {
+      if (node && node.nodeType !== 1) { node = node.parentNode; }
+      return !!(node && node.closest && node.closest(LLIURE));
     }
-    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+    function seleccioCopiable() {
+      var s = document.getSelection();
+      if (!s || s.rangeCount === 0) { return false; }
+      return copiable(s.getRangeAt(0).commonAncestorContainer);
+    }
+    ['copy', 'cut'].forEach(function (nom) {
       document.addEventListener(nom, function (e) {
-        if (!editant(e.target)) { e.preventDefault(); }
+        if (!seleccioCopiable()) { e.preventDefault(); }
       });
+    });
+    document.addEventListener('dragstart', function (e) {
+      if (!copiable(e.target)) { e.preventDefault(); }
     });
   })();
 
@@ -784,6 +798,10 @@
         } else {
           opt.classList.toggle('cq-selected');
         }
+        options.forEach(function (o) {
+          o.setAttribute('aria-pressed',
+            o.classList.contains('cq-selected') ? 'true' : 'false');
+        });
       });
     });
 
@@ -793,6 +811,7 @@
         var isCorrect = opt.dataset.correct === 'true';
         var isSelected = opt.classList.contains('cq-selected');
         opt.classList.remove('cq-selected');
+        opt.setAttribute('aria-pressed', 'false');
         if (isCorrect) {
           opt.classList.add('cq-correct');
         } else if (isSelected) {

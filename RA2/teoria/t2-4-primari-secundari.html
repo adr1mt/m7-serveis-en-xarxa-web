@@ -193,7 +193,7 @@
     color: var(--muted);
   }
 
-  .cq-block h4 {
+  .cq-block h2 {
     margin: 4px 0 14px;
     font-family: var(--font-display);
     font-size: 1.4rem;
@@ -244,26 +244,26 @@
   .cq-block[data-kind="pas a pas"]::before,
   .cq-block[data-kind="lliurament"]::before,
   .cq-block[data-kind="resum"]::before { border-color: var(--accent-line); color: var(--accent); }
-  .cq-block[data-kind="objectius"] h4,
-  .cq-block[data-kind="pas a pas"] h4,
-  .cq-block[data-kind="lliurament"] h4,
-  .cq-block[data-kind="resum"] h4 { color: var(--accent); }
+  .cq-block[data-kind="objectius"] h2,
+  .cq-block[data-kind="pas a pas"] h2,
+  .cq-block[data-kind="lliurament"] h2,
+  .cq-block[data-kind="resum"] h2 { color: var(--accent); }
 
   .cq-block[data-kind="recordatori"] { background: var(--warn-soft); border-color: #F5DCC8; }
   .cq-block[data-kind="recordatori"]::before { background: var(--warn-soft); border-color: var(--warn-line); color: var(--warn); }
-  .cq-block[data-kind="recordatori"] h4 { color: var(--warn); }
+  .cq-block[data-kind="recordatori"] h2 { color: var(--warn); }
 
   .cq-block[data-kind="bones pràctiques"] { background: var(--ok-soft); border-color: var(--ok-line); }
   .cq-block[data-kind="bones pràctiques"]::before { background: var(--ok-soft); border-color: var(--ok-line); color: var(--ok); }
-  .cq-block[data-kind="bones pràctiques"] h4 { color: var(--ok); }
+  .cq-block[data-kind="bones pràctiques"] h2 { color: var(--ok); }
 
   .cq-block[data-kind="problemes"] { background: var(--ko-soft); border-color: var(--ko-line); }
   .cq-block[data-kind="problemes"]::before { background: var(--ko-soft); border-color: var(--ko-line); color: var(--ko); }
-  .cq-block[data-kind="problemes"] h4 { color: var(--ko); }
+  .cq-block[data-kind="problemes"] h2 { color: var(--ko); }
 
   /* ==== Traçabilitat amb el currículum ==== */
   .cq-block[data-kind="currículum"] { background: transparent; }
-  .cq-block[data-kind="currículum"] h4 { color: var(--muted); }
+  .cq-block[data-kind="currículum"] h2 { color: var(--muted); }
   .cq-block[data-kind="currículum"] p {
     margin: 0 0 6px;
     font-size: .86rem;
@@ -487,14 +487,17 @@
     a.cq-ref { border-bottom: none; color: inherit; }
   }
   /* ==== Contingut no copiable ====
-     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
-     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
-     queda exclòs. */
+     Dissuasiu, no una protecció: la prosa és per llegir-la al web o a
+     Moodle, no per copiar-la. El codi, les ordres i les taules SÍ que es
+     copien: l'alumnat treballa per SSH i les ha d'enganxar. L'editor
+     treballa amb contenteditable i queda exclòs. */
   .cq-header, .cq-block {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
   }
+  .cq-block pre, .cq-block pre *,
+  .cq-block code, .cq-table, .cq-table *,
   [contenteditable="true"], [contenteditable="true"] * {
     -webkit-user-select: text;
     -moz-user-select: text;
@@ -522,7 +525,7 @@
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h4>Què sabràs fer en acabar</h4>
+  <h2>Què sabràs fer en acabar</h2>
   <ul>
     <li>Explicar per què tota zona vol dos servidors com a mínim.</li>
     <li>Configurar un servidor <strong>secundari</strong> que es descarregui la zona.</li>
@@ -534,7 +537,7 @@
 
 <!-- ============ 2 · PER QUÈ ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Un sol servidor de noms és un sol punt de fallada</h4>
+  <h2>Un sol servidor de noms és un sol punt de fallada</h2>
   <p>
     Si la teva zona la serveix una màquina i aquella màquina cau, els seus noms deixen d'existir
     per a tothom. No és que vagi lent: simplement no hi ha resposta.
@@ -552,7 +555,7 @@
 
 <!-- ============ 3 · ELS DOS PAPERS ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Qui fa què</h4>
+  <h2>Qui fa què</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th></th><th>Primari</th><th>Secundari</th></tr></thead>
@@ -572,7 +575,7 @@
 
 <!-- ============ 4 · LA TRANSFERÈNCIA ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Com viatja la zona</h4>
+  <h2>Com viatja la zona</h2>
   <p>
     La còpia es diu <strong>transferència de zona</strong> i, a diferència de les consultes
     normals, va per <strong>TCP</strong>, també al port 53: pot ser molta informació de cop.
@@ -604,7 +607,7 @@
 
 <!-- ============ 6 · SEGURETAT ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h4>Una transferència oberta és el mapa de la teva xarxa</h4>
+  <h2>Una transferència oberta és el mapa de la teva xarxa</h2>
   <p>
     Una zona conté totes les màquines amb nom i adreça. Si qualsevol se la pot descarregar, li
     estàs regalant l'inventari sencer: servidors, impressores, còpies de seguretat i com es diu
@@ -623,7 +626,7 @@
 
 <!-- ============ BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h4>Criteris professionals</h4>
+  <h2>Criteris professionals</h2>
   <ul>
     <li><strong>Dos servidors per zona com a mínim</strong>, i en xarxes o alimentacions diferents si pots.</li>
     <li><strong>Es toca només el primari</strong>: editar la còpia del secundari és treball que la pròxima transferència s'endurà.</li>
@@ -635,7 +638,7 @@
 
 <!-- ============ PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h4>Errors habituals</h4>
+  <h2>Errors habituals</h2>
   <dl class="cq-issues">
     <dt>El secundari no es descarrega la zona</dt>
     <dd>
@@ -665,7 +668,7 @@
 
 <!-- ============ 10 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h4>Resum</h4>
+  <h2>Resum</h2>
   <ul>
     <li>Tota zona vol <strong>dos servidors</strong>; tots dos responen com a autoritatius.</li>
     <li>El <strong>primari</strong> té l'original; el <strong>secundari</strong> se'l descarrega.</li>
@@ -684,64 +687,64 @@
 
 <!-- ============ 11 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h4>Comprova el que has après</h4>
+  <h2>Comprova el que has après</h2>
 
   <div class="cq-question" data-id="t2-4-transport" data-type="single">
     <div class="statement">Per quin protocol de transport viatja una transferència de zona?</div>
-    <button class="cq-option" data-correct="false">UDP, port 53</button>
-    <button class="cq-option" data-correct="true">TCP, port 53</button>
-    <button class="cq-option" data-correct="false">TCP, port 853</button>
-    <button class="cq-option" data-correct="false">UDP, port 67</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">UDP, port 53</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">TCP, port 53</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">TCP, port 853</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">UDP, port 67</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t2-4-serial" data-type="single">
     <div class="statement">Què fa que el secundari es descarregui la zona altra vegada?</div>
-    <button class="cq-option" data-correct="false">Que hagi passat el TTL</button>
-    <button class="cq-option" data-correct="true">Que el serial del primari sigui més alt que el seu</button>
-    <button class="cq-option" data-correct="false">Que es reiniciï el servei del primari</button>
-    <button class="cq-option" data-correct="false">Que el client li ho demani</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que hagi passat el TTL</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Que el serial del primari sigui més alt que el seu</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que es reiniciï el servei del primari</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que el client li ho demani</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t2-4-fitxer" data-type="single">
     <div class="statement">Al servidor secundari, qui escriu el fitxer de zona?</div>
-    <button class="cq-option" data-correct="false">L'administrador, copiant-lo del primari</button>
-    <button class="cq-option" data-correct="true">El mateix servidor, en fer la transferència</button>
-    <button class="cq-option" data-correct="false">El servei DHCP</button>
-    <button class="cq-option" data-correct="false">No hi ha fitxer: tot es guarda a memòria</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">L'administrador, copiant-lo del primari</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">El mateix servidor, en fer la transferència</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El servei DHCP</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">No hi ha fitxer: tot es guarda a memòria</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t2-4-seguretat" data-type="single">
     <div class="statement">Per què s'ha de limitar qui es pot descarregar una zona sencera?</div>
-    <button class="cq-option" data-correct="false">Perquè les transferències consumeixen molta memòria</button>
-    <button class="cq-option" data-correct="true">Perquè qui es descarrega la zona obté l'inventari sencer de la xarxa</button>
-    <button class="cq-option" data-correct="false">Perquè si no, el secundari no es descarrega res</button>
-    <button class="cq-option" data-correct="false">Perquè el port 53 TCP està tancat per defecte</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè les transferències consumeixen molta memòria</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Perquè qui es descarrega la zona obté l'inventari sencer de la xarxa</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè si no, el secundari no es descarrega res</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè el port 53 TCP està tancat per defecte</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t2-4-afirmacions" data-type="multi">
     <div class="statement">Selecciona totes les afirmacions certes</div>
-    <button class="cq-option" data-correct="true">El secundari respon amb la mateixa autoritat que el primari.</button>
-    <button class="cq-option" data-correct="true">A la zona hi ha d'haver un registre NS per a cada servidor.</button>
-    <button class="cq-option" data-correct="true">El fitxer del secundari no s'ha d'editar a mà.</button>
-    <button class="cq-option" data-correct="false">El secundari només serveix quan el primari està aturat.</button>
-    <button class="cq-option" data-correct="false">La transferència es fa amb el mateix mecanisme que una consulta normal.</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">El secundari respon amb la mateixa autoritat que el primari.</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">A la zona hi ha d'haver un registre NS per a cada servidor.</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">El fitxer del secundari no s'ha d'editar a mà.</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El secundari només serveix quan el primari està aturat.</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">La transferència es fa amb el mateix mecanisme que una consulta normal.</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 </div>
 
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h4>Al currículum</h4>
+  <h2>Al currículum</h2>
   <p><span class="lbl">Contingut 2.2</span> Zones primàries i secundàries. Transferències de zona. Tipus de registres.</p>
 </div>
 
@@ -757,15 +760,26 @@
 <!-- === PEU DE NAVEGACIÓ FI === -->
 
 <script>
-  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  // Dissuasió de la còpia: mai al codi, a les taules ni dins de l'editor.
+  // L'alumnat treballa per SSH i ha de poder enganxar les ordres.
   (function () {
-    function editant(node) {
-      return node && node.closest && node.closest('[contenteditable="true"]');
+    var LLIURE = 'pre, code, .cq-table, [contenteditable="true"]';
+    function copiable(node) {
+      if (node && node.nodeType !== 1) { node = node.parentNode; }
+      return !!(node && node.closest && node.closest(LLIURE));
     }
-    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+    function seleccioCopiable() {
+      var s = document.getSelection();
+      if (!s || s.rangeCount === 0) { return false; }
+      return copiable(s.getRangeAt(0).commonAncestorContainer);
+    }
+    ['copy', 'cut'].forEach(function (nom) {
       document.addEventListener(nom, function (e) {
-        if (!editant(e.target)) { e.preventDefault(); }
+        if (!seleccioCopiable()) { e.preventDefault(); }
       });
+    });
+    document.addEventListener('dragstart', function (e) {
+      if (!copiable(e.target)) { e.preventDefault(); }
     });
   })();
 
@@ -792,6 +806,10 @@
         } else {
           opt.classList.toggle('cq-selected');
         }
+        options.forEach(function (o) {
+          o.setAttribute('aria-pressed',
+            o.classList.contains('cq-selected') ? 'true' : 'false');
+        });
       });
     });
 
@@ -801,6 +819,7 @@
         var isCorrect = opt.dataset.correct === 'true';
         var isSelected = opt.classList.contains('cq-selected');
         opt.classList.remove('cq-selected');
+        opt.setAttribute('aria-pressed', 'false');
         if (isCorrect) {
           opt.classList.add('cq-correct');
         } else if (isSelected) {

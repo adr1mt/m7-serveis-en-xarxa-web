@@ -193,7 +193,7 @@
     color: var(--muted);
   }
 
-  .cq-block h4 {
+  .cq-block h2 {
     margin: 4px 0 14px;
     font-family: var(--font-display);
     font-size: 1.4rem;
@@ -244,26 +244,26 @@
   .cq-block[data-kind="pas a pas"]::before,
   .cq-block[data-kind="lliurament"]::before,
   .cq-block[data-kind="resum"]::before { border-color: var(--accent-line); color: var(--accent); }
-  .cq-block[data-kind="objectius"] h4,
-  .cq-block[data-kind="pas a pas"] h4,
-  .cq-block[data-kind="lliurament"] h4,
-  .cq-block[data-kind="resum"] h4 { color: var(--accent); }
+  .cq-block[data-kind="objectius"] h2,
+  .cq-block[data-kind="pas a pas"] h2,
+  .cq-block[data-kind="lliurament"] h2,
+  .cq-block[data-kind="resum"] h2 { color: var(--accent); }
 
   .cq-block[data-kind="recordatori"] { background: var(--warn-soft); border-color: #F5DCC8; }
   .cq-block[data-kind="recordatori"]::before { background: var(--warn-soft); border-color: var(--warn-line); color: var(--warn); }
-  .cq-block[data-kind="recordatori"] h4 { color: var(--warn); }
+  .cq-block[data-kind="recordatori"] h2 { color: var(--warn); }
 
   .cq-block[data-kind="bones pràctiques"] { background: var(--ok-soft); border-color: var(--ok-line); }
   .cq-block[data-kind="bones pràctiques"]::before { background: var(--ok-soft); border-color: var(--ok-line); color: var(--ok); }
-  .cq-block[data-kind="bones pràctiques"] h4 { color: var(--ok); }
+  .cq-block[data-kind="bones pràctiques"] h2 { color: var(--ok); }
 
   .cq-block[data-kind="problemes"] { background: var(--ko-soft); border-color: var(--ko-line); }
   .cq-block[data-kind="problemes"]::before { background: var(--ko-soft); border-color: var(--ko-line); color: var(--ko); }
-  .cq-block[data-kind="problemes"] h4 { color: var(--ko); }
+  .cq-block[data-kind="problemes"] h2 { color: var(--ko); }
 
   /* ==== Traçabilitat amb el currículum ==== */
   .cq-block[data-kind="currículum"] { background: transparent; }
-  .cq-block[data-kind="currículum"] h4 { color: var(--muted); }
+  .cq-block[data-kind="currículum"] h2 { color: var(--muted); }
   .cq-block[data-kind="currículum"] p {
     margin: 0 0 6px;
     font-size: .86rem;
@@ -487,14 +487,17 @@
     a.cq-ref { border-bottom: none; color: inherit; }
   }
   /* ==== Contingut no copiable ====
-     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
-     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
-     queda exclòs. */
+     Dissuasiu, no una protecció: la prosa és per llegir-la al web o a
+     Moodle, no per copiar-la. El codi, les ordres i les taules SÍ que es
+     copien: l'alumnat treballa per SSH i les ha d'enganxar. L'editor
+     treballa amb contenteditable i queda exclòs. */
   .cq-header, .cq-block {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
   }
+  .cq-block pre, .cq-block pre *,
+  .cq-block code, .cq-table, .cq-table *,
   [contenteditable="true"], [contenteditable="true"] * {
     -webkit-user-select: text;
     -moz-user-select: text;
@@ -522,7 +525,7 @@
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h4>Què sabràs fer en acabar</h4>
+  <h2>Què sabràs fer en acabar</h2>
   <ul>
     <li>Distingir el <strong>MUA</strong>, el <strong>MTA</strong> i el <strong>MDA</strong>, i posar-hi un exemple real de cada un.</li>
     <li>Associar cada protocol de correu amb el seu port.</li>
@@ -534,7 +537,7 @@
 
 <!-- ============ 2 · ELS TRES ACTORS ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Tres papers, tres programes diferents</h4>
+  <h2>Tres papers, tres programes diferents</h2>
   <p>
     Cap correu viatja sol: sempre hi intervenen tres tipus de programari, cadascun amb una feina
     concreta. Confondre'ls és l'origen de la majoria de dubtes d'aquest RA.
@@ -583,7 +586,7 @@
 
 <!-- ============ 3 · PROTOCOLS I PORTS ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Un protocol per a cada tram del viatge</h4>
+  <h2>Un protocol per a cada tram del viatge</h2>
   <p>
     El correu no fa servir un sol protocol de cap a cap: n'hi ha un per enviar i un altre per
     recollir, i cadascun té la seva versió xifrada.
@@ -609,7 +612,7 @@
 
 <!-- ============ 4 · IMAP VS POP3 ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>IMAP i POP3: es queda o es baixa</h4>
+  <h2>IMAP i POP3: es queda o es baixa</h2>
   <p>
     La diferència no és de seguretat, és de <strong>on viu el correu</strong>. Amb IMAP el missatge
     es queda al servidor i el client només en mostra una còpia sincronitzada; amb POP3 el client el
@@ -633,7 +636,7 @@
 
 <!-- ============ 5 · EXEMPLE: DIÀLEG SMTP ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h4>Una conversa SMTP vista per dins</h4>
+  <h2>Una conversa SMTP vista per dins</h2>
   <p>
     Igual que amb FTP a la <a class="cq-ref" href="../../RA3/teoria/t3-1-ftp-fonaments.html">T3.1</a>, darrere de "s'ha enviat el correu" hi ha un diàleg de text amb
     ordres i codis. Aquest és el que fa un MTA en entregar un missatge a un altre:
@@ -665,7 +668,7 @@ QUIT
 
 <!-- ============ 6 · CAS REAL: EL VIATGE COMPLET ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h4>D'anna a bruno, pas a pas</h4>
+  <h2>D'anna a bruno, pas a pas</h2>
   <p>
     <code>anna@puigcastellar.internal</code> envia un correu a
     <code>bruno@personal.internal</code>. El seu MUA no sap on és <code>personal.internal</code>:
@@ -686,7 +689,7 @@ QUIT
 
 <!-- ============ 7 · OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h4>Observa el viatge sense muntar res</h4>
+  <h2>Observa el viatge sense muntar res</h2>
   <p>
     Aquí no configures res: només mires, amb eines de consulta, com un domini real anuncia
     el seu servei de correu. Muntar-ne un és feina de les guies del RA.
@@ -732,7 +735,7 @@ sudo apt install -y bind9-dnsutils</pre>
 
 <!-- ============ 8 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h4>Criteris professionals</h4>
+  <h2>Criteris professionals</h2>
   <ul>
     <li><strong>Submission (587 o 465) per als clients</strong>, mai el 25 directe: el 25 és per a servidors.</li>
     <li><strong>IMAP com a opció per defecte</strong>: POP3 només quan de debò cal correu local i prou.</li>
@@ -744,7 +747,7 @@ sudo apt install -y bind9-dnsutils</pre>
 
 <!-- ============ 9 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h4>Errors habituals</h4>
+  <h2>Errors habituals</h2>
   <dl class="cq-issues">
     <dt>Configurar el client de correu pel port 25</dt>
     <dd>
@@ -768,7 +771,7 @@ sudo apt install -y bind9-dnsutils</pre>
 
 <!-- ============ 10 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h4>Resum</h4>
+  <h2>Resum</h2>
   <ul>
     <li><strong>MUA</strong> escriu i llegeix, <strong>MTA</strong> transporta per SMTP, <strong>MDA</strong> guarda la bústia.</li>
     <li>SMTP: <strong>25</strong> entre servidors, <strong>587 o 465</strong> del client cap al seu servidor.</li>
@@ -785,53 +788,53 @@ sudo apt install -y bind9-dnsutils</pre>
 
 <!-- ============ 11 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h4>Comprova el que has après</h4>
+  <h2>Comprova el que has après</h2>
 
   <div class="cq-question" data-id="t4-1-actors" data-type="single">
     <div class="statement">Quin dels tres actors és Dovecot, en un servidor típic?</div>
-    <button class="cq-option" data-correct="false">MUA</button>
-    <button class="cq-option" data-correct="false">MTA</button>
-    <button class="cq-option" data-correct="true">MDA</button>
-    <button class="cq-option" data-correct="false">Cap dels tres: és un client de correu</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">MUA</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">MTA</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">MDA</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Cap dels tres: és un client de correu</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t4-1-ports" data-type="single">
     <div class="statement">Un client de correu envia un missatge des de casa cap al seu propi servidor. Quin port fa servir?</div>
-    <button class="cq-option" data-correct="false">25</button>
-    <button class="cq-option" data-correct="true">587</button>
-    <button class="cq-option" data-correct="false">143</button>
-    <button class="cq-option" data-correct="false">995</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">25</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">587</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">143</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">995</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t4-1-imap-pop3" data-type="single">
     <div class="statement">Per què avui la majoria de serveis fan servir IMAP en lloc de POP3?</div>
-    <button class="cq-option" data-correct="false">Perquè IMAP no necessita cap connexió a Internet</button>
-    <button class="cq-option" data-correct="true">Perquè el correu es queda al servidor i es manté sincronitzat entre dispositius</button>
-    <button class="cq-option" data-correct="false">Perquè POP3 no permet enviar correu</button>
-    <button class="cq-option" data-correct="false">Perquè IMAP no fa servir cap port fix</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè IMAP no necessita cap connexió a Internet</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Perquè el correu es queda al servidor i es manté sincronitzat entre dispositius</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè POP3 no permet enviar correu</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè IMAP no fa servir cap port fix</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t4-1-mx" data-type="single">
     <div class="statement">Un servidor vol entregar un correu a un domini extern. Quin és el primer pas al DNS?</div>
-    <button class="cq-option" data-correct="false">Consultar directament el registre A del domini</button>
-    <button class="cq-option" data-correct="true">Consultar el registre MX del domini</button>
-    <button class="cq-option" data-correct="false">Consultar el registre MX del seu propi domini</button>
-    <button class="cq-option" data-correct="false">Connectar-se pel port 587 sense consultar el DNS</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Consultar directament el registre A del domini</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Consultar el registre MX del domini</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Consultar el registre MX del seu propi domini</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Connectar-se pel port 587 sense consultar el DNS</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 </div>
 
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h4>Al currículum</h4>
+  <h2>Al currículum</h2>
   <p><span class="lbl">Contingut 4.2</span> Protocols i serveis de descàrrega de correu.</p>
   <p><span class="lbl">CA 4.1</span> Descriu els protocols que intervenen en l'enviament i la recollida del correu electrònic.</p>
 </div>
@@ -848,15 +851,26 @@ sudo apt install -y bind9-dnsutils</pre>
 <!-- === PEU DE NAVEGACIÓ FI === -->
 
 <script>
-  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  // Dissuasió de la còpia: mai al codi, a les taules ni dins de l'editor.
+  // L'alumnat treballa per SSH i ha de poder enganxar les ordres.
   (function () {
-    function editant(node) {
-      return node && node.closest && node.closest('[contenteditable="true"]');
+    var LLIURE = 'pre, code, .cq-table, [contenteditable="true"]';
+    function copiable(node) {
+      if (node && node.nodeType !== 1) { node = node.parentNode; }
+      return !!(node && node.closest && node.closest(LLIURE));
     }
-    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+    function seleccioCopiable() {
+      var s = document.getSelection();
+      if (!s || s.rangeCount === 0) { return false; }
+      return copiable(s.getRangeAt(0).commonAncestorContainer);
+    }
+    ['copy', 'cut'].forEach(function (nom) {
       document.addEventListener(nom, function (e) {
-        if (!editant(e.target)) { e.preventDefault(); }
+        if (!seleccioCopiable()) { e.preventDefault(); }
       });
+    });
+    document.addEventListener('dragstart', function (e) {
+      if (!copiable(e.target)) { e.preventDefault(); }
     });
   })();
 
@@ -883,6 +897,10 @@ sudo apt install -y bind9-dnsutils</pre>
         } else {
           opt.classList.toggle('cq-selected');
         }
+        options.forEach(function (o) {
+          o.setAttribute('aria-pressed',
+            o.classList.contains('cq-selected') ? 'true' : 'false');
+        });
       });
     });
 
@@ -892,6 +910,7 @@ sudo apt install -y bind9-dnsutils</pre>
         var isCorrect = opt.dataset.correct === 'true';
         var isSelected = opt.classList.contains('cq-selected');
         opt.classList.remove('cq-selected');
+        opt.setAttribute('aria-pressed', 'false');
         if (isCorrect) {
           opt.classList.add('cq-correct');
         } else if (isSelected) {

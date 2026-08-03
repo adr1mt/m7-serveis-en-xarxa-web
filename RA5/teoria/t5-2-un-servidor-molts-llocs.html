@@ -193,7 +193,7 @@
     color: var(--muted);
   }
 
-  .cq-block h4 {
+  .cq-block h2 {
     margin: 4px 0 14px;
     font-family: var(--font-display);
     font-size: 1.4rem;
@@ -244,26 +244,26 @@
   .cq-block[data-kind="pas a pas"]::before,
   .cq-block[data-kind="lliurament"]::before,
   .cq-block[data-kind="resum"]::before { border-color: var(--accent-line); color: var(--accent); }
-  .cq-block[data-kind="objectius"] h4,
-  .cq-block[data-kind="pas a pas"] h4,
-  .cq-block[data-kind="lliurament"] h4,
-  .cq-block[data-kind="resum"] h4 { color: var(--accent); }
+  .cq-block[data-kind="objectius"] h2,
+  .cq-block[data-kind="pas a pas"] h2,
+  .cq-block[data-kind="lliurament"] h2,
+  .cq-block[data-kind="resum"] h2 { color: var(--accent); }
 
   .cq-block[data-kind="recordatori"] { background: var(--warn-soft); border-color: #F5DCC8; }
   .cq-block[data-kind="recordatori"]::before { background: var(--warn-soft); border-color: var(--warn-line); color: var(--warn); }
-  .cq-block[data-kind="recordatori"] h4 { color: var(--warn); }
+  .cq-block[data-kind="recordatori"] h2 { color: var(--warn); }
 
   .cq-block[data-kind="bones pràctiques"] { background: var(--ok-soft); border-color: var(--ok-line); }
   .cq-block[data-kind="bones pràctiques"]::before { background: var(--ok-soft); border-color: var(--ok-line); color: var(--ok); }
-  .cq-block[data-kind="bones pràctiques"] h4 { color: var(--ok); }
+  .cq-block[data-kind="bones pràctiques"] h2 { color: var(--ok); }
 
   .cq-block[data-kind="problemes"] { background: var(--ko-soft); border-color: var(--ko-line); }
   .cq-block[data-kind="problemes"]::before { background: var(--ko-soft); border-color: var(--ko-line); color: var(--ko); }
-  .cq-block[data-kind="problemes"] h4 { color: var(--ko); }
+  .cq-block[data-kind="problemes"] h2 { color: var(--ko); }
 
   /* ==== Traçabilitat amb el currículum ==== */
   .cq-block[data-kind="currículum"] { background: transparent; }
-  .cq-block[data-kind="currículum"] h4 { color: var(--muted); }
+  .cq-block[data-kind="currículum"] h2 { color: var(--muted); }
   .cq-block[data-kind="currículum"] p {
     margin: 0 0 6px;
     font-size: .86rem;
@@ -487,14 +487,17 @@
     a.cq-ref { border-bottom: none; color: inherit; }
   }
   /* ==== Contingut no copiable ====
-     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
-     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
-     queda exclòs. */
+     Dissuasiu, no una protecció: la prosa és per llegir-la al web o a
+     Moodle, no per copiar-la. El codi, les ordres i les taules SÍ que es
+     copien: l'alumnat treballa per SSH i les ha d'enganxar. L'editor
+     treballa amb contenteditable i queda exclòs. */
   .cq-header, .cq-block {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
   }
+  .cq-block pre, .cq-block pre *,
+  .cq-block code, .cq-table, .cq-table *,
   [contenteditable="true"], [contenteditable="true"] * {
     -webkit-user-select: text;
     -moz-user-select: text;
@@ -522,7 +525,7 @@
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h4>Què sabràs fer en acabar</h4>
+  <h2>Què sabràs fer en acabar</h2>
   <ul>
     <li>Explicar per què un sol servidor pot allotjar molts llocs web.</li>
     <li>Descriure el paper de la capçalera <code>Host</code> en la petició.</li>
@@ -533,7 +536,7 @@
 
 <!-- ============ 2 · MOLTS LLOCS, UNA IP ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Molts llocs, una sola IP</h4>
+  <h2>Molts llocs, una sola IP</h2>
   <p>
     Una màquina pot tenir una sola adreça IP i servir desenes de llocs web diferents. El servidor
     ho fa possible mirant, a cada petició, quin <strong>nom</strong> ha demanat el navegador: no
@@ -548,7 +551,7 @@
 
 <!-- ============ 3 · LA CAPÇALERA HOST ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>La capçalera Host</h4>
+  <h2>La capçalera Host</h2>
   <p>
     Cada petició HTTP porta una capçalera <code>Host</code> amb el nom que l'usuari ha escrit al
     navegador. El servidor la llig i decideix quin lloc respon, encara que totes les peticions
@@ -567,7 +570,7 @@
 
 <!-- ============ 4 · LLOC PER DEFECTE ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>El lloc per defecte</h4>
+  <h2>El lloc per defecte</h2>
   <p>
     Quan cap lloc configurat coincideix amb el nom demanat, el servidor respon amb el <strong>lloc
     per defecte</strong>. És el que es veu si s'entra per la IP directament: la IP no és cap nom,
@@ -577,7 +580,7 @@
 
 <!-- ============ 5 · EXEMPLE ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h4>Entrar per IP no és entrar pel nom</h4>
+  <h2>Entrar per IP no és entrar pel nom</h2>
   <p>
     Un usuari escriu la IP del servidor al navegador esperant veure <code>botiga.internal</code>,
     però rep el lloc per defecte: el navegador no ha enviat cap capçalera <code>Host</code> amb
@@ -587,7 +590,7 @@
 
 <!-- ============ 6 · CAS REAL ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h4>Qui resol el nom</h4>
+  <h2>Qui resol el nom</h2>
   <p>
     Al laboratori, el fitxer <code>hosts</code> del client fa d'atzucac ràpid per apuntar un nom a
     una IP sense DNS. En producció, el que funciona és publicar el nom en una zona DNS pròpia
@@ -597,7 +600,7 @@
 
 <!-- ============ 7 · OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h4>Canviar de lloc sense canviar d'IP</h4>
+  <h2>Canviar de lloc sense canviar d'IP</h2>
   <p>
     Es pot forçar la capçalera <code>Host</code> amb <code>curl</code> i veure com respon un
     lloc o un altre contra la mateixa IP:
@@ -611,7 +614,7 @@ curl -H "Host: web2.internal" http://203.0.113.10/
 
 <!-- ============ 8 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h4>Criteris professionals</h4>
+  <h2>Criteris professionals</h2>
   <ul>
     <li>Publica el nom en una zona DNS pròpia; el fitxer <code>hosts</code> és només per a proves.</li>
     <li>Configura sempre un lloc per defecte pensat, no el primer que quedi per casualitat.</li>
@@ -621,7 +624,7 @@ curl -H "Host: web2.internal" http://203.0.113.10/
 
 <!-- ============ 9 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h4>Errors habituals</h4>
+  <h2>Errors habituals</h2>
   <dl class="cq-issues">
     <dt>Entrar per IP i no veure el lloc esperat</dt>
     <dd>
@@ -641,7 +644,7 @@ curl -H "Host: web2.internal" http://203.0.113.10/
 
 <!-- ============ 10 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h4>Resum</h4>
+  <h2>Resum</h2>
   <ul>
     <li>Un servidor tria el lloc pel <strong>nom</strong> de la capçalera <code>Host</code>, no per la IP.</li>
     <li>Sense coincidència, respon el <strong>lloc per defecte</strong>.</li>
@@ -653,53 +656,53 @@ curl -H "Host: web2.internal" http://203.0.113.10/
 
 <!-- ============ 11 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h4>Comprova el que has après</h4>
+  <h2>Comprova el que has après</h2>
 
   <div class="cq-question" data-id="t5-2-host" data-type="single">
     <div class="statement">Com decideix el servidor quin lloc respon quan diverses webs comparteixen IP?</div>
-    <button class="cq-option" data-correct="false">Per l'ordre d'arribada de les peticions</button>
-    <button class="cq-option" data-correct="true">Pel nom que porta la capçalera Host de la petició</button>
-    <button class="cq-option" data-correct="false">Per la mida del contingut demanat</button>
-    <button class="cq-option" data-correct="false">Sempre respon el primer lloc que es va crear</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Per l'ordre d'arribada de les peticions</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Pel nom que porta la capçalera Host de la petició</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Per la mida del contingut demanat</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Sempre respon el primer lloc que es va crear</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t5-2-defecte" data-type="single">
     <div class="statement">Un usuari entra per la IP del servidor. Què veu?</div>
-    <button class="cq-option" data-correct="false">Sempre un error 404</button>
-    <button class="cq-option" data-correct="true">El lloc configurat per defecte</button>
-    <button class="cq-option" data-correct="false">Tots els llocs alhora</button>
-    <button class="cq-option" data-correct="false">El lloc que va visitar l'última vegada</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Sempre un error 404</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">El lloc configurat per defecte</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Tots els llocs alhora</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El lloc que va visitar l'última vegada</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t5-2-resolucio" data-type="single">
     <div class="statement">Quina és la manera bona de resoldre el nom d'un lloc en producció?</div>
-    <button class="cq-option" data-correct="false">Escriure'l al fitxer hosts de cada client</button>
-    <button class="cq-option" data-correct="true">Publicar-lo en una zona DNS pròpia</button>
-    <button class="cq-option" data-correct="false">Posar la IP directament a l'adreça de la barra</button>
-    <button class="cq-option" data-correct="false">No cal resoldre'l, el servidor ho fa sol</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Escriure'l al fitxer hosts de cada client</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Publicar-lo en una zona DNS pròpia</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Posar la IP directament a l'adreça de la barra</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">No cal resoldre'l, el servidor ho fa sol</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t5-2-repartiment" data-type="single">
     <div class="statement">Quin repartiment és el normal per allotjar diversos llocs en un servidor web?</div>
-    <button class="cq-option" data-correct="false">Per port, un port diferent per lloc</button>
-    <button class="cq-option" data-correct="false">Per IP, una IP diferent per lloc</button>
-    <button class="cq-option" data-correct="true">Per nom, amb la capçalera Host</button>
-    <button class="cq-option" data-correct="false">Per hora del dia</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Per port, un port diferent per lloc</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Per IP, una IP diferent per lloc</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Per nom, amb la capçalera Host</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Per hora del dia</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 </div>
 
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h4>Al currículum</h4>
+  <h2>Al currículum</h2>
   <p><span class="lbl">Contingut 5.1</span> Servidors virtuals. Nom d'encapçalament d'ordinador central. Identificació d'un servidor virtual.</p>
   <p><span class="lbl">CA 5.4</span> Verifica les possibilitats per discriminar el lloc de destinació del trànsit entrant.</p>
 </div>
@@ -716,15 +719,26 @@ curl -H "Host: web2.internal" http://203.0.113.10/
 <!-- === PEU DE NAVEGACIÓ FI === -->
 
 <script>
-  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  // Dissuasió de la còpia: mai al codi, a les taules ni dins de l'editor.
+  // L'alumnat treballa per SSH i ha de poder enganxar les ordres.
   (function () {
-    function editant(node) {
-      return node && node.closest && node.closest('[contenteditable="true"]');
+    var LLIURE = 'pre, code, .cq-table, [contenteditable="true"]';
+    function copiable(node) {
+      if (node && node.nodeType !== 1) { node = node.parentNode; }
+      return !!(node && node.closest && node.closest(LLIURE));
     }
-    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+    function seleccioCopiable() {
+      var s = document.getSelection();
+      if (!s || s.rangeCount === 0) { return false; }
+      return copiable(s.getRangeAt(0).commonAncestorContainer);
+    }
+    ['copy', 'cut'].forEach(function (nom) {
       document.addEventListener(nom, function (e) {
-        if (!editant(e.target)) { e.preventDefault(); }
+        if (!seleccioCopiable()) { e.preventDefault(); }
       });
+    });
+    document.addEventListener('dragstart', function (e) {
+      if (!copiable(e.target)) { e.preventDefault(); }
     });
   })();
 
@@ -751,6 +765,10 @@ curl -H "Host: web2.internal" http://203.0.113.10/
         } else {
           opt.classList.toggle('cq-selected');
         }
+        options.forEach(function (o) {
+          o.setAttribute('aria-pressed',
+            o.classList.contains('cq-selected') ? 'true' : 'false');
+        });
       });
     });
 
@@ -760,6 +778,7 @@ curl -H "Host: web2.internal" http://203.0.113.10/
         var isCorrect = opt.dataset.correct === 'true';
         var isSelected = opt.classList.contains('cq-selected');
         opt.classList.remove('cq-selected');
+        opt.setAttribute('aria-pressed', 'false');
         if (isCorrect) {
           opt.classList.add('cq-correct');
         } else if (isSelected) {

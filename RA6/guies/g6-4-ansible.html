@@ -193,7 +193,7 @@
     color: var(--muted);
   }
 
-  .cq-block h4 {
+  .cq-block h2 {
     margin: 4px 0 14px;
     font-family: var(--font-display);
     font-size: 1.4rem;
@@ -244,26 +244,26 @@
   .cq-block[data-kind="pas a pas"]::before,
   .cq-block[data-kind="lliurament"]::before,
   .cq-block[data-kind="resum"]::before { border-color: var(--accent-line); color: var(--accent); }
-  .cq-block[data-kind="objectius"] h4,
-  .cq-block[data-kind="pas a pas"] h4,
-  .cq-block[data-kind="lliurament"] h4,
-  .cq-block[data-kind="resum"] h4 { color: var(--accent); }
+  .cq-block[data-kind="objectius"] h2,
+  .cq-block[data-kind="pas a pas"] h2,
+  .cq-block[data-kind="lliurament"] h2,
+  .cq-block[data-kind="resum"] h2 { color: var(--accent); }
 
   .cq-block[data-kind="recordatori"] { background: var(--warn-soft); border-color: #F5DCC8; }
   .cq-block[data-kind="recordatori"]::before { background: var(--warn-soft); border-color: var(--warn-line); color: var(--warn); }
-  .cq-block[data-kind="recordatori"] h4 { color: var(--warn); }
+  .cq-block[data-kind="recordatori"] h2 { color: var(--warn); }
 
   .cq-block[data-kind="bones pràctiques"] { background: var(--ok-soft); border-color: var(--ok-line); }
   .cq-block[data-kind="bones pràctiques"]::before { background: var(--ok-soft); border-color: var(--ok-line); color: var(--ok); }
-  .cq-block[data-kind="bones pràctiques"] h4 { color: var(--ok); }
+  .cq-block[data-kind="bones pràctiques"] h2 { color: var(--ok); }
 
   .cq-block[data-kind="problemes"] { background: var(--ko-soft); border-color: var(--ko-line); }
   .cq-block[data-kind="problemes"]::before { background: var(--ko-soft); border-color: var(--ko-line); color: var(--ko); }
-  .cq-block[data-kind="problemes"] h4 { color: var(--ko); }
+  .cq-block[data-kind="problemes"] h2 { color: var(--ko); }
 
   /* ==== Traçabilitat amb el currículum ==== */
   .cq-block[data-kind="currículum"] { background: transparent; }
-  .cq-block[data-kind="currículum"] h4 { color: var(--muted); }
+  .cq-block[data-kind="currículum"] h2 { color: var(--muted); }
   .cq-block[data-kind="currículum"] p {
     margin: 0 0 6px;
     font-size: .86rem;
@@ -487,14 +487,17 @@
     a.cq-ref { border-bottom: none; color: inherit; }
   }
   /* ==== Contingut no copiable ====
-     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
-     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
-     queda exclòs. */
+     Dissuasiu, no una protecció: la prosa és per llegir-la al web o a
+     Moodle, no per copiar-la. El codi, les ordres i les taules SÍ que es
+     copien: l'alumnat treballa per SSH i les ha d'enganxar. L'editor
+     treballa amb contenteditable i queda exclòs. */
   .cq-header, .cq-block {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
   }
+  .cq-block pre, .cq-block pre *,
+  .cq-block code, .cq-table, .cq-table *,
   [contenteditable="true"], [contenteditable="true"] * {
     -webkit-user-select: text;
     -moz-user-select: text;
@@ -522,7 +525,7 @@
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h4>Què hi ha en aquesta guia</h4>
+  <h2>Què hi ha en aquesta guia</h2>
   <p>Documentació oficial: <a href="https://docs.ansible.com/ansible/latest/">docs.ansible.com/ansible/latest</a>.</p>
   <ul>
     <li>Punt de partida: una màquina de control amb Ansible instal·lat i accés per clau
@@ -535,7 +538,7 @@
 
 <!-- ============ 2 · PAS A PAS · INSTAL·LACIÓ ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h4>Instal·lar Ansible a la màquina de control</h4>
+  <h2>Instal·lar Ansible a la màquina de control</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Instal·la el paquet</strong> i comprova la versió:</p>
@@ -548,7 +551,7 @@ ansible --version</pre>
 
 <!-- ============ 3 · PAS A PAS · INVENTARI ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h4>L'inventari i la primera prova</h4>
+  <h2>L'inventari i la primera prova</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Crea el fitxer <code>hosts</code></strong> amb un grup i l'usuari amb què
@@ -570,7 +573,7 @@ ansible_user=usuari</pre>
 
 <!-- ============ 4 · REFERÈNCIA · ANATOMIA D'UN PLAYBOOK ============ -->
 <div class="cq-block" data-kind="referència">
-  <h4>Anatomia d'un playbook</h4>
+  <h2>Anatomia d'un playbook</h2>
   <p>
     Un playbook és un fitxer YAML amb una llista de <em>plays</em>. Cada play indica
     <code>hosts</code> (a quin grup de l'inventari s'aplica), <code>become</code> (si cal
@@ -593,7 +596,7 @@ ansible_user=usuari</pre>
 
 <!-- ============ 5 · REFERÈNCIA · MÒDULS ============ -->
 <div class="cq-block" data-kind="referència">
-  <h4>Mòduls habituals</h4>
+  <h2>Mòduls habituals</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Mòdul</th><th>Paràmetre clau</th></tr></thead>
@@ -621,7 +624,7 @@ ansible_user=usuari</pre>
 
 <!-- ============ 6 · PAS A PAS · EXECUTAR ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h4>Executar el playbook</h4>
+  <h2>Executar el playbook</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Executa'l</strong>:</p>
@@ -648,7 +651,7 @@ ansible_user=usuari</pre>
 
 <!-- ============ 7 · VARIABLES ============ -->
 <div class="cq-block" data-kind="referència">
-  <h4>Variables per grup</h4>
+  <h2>Variables per grup</h2>
   <p>
     Un fitxer <code>group_vars/&lt;grup&gt;.yml</code> es carrega sol quan el seu nom
     coincideix amb el d'un grup de l'inventari: <code>group_vars/servidors.yml</code> per al
@@ -664,7 +667,7 @@ ansible_user=usuari</pre>
 
 <!-- ============ 8 · PLANTILLES ============ -->
 <div class="cq-block" data-kind="referència">
-  <h4>Plantilles Jinja2</h4>
+  <h2>Plantilles Jinja2</h2>
   <p>
     Un fitxer a <code>templates/*.j2</code> és com qualsevol fitxer de configuració, però
     amb variables entre <code>{{ }}</code>. El mòdul <code>template</code> el processa i
@@ -681,7 +684,7 @@ ansible_user=usuari</pre>
 
 <!-- ============ 9 · PAS A PAS · HANDLERS ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h4>Reiniciar un servei només si cal</h4>
+  <h2>Reiniciar un servei només si cal</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Declara el handler</strong> al final del playbook:</p>
@@ -707,7 +710,7 @@ ansible_user=usuari</pre>
 
 <!-- ============ 10 · COMPROVACIÓ ============ -->
 <div class="cq-block" data-kind="comprovació">
-  <h4>Comprovar-ho de conjunt</h4>
+  <h2>Comprovar-ho de conjunt</h2>
   <ol class="cq-steps">
     <li><p>Executa el playbook dues vegades seguides.</p></li>
     <li><p>A la segona, el resum final no mostra cap tasca <code>changed</code>: tot ha
@@ -717,7 +720,7 @@ ansible_user=usuari</pre>
 
 <!-- ============ 11 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h4>Criteris professionals</h4>
+  <h2>Criteris professionals</h2>
   <ul>
     <li><strong>Mai root per SSH</strong>: connexió amb un usuari normal i
     <code>become: true</code> només on cal elevar privilegis.</li>
@@ -732,7 +735,7 @@ ansible_user=usuari</pre>
 
 <!-- ============ 12 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h4>Errors habituals</h4>
+  <h2>Errors habituals</h2>
   <dl class="cq-issues">
     <dt>El playbook falla amb un error de sintaxi imprecís</dt>
     <dd>
@@ -774,7 +777,7 @@ ansible_user=usuari</pre>
 
 <!-- ============ 13 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h4>Fitxa ràpida</h4>
+  <h2>Fitxa ràpida</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Què</th><th>On</th></tr></thead>
@@ -807,15 +810,26 @@ ansible_user=usuari</pre>
 <!-- === PEU DE NAVEGACIÓ FI === -->
 
 <script>
-  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  // Dissuasió de la còpia: mai al codi, a les taules ni dins de l'editor.
+  // L'alumnat treballa per SSH i ha de poder enganxar les ordres.
   (function () {
-    function editant(node) {
-      return node && node.closest && node.closest('[contenteditable="true"]');
+    var LLIURE = 'pre, code, .cq-table, [contenteditable="true"]';
+    function copiable(node) {
+      if (node && node.nodeType !== 1) { node = node.parentNode; }
+      return !!(node && node.closest && node.closest(LLIURE));
     }
-    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+    function seleccioCopiable() {
+      var s = document.getSelection();
+      if (!s || s.rangeCount === 0) { return false; }
+      return copiable(s.getRangeAt(0).commonAncestorContainer);
+    }
+    ['copy', 'cut'].forEach(function (nom) {
       document.addEventListener(nom, function (e) {
-        if (!editant(e.target)) { e.preventDefault(); }
+        if (!seleccioCopiable()) { e.preventDefault(); }
       });
+    });
+    document.addEventListener('dragstart', function (e) {
+      if (!copiable(e.target)) { e.preventDefault(); }
     });
   })();
 
@@ -842,6 +856,10 @@ ansible_user=usuari</pre>
         } else {
           opt.classList.toggle('cq-selected');
         }
+        options.forEach(function (o) {
+          o.setAttribute('aria-pressed',
+            o.classList.contains('cq-selected') ? 'true' : 'false');
+        });
       });
     });
 
@@ -851,6 +869,7 @@ ansible_user=usuari</pre>
         var isCorrect = opt.dataset.correct === 'true';
         var isSelected = opt.classList.contains('cq-selected');
         opt.classList.remove('cq-selected');
+        opt.setAttribute('aria-pressed', 'false');
         if (isCorrect) {
           opt.classList.add('cq-correct');
         } else if (isSelected) {

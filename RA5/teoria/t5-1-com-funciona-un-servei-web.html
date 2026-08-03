@@ -193,7 +193,7 @@
     color: var(--muted);
   }
 
-  .cq-block h4 {
+  .cq-block h2 {
     margin: 4px 0 14px;
     font-family: var(--font-display);
     font-size: 1.4rem;
@@ -244,26 +244,26 @@
   .cq-block[data-kind="pas a pas"]::before,
   .cq-block[data-kind="lliurament"]::before,
   .cq-block[data-kind="resum"]::before { border-color: var(--accent-line); color: var(--accent); }
-  .cq-block[data-kind="objectius"] h4,
-  .cq-block[data-kind="pas a pas"] h4,
-  .cq-block[data-kind="lliurament"] h4,
-  .cq-block[data-kind="resum"] h4 { color: var(--accent); }
+  .cq-block[data-kind="objectius"] h2,
+  .cq-block[data-kind="pas a pas"] h2,
+  .cq-block[data-kind="lliurament"] h2,
+  .cq-block[data-kind="resum"] h2 { color: var(--accent); }
 
   .cq-block[data-kind="recordatori"] { background: var(--warn-soft); border-color: #F5DCC8; }
   .cq-block[data-kind="recordatori"]::before { background: var(--warn-soft); border-color: var(--warn-line); color: var(--warn); }
-  .cq-block[data-kind="recordatori"] h4 { color: var(--warn); }
+  .cq-block[data-kind="recordatori"] h2 { color: var(--warn); }
 
   .cq-block[data-kind="bones pràctiques"] { background: var(--ok-soft); border-color: var(--ok-line); }
   .cq-block[data-kind="bones pràctiques"]::before { background: var(--ok-soft); border-color: var(--ok-line); color: var(--ok); }
-  .cq-block[data-kind="bones pràctiques"] h4 { color: var(--ok); }
+  .cq-block[data-kind="bones pràctiques"] h2 { color: var(--ok); }
 
   .cq-block[data-kind="problemes"] { background: var(--ko-soft); border-color: var(--ko-line); }
   .cq-block[data-kind="problemes"]::before { background: var(--ko-soft); border-color: var(--ko-line); color: var(--ko); }
-  .cq-block[data-kind="problemes"] h4 { color: var(--ko); }
+  .cq-block[data-kind="problemes"] h2 { color: var(--ko); }
 
   /* ==== Traçabilitat amb el currículum ==== */
   .cq-block[data-kind="currículum"] { background: transparent; }
-  .cq-block[data-kind="currículum"] h4 { color: var(--muted); }
+  .cq-block[data-kind="currículum"] h2 { color: var(--muted); }
   .cq-block[data-kind="currículum"] p {
     margin: 0 0 6px;
     font-size: .86rem;
@@ -487,14 +487,17 @@
     a.cq-ref { border-bottom: none; color: inherit; }
   }
   /* ==== Contingut no copiable ====
-     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
-     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
-     queda exclòs. */
+     Dissuasiu, no una protecció: la prosa és per llegir-la al web o a
+     Moodle, no per copiar-la. El codi, les ordres i les taules SÍ que es
+     copien: l'alumnat treballa per SSH i les ha d'enganxar. L'editor
+     treballa amb contenteditable i queda exclòs. */
   .cq-header, .cq-block {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
   }
+  .cq-block pre, .cq-block pre *,
+  .cq-block code, .cq-table, .cq-table *,
   [contenteditable="true"], [contenteditable="true"] * {
     -webkit-user-select: text;
     -moz-user-select: text;
@@ -522,7 +525,7 @@
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h4>Què sabràs fer en acabar</h4>
+  <h2>Què sabràs fer en acabar</h2>
   <ul>
     <li>Explicar el model client-servidor aplicat al web: qui demana i qui respon.</li>
     <li>Descriure una petició i una resposta HTTP i llegir-ne el codi d'estat.</li>
@@ -534,7 +537,7 @@
 
 <!-- ============ 2 · CLIENT I SERVIDOR ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Client i servidor</h4>
+  <h2>Client i servidor</h2>
   <p>
     Un servei web escolta peticions i en respon amb contingut. El navegador (client) envia la
     petició, l'interpreta i la mostra; el servidor la rep, busca el recurs al disc i l'envia. Cap
@@ -554,7 +557,7 @@
 
 <!-- ============ 3 · PETICIÓ I RESPOSTA HTTP ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Petició i resposta</h4>
+  <h2>Petició i resposta</h2>
   <p>
     HTTP defineix com es demana i com es respon. El client demana un recurs amb un
     <strong>mètode</strong> —gairebé sempre <code>GET</code>— i el servidor respon amb un codi
@@ -580,7 +583,7 @@
 
 <!-- ============ 4 · PORTS I FITXERS ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Ports i contingut estàtic</h4>
+  <h2>Ports i contingut estàtic</h2>
   <p>
     Els servidors web escolten al port <strong>80</strong> per HTTP i al <strong>443</strong> per
     HTTPS. Per al contingut estàtic —el que no canvia segons qui el demani—, el servidor
@@ -597,7 +600,7 @@
 
 <!-- ============ 5 · EXEMPLE ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h4>Una pàgina, moltes peticions</h4>
+  <h2>Una pàgina, moltes peticions</h2>
   <p>
     Una pàgina amb una imatge i un full d'estils genera com a mínim tres peticions: una per
     l'HTML, una per la imatge i una pel CSS. Si l'HTML respon 200 però la imatge no existeix al
@@ -607,7 +610,7 @@
 
 <!-- ============ 6 · CAS REAL ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h4>Quan el servei no respon</h4>
+  <h2>Quan el servei no respon</h2>
   <p>
     Si el servei web no està instal·lat, està aturat o mal configurat, el client no rep resposta
     i el navegador mostra un error de connexió, no un codi HTTP: el codi d'estat només existeix si
@@ -617,7 +620,7 @@
 
 <!-- ============ 7 · OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h4>Mirar una resposta HTTP crua</h4>
+  <h2>Mirar una resposta HTTP crua</h2>
   <p>
     <code>curl -I</code> demana només les capçaleres, sense el cos de la pàgina: es veu la línia
     d'estat i què diu el servidor sobre el que envia.
@@ -631,7 +634,7 @@
 
 <!-- ============ 8 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h4>Criteris professionals</h4>
+  <h2>Criteris professionals</h2>
   <ul>
     <li><strong>755 / 644</strong>, mai 777: el mínim permís que fa falta.</li>
     <li>El propietari dels fitxers no ha de ser l'usuari del servidor web.</li>
@@ -641,7 +644,7 @@
 
 <!-- ============ 9 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h4>Errors habituals</h4>
+  <h2>Errors habituals</h2>
   <dl class="cq-issues">
     <dt>Donar permisos 777 per "arreglar-ho ràpid"</dt>
     <dd>
@@ -660,7 +663,7 @@
 
 <!-- ============ 10 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h4>Resum</h4>
+  <h2>Resum</h2>
   <ul>
     <li>El client demana amb <strong>GET</strong>, el servidor respon amb un <strong>codi d'estat</strong> i contingut.</li>
     <li>Ports <strong>80</strong> (HTTP) i <strong>443</strong> (HTTPS).</li>
@@ -672,63 +675,63 @@
 
 <!-- ============ 11 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h4>Comprova el que has après</h4>
+  <h2>Comprova el que has après</h2>
 
   <div class="cq-question" data-id="t5-1-codis" data-type="single">
     <div class="statement">Quin codi d'estat indica que el recurs demanat no existeix?</div>
-    <button class="cq-option" data-correct="false">200</button>
-    <button class="cq-option" data-correct="false">301</button>
-    <button class="cq-option" data-correct="true">404</button>
-    <button class="cq-option" data-correct="false">500</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">200</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">301</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">404</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">500</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t5-1-ports" data-type="single">
     <div class="statement">Quin port fa servir HTTPS per defecte?</div>
-    <button class="cq-option" data-correct="false">21</button>
-    <button class="cq-option" data-correct="false">80</button>
-    <button class="cq-option" data-correct="true">443</button>
-    <button class="cq-option" data-correct="false">8080</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">21</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">80</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">443</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">8080</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t5-1-permisos" data-type="single">
     <div class="statement">Per què no s'han de posar permisos 777 als fitxers web?</div>
-    <button class="cq-option" data-correct="false">Perquè el servidor no els podria llegir</button>
-    <button class="cq-option" data-correct="true">Perquè donen escriptura a qui no en necessita, i és un risc innecessari</button>
-    <button class="cq-option" data-correct="false">Perquè Apache no arrenca amb eixe permís</button>
-    <button class="cq-option" data-correct="false">Perquè trenquen l'índex per defecte</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè el servidor no els podria llegir</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Perquè donen escriptura a qui no en necessita, i és un risc innecessari</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè Apache no arrenca amb eixe permís</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè trenquen l'índex per defecte</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t5-1-index" data-type="single">
     <div class="statement">El navegador demana una URL sense indicar cap fitxer. Què respon el servidor?</div>
-    <button class="cq-option" data-correct="false">Un error 404 sempre</button>
-    <button class="cq-option" data-correct="true"><code>index.html</code>, si existeix al directori</button>
-    <button class="cq-option" data-correct="false">Un llistat de tots els fitxers del directori</button>
-    <button class="cq-option" data-correct="false">Redirigeix sempre al port 443</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Un error 404 sempre</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true"><code>index.html</code>, si existeix al directori</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Un llistat de tots els fitxers del directori</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Redirigeix sempre al port 443</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t5-1-recursos" data-type="single">
     <div class="statement">Una pàgina té una imatge, un full d'estils i el propi HTML. Quantes peticions HTTP fa el navegador com a mínim?</div>
-    <button class="cq-option" data-correct="false">Una, tot ve junt</button>
-    <button class="cq-option" data-correct="true">Tres: una per cada recurs</button>
-    <button class="cq-option" data-correct="false">Cap, el servidor ho envia sense demanar-ho</button>
-    <button class="cq-option" data-correct="false">Depèn només de la mida del fitxer</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Una, tot ve junt</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Tres: una per cada recurs</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Cap, el servidor ho envia sense demanar-ho</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Depèn només de la mida del fitxer</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 </div>
 
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h4>Al currículum</h4>
+  <h2>Al currículum</h2>
   <p><span class="lbl">CA 5.1</span> Descriu els fonaments i protocols en què es basa el funcionament d'un servidor web.</p>
 </div>
 
@@ -744,15 +747,26 @@
 <!-- === PEU DE NAVEGACIÓ FI === -->
 
 <script>
-  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  // Dissuasió de la còpia: mai al codi, a les taules ni dins de l'editor.
+  // L'alumnat treballa per SSH i ha de poder enganxar les ordres.
   (function () {
-    function editant(node) {
-      return node && node.closest && node.closest('[contenteditable="true"]');
+    var LLIURE = 'pre, code, .cq-table, [contenteditable="true"]';
+    function copiable(node) {
+      if (node && node.nodeType !== 1) { node = node.parentNode; }
+      return !!(node && node.closest && node.closest(LLIURE));
     }
-    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+    function seleccioCopiable() {
+      var s = document.getSelection();
+      if (!s || s.rangeCount === 0) { return false; }
+      return copiable(s.getRangeAt(0).commonAncestorContainer);
+    }
+    ['copy', 'cut'].forEach(function (nom) {
       document.addEventListener(nom, function (e) {
-        if (!editant(e.target)) { e.preventDefault(); }
+        if (!seleccioCopiable()) { e.preventDefault(); }
       });
+    });
+    document.addEventListener('dragstart', function (e) {
+      if (!copiable(e.target)) { e.preventDefault(); }
     });
   })();
 
@@ -779,6 +793,10 @@
         } else {
           opt.classList.toggle('cq-selected');
         }
+        options.forEach(function (o) {
+          o.setAttribute('aria-pressed',
+            o.classList.contains('cq-selected') ? 'true' : 'false');
+        });
       });
     });
 
@@ -788,6 +806,7 @@
         var isCorrect = opt.dataset.correct === 'true';
         var isSelected = opt.classList.contains('cq-selected');
         opt.classList.remove('cq-selected');
+        opt.setAttribute('aria-pressed', 'false');
         if (isCorrect) {
           opt.classList.add('cq-correct');
         } else if (isSelected) {

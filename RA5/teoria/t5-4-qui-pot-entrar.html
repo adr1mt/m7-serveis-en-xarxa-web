@@ -193,7 +193,7 @@
     color: var(--muted);
   }
 
-  .cq-block h4 {
+  .cq-block h2 {
     margin: 4px 0 14px;
     font-family: var(--font-display);
     font-size: 1.4rem;
@@ -244,26 +244,26 @@
   .cq-block[data-kind="pas a pas"]::before,
   .cq-block[data-kind="lliurament"]::before,
   .cq-block[data-kind="resum"]::before { border-color: var(--accent-line); color: var(--accent); }
-  .cq-block[data-kind="objectius"] h4,
-  .cq-block[data-kind="pas a pas"] h4,
-  .cq-block[data-kind="lliurament"] h4,
-  .cq-block[data-kind="resum"] h4 { color: var(--accent); }
+  .cq-block[data-kind="objectius"] h2,
+  .cq-block[data-kind="pas a pas"] h2,
+  .cq-block[data-kind="lliurament"] h2,
+  .cq-block[data-kind="resum"] h2 { color: var(--accent); }
 
   .cq-block[data-kind="recordatori"] { background: var(--warn-soft); border-color: #F5DCC8; }
   .cq-block[data-kind="recordatori"]::before { background: var(--warn-soft); border-color: var(--warn-line); color: var(--warn); }
-  .cq-block[data-kind="recordatori"] h4 { color: var(--warn); }
+  .cq-block[data-kind="recordatori"] h2 { color: var(--warn); }
 
   .cq-block[data-kind="bones pràctiques"] { background: var(--ok-soft); border-color: var(--ok-line); }
   .cq-block[data-kind="bones pràctiques"]::before { background: var(--ok-soft); border-color: var(--ok-line); color: var(--ok); }
-  .cq-block[data-kind="bones pràctiques"] h4 { color: var(--ok); }
+  .cq-block[data-kind="bones pràctiques"] h2 { color: var(--ok); }
 
   .cq-block[data-kind="problemes"] { background: var(--ko-soft); border-color: var(--ko-line); }
   .cq-block[data-kind="problemes"]::before { background: var(--ko-soft); border-color: var(--ko-line); color: var(--ko); }
-  .cq-block[data-kind="problemes"] h4 { color: var(--ko); }
+  .cq-block[data-kind="problemes"] h2 { color: var(--ko); }
 
   /* ==== Traçabilitat amb el currículum ==== */
   .cq-block[data-kind="currículum"] { background: transparent; }
-  .cq-block[data-kind="currículum"] h4 { color: var(--muted); }
+  .cq-block[data-kind="currículum"] h2 { color: var(--muted); }
   .cq-block[data-kind="currículum"] p {
     margin: 0 0 6px;
     font-size: .86rem;
@@ -487,14 +487,17 @@
     a.cq-ref { border-bottom: none; color: inherit; }
   }
   /* ==== Contingut no copiable ====
-     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
-     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
-     queda exclòs. */
+     Dissuasiu, no una protecció: la prosa és per llegir-la al web o a
+     Moodle, no per copiar-la. El codi, les ordres i les taules SÍ que es
+     copien: l'alumnat treballa per SSH i les ha d'enganxar. L'editor
+     treballa amb contenteditable i queda exclòs. */
   .cq-header, .cq-block {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
   }
+  .cq-block pre, .cq-block pre *,
+  .cq-block code, .cq-table, .cq-table *,
   [contenteditable="true"], [contenteditable="true"] * {
     -webkit-user-select: text;
     -moz-user-select: text;
@@ -522,7 +525,7 @@
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h4>Què sabràs fer en acabar</h4>
+  <h2>Què sabràs fer en acabar</h2>
   <ul>
     <li>Distingir autenticació d'autorització.</li>
     <li>Explicar com funciona l'autenticació bàsica HTTP i per què necessita HTTPS.</li>
@@ -533,7 +536,7 @@
 
 <!-- ============ 2 · AUTENTICACIÓ I AUTORITZACIÓ ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Autenticació i autorització</h4>
+  <h2>Autenticació i autorització</h2>
   <p>
     <strong>Autenticació</strong> respon «qui ets»: el servidor demana una credencial i la
     comprova. <strong>Autorització</strong> respon «què pots veure», un cop ja se sap qui ets. Un
@@ -553,7 +556,7 @@
 
 <!-- ============ 3 · AUTENTICACIÓ BÀSICA HTTP ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Autenticació bàsica HTTP</h4>
+  <h2>Autenticació bàsica HTTP</h2>
   <p>
     Quan un client demana un recurs protegit, el servidor respon <strong>401</strong> i el
     navegador mostra un diàleg d'usuari i contrasenya. Les credencials viatgen codificades en
@@ -564,7 +567,7 @@
 
 <!-- ============ 4 · RESTRICCIÓ PER ADREÇA ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Restricció per adreça d'origen</h4>
+  <h2>Restricció per adreça d'origen</h2>
   <p>
     Un servidor pot permetre o denegar l'accés segons la IP d'origen de la petició. És útil per
     limitar un recurs a una xarxa interna, però és una protecció <strong>feble</strong>: una IP
@@ -575,7 +578,7 @@
 
 <!-- ============ 5 · GRUPS ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Grups d'usuaris</h4>
+  <h2>Grups d'usuaris</h2>
   <p>
     Quan diverses zones protegides han d'admetre el mateix conjunt de persones, es defineixen
     <strong>grups</strong>: es dóna accés al grup, no a cada usuari repetit a cada zona. Afegir o
@@ -585,7 +588,7 @@
 
 <!-- ============ 6 · EXEMPLE ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h4>Protegir una carpeta no protegeix la resta</h4>
+  <h2>Protegir una carpeta no protegeix la resta</h2>
   <p>
     Restringir l'accés a una carpeta concreta del lloc no fa que la resta del web quedi protegit:
     cada zona necessita la seva pròpia regla d'autenticació o autorització. Un directori sense
@@ -595,7 +598,7 @@
 
 <!-- ============ 7 · CAS REAL ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h4>Zona d'administració combinada</h4>
+  <h2>Zona d'administració combinada</h2>
   <p>
     Un panell d'administració intern sol combinar les dues coses: autenticació bàsica per saber
     qui hi entra i restricció per adreça perquè, encara que algú robi una contrasenya, només la
@@ -605,7 +608,7 @@
 
 <!-- ============ 8 · OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h4>Veure el 401 i la capçalera d'autenticació</h4>
+  <h2>Veure el 401 i la capçalera d'autenticació</h2>
   <p>
     <code>curl -I</code> contra una zona protegida mostra el codi 401 i la capçalera que indica
     quin tipus d'autenticació espera el servidor:
@@ -617,7 +620,7 @@
 
 <!-- ============ 9 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h4>Criteris professionals</h4>
+  <h2>Criteris professionals</h2>
   <ul>
     <li>Autenticació bàsica, sempre amb <strong>HTTPS</strong> per davant.</li>
     <li>Restricció per IP com a capa extra, mai com a única protecció.</li>
@@ -627,7 +630,7 @@
 
 <!-- ============ 10 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h4>Errors habituals</h4>
+  <h2>Errors habituals</h2>
   <dl class="cq-issues">
     <dt>Confiar només en la restricció per IP</dt>
     <dd>
@@ -651,7 +654,7 @@
 
 <!-- ============ 11 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h4>Resum</h4>
+  <h2>Resum</h2>
   <ul>
     <li><strong>Autenticació</strong>: qui ets. <strong>Autorització</strong>: què pots veure.</li>
     <li>Autenticació bàsica: 401 i credencials codificades, no xifrades. Cal HTTPS.</li>
@@ -664,53 +667,53 @@
 
 <!-- ============ 12 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h4>Comprova el que has après</h4>
+  <h2>Comprova el que has après</h2>
 
   <div class="cq-question" data-id="t5-4-autent-autor" data-type="single">
     <div class="statement">Quina és la diferència entre autenticació i autorització?</div>
-    <button class="cq-option" data-correct="true">L'autenticació diu qui ets; l'autorització, què pots veure</button>
-    <button class="cq-option" data-correct="false">Són dos noms per a la mateixa cosa</button>
-    <button class="cq-option" data-correct="false">L'autorització sempre passa abans que l'autenticació</button>
-    <button class="cq-option" data-correct="false">L'autenticació només serveix per a HTTPS</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">L'autenticació diu qui ets; l'autorització, què pots veure</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Són dos noms per a la mateixa cosa</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">L'autorització sempre passa abans que l'autenticació</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">L'autenticació només serveix per a HTTPS</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t5-4-basica" data-type="single">
     <div class="statement">Per què l'autenticació bàsica HTTP necessita anar sempre amb HTTPS?</div>
-    <button class="cq-option" data-correct="false">Perquè el 401 només funciona sobre TLS</button>
-    <button class="cq-option" data-correct="true">Perquè les credencials viatgen codificades, no xifrades</button>
-    <button class="cq-option" data-correct="false">Perquè el navegador no mostra el diàleg sense HTTPS</button>
-    <button class="cq-option" data-correct="false">No cal, l'autenticació bàsica ja xifra les credencials</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè el 401 només funciona sobre TLS</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Perquè les credencials viatgen codificades, no xifrades</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè el navegador no mostra el diàleg sense HTTPS</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">No cal, l'autenticació bàsica ja xifra les credencials</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t5-4-ip" data-type="single">
     <div class="statement">Per què la restricció per adreça d'origen és una protecció feble?</div>
-    <button class="cq-option" data-correct="false">Perquè no funciona amb HTTPS</button>
-    <button class="cq-option" data-correct="true">Perquè una IP identifica una màquina o xarxa, no una persona</button>
-    <button class="cq-option" data-correct="false">Perquè cap servidor web l'admet</button>
-    <button class="cq-option" data-correct="false">Perquè demana sempre usuari i contrasenya igualment</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè no funciona amb HTTPS</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Perquè una IP identifica una màquina o xarxa, no una persona</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè cap servidor web l'admet</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè demana sempre usuari i contrasenya igualment</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t5-4-grups" data-type="single">
     <div class="statement">Per a què serveixen els grups d'usuaris en el control d'accés?</div>
-    <button class="cq-option" data-correct="false">Per xifrar les credencials</button>
-    <button class="cq-option" data-correct="true">Per no repetir la llista d'usuaris a cada zona protegida</button>
-    <button class="cq-option" data-correct="false">Per canviar el codi d'estat de la resposta</button>
-    <button class="cq-option" data-correct="false">Per resoldre el nom del lloc</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Per xifrar les credencials</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Per no repetir la llista d'usuaris a cada zona protegida</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Per canviar el codi d'estat de la resposta</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Per resoldre el nom del lloc</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 </div>
 
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h4>Al currículum</h4>
+  <h2>Al currículum</h2>
   <p><span class="lbl">Contingut 5.2</span> Accés anònim i autenticat. Mètodes d'autenticació.</p>
   <p><span class="lbl">CA 5.5</span> Configura la seguretat del servidor.</p>
 </div>
@@ -727,15 +730,26 @@
 <!-- === PEU DE NAVEGACIÓ FI === -->
 
 <script>
-  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  // Dissuasió de la còpia: mai al codi, a les taules ni dins de l'editor.
+  // L'alumnat treballa per SSH i ha de poder enganxar les ordres.
   (function () {
-    function editant(node) {
-      return node && node.closest && node.closest('[contenteditable="true"]');
+    var LLIURE = 'pre, code, .cq-table, [contenteditable="true"]';
+    function copiable(node) {
+      if (node && node.nodeType !== 1) { node = node.parentNode; }
+      return !!(node && node.closest && node.closest(LLIURE));
     }
-    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+    function seleccioCopiable() {
+      var s = document.getSelection();
+      if (!s || s.rangeCount === 0) { return false; }
+      return copiable(s.getRangeAt(0).commonAncestorContainer);
+    }
+    ['copy', 'cut'].forEach(function (nom) {
       document.addEventListener(nom, function (e) {
-        if (!editant(e.target)) { e.preventDefault(); }
+        if (!seleccioCopiable()) { e.preventDefault(); }
       });
+    });
+    document.addEventListener('dragstart', function (e) {
+      if (!copiable(e.target)) { e.preventDefault(); }
     });
   })();
 
@@ -762,6 +776,10 @@
         } else {
           opt.classList.toggle('cq-selected');
         }
+        options.forEach(function (o) {
+          o.setAttribute('aria-pressed',
+            o.classList.contains('cq-selected') ? 'true' : 'false');
+        });
       });
     });
 
@@ -771,6 +789,7 @@
         var isCorrect = opt.dataset.correct === 'true';
         var isSelected = opt.classList.contains('cq-selected');
         opt.classList.remove('cq-selected');
+        opt.setAttribute('aria-pressed', 'false');
         if (isCorrect) {
           opt.classList.add('cq-correct');
         } else if (isSelected) {

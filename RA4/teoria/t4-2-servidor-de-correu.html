@@ -193,7 +193,7 @@
     color: var(--muted);
   }
 
-  .cq-block h4 {
+  .cq-block h2 {
     margin: 4px 0 14px;
     font-family: var(--font-display);
     font-size: 1.4rem;
@@ -244,26 +244,26 @@
   .cq-block[data-kind="pas a pas"]::before,
   .cq-block[data-kind="lliurament"]::before,
   .cq-block[data-kind="resum"]::before { border-color: var(--accent-line); color: var(--accent); }
-  .cq-block[data-kind="objectius"] h4,
-  .cq-block[data-kind="pas a pas"] h4,
-  .cq-block[data-kind="lliurament"] h4,
-  .cq-block[data-kind="resum"] h4 { color: var(--accent); }
+  .cq-block[data-kind="objectius"] h2,
+  .cq-block[data-kind="pas a pas"] h2,
+  .cq-block[data-kind="lliurament"] h2,
+  .cq-block[data-kind="resum"] h2 { color: var(--accent); }
 
   .cq-block[data-kind="recordatori"] { background: var(--warn-soft); border-color: #F5DCC8; }
   .cq-block[data-kind="recordatori"]::before { background: var(--warn-soft); border-color: var(--warn-line); color: var(--warn); }
-  .cq-block[data-kind="recordatori"] h4 { color: var(--warn); }
+  .cq-block[data-kind="recordatori"] h2 { color: var(--warn); }
 
   .cq-block[data-kind="bones pràctiques"] { background: var(--ok-soft); border-color: var(--ok-line); }
   .cq-block[data-kind="bones pràctiques"]::before { background: var(--ok-soft); border-color: var(--ok-line); color: var(--ok); }
-  .cq-block[data-kind="bones pràctiques"] h4 { color: var(--ok); }
+  .cq-block[data-kind="bones pràctiques"] h2 { color: var(--ok); }
 
   .cq-block[data-kind="problemes"] { background: var(--ko-soft); border-color: var(--ko-line); }
   .cq-block[data-kind="problemes"]::before { background: var(--ko-soft); border-color: var(--ko-line); color: var(--ko); }
-  .cq-block[data-kind="problemes"] h4 { color: var(--ko); }
+  .cq-block[data-kind="problemes"] h2 { color: var(--ko); }
 
   /* ==== Traçabilitat amb el currículum ==== */
   .cq-block[data-kind="currículum"] { background: transparent; }
-  .cq-block[data-kind="currículum"] h4 { color: var(--muted); }
+  .cq-block[data-kind="currículum"] h2 { color: var(--muted); }
   .cq-block[data-kind="currículum"] p {
     margin: 0 0 6px;
     font-size: .86rem;
@@ -487,14 +487,17 @@
     a.cq-ref { border-bottom: none; color: inherit; }
   }
   /* ==== Contingut no copiable ====
-     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
-     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
-     queda exclòs. */
+     Dissuasiu, no una protecció: la prosa és per llegir-la al web o a
+     Moodle, no per copiar-la. El codi, les ordres i les taules SÍ que es
+     copien: l'alumnat treballa per SSH i les ha d'enganxar. L'editor
+     treballa amb contenteditable i queda exclòs. */
   .cq-header, .cq-block {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
   }
+  .cq-block pre, .cq-block pre *,
+  .cq-block code, .cq-table, .cq-table *,
   [contenteditable="true"], [contenteditable="true"] * {
     -webkit-user-select: text;
     -moz-user-select: text;
@@ -522,7 +525,7 @@
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h4>Què sabràs fer en acabar</h4>
+  <h2>Què sabràs fer en acabar</h2>
   <ul>
     <li>Distingir un servidor fet de <strong>peces separades</strong> d'un de <strong>servei únic</strong>, i dir-ne exemples.</li>
     <li>Enumerar els ports que ha d'obrir un servidor de correu i saber quins fa servir el client.</li>
@@ -534,7 +537,7 @@
 
 <!-- ============ 2 · PECES SEPARADES O SERVEI ÚNIC ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Peces separades o un sol servei</h4>
+  <h2>Peces separades o un sol servei</h2>
   <p>
     A la <a class="cq-ref" href="t4-1-com-viatja-un-correu.html">T4.1</a> has vist que el correu necessita un MTA que transporti i un MDA que guardi la
     bústia. Són dos <em>papers</em>, i cada producte tria si els reparteix o els ajunta.
@@ -556,7 +559,7 @@
 
 <!-- ============ 3 · ELS PORTS QUE HA D'OBRIR ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Els ports que ha d'obrir</h4>
+  <h2>Els ports que ha d'obrir</h2>
   <p>
     Un servidor de correu no escolta per un sol port: n'obre un per cada conversa diferent
     que ha d'atendre.
@@ -581,7 +584,7 @@
 
 <!-- ============ 4 · ON VIU LA CONFIGURACIÓ ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>On viu la configuració</h4>
+  <h2>On viu la configuració</h2>
   <p>
     Al <a class="cq-ref" href="../../RA2/index.html">RA2</a> i al <a class="cq-ref" href="../../RA3/index.html">RA3</a> la configuració era un fitxer de text —<code>named.conf</code>,
     <code>vsftpd.conf</code>— que obries amb <code>nano</code>. No tots els serveis ho fan així.
@@ -594,7 +597,7 @@
 
 <!-- ============ 5 · EXEMPLE: CERTIFICAT AUTOFIRMAT ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h4>El certificat que ningú ha signat</h4>
+  <h2>El certificat que ningú ha signat</h2>
   <p>
     Sense domini públic ni ACME/Let's Encrypt actiu, un servidor de correu es genera un
     certificat <strong>autofirmat</strong> la primera vegada que arrenca. És vàlid per xifrar la
@@ -611,7 +614,7 @@
 
 <!-- ============ 6 · CAS REAL ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h4>Per a qui existeixen les eines tot-en-un</h4>
+  <h2>Per a qui existeixen les eines tot-en-un</h2>
   <p>
     Stalwart, Mailcow o Mail-in-a-Box existeixen per a qui no té equip per mantenir
     Postfix+Dovecot+Rspamd com a peces separades: petites organitzacions i departaments IT
@@ -625,7 +628,7 @@
 
 <!-- ============ 7 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h4>Criteris professionals</h4>
+  <h2>Criteris professionals</h2>
   <ul>
     <li><strong>465 abans que 587</strong> per a l'enviament del client.</li>
     <li><strong>No obris cap port que no calgui</strong>: cada port obert és una porta a vigilar.</li>
@@ -636,7 +639,7 @@
 
 <!-- ============ 8 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h4>Errors habituals</h4>
+  <h2>Errors habituals</h2>
   <dl class="cq-issues">
     <dt>Buscar un fitxer de configuració que no existeix</dt>
     <dd>
@@ -666,7 +669,7 @@
 
 <!-- ============ 9 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h4>Resum</h4>
+  <h2>Resum</h2>
   <ul>
     <li>Els papers d'MTA i MDA els poden fer <strong>dos programes</strong> (Postfix+Dovecot) o <strong>un de sol</strong> (Stalwart, Mailcow).</li>
     <li>Ports del servidor: <strong>25</strong> entre servidors, <strong>465</strong> i <strong>993</strong>/<strong>995</strong> per al client.</li>
@@ -679,53 +682,53 @@
 
 <!-- ============ 10 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h4>Comprova el que has après</h4>
+  <h2>Comprova el que has après</h2>
 
   <div class="cq-question" data-id="t4-2-peces" data-type="single">
     <div class="statement">Què vol dir que un servidor de correu sigui de «servei únic»?</div>
-    <button class="cq-option" data-correct="true">Que un sol programa fa d'MTA i d'MDA alhora</button>
-    <button class="cq-option" data-correct="false">Que només admet un compte d'usuari</button>
-    <button class="cq-option" data-correct="false">Que només obre un port</button>
-    <button class="cq-option" data-correct="false">Que no necessita cap tipus de xifratge</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Que un sol programa fa d'MTA i d'MDA alhora</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que només admet un compte d'usuari</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que només obre un port</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que no necessita cap tipus de xifratge</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t4-2-config" data-type="single">
     <div class="statement">Un servei guarda la configuració en una base de dades i es toca des d'una consola web. Quina conseqüència té?</div>
-    <button class="cq-option" data-correct="false">Que la configuració es perd en reiniciar</button>
-    <button class="cq-option" data-correct="true">Que no hi ha cap fitxer de text per obrir amb un editor</button>
-    <button class="cq-option" data-correct="false">Que no es pot fer cap còpia de seguretat</button>
-    <button class="cq-option" data-correct="false">Que deixa de necessitar contrasenya d'administrador</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que la configuració es perd en reiniciar</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Que no hi ha cap fitxer de text per obrir amb un editor</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que no es pot fer cap còpia de seguretat</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que deixa de necessitar contrasenya d'administrador</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t4-2-ports" data-type="single">
     <div class="statement">Quins ports fa servir un client de correu contra un servidor modern?</div>
-    <button class="cq-option" data-correct="false">587 i 143</button>
-    <button class="cq-option" data-correct="false">25 i 110</button>
-    <button class="cq-option" data-correct="true">465 i 993</button>
-    <button class="cq-option" data-correct="false">8080 i 443</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">587 i 143</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">25 i 110</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">465 i 993</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">8080 i 443</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t4-2-autofirmat" data-type="single">
     <div class="statement">El client avisa que el certificat del servidor és autofirmat. Què vol dir exactament?</div>
-    <button class="cq-option" data-correct="false">Que la connexió viatja en clar</button>
-    <button class="cq-option" data-correct="true">Que la connexió va xifrada, però cap autoritat de confiança acredita qui és el servidor</button>
-    <button class="cq-option" data-correct="false">Que el certificat ha caducat</button>
-    <button class="cq-option" data-correct="false">Que el servidor no admet TLS</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que la connexió viatja en clar</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Que la connexió va xifrada, però cap autoritat de confiança acredita qui és el servidor</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que el certificat ha caducat</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que el servidor no admet TLS</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 </div>
 
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h4>Al currículum</h4>
+  <h2>Al currículum</h2>
   <p><span class="lbl">Contingut 4.2</span> Protocols i serveis de descàrrega de correu.</p>
   <p><span class="lbl">CA 4.1</span> Descriu els protocols que intervenen en l'enviament i la recollida del correu electrònic.</p>
 </div>
@@ -742,15 +745,26 @@
 <!-- === PEU DE NAVEGACIÓ FI === -->
 
 <script>
-  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  // Dissuasió de la còpia: mai al codi, a les taules ni dins de l'editor.
+  // L'alumnat treballa per SSH i ha de poder enganxar les ordres.
   (function () {
-    function editant(node) {
-      return node && node.closest && node.closest('[contenteditable="true"]');
+    var LLIURE = 'pre, code, .cq-table, [contenteditable="true"]';
+    function copiable(node) {
+      if (node && node.nodeType !== 1) { node = node.parentNode; }
+      return !!(node && node.closest && node.closest(LLIURE));
     }
-    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+    function seleccioCopiable() {
+      var s = document.getSelection();
+      if (!s || s.rangeCount === 0) { return false; }
+      return copiable(s.getRangeAt(0).commonAncestorContainer);
+    }
+    ['copy', 'cut'].forEach(function (nom) {
       document.addEventListener(nom, function (e) {
-        if (!editant(e.target)) { e.preventDefault(); }
+        if (!seleccioCopiable()) { e.preventDefault(); }
       });
+    });
+    document.addEventListener('dragstart', function (e) {
+      if (!copiable(e.target)) { e.preventDefault(); }
     });
   })();
 
@@ -777,6 +791,10 @@
         } else {
           opt.classList.toggle('cq-selected');
         }
+        options.forEach(function (o) {
+          o.setAttribute('aria-pressed',
+            o.classList.contains('cq-selected') ? 'true' : 'false');
+        });
       });
     });
 
@@ -786,6 +804,7 @@
         var isCorrect = opt.dataset.correct === 'true';
         var isSelected = opt.classList.contains('cq-selected');
         opt.classList.remove('cq-selected');
+        opt.setAttribute('aria-pressed', 'false');
         if (isCorrect) {
           opt.classList.add('cq-correct');
         } else if (isSelected) {

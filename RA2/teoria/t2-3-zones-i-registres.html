@@ -193,7 +193,7 @@
     color: var(--muted);
   }
 
-  .cq-block h4 {
+  .cq-block h2 {
     margin: 4px 0 14px;
     font-family: var(--font-display);
     font-size: 1.4rem;
@@ -244,26 +244,26 @@
   .cq-block[data-kind="pas a pas"]::before,
   .cq-block[data-kind="lliurament"]::before,
   .cq-block[data-kind="resum"]::before { border-color: var(--accent-line); color: var(--accent); }
-  .cq-block[data-kind="objectius"] h4,
-  .cq-block[data-kind="pas a pas"] h4,
-  .cq-block[data-kind="lliurament"] h4,
-  .cq-block[data-kind="resum"] h4 { color: var(--accent); }
+  .cq-block[data-kind="objectius"] h2,
+  .cq-block[data-kind="pas a pas"] h2,
+  .cq-block[data-kind="lliurament"] h2,
+  .cq-block[data-kind="resum"] h2 { color: var(--accent); }
 
   .cq-block[data-kind="recordatori"] { background: var(--warn-soft); border-color: #F5DCC8; }
   .cq-block[data-kind="recordatori"]::before { background: var(--warn-soft); border-color: var(--warn-line); color: var(--warn); }
-  .cq-block[data-kind="recordatori"] h4 { color: var(--warn); }
+  .cq-block[data-kind="recordatori"] h2 { color: var(--warn); }
 
   .cq-block[data-kind="bones pràctiques"] { background: var(--ok-soft); border-color: var(--ok-line); }
   .cq-block[data-kind="bones pràctiques"]::before { background: var(--ok-soft); border-color: var(--ok-line); color: var(--ok); }
-  .cq-block[data-kind="bones pràctiques"] h4 { color: var(--ok); }
+  .cq-block[data-kind="bones pràctiques"] h2 { color: var(--ok); }
 
   .cq-block[data-kind="problemes"] { background: var(--ko-soft); border-color: var(--ko-line); }
   .cq-block[data-kind="problemes"]::before { background: var(--ko-soft); border-color: var(--ko-line); color: var(--ko); }
-  .cq-block[data-kind="problemes"] h4 { color: var(--ko); }
+  .cq-block[data-kind="problemes"] h2 { color: var(--ko); }
 
   /* ==== Traçabilitat amb el currículum ==== */
   .cq-block[data-kind="currículum"] { background: transparent; }
-  .cq-block[data-kind="currículum"] h4 { color: var(--muted); }
+  .cq-block[data-kind="currículum"] h2 { color: var(--muted); }
   .cq-block[data-kind="currículum"] p {
     margin: 0 0 6px;
     font-size: .86rem;
@@ -487,14 +487,17 @@
     a.cq-ref { border-bottom: none; color: inherit; }
   }
   /* ==== Contingut no copiable ====
-     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
-     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
-     queda exclòs. */
+     Dissuasiu, no una protecció: la prosa és per llegir-la al web o a
+     Moodle, no per copiar-la. El codi, les ordres i les taules SÍ que es
+     copien: l'alumnat treballa per SSH i les ha d'enganxar. L'editor
+     treballa amb contenteditable i queda exclòs. */
   .cq-header, .cq-block {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
   }
+  .cq-block pre, .cq-block pre *,
+  .cq-block code, .cq-table, .cq-table *,
   [contenteditable="true"], [contenteditable="true"] * {
     -webkit-user-select: text;
     -moz-user-select: text;
@@ -522,7 +525,7 @@
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h4>Què sabràs fer en acabar</h4>
+  <h2>Què sabràs fer en acabar</h2>
   <ul>
     <li>Distingir una zona <strong>directa</strong> d'una d'<strong>inversa</strong>.</li>
     <li>Escriure un fitxer de zona amb el registre <strong>SOA</strong> ben posat.</li>
@@ -534,7 +537,7 @@
 
 <!-- ============ 2 · DUES ZONES ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Dues zones per a la mateixa xarxa</h4>
+  <h2>Dues zones per a la mateixa xarxa</h2>
   <p>
     Fins ara el teu servidor repetia el que deien els altres. Ara tindrà dades pròpies: serà
     <strong>autoritatiu</strong> d'una zona teva.
@@ -558,7 +561,7 @@
 
 <!-- ============ 4 · EL SOA ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>La capçalera de tota zona: el registre SOA</h4>
+  <h2>La capçalera de tota zona: el registre SOA</h2>
   <p>
     Tot fitxer de zona comença igual: el TTL per defecte i un registre <strong>SOA</strong>
     (<em>Start Of Authority</em>), que declara qui mana a la zona i cada quan s'ha de revisar.
@@ -584,7 +587,7 @@
 
 <!-- ============ 7 · REGISTRES ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Els tipus de registre que faràs servir</h4>
+  <h2>Els tipus de registre que faràs servir</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Tipus</th><th>Per a què</th></tr></thead>
@@ -607,7 +610,7 @@
 
 <!-- ============ BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h4>Criteris professionals</h4>
+  <h2>Criteris professionals</h2>
   <ul>
     <li><strong>Apuja el serial a cada canvi</strong>: si no, per a la resta del món la zona no s'ha tocat.</li>
     <li><strong>Escriu els noms sencers amb punt final</strong> quan vulguis un nom absolut; és l'error tipogràfic que més costa de veure.</li>
@@ -619,7 +622,7 @@
 
 <!-- ============ PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h4>Errors habituals</h4>
+  <h2>Errors habituals</h2>
   <dl class="cq-issues">
     <dt>Has canviat un registre i ningú no ho nota</dt>
     <dd>
@@ -649,7 +652,7 @@
 
 <!-- ============ 12 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h4>Resum</h4>
+  <h2>Resum</h2>
   <ul>
     <li>Cada xarxa vol <strong>dues zones</strong>: la directa i la inversa <code>in-addr.arpa</code>.</li>
     <li>El servidor que té l'original d'una zona n'és el <strong>primari</strong>.</li>
@@ -668,64 +671,64 @@
 
 <!-- ============ 13 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h4>Comprova el que has après</h4>
+  <h2>Comprova el que has après</h2>
 
   <div class="cq-question" data-id="t2-3-inversa" data-type="single">
     <div class="statement">Com es diu la zona inversa de la xarxa <code>192.168.1.0/24</code>?</div>
-    <button class="cq-option" data-correct="false"><code>192.168.1.in-addr.arpa</code></button>
-    <button class="cq-option" data-correct="true"><code>1.168.192.in-addr.arpa</code></button>
-    <button class="cq-option" data-correct="false"><code>0.1.168.192.in-addr.arpa</code></button>
-    <button class="cq-option" data-correct="false"><code>arpa.in-addr.192.168.1</code></button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false"><code>192.168.1.in-addr.arpa</code></button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true"><code>1.168.192.in-addr.arpa</code></button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false"><code>0.1.168.192.in-addr.arpa</code></button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false"><code>arpa.in-addr.192.168.1</code></button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t2-3-serial" data-type="single">
     <div class="statement">Has canviat un registre però no has tocat el serial. Què passa?</div>
-    <button class="cq-option" data-correct="false">La zona no es carrega i el servei s'atura</button>
-    <button class="cq-option" data-correct="true">El servidor secundari no detecta el canvi i continua amb les dades antigues</button>
-    <button class="cq-option" data-correct="false">El TTL passa a ser zero</button>
-    <button class="cq-option" data-correct="false">No passa res, el serial és informatiu</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">La zona no es carrega i el servei s'atura</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">El servidor secundari no detecta el canvi i continua amb les dades antigues</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El TTL passa a ser zero</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">No passa res, el serial és informatiu</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t2-3-punt" data-type="single">
     <div class="statement">Dins de la zona <code>adria.internal</code>, què vol dir la línia <code>web IN A 192.168.1.20</code>?</div>
-    <button class="cq-option" data-correct="true">Que <code>web.adria.internal</code> té l'adreça <code>192.168.1.20</code></button>
-    <button class="cq-option" data-correct="false">Que <code>web</code> és un àlies de la zona</button>
-    <button class="cq-option" data-correct="false">Que és un error: falta el punt final</button>
-    <button class="cq-option" data-correct="false">Que <code>web</code> és el servidor de correu</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Que <code>web.adria.internal</code> té l'adreça <code>192.168.1.20</code></button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que <code>web</code> és un àlies de la zona</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que és un error: falta el punt final</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que <code>web</code> és el servidor de correu</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t2-3-cname" data-type="single">
     <div class="statement">Quina d'aquestes línies és incorrecta?</div>
-    <button class="cq-option" data-correct="true"><code>intranet IN CNAME 192.168.1.8</code></button>
-    <button class="cq-option" data-correct="false"><code>intranet IN CNAME www.adria.internal.</code></button>
-    <button class="cq-option" data-correct="false"><code>www IN A 192.168.1.8</code></button>
-    <button class="cq-option" data-correct="false"><code>8 IN PTR ns1.adria.internal.</code></button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true"><code>intranet IN CNAME 192.168.1.8</code></button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false"><code>intranet IN CNAME www.adria.internal.</code></button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false"><code>www IN A 192.168.1.8</code></button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false"><code>8 IN PTR ns1.adria.internal.</code></button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t2-3-afirmacions" data-type="multi">
     <div class="statement">Selecciona totes les afirmacions certes</div>
-    <button class="cq-option" data-correct="true">El registre PTR viu a la zona inversa.</button>
-    <button class="cq-option" data-correct="true">Una zona s'ha de validar abans de recarregar-la.</button>
-    <button class="cq-option" data-correct="true">El correu de l'administrador del SOA porta un punt on aniria l'arrova.</button>
-    <button class="cq-option" data-correct="false">Un CNAME pot apuntar directament a una adreça IP.</button>
-    <button class="cq-option" data-correct="false">Una zona inversa no necessita registre SOA.</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">El registre PTR viu a la zona inversa.</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Una zona s'ha de validar abans de recarregar-la.</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">El correu de l'administrador del SOA porta un punt on aniria l'arrova.</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Un CNAME pot apuntar directament a una adreça IP.</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Una zona inversa no necessita registre SOA.</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 </div>
 
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h4>Al currículum</h4>
+  <h2>Al currículum</h2>
   <p><span class="lbl">Contingut 2.2</span> Zones primàries i secundàries. Transferències de zona. Tipus de registres.</p>
   <p><span class="lbl">CA 2.3</span> Descriu l'estructura, nomenclatura i funcionalitat dels sistemes de noms jeràrquics.</p>
   <p><span class="lbl">CA 2.6</span> Afegeix registres de noms d'una zona nova, amb opcions de servidors de correu i àlies.</p>
@@ -743,15 +746,26 @@
 <!-- === PEU DE NAVEGACIÓ FI === -->
 
 <script>
-  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  // Dissuasió de la còpia: mai al codi, a les taules ni dins de l'editor.
+  // L'alumnat treballa per SSH i ha de poder enganxar les ordres.
   (function () {
-    function editant(node) {
-      return node && node.closest && node.closest('[contenteditable="true"]');
+    var LLIURE = 'pre, code, .cq-table, [contenteditable="true"]';
+    function copiable(node) {
+      if (node && node.nodeType !== 1) { node = node.parentNode; }
+      return !!(node && node.closest && node.closest(LLIURE));
     }
-    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+    function seleccioCopiable() {
+      var s = document.getSelection();
+      if (!s || s.rangeCount === 0) { return false; }
+      return copiable(s.getRangeAt(0).commonAncestorContainer);
+    }
+    ['copy', 'cut'].forEach(function (nom) {
       document.addEventListener(nom, function (e) {
-        if (!editant(e.target)) { e.preventDefault(); }
+        if (!seleccioCopiable()) { e.preventDefault(); }
       });
+    });
+    document.addEventListener('dragstart', function (e) {
+      if (!copiable(e.target)) { e.preventDefault(); }
     });
   })();
 
@@ -778,6 +792,10 @@
         } else {
           opt.classList.toggle('cq-selected');
         }
+        options.forEach(function (o) {
+          o.setAttribute('aria-pressed',
+            o.classList.contains('cq-selected') ? 'true' : 'false');
+        });
       });
     });
 
@@ -787,6 +805,7 @@
         var isCorrect = opt.dataset.correct === 'true';
         var isSelected = opt.classList.contains('cq-selected');
         opt.classList.remove('cq-selected');
+        opt.setAttribute('aria-pressed', 'false');
         if (isCorrect) {
           opt.classList.add('cq-correct');
         } else if (isSelected) {

@@ -193,7 +193,7 @@
     color: var(--muted);
   }
 
-  .cq-block h4 {
+  .cq-block h2 {
     margin: 4px 0 14px;
     font-family: var(--font-display);
     font-size: 1.4rem;
@@ -244,26 +244,26 @@
   .cq-block[data-kind="pas a pas"]::before,
   .cq-block[data-kind="lliurament"]::before,
   .cq-block[data-kind="resum"]::before { border-color: var(--accent-line); color: var(--accent); }
-  .cq-block[data-kind="objectius"] h4,
-  .cq-block[data-kind="pas a pas"] h4,
-  .cq-block[data-kind="lliurament"] h4,
-  .cq-block[data-kind="resum"] h4 { color: var(--accent); }
+  .cq-block[data-kind="objectius"] h2,
+  .cq-block[data-kind="pas a pas"] h2,
+  .cq-block[data-kind="lliurament"] h2,
+  .cq-block[data-kind="resum"] h2 { color: var(--accent); }
 
   .cq-block[data-kind="recordatori"] { background: var(--warn-soft); border-color: #F5DCC8; }
   .cq-block[data-kind="recordatori"]::before { background: var(--warn-soft); border-color: var(--warn-line); color: var(--warn); }
-  .cq-block[data-kind="recordatori"] h4 { color: var(--warn); }
+  .cq-block[data-kind="recordatori"] h2 { color: var(--warn); }
 
   .cq-block[data-kind="bones pràctiques"] { background: var(--ok-soft); border-color: var(--ok-line); }
   .cq-block[data-kind="bones pràctiques"]::before { background: var(--ok-soft); border-color: var(--ok-line); color: var(--ok); }
-  .cq-block[data-kind="bones pràctiques"] h4 { color: var(--ok); }
+  .cq-block[data-kind="bones pràctiques"] h2 { color: var(--ok); }
 
   .cq-block[data-kind="problemes"] { background: var(--ko-soft); border-color: var(--ko-line); }
   .cq-block[data-kind="problemes"]::before { background: var(--ko-soft); border-color: var(--ko-line); color: var(--ko); }
-  .cq-block[data-kind="problemes"] h4 { color: var(--ko); }
+  .cq-block[data-kind="problemes"] h2 { color: var(--ko); }
 
   /* ==== Traçabilitat amb el currículum ==== */
   .cq-block[data-kind="currículum"] { background: transparent; }
-  .cq-block[data-kind="currículum"] h4 { color: var(--muted); }
+  .cq-block[data-kind="currículum"] h2 { color: var(--muted); }
   .cq-block[data-kind="currículum"] p {
     margin: 0 0 6px;
     font-size: .86rem;
@@ -487,14 +487,17 @@
     a.cq-ref { border-bottom: none; color: inherit; }
   }
   /* ==== Contingut no copiable ====
-     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
-     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
-     queda exclòs. */
+     Dissuasiu, no una protecció: la prosa és per llegir-la al web o a
+     Moodle, no per copiar-la. El codi, les ordres i les taules SÍ que es
+     copien: l'alumnat treballa per SSH i les ha d'enganxar. L'editor
+     treballa amb contenteditable i queda exclòs. */
   .cq-header, .cq-block {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
   }
+  .cq-block pre, .cq-block pre *,
+  .cq-block code, .cq-table, .cq-table *,
   [contenteditable="true"], [contenteditable="true"] * {
     -webkit-user-select: text;
     -moz-user-select: text;
@@ -522,7 +525,7 @@
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h4>Què sabràs fer en acabar</h4>
+  <h2>Què sabràs fer en acabar</h2>
   <ul>
     <li>Explicar què fa un proxy com a intermediari entre client i servidor.</li>
     <li>Distingir un acert d'un fallada de memòria cau.</li>
@@ -534,7 +537,7 @@
 
 <!-- ============ 2 · INTERMEDIARI ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Un intermediari, no un simple encaminador</h4>
+  <h2>Un intermediari, no un simple encaminador</h2>
   <p>
     Amb un proxy, el client no parla amb el servidor de destí: parla amb el proxy, i és el
     proxy qui fa la petició real i li torna la resposta. Des del punt de vista del servidor de
@@ -550,7 +553,7 @@
 
 <!-- ============ 3 · MEMÒRIA CAU ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Acert i fallada de memòria cau</h4>
+  <h2>Acert i fallada de memòria cau</h2>
   <p>
     Quan un client demana un objecte, el proxy mira si ja el té guardat. Si sí, és un
     <strong>acert</strong> (<em>hit</em>) i respon a l'instant sense sortir a Internet. Si no,
@@ -566,7 +569,7 @@
 
 <!-- ============ 4 · EXPLÍCIT O TRANSPARENT ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Mode explícit o transparent</h4>
+  <h2>Mode explícit o transparent</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th></th><th>Explícit</th><th>Transparent</th></tr></thead>
@@ -586,7 +589,7 @@
 
 <!-- ============ 5 · EL LÍMIT DE HTTPS ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>El límit seriós: HTTPS</h4>
+  <h2>El límit seriós: HTTPS</h2>
   <p>
     Amb HTTPS, el proxy veu <strong>cap a on</strong> va la connexió —el nom del servidor de
     destí— però no el contingut: ni la URL sencera, ni les dades, van xifrades d'extrem a
@@ -597,7 +600,7 @@
 
 <!-- ============ 6 · DIRECTE I INVERS ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Proxy directe i proxy invers</h4>
+  <h2>Proxy directe i proxy invers</h2>
   <p>
     Tot el que s'ha vist fins ara és un <strong>proxy directe</strong>: treballa per als
     clients de dins, que hi surten a demanar coses de fora. Un <strong>proxy invers</strong> fa
@@ -608,7 +611,7 @@
 
 <!-- ============ 7 · OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h4>Llegir el registre d'accessos</h4>
+  <h2>Llegir el registre d'accessos</h2>
   <p>
     Un registre de proxy anota, per cada petició, si ha estat acert o fallada de memòria cau:
   </p>
@@ -623,7 +626,7 @@
 
 <!-- ============ 8 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h4>Criteris professionals</h4>
+  <h2>Criteris professionals</h2>
   <ul>
     <li><strong>No confiïs la memòria cau per a HTTPS</strong>: la major part del trànsit d'avui ja no es pot cachejar.</li>
     <li><strong>Tria explícit si pots</strong>: és més fàcil de diagnosticar que el transparent.</li>
@@ -633,7 +636,7 @@
 
 <!-- ============ 9 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h4>Errors habituals</h4>
+  <h2>Errors habituals</h2>
   <dl class="cq-issues">
     <dt>Esperar que el proxy cachegi tot el trànsit web</dt>
     <dd>
@@ -655,7 +658,7 @@
 
 <!-- ============ 10 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h4>Resum</h4>
+  <h2>Resum</h2>
   <ul>
     <li>Un proxy és un <strong>intermediari</strong>: el client hi parla, i el proxy fa la petició real.</li>
     <li>Guanys: control, registre i memòria <strong>cau</strong> (acert o fallada).</li>
@@ -668,63 +671,63 @@
 
 <!-- ============ 11 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h4>Comprova el que has après</h4>
+  <h2>Comprova el que has après</h2>
 
   <div class="cq-question" data-id="t8-2-intermediari" data-type="single">
     <div class="statement">Amb un proxy configurat, amb qui parla realment el client?</div>
-    <button class="cq-option" data-correct="false">Directament amb el servidor de destí</button>
-    <button class="cq-option" data-correct="true">Amb el proxy, que fa la petició real en nom seu</button>
-    <button class="cq-option" data-correct="false">Amb el servidor DNS</button>
-    <button class="cq-option" data-correct="false">Amb la passarel·la de xarxa</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Directament amb el servidor de destí</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Amb el proxy, que fa la petició real en nom seu</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Amb el servidor DNS</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Amb la passarel·la de xarxa</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t8-2-hit" data-type="single">
     <div class="statement">Un registre de proxy marca una petició com <code>TCP_HIT</code>. Què vol dir?</div>
-    <button class="cq-option" data-correct="false">Que la petició s'ha denegat</button>
-    <button class="cq-option" data-correct="true">Que el proxy ja tenia l'objecte guardat i no ha calgut anar a buscar-lo</button>
-    <button class="cq-option" data-correct="false">Que la connexió anava xifrada</button>
-    <button class="cq-option" data-correct="false">Que el client s'ha connectat en mode transparent</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que la petició s'ha denegat</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Que el proxy ja tenia l'objecte guardat i no ha calgut anar a buscar-lo</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que la connexió anava xifrada</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que el client s'ha connectat en mode transparent</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t8-2-transparent" data-type="single">
     <div class="statement">Quina limitació té el mode transparent?</div>
-    <button class="cq-option" data-correct="false">Cal configurar cada navegador a mà</button>
-    <button class="cq-option" data-correct="true">Només funciona amb HTTP en clar, no amb HTTPS</button>
-    <button class="cq-option" data-correct="false">No permet fer memòria cau</button>
-    <button class="cq-option" data-correct="false">No es pot combinar amb ACL</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Cal configurar cada navegador a mà</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Només funciona amb HTTP en clar, no amb HTTPS</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">No permet fer memòria cau</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">No es pot combinar amb ACL</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t8-2-https" data-type="single">
     <div class="statement">Amb una connexió HTTPS a través d'un proxy, què en pot veure el proxy?</div>
-    <button class="cq-option" data-correct="false">Tot el contingut, igual que amb HTTP</button>
-    <button class="cq-option" data-correct="true">Cap a quin servidor va la connexió, però no el contingut</button>
-    <button class="cq-option" data-correct="false">Res en absolut, ni tan sols el destí</button>
-    <button class="cq-option" data-correct="false">Només les capçaleres, mai el destí</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Tot el contingut, igual que amb HTTP</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Cap a quin servidor va la connexió, però no el contingut</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Res en absolut, ni tan sols el destí</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Només les capçaleres, mai el destí</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t8-2-directe-invers" data-type="single">
     <div class="statement">Quina diferència hi ha entre proxy directe i proxy invers?</div>
-    <button class="cq-option" data-correct="false">El directe és per a HTTPS i l'invers per a HTTP</button>
-    <button class="cq-option" data-correct="true">El directe treballa per als clients de dins; l'invers, per als servidors de dins</button>
-    <button class="cq-option" data-correct="false">Són el mateix concepte amb noms diferents</button>
-    <button class="cq-option" data-correct="false">L'invers no fa memòria cau</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El directe és per a HTTPS i l'invers per a HTTP</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">El directe treballa per als clients de dins; l'invers, per als servidors de dins</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Són el mateix concepte amb noms diferents</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">L'invers no fa memòria cau</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 </div>
 
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h4>Al currículum</h4>
+  <h2>Al currículum</h2>
   <p><span class="lbl">Contingut 8.2</span> Emmagatzematge en memòria cau.</p>
   <p><span class="lbl">CA 8.3</span> Reconeix i diferencia les característiques i possibilitats de l'aplicació seleccionada.</p>
   <p><span class="lbl">CA 8.6</span> Implementa mecanismes per accelerar les comunicacions entre la xarxa privada local i la pública.</p>
@@ -742,15 +745,26 @@
 <!-- === PEU DE NAVEGACIÓ FI === -->
 
 <script>
-  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  // Dissuasió de la còpia: mai al codi, a les taules ni dins de l'editor.
+  // L'alumnat treballa per SSH i ha de poder enganxar les ordres.
   (function () {
-    function editant(node) {
-      return node && node.closest && node.closest('[contenteditable="true"]');
+    var LLIURE = 'pre, code, .cq-table, [contenteditable="true"]';
+    function copiable(node) {
+      if (node && node.nodeType !== 1) { node = node.parentNode; }
+      return !!(node && node.closest && node.closest(LLIURE));
     }
-    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+    function seleccioCopiable() {
+      var s = document.getSelection();
+      if (!s || s.rangeCount === 0) { return false; }
+      return copiable(s.getRangeAt(0).commonAncestorContainer);
+    }
+    ['copy', 'cut'].forEach(function (nom) {
       document.addEventListener(nom, function (e) {
-        if (!editant(e.target)) { e.preventDefault(); }
+        if (!seleccioCopiable()) { e.preventDefault(); }
       });
+    });
+    document.addEventListener('dragstart', function (e) {
+      if (!copiable(e.target)) { e.preventDefault(); }
     });
   })();
 
@@ -777,6 +791,10 @@
         } else {
           opt.classList.toggle('cq-selected');
         }
+        options.forEach(function (o) {
+          o.setAttribute('aria-pressed',
+            o.classList.contains('cq-selected') ? 'true' : 'false');
+        });
       });
     });
 
@@ -786,6 +804,7 @@
         var isCorrect = opt.dataset.correct === 'true';
         var isSelected = opt.classList.contains('cq-selected');
         opt.classList.remove('cq-selected');
+        opt.setAttribute('aria-pressed', 'false');
         if (isCorrect) {
           opt.classList.add('cq-correct');
         } else if (isSelected) {

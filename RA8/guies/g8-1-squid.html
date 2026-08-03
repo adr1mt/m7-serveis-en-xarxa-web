@@ -193,7 +193,7 @@
     color: var(--muted);
   }
 
-  .cq-block h4 {
+  .cq-block h2 {
     margin: 4px 0 14px;
     font-family: var(--font-display);
     font-size: 1.4rem;
@@ -244,26 +244,26 @@
   .cq-block[data-kind="pas a pas"]::before,
   .cq-block[data-kind="lliurament"]::before,
   .cq-block[data-kind="resum"]::before { border-color: var(--accent-line); color: var(--accent); }
-  .cq-block[data-kind="objectius"] h4,
-  .cq-block[data-kind="pas a pas"] h4,
-  .cq-block[data-kind="lliurament"] h4,
-  .cq-block[data-kind="resum"] h4 { color: var(--accent); }
+  .cq-block[data-kind="objectius"] h2,
+  .cq-block[data-kind="pas a pas"] h2,
+  .cq-block[data-kind="lliurament"] h2,
+  .cq-block[data-kind="resum"] h2 { color: var(--accent); }
 
   .cq-block[data-kind="recordatori"] { background: var(--warn-soft); border-color: #F5DCC8; }
   .cq-block[data-kind="recordatori"]::before { background: var(--warn-soft); border-color: var(--warn-line); color: var(--warn); }
-  .cq-block[data-kind="recordatori"] h4 { color: var(--warn); }
+  .cq-block[data-kind="recordatori"] h2 { color: var(--warn); }
 
   .cq-block[data-kind="bones pràctiques"] { background: var(--ok-soft); border-color: var(--ok-line); }
   .cq-block[data-kind="bones pràctiques"]::before { background: var(--ok-soft); border-color: var(--ok-line); color: var(--ok); }
-  .cq-block[data-kind="bones pràctiques"] h4 { color: var(--ok); }
+  .cq-block[data-kind="bones pràctiques"] h2 { color: var(--ok); }
 
   .cq-block[data-kind="problemes"] { background: var(--ko-soft); border-color: var(--ko-line); }
   .cq-block[data-kind="problemes"]::before { background: var(--ko-soft); border-color: var(--ko-line); color: var(--ko); }
-  .cq-block[data-kind="problemes"] h4 { color: var(--ko); }
+  .cq-block[data-kind="problemes"] h2 { color: var(--ko); }
 
   /* ==== Traçabilitat amb el currículum ==== */
   .cq-block[data-kind="currículum"] { background: transparent; }
-  .cq-block[data-kind="currículum"] h4 { color: var(--muted); }
+  .cq-block[data-kind="currículum"] h2 { color: var(--muted); }
   .cq-block[data-kind="currículum"] p {
     margin: 0 0 6px;
     font-size: .86rem;
@@ -487,14 +487,17 @@
     a.cq-ref { border-bottom: none; color: inherit; }
   }
   /* ==== Contingut no copiable ====
-     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
-     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
-     queda exclòs. */
+     Dissuasiu, no una protecció: la prosa és per llegir-la al web o a
+     Moodle, no per copiar-la. El codi, les ordres i les taules SÍ que es
+     copien: l'alumnat treballa per SSH i les ha d'enganxar. L'editor
+     treballa amb contenteditable i queda exclòs. */
   .cq-header, .cq-block {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
   }
+  .cq-block pre, .cq-block pre *,
+  .cq-block code, .cq-table, .cq-table *,
   [contenteditable="true"], [contenteditable="true"] * {
     -webkit-user-select: text;
     -moz-user-select: text;
@@ -522,7 +525,7 @@
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h4>Què hi ha en aquesta guia</h4>
+  <h2>Què hi ha en aquesta guia</h2>
   <p>Documentació oficial: <a href="http://www.squid-cache.org/Doc/config/">squid-cache.org/Doc/config</a>
   i la wiki: <a href="https://wiki.squid-cache.org/">wiki.squid-cache.org</a>.</p>
   <ul>
@@ -535,7 +538,7 @@
 
 <!-- ============ 2 · PAS A PAS · INSTAL·LACIÓ ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h4>Instal·lar Squid i comprovar que arrenca</h4>
+  <h2>Instal·lar Squid i comprovar que arrenca</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Instal·la el paquet:</strong></p>
@@ -559,7 +562,7 @@ sudo apt install squid</pre>
 
 <!-- ============ 3 · REFERÈNCIA · SQUID.CONF ============ -->
 <div class="cq-block" data-kind="referència">
-  <h4>El fitxer squid.conf</h4>
+  <h2>El fitxer squid.conf</h2>
   <p>
     Tota la configuració viu en un únic fitxer de text,
     <code>/etc/squid/squid.conf</code>. Les directives per començar:
@@ -586,7 +589,7 @@ sudo apt install squid</pre>
 
 <!-- ============ 4 · REFERÈNCIA · ACL I HTTP_ACCESS ============ -->
 <div class="cq-block" data-kind="referència">
-  <h4>Control d'accés: ACL i http_access</h4>
+  <h2>Control d'accés: ACL i http_access</h2>
   <p>
     <code>acl &lt;nom&gt; &lt;tipus&gt; &lt;valor&gt;</code> defineix una
     <strong>condició</strong>: no fa res per si sola, només posa nom a un criteri.
@@ -618,7 +621,7 @@ sudo apt install squid</pre>
 
 <!-- ============ 5 · PAS A PAS · CANVIAR EL PORT ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h4>Canviar el port a 8080</h4>
+  <h2>Canviar el port a 8080</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Edita la directiva <code>http_port</code>:</strong></p>
@@ -652,7 +655,7 @@ sudo apt install squid</pre>
 
 <!-- ============ 6 · PAS A PAS · PERMETRE LA XARXA LOCAL ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h4>Permetre la xarxa local</h4>
+  <h2>Permetre la xarxa local</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Busca el lloc on van les teves regles.</strong> El fitxer ja porta
@@ -684,7 +687,7 @@ sudo squid -k reconfigure</pre>
 
 <!-- ============ 7 · PAS A PAS · CONFIGURAR EL CLIENT ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h4>Configurar el client</h4>
+  <h2>Configurar el client</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Firefox:</strong> Configuració → Xarxa → Configuració de la
@@ -702,7 +705,7 @@ sudo squid -k reconfigure</pre>
 
 <!-- ============ 8 · PAS A PAS · BLOQUEJOS ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h4>Bloquejar per domini, paraula, horari i port</h4>
+  <h2>Bloquejar per domini, paraula, horari i port</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Per domini</strong>, amb el punt inicial perquè agafi també els
@@ -743,7 +746,7 @@ http_access deny all</pre>
 
 <!-- ============ 9 · PAS A PAS · LLEGIR EL REGISTRE ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h4>Llegir el registre d'accessos</h4>
+  <h2>Llegir el registre d'accessos</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Segueix el registre en directe</strong> mentre navegues:</p>
@@ -769,7 +772,7 @@ http_access deny all</pre>
 
 <!-- ============ 10 · REFERÈNCIA · SQUIDCLIENT I TRANSPARENT ============ -->
 <div class="cq-block" data-kind="referència">
-  <h4>squidclient i el mode transparent</h4>
+  <h2>squidclient i el mode transparent</h2>
   <p>
     <code>squidclient mgr:info</code>, executat al mateix servidor, consulta
     l'estat intern del proxy sense passar per un navegador.
@@ -784,7 +787,7 @@ http_access deny all</pre>
 
 <!-- ============ 11 · COMPROVACIÓ ============ -->
 <div class="cq-block" data-kind="comprovació">
-  <h4>Comprovar-ho de conjunt des del client</h4>
+  <h2>Comprovar-ho de conjunt des del client</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Navega a través del proxy</strong> i que arribi:</p>
@@ -806,7 +809,7 @@ http_access deny all</pre>
 
 <!-- ============ 12 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h4>Criteris professionals</h4>
+  <h2>Criteris professionals</h2>
   <ul>
     <li><strong><code>squid -k parse</code> abans de recarregar</strong>, sempre:
     un error de sintaxi no avisa sol.</li>
@@ -823,7 +826,7 @@ http_access deny all</pre>
 
 <!-- ============ 13 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h4>Errors habituals</h4>
+  <h2>Errors habituals</h2>
   <dl class="cq-issues">
     <dt>El bloqueig no funciona i el domini es continua veient</dt>
     <dd>
@@ -877,7 +880,7 @@ http_access deny all</pre>
 
 <!-- ============ 14 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h4>Fitxa ràpida</h4>
+  <h2>Fitxa ràpida</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Què</th><th>On</th></tr></thead>
@@ -917,15 +920,26 @@ http_access deny all</pre>
 <!-- === PEU DE NAVEGACIÓ FI === -->
 
 <script>
-  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  // Dissuasió de la còpia: mai al codi, a les taules ni dins de l'editor.
+  // L'alumnat treballa per SSH i ha de poder enganxar les ordres.
   (function () {
-    function editant(node) {
-      return node && node.closest && node.closest('[contenteditable="true"]');
+    var LLIURE = 'pre, code, .cq-table, [contenteditable="true"]';
+    function copiable(node) {
+      if (node && node.nodeType !== 1) { node = node.parentNode; }
+      return !!(node && node.closest && node.closest(LLIURE));
     }
-    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+    function seleccioCopiable() {
+      var s = document.getSelection();
+      if (!s || s.rangeCount === 0) { return false; }
+      return copiable(s.getRangeAt(0).commonAncestorContainer);
+    }
+    ['copy', 'cut'].forEach(function (nom) {
       document.addEventListener(nom, function (e) {
-        if (!editant(e.target)) { e.preventDefault(); }
+        if (!seleccioCopiable()) { e.preventDefault(); }
       });
+    });
+    document.addEventListener('dragstart', function (e) {
+      if (!copiable(e.target)) { e.preventDefault(); }
     });
   })();
 
@@ -952,6 +966,10 @@ http_access deny all</pre>
         } else {
           opt.classList.toggle('cq-selected');
         }
+        options.forEach(function (o) {
+          o.setAttribute('aria-pressed',
+            o.classList.contains('cq-selected') ? 'true' : 'false');
+        });
       });
     });
 
@@ -961,6 +979,7 @@ http_access deny all</pre>
         var isCorrect = opt.dataset.correct === 'true';
         var isSelected = opt.classList.contains('cq-selected');
         opt.classList.remove('cq-selected');
+        opt.setAttribute('aria-pressed', 'false');
         if (isCorrect) {
           opt.classList.add('cq-correct');
         } else if (isSelected) {

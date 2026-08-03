@@ -193,7 +193,7 @@
     color: var(--muted);
   }
 
-  .cq-block h4 {
+  .cq-block h2 {
     margin: 4px 0 14px;
     font-family: var(--font-display);
     font-size: 1.4rem;
@@ -244,26 +244,26 @@
   .cq-block[data-kind="pas a pas"]::before,
   .cq-block[data-kind="lliurament"]::before,
   .cq-block[data-kind="resum"]::before { border-color: var(--accent-line); color: var(--accent); }
-  .cq-block[data-kind="objectius"] h4,
-  .cq-block[data-kind="pas a pas"] h4,
-  .cq-block[data-kind="lliurament"] h4,
-  .cq-block[data-kind="resum"] h4 { color: var(--accent); }
+  .cq-block[data-kind="objectius"] h2,
+  .cq-block[data-kind="pas a pas"] h2,
+  .cq-block[data-kind="lliurament"] h2,
+  .cq-block[data-kind="resum"] h2 { color: var(--accent); }
 
   .cq-block[data-kind="recordatori"] { background: var(--warn-soft); border-color: #F5DCC8; }
   .cq-block[data-kind="recordatori"]::before { background: var(--warn-soft); border-color: var(--warn-line); color: var(--warn); }
-  .cq-block[data-kind="recordatori"] h4 { color: var(--warn); }
+  .cq-block[data-kind="recordatori"] h2 { color: var(--warn); }
 
   .cq-block[data-kind="bones pràctiques"] { background: var(--ok-soft); border-color: var(--ok-line); }
   .cq-block[data-kind="bones pràctiques"]::before { background: var(--ok-soft); border-color: var(--ok-line); color: var(--ok); }
-  .cq-block[data-kind="bones pràctiques"] h4 { color: var(--ok); }
+  .cq-block[data-kind="bones pràctiques"] h2 { color: var(--ok); }
 
   .cq-block[data-kind="problemes"] { background: var(--ko-soft); border-color: var(--ko-line); }
   .cq-block[data-kind="problemes"]::before { background: var(--ko-soft); border-color: var(--ko-line); color: var(--ko); }
-  .cq-block[data-kind="problemes"] h4 { color: var(--ko); }
+  .cq-block[data-kind="problemes"] h2 { color: var(--ko); }
 
   /* ==== Traçabilitat amb el currículum ==== */
   .cq-block[data-kind="currículum"] { background: transparent; }
-  .cq-block[data-kind="currículum"] h4 { color: var(--muted); }
+  .cq-block[data-kind="currículum"] h2 { color: var(--muted); }
   .cq-block[data-kind="currículum"] p {
     margin: 0 0 6px;
     font-size: .86rem;
@@ -487,14 +487,17 @@
     a.cq-ref { border-bottom: none; color: inherit; }
   }
   /* ==== Contingut no copiable ====
-     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
-     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
-     queda exclòs. */
+     Dissuasiu, no una protecció: la prosa és per llegir-la al web o a
+     Moodle, no per copiar-la. El codi, les ordres i les taules SÍ que es
+     copien: l'alumnat treballa per SSH i les ha d'enganxar. L'editor
+     treballa amb contenteditable i queda exclòs. */
   .cq-header, .cq-block {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
   }
+  .cq-block pre, .cq-block pre *,
+  .cq-block code, .cq-table, .cq-table *,
   [contenteditable="true"], [contenteditable="true"] * {
     -webkit-user-select: text;
     -moz-user-select: text;
@@ -522,7 +525,7 @@
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h4>Què sabràs fer en acabar</h4>
+  <h2>Què sabràs fer en acabar</h2>
   <ul>
     <li>Explicar què guanyes <strong>enjaulant</strong> un usuari al seu directori.</li>
     <li>Crear usuaris i grups pensats per a accés remot.</li>
@@ -534,7 +537,7 @@
 
 <!-- ============ 4 · CHROOT ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Enjaular l'usuari: chroot</h4>
+  <h2>Enjaular l'usuari: chroot</h2>
   <p>
     Sense <code>chroot_local_user</code>, qui entra per FTP es pot moure per <strong>tot el
     sistema de fitxers</strong>: pot baixar-se <code>/etc/passwd</code> o llegir els directoris
@@ -553,7 +556,7 @@
 
 <!-- ============ 7 · CAS REAL ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h4>El compte compartit de la petita empresa</h4>
+  <h2>El compte compartit de la petita empresa</h2>
   <p>
     Un muntatge que es veu molt: un sol compte d'FTP, la contrasenya apuntada en un correu antic,
     i tothom hi entra. Proveïdors, clients i l'informàtic que va marxar fa dos anys.
@@ -571,7 +574,7 @@
 
 <!-- ============ 2 · QUÈ ÉS L'ANÒNIM ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Qui és l'usuari anònim</h4>
+  <h2>Qui és l'usuari anònim</h2>
   <p>
     L'accés anònim vol dir entrar sense compte: l'usuari escriu <code>anonymous</code> o
     <code>ftp</code> i, com a contrasenya, el seu correu o el que li sembli. Ningú no el comprova.
@@ -589,7 +592,7 @@
 
 <!-- ============ 4 · LÍMITS ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Posar fre: connexions, velocitat i temps</h4>
+  <h2>Posar fre: connexions, velocitat i temps</h2>
   <p>
     Un servidor sense límits el tomba una sola persona amb un <em>script</em>. El servei els aplica
     per separat als anònims i als usuaris amb compte.
@@ -614,7 +617,7 @@
 
 <!-- ============ 6 · QUOTES ============ -->
 <div class="cq-block" data-kind="observació">
-  <h4>Les quotes no són cosa del servidor FTP</h4>
+  <h2>Les quotes no són cosa del servidor FTP</h2>
   <p>
     Cap opció del servidor FTP limita <em>l'espai en disc</em> que ocupa un usuari. Els límits del
     servidor són de velocitat i de sessions; l'espai el controla el sistema de fitxers.
@@ -632,7 +635,7 @@
 
 <!-- ============ 7 · CAS REAL ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h4>El directori públic que va acabar sent un magatzem</h4>
+  <h2>El directori públic que va acabar sent un magatzem</h2>
   <p>
     Als anys en què tothom tenia FTP anònim era habitual deixar una carpeta <em>incoming</em>
     perquè la gent hi deixés fitxers. La idea era rebre feina de fora sense donar comptes.
@@ -650,7 +653,7 @@
 
 <!-- ============ BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h4>Criteris professionals</h4>
+  <h2>Criteris professionals</h2>
   <ul>
     <li><strong>Un compte per persona</strong>: amb un compte compartit no se sap mai qui ha esborrat què.</li>
     <li><strong>L'arrel de la gàbia, de només lectura</strong>; qui hi entra escriu en una carpeta de dins.</li>
@@ -662,7 +665,7 @@
 
 <!-- ============ PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h4>Errors habituals</h4>
+  <h2>Errors habituals</h2>
   <dl class="cq-issues">
     <dt>L'usuari veu tot el sistema de fitxers</dt>
     <dd>
@@ -691,7 +694,7 @@
 </div>
 
 <div class="cq-block" data-kind="resum">
-  <h4>Resum</h4>
+  <h2>Resum</h2>
   <ul>
     <li>El <strong>chroot</strong> tanca l'usuari dins de la seva carpeta: no en pot sortir.</li>
     <li>L'arrel d'una jaula <strong>no pot ser escrivible</strong> per qui hi queda tancat.</li>
@@ -708,53 +711,53 @@
 </div>
 
 <div class="cq-block" data-kind="quiz">
-  <h4>Comprova el que has après</h4>
+  <h2>Comprova el que has après</h2>
 
   <div class="cq-question" data-id="t3-2-chroot" data-type="single">
     <div class="statement">Què aconsegueixes amb <code>chroot_local_user=YES</code>?</div>
-    <button class="cq-option" data-correct="false">Que els usuaris puguin pujar fitxers</button>
-    <button class="cq-option" data-correct="true">Que cada usuari vegi el seu directori com si fos l'arrel i no en pugui sortir</button>
-    <button class="cq-option" data-correct="false">Que la connexió es xifri</button>
-    <button class="cq-option" data-correct="false">Que només entrin els usuaris de la llista</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que els usuaris puguin pujar fitxers</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Que cada usuari vegi el seu directori com si fos l'arrel i no en pugui sortir</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que la connexió es xifri</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que només entrin els usuaris de la llista</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t3-3-usuari" data-type="single">
     <div class="statement">Amb quin compte del sistema treballa una sessió anònima?</div>
-    <button class="cq-option" data-correct="false"><code>root</code></button>
-    <button class="cq-option" data-correct="false"><code>nobody</code></button>
-    <button class="cq-option" data-correct="true"><code>ftp</code></button>
-    <button class="cq-option" data-correct="false"><code>anonymous</code>, que es crea a cada connexió</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false"><code>root</code></button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false"><code>nobody</code></button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true"><code>ftp</code></button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false"><code>anonymous</code>, que es crea a cada connexió</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t3-3-arrel" data-type="single">
     <div class="statement">Per què <code>/srv/ftp</code> no pot ser escrivible?</div>
-    <button class="cq-option" data-correct="false">Perquè si no, no es pot llegir</button>
-    <button class="cq-option" data-correct="true">Perquè el servei es nega a fer un chroot sobre una arrel escrivible</button>
-    <button class="cq-option" data-correct="false">Perquè el sistema de fitxers no ho permet</button>
-    <button class="cq-option" data-correct="false">Perquè aleshores caldria activar el mode passiu</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè si no, no es pot llegir</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Perquè el servei es nega a fer un chroot sobre una arrel escrivible</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè el sistema de fitxers no ho permet</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè aleshores caldria activar el mode passiu</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t3-3-quota" data-type="single">
     <div class="statement">Vols que cap usuari ocupi més d'1 GB al servidor. Què fas servir?</div>
-    <button class="cq-option" data-correct="false"><code>local_max_rate</code></button>
-    <button class="cq-option" data-correct="false"><code>max_per_ip</code></button>
-    <button class="cq-option" data-correct="true">Les quotes del sistema de fitxers</button>
-    <button class="cq-option" data-correct="false"><code>anon_umask</code></button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false"><code>local_max_rate</code></button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false"><code>max_per_ip</code></button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Les quotes del sistema de fitxers</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false"><code>anon_umask</code></button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 </div>
 
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h4>Al currículum</h4>
+  <h2>Al currículum</h2>
   <p><span class="lbl">Contingut 3.1</span> Usuaris i grups. Accés anònim. Permisos. Quotes. Límit d'amplada de banda.</p>
   <p><span class="lbl">CA 3.3</span> Crea usuaris i grups per a accés remot al servidor.</p>
   <p><span class="lbl">CA 3.4</span> Configura l'accés anònim.</p>
@@ -773,15 +776,26 @@
 <!-- === PEU DE NAVEGACIÓ FI === -->
 
 <script>
-  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  // Dissuasió de la còpia: mai al codi, a les taules ni dins de l'editor.
+  // L'alumnat treballa per SSH i ha de poder enganxar les ordres.
   (function () {
-    function editant(node) {
-      return node && node.closest && node.closest('[contenteditable="true"]');
+    var LLIURE = 'pre, code, .cq-table, [contenteditable="true"]';
+    function copiable(node) {
+      if (node && node.nodeType !== 1) { node = node.parentNode; }
+      return !!(node && node.closest && node.closest(LLIURE));
     }
-    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+    function seleccioCopiable() {
+      var s = document.getSelection();
+      if (!s || s.rangeCount === 0) { return false; }
+      return copiable(s.getRangeAt(0).commonAncestorContainer);
+    }
+    ['copy', 'cut'].forEach(function (nom) {
       document.addEventListener(nom, function (e) {
-        if (!editant(e.target)) { e.preventDefault(); }
+        if (!seleccioCopiable()) { e.preventDefault(); }
       });
+    });
+    document.addEventListener('dragstart', function (e) {
+      if (!copiable(e.target)) { e.preventDefault(); }
     });
   })();
 
@@ -808,6 +822,10 @@
         } else {
           opt.classList.toggle('cq-selected');
         }
+        options.forEach(function (o) {
+          o.setAttribute('aria-pressed',
+            o.classList.contains('cq-selected') ? 'true' : 'false');
+        });
       });
     });
 
@@ -817,6 +835,7 @@
         var isCorrect = opt.dataset.correct === 'true';
         var isSelected = opt.classList.contains('cq-selected');
         opt.classList.remove('cq-selected');
+        opt.setAttribute('aria-pressed', 'false');
         if (isCorrect) {
           opt.classList.add('cq-correct');
         } else if (isSelected) {

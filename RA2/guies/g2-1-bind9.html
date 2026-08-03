@@ -193,7 +193,7 @@
     color: var(--muted);
   }
 
-  .cq-block h4 {
+  .cq-block h2 {
     margin: 4px 0 14px;
     font-family: var(--font-display);
     font-size: 1.4rem;
@@ -244,26 +244,26 @@
   .cq-block[data-kind="pas a pas"]::before,
   .cq-block[data-kind="lliurament"]::before,
   .cq-block[data-kind="resum"]::before { border-color: var(--accent-line); color: var(--accent); }
-  .cq-block[data-kind="objectius"] h4,
-  .cq-block[data-kind="pas a pas"] h4,
-  .cq-block[data-kind="lliurament"] h4,
-  .cq-block[data-kind="resum"] h4 { color: var(--accent); }
+  .cq-block[data-kind="objectius"] h2,
+  .cq-block[data-kind="pas a pas"] h2,
+  .cq-block[data-kind="lliurament"] h2,
+  .cq-block[data-kind="resum"] h2 { color: var(--accent); }
 
   .cq-block[data-kind="recordatori"] { background: var(--warn-soft); border-color: #F5DCC8; }
   .cq-block[data-kind="recordatori"]::before { background: var(--warn-soft); border-color: var(--warn-line); color: var(--warn); }
-  .cq-block[data-kind="recordatori"] h4 { color: var(--warn); }
+  .cq-block[data-kind="recordatori"] h2 { color: var(--warn); }
 
   .cq-block[data-kind="bones pràctiques"] { background: var(--ok-soft); border-color: var(--ok-line); }
   .cq-block[data-kind="bones pràctiques"]::before { background: var(--ok-soft); border-color: var(--ok-line); color: var(--ok); }
-  .cq-block[data-kind="bones pràctiques"] h4 { color: var(--ok); }
+  .cq-block[data-kind="bones pràctiques"] h2 { color: var(--ok); }
 
   .cq-block[data-kind="problemes"] { background: var(--ko-soft); border-color: var(--ko-line); }
   .cq-block[data-kind="problemes"]::before { background: var(--ko-soft); border-color: var(--ko-line); color: var(--ko); }
-  .cq-block[data-kind="problemes"] h4 { color: var(--ko); }
+  .cq-block[data-kind="problemes"] h2 { color: var(--ko); }
 
   /* ==== Traçabilitat amb el currículum ==== */
   .cq-block[data-kind="currículum"] { background: transparent; }
-  .cq-block[data-kind="currículum"] h4 { color: var(--muted); }
+  .cq-block[data-kind="currículum"] h2 { color: var(--muted); }
   .cq-block[data-kind="currículum"] p {
     margin: 0 0 6px;
     font-size: .86rem;
@@ -487,14 +487,17 @@
     a.cq-ref { border-bottom: none; color: inherit; }
   }
   /* ==== Contingut no copiable ====
-     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
-     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
-     queda exclòs. */
+     Dissuasiu, no una protecció: la prosa és per llegir-la al web o a
+     Moodle, no per copiar-la. El codi, les ordres i les taules SÍ que es
+     copien: l'alumnat treballa per SSH i les ha d'enganxar. L'editor
+     treballa amb contenteditable i queda exclòs. */
   .cq-header, .cq-block {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
   }
+  .cq-block pre, .cq-block pre *,
+  .cq-block code, .cq-table, .cq-table *,
   [contenteditable="true"], [contenteditable="true"] * {
     -webkit-user-select: text;
     -moz-user-select: text;
@@ -522,7 +525,7 @@
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h4>Què hi ha en aquesta guia</h4>
+  <h2>Què hi ha en aquesta guia</h2>
   <p>Documentació oficial: <a href="https://bind9.readthedocs.io">bind9.readthedocs.io</a></p>
   <ul>
     <li>Punt de partida: Ubuntu Server amb IP fixa a la targeta interna.</li>
@@ -533,7 +536,7 @@
 
 <!-- ============ 2 · QUÈ ÉS BIND ============ -->
 <div class="cq-block" data-kind="referència">
-  <h4>Per què BIND</h4>
+  <h2>Per què BIND</h2>
   <p>
     <strong>BIND</strong> (<em>Berkeley Internet Name Domain</em>) és el servidor DNS més
     utilitzat de la història d'Internet, i el que fan servir bona part dels servidors arrel. El
@@ -553,7 +556,7 @@
 
 <!-- ============ 3 · ELS FITXERS ============ -->
 <div class="cq-block" data-kind="referència">
-  <h4>On és cada cosa</h4>
+  <h2>On és cada cosa</h2>
   <p>
     Tot viu a <code>/etc/bind/</code>. El fitxer principal, <code>named.conf</code>, gairebé no
     té contingut: només inclou els altres tres. Tu no el tocaràs mai.
@@ -577,7 +580,7 @@
 
 <!-- ============ 4 · LES OPCIONS ============ -->
 <div class="cq-block" data-kind="referència">
-  <h4>Les cinc directives que has de decidir</h4>
+  <h2>Les cinc directives que has de decidir</h2>
   <p>
     Tot això va dins del bloc <code>options</code> de <code>named.conf.options</code>. Són poques
     i totes tenen conseqüències de seguretat.
@@ -602,7 +605,7 @@
 
 <!-- ============ 5 · EXEMPLE ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h4>Un resolutor per a la xarxa 192.168.1.0/24</h4>
+  <h2>Un resolutor per a la xarxa 192.168.1.0/24</h2>
   <p>Aquest és el fitxer sencer d'un servidor que dona servei només a la seva xarxa interna:</p>
 <pre>acl interna { 192.168.1.0/24; localhost; };
 
@@ -628,7 +631,7 @@ options {
 
 <!-- ============ 6 · FORWARDERS O ARREL ============ -->
 <div class="cq-block" data-kind="observació">
-  <h4>Forwarders: quan sí i quan no</h4>
+  <h2>Forwarders: quan sí i quan no</h2>
   <p>
     Sense <code>forwarders</code>, el teu BIND resol pel seu compte: comença pels servidors arrel
     i va baixant per l'arbre. Funciona i és el més independent.
@@ -646,7 +649,7 @@ options {
 
 <!-- ============ 8 · PAS A PAS ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h4>Muntar el resolutor</h4>
+  <h2>Muntar el resolutor</h2>
   <p>
     Amb una màquina que ja tingui IP fixa a <code>personal1</code>: un servidor DNS no pot
     escoltar per una targeta sense adreça.
@@ -704,7 +707,7 @@ dig @192.168.1.8 www.upc.edu +short</pre>
 
 <!-- ============ 3 · DECLARAR-LES ============ -->
 <div class="cq-block" data-kind="referència">
-  <h4>Declarar les zones</h4>
+  <h2>Declarar les zones</h2>
   <p>
     Les zones es declaren a <code>named.conf.local</code>. Cada declaració diu tres coses: com es
     diu la zona, quin paper hi fa aquest servidor i on són les dades.
@@ -727,7 +730,7 @@ zone "1.168.192.in-addr.arpa" {
 
 <!-- ============ 5 · EXEMPLE DIRECTA ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h4>Fitxer de zona directa</h4>
+  <h2>Fitxer de zona directa</h2>
   <p>Per a <code>adria.internal</code>, amb el servidor a la <code>192.168.1.8</code>:</p>
 <pre>$TTL 600
 @   IN  SOA ns1.adria.internal. admin.adria.internal. (
@@ -754,7 +757,7 @@ correu  IN  A       192.168.1.9
 
 <!-- ============ 6 · EL PUNT FINAL ============ -->
 <div class="cq-block" data-kind="recordatori">
-  <h4>El punt final no és decoració</h4>
+  <h2>El punt final no és decoració</h2>
   <p>
     Un nom acabat en punt és <strong>absolut</strong>: es fa servir tal com és. Un nom sense punt
     és <strong>relatiu</strong>: BIND hi enganxa el nom de la zona al darrere.
@@ -769,7 +772,7 @@ correu  IN  A       192.168.1.9
 
 <!-- ============ 8 · EXEMPLE INVERSA ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h4>Fitxer de zona inversa</h4>
+  <h2>Fitxer de zona inversa</h2>
   <p>Les mateixes màquines, al revés. Aquí el número de l'esquerra és l'últim octet:</p>
 <pre>$TTL 600
 @   IN  SOA ns1.adria.internal. admin.adria.internal. (
@@ -788,7 +791,7 @@ correu  IN  A       192.168.1.9
 
 <!-- ============ 9 · PAS A PAS ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h4>Crear i comprovar una zona</h4>
+  <h2>Crear i comprovar una zona</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Crea la carpeta</strong> de les teves zones:</p>
@@ -824,7 +827,7 @@ dig @192.168.1.8 -x 192.168.1.8 +short</pre>
 
 <!-- ============ 5 · EXEMPLE ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h4>Les dues declaracions</h4>
+  <h2>Les dues declaracions</h2>
   <p>Al <strong>primari</strong>, s'autoritza qui es pot endur la zona i a qui s'avisa:</p>
 <pre>zone "adria.internal" {
     type primary;
@@ -846,7 +849,7 @@ dig @192.168.1.8 -x 192.168.1.8 +short</pre>
 
 <!-- ============ 7 · PAS A PAS ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h4>Muntar un secundari</h4>
+  <h2>Muntar un secundari</h2>
   <p>Amb dues màquines a la mateixa xarxa: la teva com a primari i una altra com a secundari.</p>
 
   <ol class="cq-steps">
@@ -900,7 +903,7 @@ dig @192.168.1.9 www.adria.internal +short</pre>
 
 <!-- ============ COMPROVACIÓ ============ -->
 <div class="cq-block" data-kind="comprovació">
-  <h4>Comprovar-ho des d'un client, no des del servidor</h4>
+  <h2>Comprovar-ho des d'un client, no des del servidor</h2>
   <p>
     Que el servidor es respongui a si mateix no vol dir que doni servei. Aquesta prova es fa
     des d'una altra màquina de la xarxa.
@@ -929,7 +932,7 @@ dig @192.168.1.9 adria.internal SOA +short</pre>
 
 <!-- ============ BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h4>Criteris professionals</h4>
+  <h2>Criteris professionals</h2>
   <ul>
     <li><strong>Còpia de l'original</strong> abans de la primera edició, sempre.</li>
     <li><strong><code>named-checkconf</code> i <code>named-checkzone</code></strong> abans de recarregar.</li>
@@ -941,7 +944,7 @@ dig @192.168.1.9 adria.internal SOA +short</pre>
 
 <!-- ============ PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h4>Errors habituals</h4>
+  <h2>Errors habituals</h2>
   <dl class="cq-issues">
 <dt>El servei no arrenca</dt>
     <dd>
@@ -1001,7 +1004,7 @@ dig @192.168.1.9 adria.internal SOA +short</pre>
 
 <!-- ============ RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h4>Fitxa ràpida</h4>
+  <h2>Fitxa ràpida</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Comanda</th><th>Per a què serveix</th></tr></thead>
@@ -1039,15 +1042,26 @@ dig @192.168.1.9 adria.internal SOA +short</pre>
 <!-- === PEU DE NAVEGACIÓ FI === -->
 
 <script>
-  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  // Dissuasió de la còpia: mai al codi, a les taules ni dins de l'editor.
+  // L'alumnat treballa per SSH i ha de poder enganxar les ordres.
   (function () {
-    function editant(node) {
-      return node && node.closest && node.closest('[contenteditable="true"]');
+    var LLIURE = 'pre, code, .cq-table, [contenteditable="true"]';
+    function copiable(node) {
+      if (node && node.nodeType !== 1) { node = node.parentNode; }
+      return !!(node && node.closest && node.closest(LLIURE));
     }
-    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+    function seleccioCopiable() {
+      var s = document.getSelection();
+      if (!s || s.rangeCount === 0) { return false; }
+      return copiable(s.getRangeAt(0).commonAncestorContainer);
+    }
+    ['copy', 'cut'].forEach(function (nom) {
       document.addEventListener(nom, function (e) {
-        if (!editant(e.target)) { e.preventDefault(); }
+        if (!seleccioCopiable()) { e.preventDefault(); }
       });
+    });
+    document.addEventListener('dragstart', function (e) {
+      if (!copiable(e.target)) { e.preventDefault(); }
     });
   })();
 
@@ -1074,6 +1088,10 @@ dig @192.168.1.9 adria.internal SOA +short</pre>
         } else {
           opt.classList.toggle('cq-selected');
         }
+        options.forEach(function (o) {
+          o.setAttribute('aria-pressed',
+            o.classList.contains('cq-selected') ? 'true' : 'false');
+        });
       });
     });
 
@@ -1083,6 +1101,7 @@ dig @192.168.1.9 adria.internal SOA +short</pre>
         var isCorrect = opt.dataset.correct === 'true';
         var isSelected = opt.classList.contains('cq-selected');
         opt.classList.remove('cq-selected');
+        opt.setAttribute('aria-pressed', 'false');
         if (isCorrect) {
           opt.classList.add('cq-correct');
         } else if (isSelected) {

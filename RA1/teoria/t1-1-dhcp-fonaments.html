@@ -193,7 +193,7 @@
     color: var(--muted);
   }
 
-  .cq-block h4 {
+  .cq-block h2 {
     margin: 4px 0 14px;
     font-family: var(--font-display);
     font-size: 1.4rem;
@@ -244,26 +244,26 @@
   .cq-block[data-kind="pas a pas"]::before,
   .cq-block[data-kind="lliurament"]::before,
   .cq-block[data-kind="resum"]::before { border-color: var(--accent-line); color: var(--accent); }
-  .cq-block[data-kind="objectius"] h4,
-  .cq-block[data-kind="pas a pas"] h4,
-  .cq-block[data-kind="lliurament"] h4,
-  .cq-block[data-kind="resum"] h4 { color: var(--accent); }
+  .cq-block[data-kind="objectius"] h2,
+  .cq-block[data-kind="pas a pas"] h2,
+  .cq-block[data-kind="lliurament"] h2,
+  .cq-block[data-kind="resum"] h2 { color: var(--accent); }
 
   .cq-block[data-kind="recordatori"] { background: var(--warn-soft); border-color: #F5DCC8; }
   .cq-block[data-kind="recordatori"]::before { background: var(--warn-soft); border-color: var(--warn-line); color: var(--warn); }
-  .cq-block[data-kind="recordatori"] h4 { color: var(--warn); }
+  .cq-block[data-kind="recordatori"] h2 { color: var(--warn); }
 
   .cq-block[data-kind="bones pràctiques"] { background: var(--ok-soft); border-color: var(--ok-line); }
   .cq-block[data-kind="bones pràctiques"]::before { background: var(--ok-soft); border-color: var(--ok-line); color: var(--ok); }
-  .cq-block[data-kind="bones pràctiques"] h4 { color: var(--ok); }
+  .cq-block[data-kind="bones pràctiques"] h2 { color: var(--ok); }
 
   .cq-block[data-kind="problemes"] { background: var(--ko-soft); border-color: var(--ko-line); }
   .cq-block[data-kind="problemes"]::before { background: var(--ko-soft); border-color: var(--ko-line); color: var(--ko); }
-  .cq-block[data-kind="problemes"] h4 { color: var(--ko); }
+  .cq-block[data-kind="problemes"] h2 { color: var(--ko); }
 
   /* ==== Traçabilitat amb el currículum ==== */
   .cq-block[data-kind="currículum"] { background: transparent; }
-  .cq-block[data-kind="currículum"] h4 { color: var(--muted); }
+  .cq-block[data-kind="currículum"] h2 { color: var(--muted); }
   .cq-block[data-kind="currículum"] p {
     margin: 0 0 6px;
     font-size: .86rem;
@@ -487,14 +487,17 @@
     a.cq-ref { border-bottom: none; color: inherit; }
   }
   /* ==== Contingut no copiable ====
-     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
-     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
-     queda exclòs. */
+     Dissuasiu, no una protecció: la prosa és per llegir-la al web o a
+     Moodle, no per copiar-la. El codi, les ordres i les taules SÍ que es
+     copien: l'alumnat treballa per SSH i les ha d'enganxar. L'editor
+     treballa amb contenteditable i queda exclòs. */
   .cq-header, .cq-block {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
   }
+  .cq-block pre, .cq-block pre *,
+  .cq-block code, .cq-table, .cq-table *,
   [contenteditable="true"], [contenteditable="true"] * {
     -webkit-user-select: text;
     -moz-user-select: text;
@@ -522,7 +525,7 @@
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h4>Què sabràs fer en acabar</h4>
+  <h2>Què sabràs fer en acabar</h2>
   <ul>
     <li>Explicar per què les xarxes no es configuren a mà.</li>
     <li>Descriure els quatre passos del procés <strong>DORA</strong>.</li>
@@ -534,7 +537,7 @@
 
 <!-- ============ 2 · ESTÀTICA O DINÀMICA ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>IP fixa o IP automàtica?</h4>
+  <h2>IP fixa o IP automàtica?</h2>
   <p>
     Un equip pot rebre la configuració de dues maneres: <strong>automàtica</strong>, demanant-la
     a un servidor DHCP, o <strong>fixa</strong> (estàtica), escrivint-la tu en un fitxer.
@@ -552,7 +555,7 @@
 
 <!-- ============ 2 · INTRODUCCIÓ ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>El problema que resol DHCP</h4>
+  <h2>El problema que resol DHCP</h2>
   <p>
     Perquè un equip funcioni en xarxa necessita quatre dades: <strong>IP</strong>,
     <strong>màscara</strong>, <strong>porta d'enllaç</strong> i <strong>DNS</strong>.
@@ -574,7 +577,7 @@
 
 <!-- ============ 3 · FUNCIONAMENT INTERN ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Funcionament: el procés DORA</h4>
+  <h2>Funcionament: el procés DORA</h2>
   <p>
     Hi ha una pregunta òbvia: si el client encara no té IP, com pot demanar res? Ho fa per
     <strong>difusió</strong> (<em>broadcast</em>), un missatge que arriba a tothom del segment.
@@ -618,7 +621,7 @@
 
 <!-- ============ 4 · EXEMPLE SENZILL ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h4>Un DORA, missatge a missatge</h4>
+  <h2>Un DORA, missatge a missatge</h2>
   <p>
     Servidor <code>10.0.0.1</code>, que reparteix a partir de la <code>10.0.0.100</code>.
     Un portàtil s'acaba de connectar:
@@ -644,7 +647,7 @@
 
 <!-- ============ 5 · LA CONCESSIÓ ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>L'adreça es presta, no es regala</h4>
+  <h2>L'adreça es presta, no es regala</h2>
   <p>
     El servidor concedeix l'adreça durant un temps limitat: és la <strong>concessió</strong>
     (<em>lease</em>). Quan caduca, l'adreça torna al fons comú i pot anar a un altre equip.
@@ -663,7 +666,7 @@
 
 <!-- ============ 6 · TIPUS D'ASSIGNACIÓ ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Tres maneres d'assignar adreces</h4>
+  <h2>Tres maneres d'assignar adreces</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead>
@@ -701,7 +704,7 @@
 
 <!-- ============ 7 · CAS REAL ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h4>El router que algú va endollar a l'aula</h4>
+  <h2>El router que algú va endollar a l'aula</h2>
   <p>
     Un alumne connecta un router domèstic a una roseta. Aquell router porta el DHCP activat de
     fàbrica i comença a respondre OFFERs amb la seva pròpia IP com a porta d'enllaç. És el que
@@ -721,7 +724,7 @@
 
 <!-- ============ 9 · OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h4>Veure el DORA amb els teus ulls</h4>
+  <h2>Veure el DORA amb els teus ulls</h2>
   <p>
     Captura els quatre missatges a <code>puigcastellar1</code>, que rep la configuració del
     DHCP del centre.
@@ -788,7 +791,7 @@ resolvectl status enp1s0</pre>
 
 <!-- ============ 10 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h4>Criteris professionals</h4>
+  <h2>Criteris professionals</h2>
   <ul>
     <li>
       <strong>Infraestructura fora del rang dinàmic.</strong> Servidor, routers i punts d'accés
@@ -813,7 +816,7 @@ resolvectl status enp1s0</pre>
 
 <!-- ============ 11 · PROBLEMES HABITUALS ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h4>Quan el client no rep adreça</h4>
+  <h2>Quan el client no rep adreça</h2>
   <dl class="cq-issues">
     <dt>El client té una adreça 169.254.x.x</dt>
     <dd>
@@ -837,7 +840,7 @@ resolvectl status enp1s0</pre>
 
 <!-- ============ 12 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h4>Resum</h4>
+  <h2>Resum</h2>
   <ul>
     <li>DHCP reparteix IP, màscara, porta d'enllaç i DNS de manera automàtica.</li>
     <li>Va sobre UDP: servidor al port <strong>67</strong>, client al <strong>68</strong>.</li>
@@ -872,64 +875,64 @@ resolvectl status enp1s0</pre>
 
 <!-- ============ 13 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h4>Comprova el que has après</h4>
+  <h2>Comprova el que has après</h2>
 
   <div class="cq-question" data-id="t1-1-dora-ordre" data-type="single">
     <div class="statement">Quin és el tercer pas del procés DORA?</div>
-    <button class="cq-option" data-correct="false">OFFER — el servidor ofereix una IP</button>
-    <button class="cq-option" data-correct="true">REQUEST — el client accepta l'oferta</button>
-    <button class="cq-option" data-correct="false">DISCOVER — el client busca un servidor</button>
-    <button class="cq-option" data-correct="false">ACK — el servidor confirma la concessió</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">OFFER — el servidor ofereix una IP</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">REQUEST — el client accepta l'oferta</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">DISCOVER — el client busca un servidor</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">ACK — el servidor confirma la concessió</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t1-1-ports" data-type="single">
     <div class="statement">Sobre quin protocol i ports treballa DHCP?</div>
-    <button class="cq-option" data-correct="false">TCP, ports 67 i 68</button>
-    <button class="cq-option" data-correct="true">UDP, port 67 al servidor i 68 al client</button>
-    <button class="cq-option" data-correct="false">UDP, port 53 al servidor i 68 al client</button>
-    <button class="cq-option" data-correct="false">TCP, port 80 als dos extrems</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">TCP, ports 67 i 68</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">UDP, port 67 al servidor i 68 al client</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">UDP, port 53 al servidor i 68 al client</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">TCP, port 80 als dos extrems</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t1-1-discover-origen" data-type="single">
     <div class="statement">Quina IP d'origen porta el missatge DISCOVER?</div>
-    <button class="cq-option" data-correct="false">La seva IP anterior, si en tenia</button>
-    <button class="cq-option" data-correct="true">0.0.0.0, perquè encara no en té cap</button>
-    <button class="cq-option" data-correct="false">255.255.255.255</button>
-    <button class="cq-option" data-correct="false">169.254.0.1</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">La seva IP anterior, si en tenia</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">0.0.0.0, perquè encara no en té cap</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">255.255.255.255</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">169.254.0.1</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t1-1-apipa" data-type="single">
     <div class="statement">Un client acaba amb l'adreça 169.254.12.7. Què vol dir?</div>
-    <button class="cq-option" data-correct="false">Que el servidor DHCP li ha donat una adreça privada</button>
-    <button class="cq-option" data-correct="true">Que no ha rebut cap resposta DHCP i se l'ha posat ell sol</button>
-    <button class="cq-option" data-correct="false">Que la concessió ha caducat però encara funciona</button>
-    <button class="cq-option" data-correct="false">Que hi ha un conflicte amb un altre equip</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que el servidor DHCP li ha donat una adreça privada</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Que no ha rebut cap resposta DHCP i se l'ha posat ell sol</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que la concessió ha caducat però encara funciona</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que hi ha un conflicte amb un altre equip</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t1-1-afirmacions" data-type="multi">
     <div class="statement">Selecciona totes les afirmacions certes sobre DHCP</div>
-    <button class="cq-option" data-correct="true">Cada concessió té una durada limitada.</button>
-    <button class="cq-option" data-correct="false">El client tria lliurement la IP que vol.</button>
-    <button class="cq-option" data-correct="true">El client renova la concessió quan n'ha passat la meitat del temps.</button>
-    <button class="cq-option" data-correct="true">Una reserva associa una MAC concreta a una IP concreta.</button>
-    <button class="cq-option" data-correct="false">Una IP estàtica ha d'estar dins del rang dinàmic.</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Cada concessió té una durada limitada.</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El client tria lliurement la IP que vol.</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">El client renova la concessió quan n'ha passat la meitat del temps.</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Una reserva associa una MAC concreta a una IP concreta.</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Una IP estàtica ha d'estar dins del rang dinàmic.</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 </div>
 
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h4>Al currículum</h4>
+  <h2>Al currículum</h2>
   <p><span class="lbl">Contingut 1.2</span> DHCP. Rangs, exclusions, concessions i reserves.</p>
   <p><span class="lbl">CA 1.1</span> Reconeix el funcionament dels mecanismes automatitzats de configuració dels paràmetres de xarxa.</p>
   <p><span class="lbl">CA 1.2</span> Identifica els avantatges que proporcionen.</p>
@@ -948,15 +951,26 @@ resolvectl status enp1s0</pre>
 <!-- === PEU DE NAVEGACIÓ FI === -->
 
 <script>
-  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  // Dissuasió de la còpia: mai al codi, a les taules ni dins de l'editor.
+  // L'alumnat treballa per SSH i ha de poder enganxar les ordres.
   (function () {
-    function editant(node) {
-      return node && node.closest && node.closest('[contenteditable="true"]');
+    var LLIURE = 'pre, code, .cq-table, [contenteditable="true"]';
+    function copiable(node) {
+      if (node && node.nodeType !== 1) { node = node.parentNode; }
+      return !!(node && node.closest && node.closest(LLIURE));
     }
-    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+    function seleccioCopiable() {
+      var s = document.getSelection();
+      if (!s || s.rangeCount === 0) { return false; }
+      return copiable(s.getRangeAt(0).commonAncestorContainer);
+    }
+    ['copy', 'cut'].forEach(function (nom) {
       document.addEventListener(nom, function (e) {
-        if (!editant(e.target)) { e.preventDefault(); }
+        if (!seleccioCopiable()) { e.preventDefault(); }
       });
+    });
+    document.addEventListener('dragstart', function (e) {
+      if (!copiable(e.target)) { e.preventDefault(); }
     });
   })();
 
@@ -983,6 +997,10 @@ resolvectl status enp1s0</pre>
         } else {
           opt.classList.toggle('cq-selected');
         }
+        options.forEach(function (o) {
+          o.setAttribute('aria-pressed',
+            o.classList.contains('cq-selected') ? 'true' : 'false');
+        });
       });
     });
 
@@ -992,6 +1010,7 @@ resolvectl status enp1s0</pre>
         var isCorrect = opt.dataset.correct === 'true';
         var isSelected = opt.classList.contains('cq-selected');
         opt.classList.remove('cq-selected');
+        opt.setAttribute('aria-pressed', 'false');
         if (isCorrect) {
           opt.classList.add('cq-correct');
         } else if (isSelected) {

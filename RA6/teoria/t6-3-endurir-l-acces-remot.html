@@ -193,7 +193,7 @@
     color: var(--muted);
   }
 
-  .cq-block h4 {
+  .cq-block h2 {
     margin: 4px 0 14px;
     font-family: var(--font-display);
     font-size: 1.4rem;
@@ -244,26 +244,26 @@
   .cq-block[data-kind="pas a pas"]::before,
   .cq-block[data-kind="lliurament"]::before,
   .cq-block[data-kind="resum"]::before { border-color: var(--accent-line); color: var(--accent); }
-  .cq-block[data-kind="objectius"] h4,
-  .cq-block[data-kind="pas a pas"] h4,
-  .cq-block[data-kind="lliurament"] h4,
-  .cq-block[data-kind="resum"] h4 { color: var(--accent); }
+  .cq-block[data-kind="objectius"] h2,
+  .cq-block[data-kind="pas a pas"] h2,
+  .cq-block[data-kind="lliurament"] h2,
+  .cq-block[data-kind="resum"] h2 { color: var(--accent); }
 
   .cq-block[data-kind="recordatori"] { background: var(--warn-soft); border-color: #F5DCC8; }
   .cq-block[data-kind="recordatori"]::before { background: var(--warn-soft); border-color: var(--warn-line); color: var(--warn); }
-  .cq-block[data-kind="recordatori"] h4 { color: var(--warn); }
+  .cq-block[data-kind="recordatori"] h2 { color: var(--warn); }
 
   .cq-block[data-kind="bones pràctiques"] { background: var(--ok-soft); border-color: var(--ok-line); }
   .cq-block[data-kind="bones pràctiques"]::before { background: var(--ok-soft); border-color: var(--ok-line); color: var(--ok); }
-  .cq-block[data-kind="bones pràctiques"] h4 { color: var(--ok); }
+  .cq-block[data-kind="bones pràctiques"] h2 { color: var(--ok); }
 
   .cq-block[data-kind="problemes"] { background: var(--ko-soft); border-color: var(--ko-line); }
   .cq-block[data-kind="problemes"]::before { background: var(--ko-soft); border-color: var(--ko-line); color: var(--ko); }
-  .cq-block[data-kind="problemes"] h4 { color: var(--ko); }
+  .cq-block[data-kind="problemes"] h2 { color: var(--ko); }
 
   /* ==== Traçabilitat amb el currículum ==== */
   .cq-block[data-kind="currículum"] { background: transparent; }
-  .cq-block[data-kind="currículum"] h4 { color: var(--muted); }
+  .cq-block[data-kind="currículum"] h2 { color: var(--muted); }
   .cq-block[data-kind="currículum"] p {
     margin: 0 0 6px;
     font-size: .86rem;
@@ -487,14 +487,17 @@
     a.cq-ref { border-bottom: none; color: inherit; }
   }
   /* ==== Contingut no copiable ====
-     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
-     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
-     queda exclòs. */
+     Dissuasiu, no una protecció: la prosa és per llegir-la al web o a
+     Moodle, no per copiar-la. El codi, les ordres i les taules SÍ que es
+     copien: l'alumnat treballa per SSH i les ha d'enganxar. L'editor
+     treballa amb contenteditable i queda exclòs. */
   .cq-header, .cq-block {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
   }
+  .cq-block pre, .cq-block pre *,
+  .cq-block code, .cq-table, .cq-table *,
   [contenteditable="true"], [contenteditable="true"] * {
     -webkit-user-select: text;
     -moz-user-select: text;
@@ -522,7 +525,7 @@
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h4>Què sabràs fer en acabar</h4>
+  <h2>Què sabràs fer en acabar</h2>
   <ul>
     <li>Definir superfície d'atac i mínim privilegi.</li>
     <li>Explicar per què un servei d'accés remot exposat rep intents constants.</li>
@@ -534,7 +537,7 @@
 
 <!-- ============ 2 · SUPERFÍCIE D'ATAC I MÍNIM PRIVILEGI ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Superfície d'atac i mínim privilegi</h4>
+  <h2>Superfície d'atac i mínim privilegi</h2>
   <p>
     Cada servei que escolta en un port és una porta oberta que algú, en algun lloc, pot
     intentar forçar. Al conjunt de portes obertes d'una màquina se'n diu <strong>superfície
@@ -549,7 +552,7 @@
 
 <!-- ============ 3 · PER QUÈ RECOMANEN TANTS INTENTS ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Per què reben intents constants</h4>
+  <h2>Per què reben intents constants</h2>
   <p>
     Qualsevol servei d'accés remot exposat a Internet rep, des del primer minut, intents
     automàtics de connexió amb combinacions d'usuari i contrasenya. No és un atac dirigit
@@ -560,7 +563,7 @@
 
 <!-- ============ 4 · LES FAMÍLIES DE MESURES ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Les famílies de mesures</h4>
+  <h2>Les famílies de mesures</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Família</th><th>Què fa</th><th>Exemple</th></tr></thead>
@@ -576,7 +579,7 @@
 
 <!-- ============ 5 · CANVIAR EL PORT ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h4>Canviar el port: amaga, no protegeix</h4>
+  <h2>Canviar el port: amaga, no protegeix</h2>
   <p>
     Canviar el port per defecte redueix de cop el soroll dels escanejos automàtics, que
     proven gairebé sempre els ports coneguts. Però no és cap mesura de seguretat real: qui
@@ -590,7 +593,7 @@
 
 <!-- ============ 6 · L'AVÍS ABANS DEL LOGIN ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h4>L'avís abans del login</h4>
+  <h2>L'avís abans del login</h2>
   <p>
     Molts serveis d'accés remot mostren un avís legal abans de demanar les credencials: qui
     es connecti sense permís pot ser objecte de mesures legals. No atura ningú tècnicament,
@@ -600,7 +603,7 @@
 
 <!-- ============ 7 · OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h4>Els intents fallits al registre</h4>
+  <h2>Els intents fallits al registre</h2>
 <pre>journalctl -u ssh --no-pager | tail
 <span class="o">Failed password for invalid user admin from 203.0.113.5
 Failed password for root from 198.51.100.9</span></pre>
@@ -613,7 +616,7 @@ Failed password for root from 198.51.100.9</span></pre>
 
 <!-- ============ 8 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h4>Criteris professionals</h4>
+  <h2>Criteris professionals</h2>
   <ul>
     <li><strong>Mai es tanca la sessió oberta</strong> fins a comprovar en una altra que la mesura nova funciona.</li>
     <li>Les mesures s'apliquen d'una en una, i es comprova abans de seguir amb la següent.</li>
@@ -623,7 +626,7 @@ Failed password for root from 198.51.100.9</span></pre>
 
 <!-- ============ 9 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h4>Errors habituals</h4>
+  <h2>Errors habituals</h2>
   <dl class="cq-issues">
     <dt>Quedar-se fora de la pròpia màquina en aplicar una mesura</dt>
     <dd>
@@ -641,7 +644,7 @@ Failed password for root from 198.51.100.9</span></pre>
 
 <!-- ============ 10 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h4>Resum</h4>
+  <h2>Resum</h2>
   <ul>
     <li><strong>Superfície d'atac</strong> petita i <strong>mínim privilegi</strong>: la base de tot enduriment.</li>
     <li>Quatre famílies: qui entra, com entra, a quin ritme i bloqueig automàtic.</li>
@@ -653,63 +656,63 @@ Failed password for root from 198.51.100.9</span></pre>
 
 <!-- ============ 11 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h4>Comprova el que has après</h4>
+  <h2>Comprova el que has après</h2>
 
   <div class="cq-question" data-id="t6-3-superficie" data-type="single">
     <div class="statement">Què és la «superfície d'atac» d'una màquina?</div>
-    <button class="cq-option" data-correct="false">La quantitat de RAM que consumeix</button>
-    <button class="cq-option" data-correct="true">El conjunt de portes -serveis i ports- que algú podria intentar forçar</button>
-    <button class="cq-option" data-correct="false">El nombre d'usuaris que hi tenen compte</button>
-    <button class="cq-option" data-correct="false">La velocitat de la connexió a Internet</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">La quantitat de RAM que consumeix</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">El conjunt de portes -serveis i ports- que algú podria intentar forçar</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El nombre d'usuaris que hi tenen compte</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">La velocitat de la connexió a Internet</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t6-3-intents" data-type="single">
     <div class="statement">Per què rep un servei d'accés remot exposat intents constants d'usuari i contrasenya?</div>
-    <button class="cq-option" data-correct="false">Perquè algú concret ha decidit atacar-te a tu</button>
-    <button class="cq-option" data-correct="true">Perquè eines automàtiques escanegen Internet sencer buscant qui respon</button>
-    <button class="cq-option" data-correct="false">Perquè el servei té un error de configuració</button>
-    <button class="cq-option" data-correct="false">Només passa si el port és el 22</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè algú concret ha decidit atacar-te a tu</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Perquè eines automàtiques escanegen Internet sencer buscant qui respon</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè el servei té un error de configuració</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Només passa si el port és el 22</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t6-3-families" data-type="multi">
     <div class="statement">Quines d'aquestes són famílies de mesures d'enduriment de l'accés remot? (marca totes les correctes)</div>
-    <button class="cq-option" data-correct="true">Reduir qui pot entrar</button>
-    <button class="cq-option" data-correct="true">Limitar el ritme d'intents</button>
-    <button class="cq-option" data-correct="true">Bloquejar automàticament qui insisteix</button>
-    <button class="cq-option" data-correct="false">Augmentar la mida del disc</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Reduir qui pot entrar</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Limitar el ritme d'intents</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Bloquejar automàticament qui insisteix</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Augmentar la mida del disc</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t6-3-port" data-type="single">
     <div class="statement">Canviar el port per defecte d'un servei d'accés remot, què evita de veritat?</div>
-    <button class="cq-option" data-correct="false">Que algú que t'apunta expressament a tu hi entri</button>
-    <button class="cq-option" data-correct="true">El soroll dels escanejos automàtics que proven només els ports coneguts</button>
-    <button class="cq-option" data-correct="false">Els intents de força bruta amb usuari i contrasenya, encara que trobin el port</button>
-    <button class="cq-option" data-correct="false">La necessitat de fer servir clau en lloc de contrasenya</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que algú que t'apunta expressament a tu hi entri</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">El soroll dels escanejos automàtics que proven només els ports coneguts</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Els intents de força bruta amb usuari i contrasenya, encara que trobin el port</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">La necessitat de fer servir clau en lloc de contrasenya</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t6-3-trampa" data-type="single">
     <div class="statement">Quina és la trampa habitual en aplicar una mesura d'enduriment?</div>
-    <button class="cq-option" data-correct="false">Que el servei consumeixi més memòria</button>
-    <button class="cq-option" data-correct="true">Tancar la sessió oberta abans de comprovar que la mesura nova funciona, i quedar-se fora</button>
-    <button class="cq-option" data-correct="false">Que calgui reiniciar la màquina sencera</button>
-    <button class="cq-option" data-correct="false">Que el registre del sistema deixi de funcionar</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que el servei consumeixi més memòria</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Tancar la sessió oberta abans de comprovar que la mesura nova funciona, i quedar-se fora</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que calgui reiniciar la màquina sencera</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que el registre del sistema deixi de funcionar</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 </div>
 
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h4>Al currículum</h4>
+  <h2>Al currículum</h2>
   <p><span class="lbl">Contingut 6.1</span> Terminals en mode text.</p>
   <p><span class="lbl">CA 6.5</span> Identifica els principals avantatges i deficiències de cadascun.</p>
 </div>
@@ -726,15 +729,26 @@ Failed password for root from 198.51.100.9</span></pre>
 <!-- === PEU DE NAVEGACIÓ FI === -->
 
 <script>
-  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  // Dissuasió de la còpia: mai al codi, a les taules ni dins de l'editor.
+  // L'alumnat treballa per SSH i ha de poder enganxar les ordres.
   (function () {
-    function editant(node) {
-      return node && node.closest && node.closest('[contenteditable="true"]');
+    var LLIURE = 'pre, code, .cq-table, [contenteditable="true"]';
+    function copiable(node) {
+      if (node && node.nodeType !== 1) { node = node.parentNode; }
+      return !!(node && node.closest && node.closest(LLIURE));
     }
-    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+    function seleccioCopiable() {
+      var s = document.getSelection();
+      if (!s || s.rangeCount === 0) { return false; }
+      return copiable(s.getRangeAt(0).commonAncestorContainer);
+    }
+    ['copy', 'cut'].forEach(function (nom) {
       document.addEventListener(nom, function (e) {
-        if (!editant(e.target)) { e.preventDefault(); }
+        if (!seleccioCopiable()) { e.preventDefault(); }
       });
+    });
+    document.addEventListener('dragstart', function (e) {
+      if (!copiable(e.target)) { e.preventDefault(); }
     });
   })();
 
@@ -761,6 +775,10 @@ Failed password for root from 198.51.100.9</span></pre>
         } else {
           opt.classList.toggle('cq-selected');
         }
+        options.forEach(function (o) {
+          o.setAttribute('aria-pressed',
+            o.classList.contains('cq-selected') ? 'true' : 'false');
+        });
       });
     });
 
@@ -770,6 +788,7 @@ Failed password for root from 198.51.100.9</span></pre>
         var isCorrect = opt.dataset.correct === 'true';
         var isSelected = opt.classList.contains('cq-selected');
         opt.classList.remove('cq-selected');
+        opt.setAttribute('aria-pressed', 'false');
         if (isCorrect) {
           opt.classList.add('cq-correct');
         } else if (isSelected) {

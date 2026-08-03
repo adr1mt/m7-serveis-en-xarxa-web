@@ -193,7 +193,7 @@
     color: var(--muted);
   }
 
-  .cq-block h4 {
+  .cq-block h2 {
     margin: 4px 0 14px;
     font-family: var(--font-display);
     font-size: 1.4rem;
@@ -244,26 +244,26 @@
   .cq-block[data-kind="pas a pas"]::before,
   .cq-block[data-kind="lliurament"]::before,
   .cq-block[data-kind="resum"]::before { border-color: var(--accent-line); color: var(--accent); }
-  .cq-block[data-kind="objectius"] h4,
-  .cq-block[data-kind="pas a pas"] h4,
-  .cq-block[data-kind="lliurament"] h4,
-  .cq-block[data-kind="resum"] h4 { color: var(--accent); }
+  .cq-block[data-kind="objectius"] h2,
+  .cq-block[data-kind="pas a pas"] h2,
+  .cq-block[data-kind="lliurament"] h2,
+  .cq-block[data-kind="resum"] h2 { color: var(--accent); }
 
   .cq-block[data-kind="recordatori"] { background: var(--warn-soft); border-color: #F5DCC8; }
   .cq-block[data-kind="recordatori"]::before { background: var(--warn-soft); border-color: var(--warn-line); color: var(--warn); }
-  .cq-block[data-kind="recordatori"] h4 { color: var(--warn); }
+  .cq-block[data-kind="recordatori"] h2 { color: var(--warn); }
 
   .cq-block[data-kind="bones pràctiques"] { background: var(--ok-soft); border-color: var(--ok-line); }
   .cq-block[data-kind="bones pràctiques"]::before { background: var(--ok-soft); border-color: var(--ok-line); color: var(--ok); }
-  .cq-block[data-kind="bones pràctiques"] h4 { color: var(--ok); }
+  .cq-block[data-kind="bones pràctiques"] h2 { color: var(--ok); }
 
   .cq-block[data-kind="problemes"] { background: var(--ko-soft); border-color: var(--ko-line); }
   .cq-block[data-kind="problemes"]::before { background: var(--ko-soft); border-color: var(--ko-line); color: var(--ko); }
-  .cq-block[data-kind="problemes"] h4 { color: var(--ko); }
+  .cq-block[data-kind="problemes"] h2 { color: var(--ko); }
 
   /* ==== Traçabilitat amb el currículum ==== */
   .cq-block[data-kind="currículum"] { background: transparent; }
-  .cq-block[data-kind="currículum"] h4 { color: var(--muted); }
+  .cq-block[data-kind="currículum"] h2 { color: var(--muted); }
   .cq-block[data-kind="currículum"] p {
     margin: 0 0 6px;
     font-size: .86rem;
@@ -487,14 +487,17 @@
     a.cq-ref { border-bottom: none; color: inherit; }
   }
   /* ==== Contingut no copiable ====
-     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
-     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
-     queda exclòs. */
+     Dissuasiu, no una protecció: la prosa és per llegir-la al web o a
+     Moodle, no per copiar-la. El codi, les ordres i les taules SÍ que es
+     copien: l'alumnat treballa per SSH i les ha d'enganxar. L'editor
+     treballa amb contenteditable i queda exclòs. */
   .cq-header, .cq-block {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
   }
+  .cq-block pre, .cq-block pre *,
+  .cq-block code, .cq-table, .cq-table *,
   [contenteditable="true"], [contenteditable="true"] * {
     -webkit-user-select: text;
     -moz-user-select: text;
@@ -522,7 +525,7 @@
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h4>Què sabràs fer en acabar</h4>
+  <h2>Què sabràs fer en acabar</h2>
   <ul>
     <li>Distingir <strong>FTP</strong>, <strong>FTPS</strong> i <strong>SFTP</strong>, i saber quin és quin.</li>
     <li>Veure amb un capturador que l'FTP en clar ensenya la contrasenya.</li>
@@ -534,7 +537,7 @@
 
 <!-- ============ 2 · TRES NOMS ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Tres noms que sonen igual</h4>
+  <h2>Tres noms que sonen igual</h2>
   <p>
     La confusió és universal i val la pena aclarir-la d'entrada: <strong>SFTP no és FTP amb una
     <em>s</em></strong>. No comparteixen ni protocol ni servidor.
@@ -557,7 +560,7 @@
 
 <!-- ============ 3 · FTPS ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>FTPS: TLS damunt de l'FTP</h4>
+  <h2>FTPS: TLS damunt de l'FTP</h2>
   <p>
     Hi ha dues maneres d'encaixar-hi el TLS. En <strong>explícit</strong>, el client connecta al
     port 21 de sempre i demana xifrar amb l'ordre <code>AUTH TLS</code>. És el normal, i el que
@@ -575,7 +578,7 @@
 
 <!-- ============ 4 · SFTP ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>SFTP: un subsistema de SSH</h4>
+  <h2>SFTP: un subsistema de SSH</h2>
   <p>
     Si la màquina té servidor SSH, ja té SFTP: ve activat de sèrie i qualsevol usuari que
     pugui fer SSH pot fer SFTP.
@@ -599,7 +602,7 @@
 
 <!-- ============ 7 · CAS REAL ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h4>Els escàners no dormen</h4>
+  <h2>Els escàners no dormen</h2>
   <p>
     Qualsevol adreça pública rep, cada dia, intents automàtics de connexió als ports coneguts. El
     21 és dels més visitats: els robots hi proven parells d'usuari i contrasenya habituals i
@@ -616,7 +619,7 @@
 </div>
 
 <div class="cq-block" data-kind="observació">
-  <h4>Mira la contrasenya passar en clar</h4>
+  <h2>Mira la contrasenya passar en clar</h2>
   <ol class="cq-steps">
 <li>
       <p><strong>Captura una sessió FTP en clar.</strong> En una terminal:</p>
@@ -632,7 +635,7 @@ sudo tcpdump -i lo -A -n port 21</pre>
 
 <!-- ============ BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h4>Criteris professionals</h4>
+  <h2>Criteris professionals</h2>
   <ul>
     <li><strong>SFTP com a primera opció</strong>: un sol port, cap certificat i ja el tens instal·lat.</li>
     <li><strong>Activar el xifratge no és obligar-lo</strong>: si no el forces, el client pot seguir enviant-ho tot en clar.</li>
@@ -644,7 +647,7 @@ sudo tcpdump -i lo -A -n port 21</pre>
 
 <!-- ============ PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h4>Errors habituals</h4>
+  <h2>Errors habituals</h2>
   <dl class="cq-issues">
     <dt>Es confonen FTPS i SFTP</dt>
     <dd>
@@ -674,7 +677,7 @@ sudo tcpdump -i lo -A -n port 21</pre>
 
 <!-- ============ 11 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h4>Resum</h4>
+  <h2>Resum</h2>
   <ul>
     <li><strong>FTPS</strong> és FTP dins de TLS, mateix servidor i mateix port 21.</li>
     <li><strong>SFTP</strong> és un subsistema de <strong>SSH</strong>, port 22, i no té res a veure amb FTP.</li>
@@ -691,64 +694,64 @@ sudo tcpdump -i lo -A -n port 21</pre>
 
 <!-- ============ 12 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h4>Comprova el que has après</h4>
+  <h2>Comprova el que has après</h2>
 
   <div class="cq-question" data-id="t3-3-sftp" data-type="single">
     <div class="statement">Quin servei has de tenir en marxa per oferir SFTP?</div>
-    <button class="cq-option" data-correct="false">El servidor FTP amb el TLS activat</button>
-    <button class="cq-option" data-correct="true"><code>ssh</code>, que ja porta el subsistema SFTP</button>
-    <button class="cq-option" data-correct="false">Un paquet propi, <code>sftpd</code></button>
-    <button class="cq-option" data-correct="false">Cap: SFTP funciona sense servidor</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El servidor FTP amb el TLS activat</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true"><code>ssh</code>, que ja porta el subsistema SFTP</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Un paquet propi, <code>sftpd</code></button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Cap: SFTP funciona sense servidor</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t3-3-ports" data-type="single">
     <div class="statement">Per quins ports treballen FTPS explícit i SFTP?</div>
-    <button class="cq-option" data-correct="false">990 i 21</button>
-    <button class="cq-option" data-correct="true">21 i 22</button>
-    <button class="cq-option" data-correct="false">22 i 21</button>
-    <button class="cq-option" data-correct="false">Tots dos pel 990</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">990 i 21</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">21 i 22</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">22 i 21</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Tots dos pel 990</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t3-3-forca" data-type="single">
     <div class="statement">Has posat <code>ssl_enable=YES</code> i prou. Què passa?</div>
-    <button class="cq-option" data-correct="false">Que ningú no pot connectar</button>
-    <button class="cq-option" data-correct="true">Que es pot xifrar, però qui vulgui encara pot entrar en clar</button>
-    <button class="cq-option" data-correct="false">Que el servidor passa a escoltar pel port 22</button>
-    <button class="cq-option" data-correct="false">Que l'accés anònim queda xifrat automàticament</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que ningú no pot connectar</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Que es pot xifrar, però qui vulgui encara pot entrar en clar</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que el servidor passa a escoltar pel port 22</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que l'accés anònim queda xifrat automàticament</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t3-3-chroot" data-type="single">
     <div class="statement">L'SFTP es tanca just després d'autenticar. Què mires primer?</div>
-    <button class="cq-option" data-correct="false">El mode passiu del client</button>
-    <button class="cq-option" data-correct="true">Els permisos del <code>ChrootDirectory</code> i de tota la ruta per sobre</button>
-    <button class="cq-option" data-correct="false">El certificat del servidor</button>
-    <button class="cq-option" data-correct="false">La directiva <code>write_enable</code></button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El mode passiu del client</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Els permisos del <code>ChrootDirectory</code> i de tota la ruta per sobre</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El certificat del servidor</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">La directiva <code>write_enable</code></button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t3-3-afirmacions" data-type="multi">
     <div class="statement">Selecciona totes les afirmacions certes</div>
-    <button class="cq-option" data-correct="true">SFTP no fa servir cap canal de dades separat.</button>
-    <button class="cq-option" data-correct="true">FTPS explícit comença en clar i demana xifrar amb <code>AUTH TLS</code>.</button>
-    <button class="cq-option" data-correct="true"><code>ForceCommand internal-sftp</code> impedeix obrir una consola.</button>
-    <button class="cq-option" data-correct="false">SFTP és el mateix protocol que FTP amb xifratge.</button>
-    <button class="cq-option" data-correct="false">Un certificat autosignat el validen els clients sense dir res.</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">SFTP no fa servir cap canal de dades separat.</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">FTPS explícit comença en clar i demana xifrar amb <code>AUTH TLS</code>.</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true"><code>ForceCommand internal-sftp</code> impedeix obrir una consola.</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">SFTP és el mateix protocol que FTP amb xifratge.</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Un certificat autosignat el validen els clients sense dir res.</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 </div>
 
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h4>Al currículum</h4>
+  <h2>Al currículum</h2>
   <p><span class="lbl">Contingut 3.2</span> Ordres de control, autenticació, gestió i transferència de fitxers. Mode text i binari.</p>
   <p><span class="lbl">CA 3.1</span> Estableix la utilitat i mode d'operació del servei de transferència de fitxers.</p>
 </div>
@@ -765,15 +768,26 @@ sudo tcpdump -i lo -A -n port 21</pre>
 <!-- === PEU DE NAVEGACIÓ FI === -->
 
 <script>
-  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  // Dissuasió de la còpia: mai al codi, a les taules ni dins de l'editor.
+  // L'alumnat treballa per SSH i ha de poder enganxar les ordres.
   (function () {
-    function editant(node) {
-      return node && node.closest && node.closest('[contenteditable="true"]');
+    var LLIURE = 'pre, code, .cq-table, [contenteditable="true"]';
+    function copiable(node) {
+      if (node && node.nodeType !== 1) { node = node.parentNode; }
+      return !!(node && node.closest && node.closest(LLIURE));
     }
-    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+    function seleccioCopiable() {
+      var s = document.getSelection();
+      if (!s || s.rangeCount === 0) { return false; }
+      return copiable(s.getRangeAt(0).commonAncestorContainer);
+    }
+    ['copy', 'cut'].forEach(function (nom) {
       document.addEventListener(nom, function (e) {
-        if (!editant(e.target)) { e.preventDefault(); }
+        if (!seleccioCopiable()) { e.preventDefault(); }
       });
+    });
+    document.addEventListener('dragstart', function (e) {
+      if (!copiable(e.target)) { e.preventDefault(); }
     });
   })();
 
@@ -800,6 +814,10 @@ sudo tcpdump -i lo -A -n port 21</pre>
         } else {
           opt.classList.toggle('cq-selected');
         }
+        options.forEach(function (o) {
+          o.setAttribute('aria-pressed',
+            o.classList.contains('cq-selected') ? 'true' : 'false');
+        });
       });
     });
 
@@ -809,6 +827,7 @@ sudo tcpdump -i lo -A -n port 21</pre>
         var isCorrect = opt.dataset.correct === 'true';
         var isSelected = opt.classList.contains('cq-selected');
         opt.classList.remove('cq-selected');
+        opt.setAttribute('aria-pressed', 'false');
         if (isCorrect) {
           opt.classList.add('cq-correct');
         } else if (isSelected) {

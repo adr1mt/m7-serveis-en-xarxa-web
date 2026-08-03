@@ -193,7 +193,7 @@
     color: var(--muted);
   }
 
-  .cq-block h4 {
+  .cq-block h2 {
     margin: 4px 0 14px;
     font-family: var(--font-display);
     font-size: 1.4rem;
@@ -244,26 +244,26 @@
   .cq-block[data-kind="pas a pas"]::before,
   .cq-block[data-kind="lliurament"]::before,
   .cq-block[data-kind="resum"]::before { border-color: var(--accent-line); color: var(--accent); }
-  .cq-block[data-kind="objectius"] h4,
-  .cq-block[data-kind="pas a pas"] h4,
-  .cq-block[data-kind="lliurament"] h4,
-  .cq-block[data-kind="resum"] h4 { color: var(--accent); }
+  .cq-block[data-kind="objectius"] h2,
+  .cq-block[data-kind="pas a pas"] h2,
+  .cq-block[data-kind="lliurament"] h2,
+  .cq-block[data-kind="resum"] h2 { color: var(--accent); }
 
   .cq-block[data-kind="recordatori"] { background: var(--warn-soft); border-color: #F5DCC8; }
   .cq-block[data-kind="recordatori"]::before { background: var(--warn-soft); border-color: var(--warn-line); color: var(--warn); }
-  .cq-block[data-kind="recordatori"] h4 { color: var(--warn); }
+  .cq-block[data-kind="recordatori"] h2 { color: var(--warn); }
 
   .cq-block[data-kind="bones pràctiques"] { background: var(--ok-soft); border-color: var(--ok-line); }
   .cq-block[data-kind="bones pràctiques"]::before { background: var(--ok-soft); border-color: var(--ok-line); color: var(--ok); }
-  .cq-block[data-kind="bones pràctiques"] h4 { color: var(--ok); }
+  .cq-block[data-kind="bones pràctiques"] h2 { color: var(--ok); }
 
   .cq-block[data-kind="problemes"] { background: var(--ko-soft); border-color: var(--ko-line); }
   .cq-block[data-kind="problemes"]::before { background: var(--ko-soft); border-color: var(--ko-line); color: var(--ko); }
-  .cq-block[data-kind="problemes"] h4 { color: var(--ko); }
+  .cq-block[data-kind="problemes"] h2 { color: var(--ko); }
 
   /* ==== Traçabilitat amb el currículum ==== */
   .cq-block[data-kind="currículum"] { background: transparent; }
-  .cq-block[data-kind="currículum"] h4 { color: var(--muted); }
+  .cq-block[data-kind="currículum"] h2 { color: var(--muted); }
   .cq-block[data-kind="currículum"] p {
     margin: 0 0 6px;
     font-size: .86rem;
@@ -487,14 +487,17 @@
     a.cq-ref { border-bottom: none; color: inherit; }
   }
   /* ==== Contingut no copiable ====
-     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
-     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
-     queda exclòs. */
+     Dissuasiu, no una protecció: la prosa és per llegir-la al web o a
+     Moodle, no per copiar-la. El codi, les ordres i les taules SÍ que es
+     copien: l'alumnat treballa per SSH i les ha d'enganxar. L'editor
+     treballa amb contenteditable i queda exclòs. */
   .cq-header, .cq-block {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
   }
+  .cq-block pre, .cq-block pre *,
+  .cq-block code, .cq-table, .cq-table *,
   [contenteditable="true"], [contenteditable="true"] * {
     -webkit-user-select: text;
     -moz-user-select: text;
@@ -522,7 +525,7 @@
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h4>Què sabràs fer en acabar</h4>
+  <h2>Què sabràs fer en acabar</h2>
   <ul>
     <li>Explicar el problema invers al de <a class="cq-ref" href="t8-1-de-la-xarxa-local-a-internet.html">T8.1</a>: qui és de fora i vol un servei de dins.</li>
     <li>Distingir redirigir un port de fer un proxy invers.</li>
@@ -533,7 +536,7 @@
 
 <!-- ============ 2 · EL PROBLEMA INVERS ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Ara la petició ve de fora</h4>
+  <h2>Ara la petició ve de fora</h2>
   <p>
     Fins ara, qui sortia era el client de dins cap a Internet. Ara el cas és el contrari: hi ha
     un servidor a la xarxa interna i algú de fora —un client qualsevol d'Internet— vol
@@ -544,7 +547,7 @@
 
 <!-- ============ 3 · DUES MANERES ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Redirigir un port o fer de proxy invers</h4>
+  <h2>Redirigir un port o fer de proxy invers</h2>
   <p>
     Igual que a <a class="cq-ref" href="t8-1-de-la-xarxa-local-a-internet.html">T8.1</a> hi havia dues altures per sortir, n'hi ha dues per entrar.
   </p>
@@ -568,7 +571,7 @@
 
 <!-- ============ 4 · QUÈ GUANYA EL PROXY INVERS ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Què hi guanya el proxy invers</h4>
+  <h2>Què hi guanya el proxy invers</h2>
   <p>
     En atendre ell la connexió, el proxy invers pot ser l'únic lloc on es xifra amb HTTPS i on
     viu el certificat: el servidor intern no necessita saber-ne res, ni tenir-lo instal·lat. I
@@ -579,7 +582,7 @@
 
 <!-- ============ 5 · PER QUÈ NO ES PUBLICA EL SERVIDOR INTERN ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>El servidor intern no surt enlloc</h4>
+  <h2>El servidor intern no surt enlloc</h2>
   <p>
     El servidor intern <strong>no es publica al DNS</strong> ni se li permet acceptar
     connexions de ningú que no sigui la passarel·la: si algú de fora en conegués l'adreça, es
@@ -591,7 +594,7 @@
 
 <!-- ============ 6 · OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h4>Comprovar qui respon des de fora</h4>
+  <h2>Comprovar qui respon des de fora</h2>
   <p>
     Des d'un client de fora, cal comprovar que només respon la màquina del davant:
   </p>
@@ -606,7 +609,7 @@
 
 <!-- ============ 7 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h4>Criteris professionals</h4>
+  <h2>Criteris professionals</h2>
   <ul>
     <li><strong>Un únic punt visible des de fora</strong>: el servidor intern mai no hi respon directament.</li>
     <li><strong>El certificat viu a la passarel·la</strong>, no cal repetir-lo a cada servidor intern.</li>
@@ -616,7 +619,7 @@
 
 <!-- ============ 8 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h4>Errors habituals</h4>
+  <h2>Errors habituals</h2>
   <dl class="cq-issues">
     <dt>El servidor intern respon directament des de fora</dt>
     <dd>
@@ -638,7 +641,7 @@
 
 <!-- ============ 9 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h4>Resum</h4>
+  <h2>Resum</h2>
   <ul>
     <li>Publicar un servei intern és el problema <strong>invers</strong> a sortir a Internet.</li>
     <li><strong>Redirigir un port</strong> (xarxa) canvia el destí del paquet; el <strong>proxy invers</strong> (aplicació) atén ell mateix la petició.</li>
@@ -650,63 +653,63 @@
 
 <!-- ============ 10 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h4>Comprova el que has après</h4>
+  <h2>Comprova el que has après</h2>
 
   <div class="cq-question" data-id="t8-4-invers" data-type="single">
     <div class="statement">Quin problema resol un proxy invers?</div>
-    <button class="cq-option" data-correct="false">Que els clients de dins puguin sortir a Internet</button>
-    <button class="cq-option" data-correct="true">Que algú de fora arribi a un servei de dins sense contactar-lo directament</button>
-    <button class="cq-option" data-correct="false">Que dos servidors interns es vegin entre ells</button>
-    <button class="cq-option" data-correct="false">Que el DNS resolgui noms interns</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que els clients de dins puguin sortir a Internet</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Que algú de fora arribi a un servei de dins sense contactar-lo directament</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que dos servidors interns es vegin entre ells</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que el DNS resolgui noms interns</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t8-4-redirigir-vs-invers" data-type="single">
     <div class="statement">Quina diferència hi ha entre redirigir un port i fer proxy invers?</div>
-    <button class="cq-option" data-correct="false">Redirigir un port només funciona amb HTTPS</button>
-    <button class="cq-option" data-correct="true">Redirigir un port canvia el destí del paquet; el proxy invers atén la petició ell mateix i en fa una de nova cap endins</button>
-    <button class="cq-option" data-correct="false">Són el mateix mecanisme amb noms diferents</button>
-    <button class="cq-option" data-correct="false">El proxy invers no permet fer servir HTTPS</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Redirigir un port només funciona amb HTTPS</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Redirigir un port canvia el destí del paquet; el proxy invers atén la petició ell mateix i en fa una de nova cap endins</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Són el mateix mecanisme amb noms diferents</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El proxy invers no permet fer servir HTTPS</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t8-4-certificat" data-type="single">
     <div class="statement">Per què es posa el certificat HTTPS al proxy invers i no al servidor intern?</div>
-    <button class="cq-option" data-correct="true">Perquè és un únic punt de xifratge, i el servidor intern no ha de saber res d'HTTPS</button>
-    <button class="cq-option" data-correct="false">Perquè el servidor intern no pot instal·lar certificats</button>
-    <button class="cq-option" data-correct="false">Perquè HTTPS només funciona des d'un proxy</button>
-    <button class="cq-option" data-correct="false">Per estalviar memòria al servidor intern</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Perquè és un únic punt de xifratge, i el servidor intern no ha de saber res d'HTTPS</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè el servidor intern no pot instal·lar certificats</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè HTTPS només funciona des d'un proxy</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Per estalviar memòria al servidor intern</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t8-4-dns" data-type="single">
     <div class="statement">Per què el servidor intern no s'ha de publicar al DNS?</div>
-    <button class="cq-option" data-correct="false">Perquè el DNS no permet noms interns</button>
-    <button class="cq-option" data-correct="true">Perquè un nom públic deixaria una via per saltar-se el proxy invers</button>
-    <button class="cq-option" data-correct="false">Perquè els servidors interns no tenen adreça IP</button>
-    <button class="cq-option" data-correct="false">Perquè trencaria la memòria cau</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè el DNS no permet noms interns</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Perquè un nom públic deixaria una via per saltar-se el proxy invers</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè els servidors interns no tenen adreça IP</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè trencaria la memòria cau</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t8-4-dmz" data-type="single">
     <div class="statement">Quina idea descriu millor «zona desmilitaritzada» en aquest context?</div>
-    <button class="cq-option" data-correct="false">Una xarxa sense cap tallafoc actiu</button>
-    <button class="cq-option" data-correct="true">Una zona pensada perquè només hi entri trànsit que ja ha passat per una passarel·la controlada</button>
-    <button class="cq-option" data-correct="false">Una xarxa que no necessita adreçament IP</button>
-    <button class="cq-option" data-correct="false">Un servidor sense sistema operatiu instal·lat</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Una xarxa sense cap tallafoc actiu</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Una zona pensada perquè només hi entri trànsit que ja ha passat per una passarel·la controlada</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Una xarxa que no necessita adreçament IP</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Un servidor sense sistema operatiu instal·lat</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 </div>
 
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h4>Al currículum</h4>
+  <h2>Al currículum</h2>
   <p><span class="lbl">Contingut 8.1</span> Passarel·les a nivell d'aplicació.</p>
   <p><span class="lbl">CA 8.10</span> Implanta i verifica la configuració per accedir des d'una xarxa pública a un servei d'una xarxa privada local.</p>
 </div>
@@ -723,15 +726,26 @@
 <!-- === PEU DE NAVEGACIÓ FI === -->
 
 <script>
-  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  // Dissuasió de la còpia: mai al codi, a les taules ni dins de l'editor.
+  // L'alumnat treballa per SSH i ha de poder enganxar les ordres.
   (function () {
-    function editant(node) {
-      return node && node.closest && node.closest('[contenteditable="true"]');
+    var LLIURE = 'pre, code, .cq-table, [contenteditable="true"]';
+    function copiable(node) {
+      if (node && node.nodeType !== 1) { node = node.parentNode; }
+      return !!(node && node.closest && node.closest(LLIURE));
     }
-    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+    function seleccioCopiable() {
+      var s = document.getSelection();
+      if (!s || s.rangeCount === 0) { return false; }
+      return copiable(s.getRangeAt(0).commonAncestorContainer);
+    }
+    ['copy', 'cut'].forEach(function (nom) {
       document.addEventListener(nom, function (e) {
-        if (!editant(e.target)) { e.preventDefault(); }
+        if (!seleccioCopiable()) { e.preventDefault(); }
       });
+    });
+    document.addEventListener('dragstart', function (e) {
+      if (!copiable(e.target)) { e.preventDefault(); }
     });
   })();
 
@@ -758,6 +772,10 @@
         } else {
           opt.classList.toggle('cq-selected');
         }
+        options.forEach(function (o) {
+          o.setAttribute('aria-pressed',
+            o.classList.contains('cq-selected') ? 'true' : 'false');
+        });
       });
     });
 
@@ -767,6 +785,7 @@
         var isCorrect = opt.dataset.correct === 'true';
         var isSelected = opt.classList.contains('cq-selected');
         opt.classList.remove('cq-selected');
+        opt.setAttribute('aria-pressed', 'false');
         if (isCorrect) {
           opt.classList.add('cq-correct');
         } else if (isSelected) {

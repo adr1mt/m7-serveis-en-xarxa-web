@@ -193,7 +193,7 @@
     color: var(--muted);
   }
 
-  .cq-block h4 {
+  .cq-block h2 {
     margin: 4px 0 14px;
     font-family: var(--font-display);
     font-size: 1.4rem;
@@ -244,26 +244,26 @@
   .cq-block[data-kind="pas a pas"]::before,
   .cq-block[data-kind="lliurament"]::before,
   .cq-block[data-kind="resum"]::before { border-color: var(--accent-line); color: var(--accent); }
-  .cq-block[data-kind="objectius"] h4,
-  .cq-block[data-kind="pas a pas"] h4,
-  .cq-block[data-kind="lliurament"] h4,
-  .cq-block[data-kind="resum"] h4 { color: var(--accent); }
+  .cq-block[data-kind="objectius"] h2,
+  .cq-block[data-kind="pas a pas"] h2,
+  .cq-block[data-kind="lliurament"] h2,
+  .cq-block[data-kind="resum"] h2 { color: var(--accent); }
 
   .cq-block[data-kind="recordatori"] { background: var(--warn-soft); border-color: #F5DCC8; }
   .cq-block[data-kind="recordatori"]::before { background: var(--warn-soft); border-color: var(--warn-line); color: var(--warn); }
-  .cq-block[data-kind="recordatori"] h4 { color: var(--warn); }
+  .cq-block[data-kind="recordatori"] h2 { color: var(--warn); }
 
   .cq-block[data-kind="bones pràctiques"] { background: var(--ok-soft); border-color: var(--ok-line); }
   .cq-block[data-kind="bones pràctiques"]::before { background: var(--ok-soft); border-color: var(--ok-line); color: var(--ok); }
-  .cq-block[data-kind="bones pràctiques"] h4 { color: var(--ok); }
+  .cq-block[data-kind="bones pràctiques"] h2 { color: var(--ok); }
 
   .cq-block[data-kind="problemes"] { background: var(--ko-soft); border-color: var(--ko-line); }
   .cq-block[data-kind="problemes"]::before { background: var(--ko-soft); border-color: var(--ko-line); color: var(--ko); }
-  .cq-block[data-kind="problemes"] h4 { color: var(--ko); }
+  .cq-block[data-kind="problemes"] h2 { color: var(--ko); }
 
   /* ==== Traçabilitat amb el currículum ==== */
   .cq-block[data-kind="currículum"] { background: transparent; }
-  .cq-block[data-kind="currículum"] h4 { color: var(--muted); }
+  .cq-block[data-kind="currículum"] h2 { color: var(--muted); }
   .cq-block[data-kind="currículum"] p {
     margin: 0 0 6px;
     font-size: .86rem;
@@ -487,14 +487,17 @@
     a.cq-ref { border-bottom: none; color: inherit; }
   }
   /* ==== Contingut no copiable ====
-     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
-     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
-     queda exclòs. */
+     Dissuasiu, no una protecció: la prosa és per llegir-la al web o a
+     Moodle, no per copiar-la. El codi, les ordres i les taules SÍ que es
+     copien: l'alumnat treballa per SSH i les ha d'enganxar. L'editor
+     treballa amb contenteditable i queda exclòs. */
   .cq-header, .cq-block {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
   }
+  .cq-block pre, .cq-block pre *,
+  .cq-block code, .cq-table, .cq-table *,
   [contenteditable="true"], [contenteditable="true"] * {
     -webkit-user-select: text;
     -moz-user-select: text;
@@ -522,7 +525,7 @@
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h4>Què sabràs fer en acabar</h4>
+  <h2>Què sabràs fer en acabar</h2>
   <ul>
     <li>Diferenciar l'adreça MAC de l'adreça IP.</li>
     <li>Interpretar una màscara escrita en format CIDR (<code>/24</code>).</li>
@@ -533,7 +536,7 @@
 
 <!-- ============ 2 · MAC I IP ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Dues adreces per a cada targeta</h4>
+  <h2>Dues adreces per a cada targeta</h2>
   <p>
     Cada targeta de xarxa té <strong>dues</strong> adreces, i fan feines diferents:
   </p>
@@ -555,7 +558,7 @@
 
 <!-- ============ 3 · IP I MÀSCARA ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>La màscara parteix l'adreça en dos</h4>
+  <h2>La màscara parteix l'adreça en dos</h2>
   <p>
     Una adreça IPv4 són quatre números de 0 a 255, i sempre va acompanyada d'una
     <strong>màscara</strong>. La màscara diu quina part de l'adreça identifica la
@@ -575,7 +578,7 @@
 
 <!-- ============ 4 · CIDR ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Les màscares que faràs servir</h4>
+  <h2>Les màscares que faràs servir</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>CIDR</th><th>Màscara</th><th>Adreces</th><th>Equips</th></tr></thead>
@@ -596,7 +599,7 @@
 
 <!-- ============ MÀSCARES NO RODONES ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Les màscares no acaben sempre en un punt</h4>
+  <h2>Les màscares no acaben sempre en un punt</h2>
   <p>
     El <code>/24</code>, el <code>/16</code> i el <code>/8</code> són còmodes perquè cauen just
     entre dos números de l'adreça. Però la màscara pot ser <strong>qualsevol valor entre /0 i
@@ -618,7 +621,7 @@
 
 <!-- ============ 5 · EXEMPLE ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h4>Desglossar la xarxa 192.168.1.0/24</h4>
+  <h2>Desglossar la xarxa 192.168.1.0/24</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Adreça</th><th>Què és</th><th>Es pot fer servir?</th></tr></thead>
@@ -638,7 +641,7 @@
 
 <!-- ============ 6 · RANGS PRIVATS ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Adreces privades i públiques</h4>
+  <h2>Adreces privades i públiques</h2>
   <p>
     Hi ha tres rangs reservats per a xarxes internes. <strong>No existeixen a Internet</strong>:
     els pots fer servir a casa, a l'institut i a l'empresa sense demanar permís a ningú.
@@ -662,7 +665,7 @@
 
 <!-- ============ 5 · CALCULAR EL RANG ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Quantes adreces necessites</h4>
+  <h2>Quantes adreces necessites</h2>
   <p>
     Les activitats et demanaran rangs per a un nombre concret d'equips. El càlcul és una resta,
     però has de comptar bé: <strong>els dos extrems del rang hi entren</strong>.
@@ -696,7 +699,7 @@
 
 <!-- ============ 7 · OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h4>Llegir la teva pròpia xarxa</h4>
+  <h2>Llegir la teva pròpia xarxa</h2>
 
   <ol class="cq-steps">
     <li>
@@ -739,7 +742,7 @@ print('Equips:', n.num_addresses - 2)"</pre>
 
 <!-- ============ 8 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h4>Confusions habituals</h4>
+  <h2>Confusions habituals</h2>
   <dl class="cq-issues">
     <dt>Dos equips no es veuen tot i tenir IP</dt>
     <dd>
@@ -763,7 +766,7 @@ print('Equips:', n.num_addresses - 2)"</pre>
 
 <!-- ============ 9 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h4>Resum</h4>
+  <h2>Resum</h2>
   <ul>
     <li>La <strong>MAC</strong> ve de fàbrica i és local; la <strong>IP</strong> es configura i serveix arreu.</li>
     <li>La <strong>màscara</strong> parteix l'adreça en part de xarxa i part d'equip.</li>
@@ -792,74 +795,74 @@ print('Equips:', n.num_addresses - 2)"</pre>
 
 <!-- ============ 10 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h4>Comprova el que has après</h4>
+  <h2>Comprova el que has après</h2>
 
   <div class="cq-question" data-id="t1-0-cidr" data-type="single">
     <div class="statement">Quina màscara correspon a <code>/24</code>?</div>
-    <button class="cq-option" data-correct="false">255.255.0.0</button>
-    <button class="cq-option" data-correct="true">255.255.255.0</button>
-    <button class="cq-option" data-correct="false">255.0.0.0</button>
-    <button class="cq-option" data-correct="false">255.255.255.255</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">255.255.0.0</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">255.255.255.0</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">255.0.0.0</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">255.255.255.255</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t1-0-equips" data-type="single">
     <div class="statement">Quants equips es poden connectar a la xarxa <code>192.168.1.0/24</code>?</div>
-    <button class="cq-option" data-correct="false">256</button>
-    <button class="cq-option" data-correct="false">255</button>
-    <button class="cq-option" data-correct="true">254</button>
-    <button class="cq-option" data-correct="false">253</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">256</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">255</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">254</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">253</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t1-0-difusio-mascara" data-type="single">
     <div class="statement">Quina és l'adreça de difusió de la xarxa <code>10.0.0.0/8</code>?</div>
-    <button class="cq-option" data-correct="false">10.0.0.255</button>
-    <button class="cq-option" data-correct="true">10.255.255.255</button>
-    <button class="cq-option" data-correct="false">10.0.255.255</button>
-    <button class="cq-option" data-correct="false">255.255.255.255</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">10.0.0.255</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">10.255.255.255</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">10.0.255.255</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">255.255.255.255</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t1-0-privada" data-type="single">
     <div class="statement">Quina d'aquestes adreces <em>no</em> és privada?</div>
-    <button class="cq-option" data-correct="false">10.5.4.3</button>
-    <button class="cq-option" data-correct="false">172.16.0.10</button>
-    <button class="cq-option" data-correct="false">192.168.30.1</button>
-    <button class="cq-option" data-correct="true">9.9.9.9</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">10.5.4.3</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">172.16.0.10</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">192.168.30.1</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">9.9.9.9</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t1-0-mateixa-xarxa" data-type="single">
     <div class="statement">Els equips <code>192.168.1.10/24</code> i <code>192.168.2.10/24</code> es poden parlar directament?</div>
-    <button class="cq-option" data-correct="false">Sí, comparteixen els dos primers números</button>
-    <button class="cq-option" data-correct="true">No, amb <code>/24</code> la part de xarxa són els tres primers i no coincideix</button>
-    <button class="cq-option" data-correct="false">Sí, perquè totes dues són privades</button>
-    <button class="cq-option" data-correct="false">Només si tenen la mateixa MAC</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Sí, comparteixen els dos primers números</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">No, amb <code>/24</code> la part de xarxa són els tres primers i no coincideix</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Sí, perquè totes dues són privades</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Només si tenen la mateixa MAC</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t1-0-certes" data-type="multi">
     <div class="statement">Selecciona totes les afirmacions certes</div>
-    <button class="cq-option" data-correct="true">L'adreça MAC ve de fàbrica amb la targeta.</button>
-    <button class="cq-option" data-correct="true">L'última adreça d'una xarxa és la de difusió i no s'assigna.</button>
-    <button class="cq-option" data-correct="true">La porta d'enllaç ha d'estar dins de la mateixa xarxa que l'equip.</button>
-    <button class="cq-option" data-correct="false">Les adreces privades es poden fer servir a Internet.</button>
-    <button class="cq-option" data-correct="false">Una adreça IP funciona sense necessitat de màscara.</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">L'adreça MAC ve de fàbrica amb la targeta.</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">L'última adreça d'una xarxa és la de difusió i no s'assigna.</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">La porta d'enllaç ha d'estar dins de la mateixa xarxa que l'equip.</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Les adreces privades es poden fer servir a Internet.</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Una adreça IP funciona sense necessitat de màscara.</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 </div>
 
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h4>Al currículum</h4>
+  <h2>Al currículum</h2>
   <p><span class="lbl">Contingut 1.1</span> Adreça IP, màscara de xarxa, porta d'enllaç.</p>
 </div>
 
@@ -875,15 +878,26 @@ print('Equips:', n.num_addresses - 2)"</pre>
 <!-- === PEU DE NAVEGACIÓ FI === -->
 
 <script>
-  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  // Dissuasió de la còpia: mai al codi, a les taules ni dins de l'editor.
+  // L'alumnat treballa per SSH i ha de poder enganxar les ordres.
   (function () {
-    function editant(node) {
-      return node && node.closest && node.closest('[contenteditable="true"]');
+    var LLIURE = 'pre, code, .cq-table, [contenteditable="true"]';
+    function copiable(node) {
+      if (node && node.nodeType !== 1) { node = node.parentNode; }
+      return !!(node && node.closest && node.closest(LLIURE));
     }
-    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+    function seleccioCopiable() {
+      var s = document.getSelection();
+      if (!s || s.rangeCount === 0) { return false; }
+      return copiable(s.getRangeAt(0).commonAncestorContainer);
+    }
+    ['copy', 'cut'].forEach(function (nom) {
       document.addEventListener(nom, function (e) {
-        if (!editant(e.target)) { e.preventDefault(); }
+        if (!seleccioCopiable()) { e.preventDefault(); }
       });
+    });
+    document.addEventListener('dragstart', function (e) {
+      if (!copiable(e.target)) { e.preventDefault(); }
     });
   })();
 
@@ -910,6 +924,10 @@ print('Equips:', n.num_addresses - 2)"</pre>
         } else {
           opt.classList.toggle('cq-selected');
         }
+        options.forEach(function (o) {
+          o.setAttribute('aria-pressed',
+            o.classList.contains('cq-selected') ? 'true' : 'false');
+        });
       });
     });
 
@@ -919,6 +937,7 @@ print('Equips:', n.num_addresses - 2)"</pre>
         var isCorrect = opt.dataset.correct === 'true';
         var isSelected = opt.classList.contains('cq-selected');
         opt.classList.remove('cq-selected');
+        opt.setAttribute('aria-pressed', 'false');
         if (isCorrect) {
           opt.classList.add('cq-correct');
         } else if (isSelected) {

@@ -193,7 +193,7 @@
     color: var(--muted);
   }
 
-  .cq-block h4 {
+  .cq-block h2 {
     margin: 4px 0 14px;
     font-family: var(--font-display);
     font-size: 1.4rem;
@@ -244,26 +244,26 @@
   .cq-block[data-kind="pas a pas"]::before,
   .cq-block[data-kind="lliurament"]::before,
   .cq-block[data-kind="resum"]::before { border-color: var(--accent-line); color: var(--accent); }
-  .cq-block[data-kind="objectius"] h4,
-  .cq-block[data-kind="pas a pas"] h4,
-  .cq-block[data-kind="lliurament"] h4,
-  .cq-block[data-kind="resum"] h4 { color: var(--accent); }
+  .cq-block[data-kind="objectius"] h2,
+  .cq-block[data-kind="pas a pas"] h2,
+  .cq-block[data-kind="lliurament"] h2,
+  .cq-block[data-kind="resum"] h2 { color: var(--accent); }
 
   .cq-block[data-kind="recordatori"] { background: var(--warn-soft); border-color: #F5DCC8; }
   .cq-block[data-kind="recordatori"]::before { background: var(--warn-soft); border-color: var(--warn-line); color: var(--warn); }
-  .cq-block[data-kind="recordatori"] h4 { color: var(--warn); }
+  .cq-block[data-kind="recordatori"] h2 { color: var(--warn); }
 
   .cq-block[data-kind="bones pràctiques"] { background: var(--ok-soft); border-color: var(--ok-line); }
   .cq-block[data-kind="bones pràctiques"]::before { background: var(--ok-soft); border-color: var(--ok-line); color: var(--ok); }
-  .cq-block[data-kind="bones pràctiques"] h4 { color: var(--ok); }
+  .cq-block[data-kind="bones pràctiques"] h2 { color: var(--ok); }
 
   .cq-block[data-kind="problemes"] { background: var(--ko-soft); border-color: var(--ko-line); }
   .cq-block[data-kind="problemes"]::before { background: var(--ko-soft); border-color: var(--ko-line); color: var(--ko); }
-  .cq-block[data-kind="problemes"] h4 { color: var(--ko); }
+  .cq-block[data-kind="problemes"] h2 { color: var(--ko); }
 
   /* ==== Traçabilitat amb el currículum ==== */
   .cq-block[data-kind="currículum"] { background: transparent; }
-  .cq-block[data-kind="currículum"] h4 { color: var(--muted); }
+  .cq-block[data-kind="currículum"] h2 { color: var(--muted); }
   .cq-block[data-kind="currículum"] p {
     margin: 0 0 6px;
     font-size: .86rem;
@@ -487,14 +487,17 @@
     a.cq-ref { border-bottom: none; color: inherit; }
   }
   /* ==== Contingut no copiable ====
-     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
-     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
-     queda exclòs. */
+     Dissuasiu, no una protecció: la prosa és per llegir-la al web o a
+     Moodle, no per copiar-la. El codi, les ordres i les taules SÍ que es
+     copien: l'alumnat treballa per SSH i les ha d'enganxar. L'editor
+     treballa amb contenteditable i queda exclòs. */
   .cq-header, .cq-block {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
   }
+  .cq-block pre, .cq-block pre *,
+  .cq-block code, .cq-table, .cq-table *,
   [contenteditable="true"], [contenteditable="true"] * {
     -webkit-user-select: text;
     -moz-user-select: text;
@@ -522,7 +525,7 @@
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h4>Què sabràs fer en acabar</h4>
+  <h2>Què sabràs fer en acabar</h2>
   <ul>
     <li>Explicar què garanteix SSH: xifrat i comprovació de la identitat del servidor.</li>
     <li>Descriure què és <code>known_hosts</code> i per què la primera connexió pregunta.</li>
@@ -534,7 +537,7 @@
 
 <!-- ============ 2 · QUÈ GARANTEIX SSH ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Xifrat i identitat, no només xifrat</h4>
+  <h2>Xifrat i identitat, no només xifrat</h2>
   <p>
     SSH xifra tota la sessió des del primer byte: ningú que intercepti el trànsit en pot
     llegir el contingut. Però xifrar no basta; cal saber també que et connectes al servidor
@@ -550,7 +553,7 @@
 
 <!-- ============ 3 · QUAN LA CLAU CANVIA ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Quan la clau del servidor canvia</h4>
+  <h2>Quan la clau del servidor canvia</h2>
   <p>
     Si un dia la clau que arriba no coincideix amb la de <code>known_hosts</code>, SSH ho
     avisa amb un missatge fort i talla la connexió. Normalment vol dir que el servidor s'ha
@@ -562,7 +565,7 @@
 
 <!-- ============ 4 · CONTRASENYA O PARELL DE CLAUS ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h4>Contrasenya o parell de claus</h4>
+  <h2>Contrasenya o parell de claus</h2>
   <p>
     SSH admet dues maneres d'autenticar l'usuari. Amb <strong>contrasenya</strong>, la
     introdueixes a cada connexió i qualsevol que l'endevini o la robi pot entrar. Amb un
@@ -578,7 +581,7 @@
 
 <!-- ============ 5 · MÉS ENLLÀ DE LA CONSOLA ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h4>SSH transporta més coses que una consola</h4>
+  <h2>SSH transporta més coses que una consola</h2>
   <p>
     La consola no és l'única cosa que viatja per SSH: el mateix canal xifrat serveix per
     copiar fitxers -com ja vas veure amb SFTP a <a class="cq-ref" href="../../RA3/teoria/t3-3-ftps-i-sftp.html">T3.3</a>- i per obrir túnels, que reenvien el
@@ -589,7 +592,7 @@
 
 <!-- ============ 6 · OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h4>Veure la negociació</h4>
+  <h2>Veure la negociació</h2>
   <p>El mode detallat del client mostra la connexió pas a pas:</p>
 <pre>ssh -v usuari@servidor
 <span class="o">debug1: Local version string SSH-2.0-OpenSSH_9.6
@@ -603,7 +606,7 @@ debug1: Authentications that can continue: publickey,password</span></pre>
 
 <!-- ============ 7 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h4>Criteris professionals</h4>
+  <h2>Criteris professionals</h2>
   <ul>
     <li>Comprova sempre l'empremta abans d'acceptar-la la primera vegada.</li>
     <li>Prefereix clau per damunt de contrasenya sempre que es pugui.</li>
@@ -613,7 +616,7 @@ debug1: Authentications that can continue: publickey,password</span></pre>
 
 <!-- ============ 8 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h4>Errors habituals</h4>
+  <h2>Errors habituals</h2>
   <dl class="cq-issues">
     <dt>Acceptar sense comprovar un avís de canvi de clau d'amfitrió</dt>
     <dd>
@@ -637,7 +640,7 @@ debug1: Authentications that can continue: publickey,password</span></pre>
 
 <!-- ============ 9 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h4>Resum</h4>
+  <h2>Resum</h2>
   <ul>
     <li>SSH garanteix <strong>xifrat</strong> i <strong>identitat del servidor</strong>.</li>
     <li><code>known_hosts</code> guarda l'empremta; un canvi inesperat és motiu d'alerta.</li>
@@ -649,63 +652,63 @@ debug1: Authentications that can continue: publickey,password</span></pre>
 
 <!-- ============ 10 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h4>Comprova el que has après</h4>
+  <h2>Comprova el que has après</h2>
 
   <div class="cq-question" data-id="t6-2-garanteix" data-type="multi">
     <div class="statement">Què garanteix SSH? (marca totes les correctes)</div>
-    <button class="cq-option" data-correct="true">Que la sessió va xifrada</button>
-    <button class="cq-option" data-correct="true">Que el client pot comprovar la identitat del servidor</button>
-    <button class="cq-option" data-correct="false">Que l'usuari té sempre permisos d'administrador</button>
-    <button class="cq-option" data-correct="false">Que la contrasenya es transmet en clar</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Que la sessió va xifrada</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Que el client pot comprovar la identitat del servidor</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que l'usuari té sempre permisos d'administrador</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que la contrasenya es transmet en clar</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t6-2-known-hosts" data-type="single">
     <div class="statement">Per a què serveix <code>known_hosts</code>?</div>
-    <button class="cq-option" data-correct="false">Guarda la clau privada de l'usuari</button>
-    <button class="cq-option" data-correct="true">Guarda l'empremta dels servidors en què ja confies</button>
-    <button class="cq-option" data-correct="false">Guarda la contrasenya de cada servidor</button>
-    <button class="cq-option" data-correct="false">Guarda la llista de fitxers copiats per SFTP</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Guarda la clau privada de l'usuari</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Guarda l'empremta dels servidors en què ja confies</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Guarda la contrasenya de cada servidor</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Guarda la llista de fitxers copiats per SFTP</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t6-2-avis-clau" data-type="single">
     <div class="statement">SSH avisa que la clau del servidor ha canviat des de l'última connexió. Què cal fer?</div>
-    <button class="cq-option" data-correct="false">Acceptar-la sense més: és normal que canviï de tant en tant</button>
-    <button class="cq-option" data-correct="true">Comprovar per un altre canal que el canvi és legítim abans d'acceptar-la</button>
-    <button class="cq-option" data-correct="false">Esborrar tot el fitxer <code>known_hosts</code> i no tornar-hi a pensar</button>
-    <button class="cq-option" data-correct="false">Canviar la contrasenya de l'usuari</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Acceptar-la sense més: és normal que canviï de tant en tant</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Comprovar per un altre canal que el canvi és legítim abans d'acceptar-la</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Esborrar tot el fitxer <code>known_hosts</code> i no tornar-hi a pensar</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Canviar la contrasenya de l'usuari</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t6-2-claus" data-type="single">
     <div class="statement">En l'autenticació per parell de claus, on viu la clau privada?</div>
-    <button class="cq-option" data-correct="false">Al servidor, dins del compte on es vol entrar</button>
-    <button class="cq-option" data-correct="true">Sempre a la màquina del client, no viatja mai</button>
-    <button class="cq-option" data-correct="false">Repartida a mitges entre client i servidor</button>
-    <button class="cq-option" data-correct="false">Dins de <code>known_hosts</code></button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Al servidor, dins del compte on es vol entrar</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Sempre a la màquina del client, no viatja mai</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Repartida a mitges entre client i servidor</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Dins de <code>known_hosts</code></button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t6-2-mes-usos" data-type="multi">
     <div class="statement">A més de la consola, què més pot transportar una connexió SSH? (marca totes les correctes)</div>
-    <button class="cq-option" data-correct="true">Còpia de fitxers</button>
-    <button class="cq-option" data-correct="true">Túnels cap a un altre servei</button>
-    <button class="cq-option" data-correct="false">Correu electrònic sense cap altre servidor</button>
-    <button class="cq-option" data-correct="false">Resolució DNS</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Còpia de fitxers</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Túnels cap a un altre servei</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Correu electrònic sense cap altre servidor</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Resolució DNS</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 </div>
 
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h4>Al currículum</h4>
+  <h2>Al currículum</h2>
   <p><span class="lbl">Contingut 6.1</span> Terminals en mode text.</p>
   <p><span class="lbl">CA 6.1</span> Descriu mètodes d'accés i administració remota de sistemes.</p>
 </div>
@@ -722,15 +725,26 @@ debug1: Authentications that can continue: publickey,password</span></pre>
 <!-- === PEU DE NAVEGACIÓ FI === -->
 
 <script>
-  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  // Dissuasió de la còpia: mai al codi, a les taules ni dins de l'editor.
+  // L'alumnat treballa per SSH i ha de poder enganxar les ordres.
   (function () {
-    function editant(node) {
-      return node && node.closest && node.closest('[contenteditable="true"]');
+    var LLIURE = 'pre, code, .cq-table, [contenteditable="true"]';
+    function copiable(node) {
+      if (node && node.nodeType !== 1) { node = node.parentNode; }
+      return !!(node && node.closest && node.closest(LLIURE));
     }
-    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+    function seleccioCopiable() {
+      var s = document.getSelection();
+      if (!s || s.rangeCount === 0) { return false; }
+      return copiable(s.getRangeAt(0).commonAncestorContainer);
+    }
+    ['copy', 'cut'].forEach(function (nom) {
       document.addEventListener(nom, function (e) {
-        if (!editant(e.target)) { e.preventDefault(); }
+        if (!seleccioCopiable()) { e.preventDefault(); }
       });
+    });
+    document.addEventListener('dragstart', function (e) {
+      if (!copiable(e.target)) { e.preventDefault(); }
     });
   })();
 
@@ -757,6 +771,10 @@ debug1: Authentications that can continue: publickey,password</span></pre>
         } else {
           opt.classList.toggle('cq-selected');
         }
+        options.forEach(function (o) {
+          o.setAttribute('aria-pressed',
+            o.classList.contains('cq-selected') ? 'true' : 'false');
+        });
       });
     });
 
@@ -766,6 +784,7 @@ debug1: Authentications that can continue: publickey,password</span></pre>
         var isCorrect = opt.dataset.correct === 'true';
         var isSelected = opt.classList.contains('cq-selected');
         opt.classList.remove('cq-selected');
+        opt.setAttribute('aria-pressed', 'false');
         if (isCorrect) {
           opt.classList.add('cq-correct');
         } else if (isSelected) {

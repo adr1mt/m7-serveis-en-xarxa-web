@@ -193,7 +193,7 @@
     color: var(--muted);
   }
 
-  .cq-block h4 {
+  .cq-block h2 {
     margin: 4px 0 14px;
     font-family: var(--font-display);
     font-size: 1.4rem;
@@ -244,26 +244,26 @@
   .cq-block[data-kind="pas a pas"]::before,
   .cq-block[data-kind="lliurament"]::before,
   .cq-block[data-kind="resum"]::before { border-color: var(--accent-line); color: var(--accent); }
-  .cq-block[data-kind="objectius"] h4,
-  .cq-block[data-kind="pas a pas"] h4,
-  .cq-block[data-kind="lliurament"] h4,
-  .cq-block[data-kind="resum"] h4 { color: var(--accent); }
+  .cq-block[data-kind="objectius"] h2,
+  .cq-block[data-kind="pas a pas"] h2,
+  .cq-block[data-kind="lliurament"] h2,
+  .cq-block[data-kind="resum"] h2 { color: var(--accent); }
 
   .cq-block[data-kind="recordatori"] { background: var(--warn-soft); border-color: #F5DCC8; }
   .cq-block[data-kind="recordatori"]::before { background: var(--warn-soft); border-color: var(--warn-line); color: var(--warn); }
-  .cq-block[data-kind="recordatori"] h4 { color: var(--warn); }
+  .cq-block[data-kind="recordatori"] h2 { color: var(--warn); }
 
   .cq-block[data-kind="bones pràctiques"] { background: var(--ok-soft); border-color: var(--ok-line); }
   .cq-block[data-kind="bones pràctiques"]::before { background: var(--ok-soft); border-color: var(--ok-line); color: var(--ok); }
-  .cq-block[data-kind="bones pràctiques"] h4 { color: var(--ok); }
+  .cq-block[data-kind="bones pràctiques"] h2 { color: var(--ok); }
 
   .cq-block[data-kind="problemes"] { background: var(--ko-soft); border-color: var(--ko-line); }
   .cq-block[data-kind="problemes"]::before { background: var(--ko-soft); border-color: var(--ko-line); color: var(--ko); }
-  .cq-block[data-kind="problemes"] h4 { color: var(--ko); }
+  .cq-block[data-kind="problemes"] h2 { color: var(--ko); }
 
   /* ==== Traçabilitat amb el currículum ==== */
   .cq-block[data-kind="currículum"] { background: transparent; }
-  .cq-block[data-kind="currículum"] h4 { color: var(--muted); }
+  .cq-block[data-kind="currículum"] h2 { color: var(--muted); }
   .cq-block[data-kind="currículum"] p {
     margin: 0 0 6px;
     font-size: .86rem;
@@ -487,14 +487,17 @@
     a.cq-ref { border-bottom: none; color: inherit; }
   }
   /* ==== Contingut no copiable ====
-     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
-     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
-     queda exclòs. */
+     Dissuasiu, no una protecció: la prosa és per llegir-la al web o a
+     Moodle, no per copiar-la. El codi, les ordres i les taules SÍ que es
+     copien: l'alumnat treballa per SSH i les ha d'enganxar. L'editor
+     treballa amb contenteditable i queda exclòs. */
   .cq-header, .cq-block {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
   }
+  .cq-block pre, .cq-block pre *,
+  .cq-block code, .cq-table, .cq-table *,
   [contenteditable="true"], [contenteditable="true"] * {
     -webkit-user-select: text;
     -moz-user-select: text;
@@ -522,7 +525,7 @@
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h4>Què sabràs fer en acabar</h4>
+  <h2>Què sabràs fer en acabar</h2>
   <ul>
     <li>Explicar per què les xarxes treballen amb noms i no amb adreces.</li>
     <li>Distingir els dos mecanismes de resolució: fitxer local i DNS.</li>
@@ -534,7 +537,7 @@
 
 <!-- ============ 2 · INTRODUCCIÓ ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>El problema que resol el DNS</h4>
+  <h2>El problema que resol el DNS</h2>
   <p>
     Al <a class="cq-ref" href="../../RA1/index.html">RA1</a> vas repartir adreces amb DHCP. Però ningú escriu
     <code>142.250.185.3</code> al navegador: escrivim <strong>noms</strong>. Algú ha de
@@ -553,7 +556,7 @@
 
 <!-- ============ 3 · ELS DOS MECANISMES ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Dos mecanismes, i un ordre</h4>
+  <h2>Dos mecanismes, i un ordre</h2>
   <p>
     El teu equip pot resoldre un nom de dues maneres: mirant un <strong>fitxer local</strong> o
     <strong>preguntant a un servidor</strong>. No en tria una a l'atzar: hi ha un ordre escrit.
@@ -577,7 +580,7 @@
 
 <!-- ============ 4 · SYSTEMD-RESOLVED ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Qui pregunta de veritat: systemd-resolved</h4>
+  <h2>Qui pregunta de veritat: systemd-resolved</h2>
   <p>
     A Ubuntu, les aplicacions no parlen amb el servidor DNS directament. Parlen amb un servei
     local, <strong>systemd-resolved</strong>, que escolta a l'adreça <code>127.0.0.53</code> i fa
@@ -596,7 +599,7 @@
 
 <!-- ============ 5 · EXEMPLE ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h4>El fitxer /etc/resolv.conf ja no és el que era</h4>
+  <h2>El fitxer /etc/resolv.conf ja no és el que era</h2>
   <p>
     Durant anys, el servidor DNS s'escrivia a mà a <code>/etc/resolv.conf</code>. Avui aquest
     fitxer el genera <code>systemd-resolved</code> i conté sempre el mateix:
@@ -616,7 +619,7 @@ search .</pre>
 
 <!-- ============ 6 · CAS REAL ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h4>El domini .local no és teu</h4>
+  <h2>El domini .local no és teu</h2>
   <p>
     És molt habitual batejar la xarxa de casa o de l'aula com <code>empresa.local</code>. És una
     mala idea: el sufix <strong><code>.local</code> està reservat</strong> per a mDNS, el
@@ -635,7 +638,7 @@ search .</pre>
 
 <!-- ============ 7 · OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h4>Mirar com resol la teva màquina</h4>
+  <h2>Mirar com resol la teva màquina</h2>
   <p>Amb qualsevol Ubuntu connectat a la xarxa del centre:</p>
 
   <ol class="cq-steps">
@@ -683,7 +686,7 @@ getent hosts provaordre.test</pre>
 
 <!-- ============ 8 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h4>Criteris professionals</h4>
+  <h2>Criteris professionals</h2>
   <ul>
     <li><strong><code>/etc/hosts</code> és per a proves</strong>, no per a administrar una xarxa. No escala i ningú se'n recorda.</li>
     <li><strong>No editis <code>/etc/resolv.conf</code></strong>: el DNS es configura al Netplan o s'obté per DHCP.</li>
@@ -695,7 +698,7 @@ getent hosts provaordre.test</pre>
 
 <!-- ============ 9 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h4>Errors habituals</h4>
+  <h2>Errors habituals</h2>
   <dl class="cq-issues">
     <dt><code>ping 9.9.9.9</code> va, però <code>ping www.upc.edu</code> no</dt>
     <dd>
@@ -719,7 +722,7 @@ getent hosts provaordre.test</pre>
 
 <!-- ============ 10 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h4>Resum</h4>
+  <h2>Resum</h2>
   <ul>
     <li>Resoldre un nom és convertir-lo en adreça IP abans d'enviar res.</li>
     <li>L'ordre el marca <code>/etc/nsswitch.conf</code>: <strong><code>/etc/hosts</code> guanya al DNS</strong>.</li>
@@ -751,64 +754,64 @@ getent hosts provaordre.test</pre>
 
 <!-- ============ 11 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h4>Comprova el que has après</h4>
+  <h2>Comprova el que has après</h2>
 
   <div class="cq-question" data-id="t2-1-ordre" data-type="single">
     <div class="statement">Tens un nom escrit a <code>/etc/hosts</code> amb una IP, i al DNS amb una altra. Quina fa servir el sistema?</div>
-    <button class="cq-option" data-correct="true">La de <code>/etc/hosts</code>, perquè es consulta abans</button>
-    <button class="cq-option" data-correct="false">La del DNS, perquè és l'autoritat</button>
-    <button class="cq-option" data-correct="false">La més recent de les dues</button>
-    <button class="cq-option" data-correct="false">Cap: el sistema dona error de conflicte</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">La de <code>/etc/hosts</code>, perquè es consulta abans</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">La del DNS, perquè és l'autoritat</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">La més recent de les dues</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Cap: el sistema dona error de conflicte</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t2-1-stub" data-type="single">
     <div class="statement">Què és l'adreça <code>127.0.0.53</code> que surt a <code>/etc/resolv.conf</code>?</div>
-    <button class="cq-option" data-correct="false">El servidor DNS del teu proveïdor</button>
-    <button class="cq-option" data-correct="true">El servei local systemd-resolved, que fa de intermediari i memòria cau</button>
-    <button class="cq-option" data-correct="false">L'adreça de difusió de la xarxa</button>
-    <button class="cq-option" data-correct="false">Un servidor DNS públic de reserva</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El servidor DNS del teu proveïdor</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">El servei local systemd-resolved, que fa de intermediari i memòria cau</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">L'adreça de difusió de la xarxa</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Un servidor DNS públic de reserva</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t2-1-resolvconf" data-type="single">
     <div class="statement">Vols canviar el servidor DNS d'un Ubuntu Server. Què fas?</div>
-    <button class="cq-option" data-correct="false">Edito <code>/etc/resolv.conf</code> i hi poso la IP nova</button>
-    <button class="cq-option" data-correct="true">Ho configuro al Netplan, o deixo que ho reparteixi el DHCP</button>
-    <button class="cq-option" data-correct="false">Afegeixo el servidor a <code>/etc/hosts</code></button>
-    <button class="cq-option" data-correct="false">Reinstal·lo systemd-resolved</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Edito <code>/etc/resolv.conf</code> i hi poso la IP nova</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Ho configuro al Netplan, o deixo que ho reparteixi el DHCP</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Afegeixo el servidor a <code>/etc/hosts</code></button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Reinstal·lo systemd-resolved</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t2-1-local" data-type="single">
     <div class="statement">Per què no convé batejar la xarxa interna com <code>empresa.local</code>?</div>
-    <button class="cq-option" data-correct="false">Perquè els noms curts no es poden resoldre</button>
-    <button class="cq-option" data-correct="true">Perquè <code>.local</code> està reservat per a mDNS i la consulta pot no arribar al teu DNS</button>
-    <button class="cq-option" data-correct="false">Perquè BIND no admet dominis inventats</button>
-    <button class="cq-option" data-correct="false">Perquè cal pagar per registrar-lo</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè els noms curts no es poden resoldre</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Perquè <code>.local</code> està reservat per a mDNS i la consulta pot no arribar al teu DNS</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè BIND no admet dominis inventats</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè cal pagar per registrar-lo</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t2-1-eines" data-type="multi">
     <div class="statement">Selecciona totes les afirmacions certes</div>
-    <button class="cq-option" data-correct="true"><code>dig @9.9.9.9 nom</code> pregunta directament a aquell servidor.</button>
-    <button class="cq-option" data-correct="true">La memòria cau pot fer que vegis una adreça antiga.</button>
-    <button class="cq-option" data-correct="false">systemd-resolved pot resoldre sol, sense cap servidor DNS.</button>
-    <button class="cq-option" data-correct="true">El servidor DNS del client sol arribar per DHCP.</button>
-    <button class="cq-option" data-correct="false"><code>/etc/hosts</code> és la manera recomanada de gestionar els noms d'una empresa.</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true"><code>dig @9.9.9.9 nom</code> pregunta directament a aquell servidor.</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">La memòria cau pot fer que vegis una adreça antiga.</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">systemd-resolved pot resoldre sol, sense cap servidor DNS.</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">El servidor DNS del client sol arribar per DHCP.</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false"><code>/etc/hosts</code> és la manera recomanada de gestionar els noms d'una empresa.</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 </div>
 
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h4>Al currículum</h4>
+  <h2>Al currículum</h2>
   <p><span class="lbl">Contingut 2.1</span> Sistemes de noms plans i jeràrquics.</p>
   <p><span class="lbl">CA 2.1</span> Identifica i descriu escenaris en què sorgeix la necessitat d'un servei de resolució de noms.</p>
   <p><span class="lbl">CA 2.2</span> Classifica els principals mecanismes de resolució de noms.</p>
@@ -826,15 +829,26 @@ getent hosts provaordre.test</pre>
 <!-- === PEU DE NAVEGACIÓ FI === -->
 
 <script>
-  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  // Dissuasió de la còpia: mai al codi, a les taules ni dins de l'editor.
+  // L'alumnat treballa per SSH i ha de poder enganxar les ordres.
   (function () {
-    function editant(node) {
-      return node && node.closest && node.closest('[contenteditable="true"]');
+    var LLIURE = 'pre, code, .cq-table, [contenteditable="true"]';
+    function copiable(node) {
+      if (node && node.nodeType !== 1) { node = node.parentNode; }
+      return !!(node && node.closest && node.closest(LLIURE));
     }
-    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+    function seleccioCopiable() {
+      var s = document.getSelection();
+      if (!s || s.rangeCount === 0) { return false; }
+      return copiable(s.getRangeAt(0).commonAncestorContainer);
+    }
+    ['copy', 'cut'].forEach(function (nom) {
       document.addEventListener(nom, function (e) {
-        if (!editant(e.target)) { e.preventDefault(); }
+        if (!seleccioCopiable()) { e.preventDefault(); }
       });
+    });
+    document.addEventListener('dragstart', function (e) {
+      if (!copiable(e.target)) { e.preventDefault(); }
     });
   })();
 
@@ -861,6 +875,10 @@ getent hosts provaordre.test</pre>
         } else {
           opt.classList.toggle('cq-selected');
         }
+        options.forEach(function (o) {
+          o.setAttribute('aria-pressed',
+            o.classList.contains('cq-selected') ? 'true' : 'false');
+        });
       });
     });
 
@@ -870,6 +888,7 @@ getent hosts provaordre.test</pre>
         var isCorrect = opt.dataset.correct === 'true';
         var isSelected = opt.classList.contains('cq-selected');
         opt.classList.remove('cq-selected');
+        opt.setAttribute('aria-pressed', 'false');
         if (isCorrect) {
           opt.classList.add('cq-correct');
         } else if (isSelected) {

@@ -193,7 +193,7 @@
     color: var(--muted);
   }
 
-  .cq-block h4 {
+  .cq-block h2 {
     margin: 4px 0 14px;
     font-family: var(--font-display);
     font-size: 1.4rem;
@@ -244,26 +244,26 @@
   .cq-block[data-kind="pas a pas"]::before,
   .cq-block[data-kind="lliurament"]::before,
   .cq-block[data-kind="resum"]::before { border-color: var(--accent-line); color: var(--accent); }
-  .cq-block[data-kind="objectius"] h4,
-  .cq-block[data-kind="pas a pas"] h4,
-  .cq-block[data-kind="lliurament"] h4,
-  .cq-block[data-kind="resum"] h4 { color: var(--accent); }
+  .cq-block[data-kind="objectius"] h2,
+  .cq-block[data-kind="pas a pas"] h2,
+  .cq-block[data-kind="lliurament"] h2,
+  .cq-block[data-kind="resum"] h2 { color: var(--accent); }
 
   .cq-block[data-kind="recordatori"] { background: var(--warn-soft); border-color: #F5DCC8; }
   .cq-block[data-kind="recordatori"]::before { background: var(--warn-soft); border-color: var(--warn-line); color: var(--warn); }
-  .cq-block[data-kind="recordatori"] h4 { color: var(--warn); }
+  .cq-block[data-kind="recordatori"] h2 { color: var(--warn); }
 
   .cq-block[data-kind="bones pràctiques"] { background: var(--ok-soft); border-color: var(--ok-line); }
   .cq-block[data-kind="bones pràctiques"]::before { background: var(--ok-soft); border-color: var(--ok-line); color: var(--ok); }
-  .cq-block[data-kind="bones pràctiques"] h4 { color: var(--ok); }
+  .cq-block[data-kind="bones pràctiques"] h2 { color: var(--ok); }
 
   .cq-block[data-kind="problemes"] { background: var(--ko-soft); border-color: var(--ko-line); }
   .cq-block[data-kind="problemes"]::before { background: var(--ko-soft); border-color: var(--ko-line); color: var(--ko); }
-  .cq-block[data-kind="problemes"] h4 { color: var(--ko); }
+  .cq-block[data-kind="problemes"] h2 { color: var(--ko); }
 
   /* ==== Traçabilitat amb el currículum ==== */
   .cq-block[data-kind="currículum"] { background: transparent; }
-  .cq-block[data-kind="currículum"] h4 { color: var(--muted); }
+  .cq-block[data-kind="currículum"] h2 { color: var(--muted); }
   .cq-block[data-kind="currículum"] p {
     margin: 0 0 6px;
     font-size: .86rem;
@@ -487,14 +487,17 @@
     a.cq-ref { border-bottom: none; color: inherit; }
   }
   /* ==== Contingut no copiable ====
-     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
-     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
-     queda exclòs. */
+     Dissuasiu, no una protecció: la prosa és per llegir-la al web o a
+     Moodle, no per copiar-la. El codi, les ordres i les taules SÍ que es
+     copien: l'alumnat treballa per SSH i les ha d'enganxar. L'editor
+     treballa amb contenteditable i queda exclòs. */
   .cq-header, .cq-block {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
   }
+  .cq-block pre, .cq-block pre *,
+  .cq-block code, .cq-table, .cq-table *,
   [contenteditable="true"], [contenteditable="true"] * {
     -webkit-user-select: text;
     -moz-user-select: text;
@@ -522,7 +525,7 @@
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h4>Què hi ha en aquesta guia</h4>
+  <h2>Què hi ha en aquesta guia</h2>
   <p>Documentació oficial: <a href="https://wiki.nftables.org">wiki.nftables.org</a></p>
   <ul>
     <li>Punt de partida: el servidor ja reparteix adreces per la targeta interna.</li>
@@ -532,7 +535,7 @@
 
 <!-- ============ 8 · IPTABLES ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h4>Per què no fem servir iptables</h4>
+  <h2>Per què no fem servir iptables</h2>
   <p>
     Tota la documentació d'Internet parla d'<code>iptables</code>, amb comandes com
     <code>iptables -t nat -A POSTROUTING -o enp1s0 -j MASQUERADE</code>. Encara funcionen, però
@@ -552,7 +555,7 @@
 
 <!-- ============ 6 · RECORDATORI ============ -->
 <div class="cq-block" data-kind="recordatori">
-  <h4>Una regla mal escrita et tanca la porta</h4>
+  <h2>Una regla mal escrita et tanca la porta</h2>
   <p>
     Estàs escrivint un tallafoc. Si poses <code>policy drop</code> a la cadena
     <code>input</code> sense permetre SSH, perdràs la connexió en carregar les regles. En aquesta
@@ -563,7 +566,7 @@
 
 <!-- ============ 7 · PAS A PAS ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h4>Convertir el servidor en porta d'enllaç</h4>
+  <h2>Convertir el servidor en porta d'enllaç</h2>
 
   <ol class="cq-steps">
     <li>
@@ -657,7 +660,7 @@ ping -c3 www.upc.edu  <span class="c"># funciona el DNS?</span></pre>
 
 <!-- ============ 7b · REFERÈNCIA · DNAT ============ -->
 <div class="cq-block" data-kind="referència">
-  <h4>DNAT: canviar la destinació abans d'encaminar</h4>
+  <h2>DNAT: canviar la destinació abans d'encaminar</h2>
   <p>
     <code>dnat to</code> reescriu l'adreça (i el port, si cal) de destinació d'un
     paquet abans que el nucli decideixi cap a on l'encamina. Per això viu al ganxo
@@ -675,7 +678,7 @@ ping -c3 www.upc.edu  <span class="c"># funciona el DNS?</span></pre>
 
 <!-- ============ 7c · PAS A PAS · PUBLICAR UN SERVEI INTERN ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h4>Publicar cap a fora un servei de la xarxa interna</h4>
+  <h2>Publicar cap a fora un servei de la xarxa interna</h2>
 
   <ol class="cq-steps">
     <li>
@@ -726,7 +729,7 @@ curl http://IP-EXTERNA-DEL-SERVIDOR/</pre>
 
 <!-- ============ COMPROVACIÓ ============ -->
 <div class="cq-block" data-kind="comprovació">
-  <h4>Comprovar que els clients surten a Internet</h4>
+  <h2>Comprovar que els clients surten a Internet</h2>
   <p>Les dues primeres ordres van al servidor; les dues últimes, al client.</p>
   <ol class="cq-steps">
     <li>
@@ -751,7 +754,7 @@ ping -c3 www.upc.edu</pre>
 
 <!-- ============ 9 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h4>Criteris professionals</h4>
+  <h2>Criteris professionals</h2>
   <ul>
     <li><strong><code>policy drop</code> a <code>forward</code></strong> i obre només el que cal. El que no s'ha permès, no passa.</li>
     <li><strong>Fes servir <code>ct state related,established</code></strong> per al trànsit de tornada, en lloc d'obrir el sentit contrari sencer.</li>
@@ -763,7 +766,7 @@ ping -c3 www.upc.edu</pre>
 
 <!-- ============ 10 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h4>Errors habituals</h4>
+  <h2>Errors habituals</h2>
   <dl class="cq-issues">
     <dt>Funcionava i després de reiniciar ja no</dt>
     <dd>
@@ -793,7 +796,7 @@ ping -c3 www.upc.edu</pre>
 
 <!-- ============ 11 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h4>Resum</h4>
+  <h2>Resum</h2>
   <ul>
     <li>Un client amb IP correcta encara necessita <strong>encaminament</strong> i <strong>NAT</strong> per sortir a Internet.</li>
     <li>L'encaminament s'activa amb <code>net.ipv4.ip_forward=1</code>, permanent a <code>/etc/sysctl.d/</code>.</li>
@@ -835,15 +838,26 @@ ping -c3 www.upc.edu</pre>
 <!-- === PEU DE NAVEGACIÓ FI === -->
 
 <script>
-  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  // Dissuasió de la còpia: mai al codi, a les taules ni dins de l'editor.
+  // L'alumnat treballa per SSH i ha de poder enganxar les ordres.
   (function () {
-    function editant(node) {
-      return node && node.closest && node.closest('[contenteditable="true"]');
+    var LLIURE = 'pre, code, .cq-table, [contenteditable="true"]';
+    function copiable(node) {
+      if (node && node.nodeType !== 1) { node = node.parentNode; }
+      return !!(node && node.closest && node.closest(LLIURE));
     }
-    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+    function seleccioCopiable() {
+      var s = document.getSelection();
+      if (!s || s.rangeCount === 0) { return false; }
+      return copiable(s.getRangeAt(0).commonAncestorContainer);
+    }
+    ['copy', 'cut'].forEach(function (nom) {
       document.addEventListener(nom, function (e) {
-        if (!editant(e.target)) { e.preventDefault(); }
+        if (!seleccioCopiable()) { e.preventDefault(); }
       });
+    });
+    document.addEventListener('dragstart', function (e) {
+      if (!copiable(e.target)) { e.preventDefault(); }
     });
   })();
 
@@ -870,6 +884,10 @@ ping -c3 www.upc.edu</pre>
         } else {
           opt.classList.toggle('cq-selected');
         }
+        options.forEach(function (o) {
+          o.setAttribute('aria-pressed',
+            o.classList.contains('cq-selected') ? 'true' : 'false');
+        });
       });
     });
 
@@ -879,6 +897,7 @@ ping -c3 www.upc.edu</pre>
         var isCorrect = opt.dataset.correct === 'true';
         var isSelected = opt.classList.contains('cq-selected');
         opt.classList.remove('cq-selected');
+        opt.setAttribute('aria-pressed', 'false');
         if (isCorrect) {
           opt.classList.add('cq-correct');
         } else if (isSelected) {

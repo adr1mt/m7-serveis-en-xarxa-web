@@ -193,7 +193,7 @@
     color: var(--muted);
   }
 
-  .cq-block h4 {
+  .cq-block h2 {
     margin: 4px 0 14px;
     font-family: var(--font-display);
     font-size: 1.4rem;
@@ -244,26 +244,26 @@
   .cq-block[data-kind="pas a pas"]::before,
   .cq-block[data-kind="lliurament"]::before,
   .cq-block[data-kind="resum"]::before { border-color: var(--accent-line); color: var(--accent); }
-  .cq-block[data-kind="objectius"] h4,
-  .cq-block[data-kind="pas a pas"] h4,
-  .cq-block[data-kind="lliurament"] h4,
-  .cq-block[data-kind="resum"] h4 { color: var(--accent); }
+  .cq-block[data-kind="objectius"] h2,
+  .cq-block[data-kind="pas a pas"] h2,
+  .cq-block[data-kind="lliurament"] h2,
+  .cq-block[data-kind="resum"] h2 { color: var(--accent); }
 
   .cq-block[data-kind="recordatori"] { background: var(--warn-soft); border-color: #F5DCC8; }
   .cq-block[data-kind="recordatori"]::before { background: var(--warn-soft); border-color: var(--warn-line); color: var(--warn); }
-  .cq-block[data-kind="recordatori"] h4 { color: var(--warn); }
+  .cq-block[data-kind="recordatori"] h2 { color: var(--warn); }
 
   .cq-block[data-kind="bones pràctiques"] { background: var(--ok-soft); border-color: var(--ok-line); }
   .cq-block[data-kind="bones pràctiques"]::before { background: var(--ok-soft); border-color: var(--ok-line); color: var(--ok); }
-  .cq-block[data-kind="bones pràctiques"] h4 { color: var(--ok); }
+  .cq-block[data-kind="bones pràctiques"] h2 { color: var(--ok); }
 
   .cq-block[data-kind="problemes"] { background: var(--ko-soft); border-color: var(--ko-line); }
   .cq-block[data-kind="problemes"]::before { background: var(--ko-soft); border-color: var(--ko-line); color: var(--ko); }
-  .cq-block[data-kind="problemes"] h4 { color: var(--ko); }
+  .cq-block[data-kind="problemes"] h2 { color: var(--ko); }
 
   /* ==== Traçabilitat amb el currículum ==== */
   .cq-block[data-kind="currículum"] { background: transparent; }
-  .cq-block[data-kind="currículum"] h4 { color: var(--muted); }
+  .cq-block[data-kind="currículum"] h2 { color: var(--muted); }
   .cq-block[data-kind="currículum"] p {
     margin: 0 0 6px;
     font-size: .86rem;
@@ -487,14 +487,17 @@
     a.cq-ref { border-bottom: none; color: inherit; }
   }
   /* ==== Contingut no copiable ====
-     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
-     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
-     queda exclòs. */
+     Dissuasiu, no una protecció: la prosa és per llegir-la al web o a
+     Moodle, no per copiar-la. El codi, les ordres i les taules SÍ que es
+     copien: l'alumnat treballa per SSH i les ha d'enganxar. L'editor
+     treballa amb contenteditable i queda exclòs. */
   .cq-header, .cq-block {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
   }
+  .cq-block pre, .cq-block pre *,
+  .cq-block code, .cq-table, .cq-table *,
   [contenteditable="true"], [contenteditable="true"] * {
     -webkit-user-select: text;
     -moz-user-select: text;
@@ -522,7 +525,7 @@
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h4>Què sabràs fer en acabar</h4>
+  <h2>Què sabràs fer en acabar</h2>
   <ul>
     <li>Explicar per a què serveix un servei de transferència de fitxers i quan se'n fa servir un altre.</li>
     <li>Distingir el <strong>canal de control</strong> del <strong>canal de dades</strong>.</li>
@@ -534,7 +537,7 @@
 
 <!-- ============ 2 · PER A QUÈ SERVEIX ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Un servei per moure fitxers, no per compartir-los</h4>
+  <h2>Un servei per moure fitxers, no per compartir-los</h2>
   <p>
     Un servei de transferència de fitxers serveix perquè una màquina <strong>pugi</strong> o
     <strong>baixi</strong> fitxers d'un servidor, amb un compte i uns permisos. No és el mateix
@@ -550,7 +553,7 @@
 
 <!-- ============ 3 · DOS CANALS ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Dos canals: control i dades</h4>
+  <h2>Dos canals: control i dades</h2>
   <p>
     <strong>FTP</strong> (<em>File Transfer Protocol</em>) és de 1971 i té una particularitat que
     cap protocol modern repeteix: fa servir <strong>dues connexions TCP</strong> alhora.
@@ -572,7 +575,7 @@
 
 <!-- ============ 4 · ACTIU I PASSIU ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Mode actiu i mode passiu</h4>
+  <h2>Mode actiu i mode passiu</h2>
   <p>
     La pregunta que resolen aquests dos modes és sempre la mateixa: <strong>qui obre la connexió
     de dades</strong>, el client o el servidor.
@@ -627,7 +630,7 @@
 
 <!-- ============ 5 · EXEMPLE ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h4>Una sessió vista per dins</h4>
+  <h2>Una sessió vista per dins</h2>
   <p>
     El client tradueix el que escrius a ordres del protocol. Aquestes són les que envia per baixar
     un fitxer, amb la resposta del servidor al davant:
@@ -656,7 +659,7 @@ RETR informe.pdf
 
 <!-- ============ 6 · CODIS ============ -->
 <div class="cq-block" data-kind="observació">
-  <h4>Els codis numèrics es llegeixen per la primera xifra</h4>
+  <h2>Els codis numèrics es llegeixen per la primera xifra</h2>
   <p>
     No cal memoritzar-los. La primera xifra ja diu de què va la resposta, i això et serveix per a
     qualsevol servidor FTP del món.
@@ -676,7 +679,7 @@ RETR informe.pdf
 
 <!-- ============ 7 · TEXT I BINARI ============ -->
 <div class="cq-block" data-kind="observació">
-  <h4>Mode text i mode binari</h4>
+  <h2>Mode text i mode binari</h2>
   <p>
     FTP pot transferir de dues maneres. En <strong>mode text</strong> (<em>ASCII</em>) converteix
     el final de línia al del sistema de destinació; en <strong>mode binari</strong> copia byte a
@@ -695,7 +698,7 @@ RETR informe.pdf
 
 <!-- ============ 8 · CAS REAL ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h4>La contrasenya viatja escrita</h4>
+  <h2>La contrasenya viatja escrita</h2>
   <p>
     FTP és anterior al xifratge. L'ordre <code>PASS</code> envia la contrasenya tal com és, en
     text pla, i el mateix passa amb el contingut dels fitxers.
@@ -714,7 +717,7 @@ RETR informe.pdf
 
 <!-- ============ 9 · OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h4>La teva primera sessió FTP</h4>
+  <h2>La teva primera sessió FTP</h2>
   <p>Instal·la el servidor amb els valors de sèrie i mira el protocol funcionant.</p>
 
   <ol class="cq-steps">
@@ -771,7 +774,7 @@ sudo ss -lntp | grep :21</pre>
 
 <!-- ============ 10 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h4>Criteris professionals</h4>
+  <h2>Criteris professionals</h2>
   <ul>
     <li><strong>Passiu per defecte</strong>: és l'únic que funciona des de darrere d'un router.</li>
     <li><strong>Rang de ports de dades acotat</strong> amb <code>pasv_min_port</code> i <code>pasv_max_port</code>, perquè el tallafocs el pugui obrir.</li>
@@ -783,7 +786,7 @@ sudo ss -lntp | grep :21</pre>
 
 <!-- ============ 11 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h4>Errors habituals</h4>
+  <h2>Errors habituals</h2>
   <dl class="cq-issues">
     <dt>Connecta i autentica, però <code>ls</code> es queda penjat</dt>
     <dd>
@@ -813,7 +816,7 @@ sudo ss -lntp | grep :21</pre>
 
 <!-- ============ 12 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h4>Resum</h4>
+  <h2>Resum</h2>
   <ul>
     <li>FTP fa servir <strong>dos canals</strong>: control al port 21 i dades a part.</li>
     <li>En <strong>actiu</strong> connecta el servidor; en <strong>passiu</strong>, el client. Avui, passiu.</li>
@@ -844,64 +847,64 @@ sudo ss -lntp | grep :21</pre>
 
 <!-- ============ 13 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h4>Comprova el que has après</h4>
+  <h2>Comprova el que has après</h2>
 
   <div class="cq-question" data-id="t3-1-canals" data-type="single">
     <div class="statement">Quantes connexions TCP fa servir una transferència per FTP?</div>
-    <button class="cq-option" data-correct="false">Una de sola, pel port 21</button>
-    <button class="cq-option" data-correct="true">Dues: una de control i una de dades</button>
-    <button class="cq-option" data-correct="false">Una per cada fitxer, sempre pel port 20</button>
-    <button class="cq-option" data-correct="false">Cap: FTP funciona sobre UDP</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Una de sola, pel port 21</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Dues: una de control i una de dades</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Una per cada fitxer, sempre pel port 20</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Cap: FTP funciona sobre UDP</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t3-1-passiu" data-type="single">
     <div class="statement">Un client darrere d'un router amb NAT no aconsegueix llistar el directori. Què li dius?</div>
-    <button class="cq-option" data-correct="false">Que canviï a mode text</button>
-    <button class="cq-option" data-correct="true">Que faci servir el mode passiu</button>
-    <button class="cq-option" data-correct="false">Que faci servir el mode actiu</button>
-    <button class="cq-option" data-correct="false">Que canviï el port de control al 20</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que canviï a mode text</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Que faci servir el mode passiu</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que faci servir el mode actiu</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que canviï el port de control al 20</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t3-1-codi" data-type="single">
     <div class="statement">El servidor respon <code>331</code>. Què vol dir?</div>
-    <button class="cq-option" data-correct="false">Que l'operació ha acabat bé</button>
-    <button class="cq-option" data-correct="true">Que falta un pas més: espera la contrasenya</button>
-    <button class="cq-option" data-correct="false">Que hi ha un error definitiu</button>
-    <button class="cq-option" data-correct="false">Que el servidor està saturat</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que l'operació ha acabat bé</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Que falta un pas més: espera la contrasenya</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que hi ha un error definitiu</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que el servidor està saturat</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t3-1-binari" data-type="single">
     <div class="statement">Per què una imatge transferida en mode text arriba malmesa?</div>
-    <button class="cq-option" data-correct="false">Perquè es comprimeix i es perd qualitat</button>
-    <button class="cq-option" data-correct="true">Perquè es canvien els bytes de final de línia dins del fitxer</button>
-    <button class="cq-option" data-correct="false">Perquè el mode text talla el fitxer als 64 KB</button>
-    <button class="cq-option" data-correct="false">Perquè el mode text xifra el contingut</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè es comprimeix i es perd qualitat</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Perquè es canvien els bytes de final de línia dins del fitxer</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè el mode text talla el fitxer als 64 KB</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè el mode text xifra el contingut</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t3-1-afirmacions" data-type="multi">
     <div class="statement">Selecciona totes les afirmacions certes sobre FTP</div>
-    <button class="cq-option" data-correct="true">La contrasenya viatja en text pla.</button>
-    <button class="cq-option" data-correct="true">El canal de dades s'obre i es tanca a cada transferència.</button>
-    <button class="cq-option" data-correct="true">La resposta <code>227</code> indica al client on ha d'anar a buscar les dades.</button>
-    <button class="cq-option" data-correct="false">El mode actiu és el recomanat avui dia.</button>
-    <button class="cq-option" data-correct="false">Amb la configuració de sèrie de vsftpd els usuaris ja poden pujar fitxers.</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">La contrasenya viatja en text pla.</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">El canal de dades s'obre i es tanca a cada transferència.</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">La resposta <code>227</code> indica al client on ha d'anar a buscar les dades.</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El mode actiu és el recomanat avui dia.</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Amb la configuració de sèrie de vsftpd els usuaris ja poden pujar fitxers.</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 </div>
 
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h4>Al currículum</h4>
+  <h2>Al currículum</h2>
   <p><span class="lbl">Contingut 3.2</span> Ordres de control, autenticació, gestió i transferència de fitxers. Mode text i binari.</p>
   <p><span class="lbl">CA 3.1</span> Estableix la utilitat i mode d'operació del servei de transferència de fitxers.</p>
 </div>
@@ -918,15 +921,26 @@ sudo ss -lntp | grep :21</pre>
 <!-- === PEU DE NAVEGACIÓ FI === -->
 
 <script>
-  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  // Dissuasió de la còpia: mai al codi, a les taules ni dins de l'editor.
+  // L'alumnat treballa per SSH i ha de poder enganxar les ordres.
   (function () {
-    function editant(node) {
-      return node && node.closest && node.closest('[contenteditable="true"]');
+    var LLIURE = 'pre, code, .cq-table, [contenteditable="true"]';
+    function copiable(node) {
+      if (node && node.nodeType !== 1) { node = node.parentNode; }
+      return !!(node && node.closest && node.closest(LLIURE));
     }
-    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+    function seleccioCopiable() {
+      var s = document.getSelection();
+      if (!s || s.rangeCount === 0) { return false; }
+      return copiable(s.getRangeAt(0).commonAncestorContainer);
+    }
+    ['copy', 'cut'].forEach(function (nom) {
       document.addEventListener(nom, function (e) {
-        if (!editant(e.target)) { e.preventDefault(); }
+        if (!seleccioCopiable()) { e.preventDefault(); }
       });
+    });
+    document.addEventListener('dragstart', function (e) {
+      if (!copiable(e.target)) { e.preventDefault(); }
     });
   })();
 
@@ -953,6 +967,10 @@ sudo ss -lntp | grep :21</pre>
         } else {
           opt.classList.toggle('cq-selected');
         }
+        options.forEach(function (o) {
+          o.setAttribute('aria-pressed',
+            o.classList.contains('cq-selected') ? 'true' : 'false');
+        });
       });
     });
 
@@ -962,6 +980,7 @@ sudo ss -lntp | grep :21</pre>
         var isCorrect = opt.dataset.correct === 'true';
         var isSelected = opt.classList.contains('cq-selected');
         opt.classList.remove('cq-selected');
+        opt.setAttribute('aria-pressed', 'false');
         if (isCorrect) {
           opt.classList.add('cq-correct');
         } else if (isSelected) {

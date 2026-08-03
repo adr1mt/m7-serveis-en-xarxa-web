@@ -193,7 +193,7 @@
     color: var(--muted);
   }
 
-  .cq-block h4 {
+  .cq-block h2 {
     margin: 4px 0 14px;
     font-family: var(--font-display);
     font-size: 1.4rem;
@@ -244,26 +244,26 @@
   .cq-block[data-kind="pas a pas"]::before,
   .cq-block[data-kind="lliurament"]::before,
   .cq-block[data-kind="resum"]::before { border-color: var(--accent-line); color: var(--accent); }
-  .cq-block[data-kind="objectius"] h4,
-  .cq-block[data-kind="pas a pas"] h4,
-  .cq-block[data-kind="lliurament"] h4,
-  .cq-block[data-kind="resum"] h4 { color: var(--accent); }
+  .cq-block[data-kind="objectius"] h2,
+  .cq-block[data-kind="pas a pas"] h2,
+  .cq-block[data-kind="lliurament"] h2,
+  .cq-block[data-kind="resum"] h2 { color: var(--accent); }
 
   .cq-block[data-kind="recordatori"] { background: var(--warn-soft); border-color: #F5DCC8; }
   .cq-block[data-kind="recordatori"]::before { background: var(--warn-soft); border-color: var(--warn-line); color: var(--warn); }
-  .cq-block[data-kind="recordatori"] h4 { color: var(--warn); }
+  .cq-block[data-kind="recordatori"] h2 { color: var(--warn); }
 
   .cq-block[data-kind="bones pràctiques"] { background: var(--ok-soft); border-color: var(--ok-line); }
   .cq-block[data-kind="bones pràctiques"]::before { background: var(--ok-soft); border-color: var(--ok-line); color: var(--ok); }
-  .cq-block[data-kind="bones pràctiques"] h4 { color: var(--ok); }
+  .cq-block[data-kind="bones pràctiques"] h2 { color: var(--ok); }
 
   .cq-block[data-kind="problemes"] { background: var(--ko-soft); border-color: var(--ko-line); }
   .cq-block[data-kind="problemes"]::before { background: var(--ko-soft); border-color: var(--ko-line); color: var(--ko); }
-  .cq-block[data-kind="problemes"] h4 { color: var(--ko); }
+  .cq-block[data-kind="problemes"] h2 { color: var(--ko); }
 
   /* ==== Traçabilitat amb el currículum ==== */
   .cq-block[data-kind="currículum"] { background: transparent; }
-  .cq-block[data-kind="currículum"] h4 { color: var(--muted); }
+  .cq-block[data-kind="currículum"] h2 { color: var(--muted); }
   .cq-block[data-kind="currículum"] p {
     margin: 0 0 6px;
     font-size: .86rem;
@@ -487,14 +487,17 @@
     a.cq-ref { border-bottom: none; color: inherit; }
   }
   /* ==== Contingut no copiable ====
-     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
-     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
-     queda exclòs. */
+     Dissuasiu, no una protecció: la prosa és per llegir-la al web o a
+     Moodle, no per copiar-la. El codi, les ordres i les taules SÍ que es
+     copien: l'alumnat treballa per SSH i les ha d'enganxar. L'editor
+     treballa amb contenteditable i queda exclòs. */
   .cq-header, .cq-block {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
   }
+  .cq-block pre, .cq-block pre *,
+  .cq-block code, .cq-table, .cq-table *,
   [contenteditable="true"], [contenteditable="true"] * {
     -webkit-user-select: text;
     -moz-user-select: text;
@@ -522,7 +525,7 @@
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h4>Què hi ha en aquesta guia</h4>
+  <h2>Què hi ha en aquesta guia</h2>
   <p>Documentació oficial: <a href="https://nginx.org/en/docs/">nginx.org/en/docs</a></p>
   <ul>
     <li>Punt de partida: Ubuntu Server 26.04 acabat d'instal·lar, amb la
@@ -542,7 +545,7 @@
 
 <!-- ============ 2 · REFERÈNCIA · ESTRUCTURA ============ -->
 <div class="cq-block" data-kind="referència">
-  <h4>Estructura de /etc/nginx</h4>
+  <h2>Estructura de /etc/nginx</h2>
   <p>
     <code>nginx.conf</code> és el fitxer principal i inclou la resta.
     Els llocs es declaren a <code>sites-available</code> i s'activen amb
@@ -569,7 +572,7 @@
 
 <!-- ============ 3 · PAS A PAS · INSTAL·LACIÓ ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h4>Instal·lar Nginx i preparar el contingut</h4>
+  <h2>Instal·lar Nginx i preparar el contingut</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Instal·la el paquet:</strong></p>
@@ -599,7 +602,7 @@ sudo chmod -R 755 /var/www/web1.internal</pre>
 
 <!-- ============ 4 · PAS A PAS · BLOC SERVER ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h4>El bloc server i l'enllaç simbòlic</h4>
+  <h2>El bloc server i l'enllaç simbòlic</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Crea el fitxer del lloc:</strong></p>
@@ -642,7 +645,7 @@ sudo systemctl reload nginx</pre>
 
 <!-- ============ 5 · PAS A PAS · ERROR 404 ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h4>Pàgina d'error 404 personalitzada</h4>
+  <h2>Pàgina d'error 404 personalitzada</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Escriu la pàgina</strong> dins del mateix
@@ -663,7 +666,7 @@ sudo systemctl reload nginx</pre>
 
 <!-- ============ 6 · PAS A PAS · CAPÇALERES ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h4>Capçaleres de seguretat</h4>
+  <h2>Capçaleres de seguretat</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Afegeix-les</strong> dins del bloc <code>server</code>:</p>
@@ -680,7 +683,7 @@ sudo systemctl reload nginx</pre>
 
 <!-- ============ 7 · PAS A PAS · HTTPS ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h4>HTTPS amb certificat autofirmat</h4>
+  <h2>HTTPS amb certificat autofirmat</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Genera la clau i el certificat.</strong> El
@@ -734,7 +737,7 @@ sudo systemctl reload nginx</pre>
 
 <!-- ============ 8 · COMPROVACIÓ ============ -->
 <div class="cq-block" data-kind="comprovació">
-  <h4>Comprovació de conjunt, des del client</h4>
+  <h2>Comprovació de conjunt, des del client</h2>
   <ol class="cq-steps">
     <li>
       <p><code>http://web1.internal</code> redirigeix a
@@ -756,7 +759,7 @@ sudo systemctl reload nginx</pre>
 
 <!-- ============ 9 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h4>Criteris professionals</h4>
+  <h2>Criteris professionals</h2>
   <ul>
     <li><strong>Mai 777</strong>: directoris 755, fitxers 644.</li>
     <li>Desactiva sempre el lloc per defecte quan el servidor és d'un
@@ -771,7 +774,7 @@ sudo systemctl reload nginx</pre>
 
 <!-- ============ 10 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h4>Errors habituals</h4>
+  <h2>Errors habituals</h2>
   <dl class="cq-issues">
     <dt>Nginx no arrenca després d'instal·lar-lo</dt>
     <dd>
@@ -815,7 +818,7 @@ sudo systemctl reload nginx</pre>
 
 <!-- ============ 11 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h4>Fitxa ràpida</h4>
+  <h2>Fitxa ràpida</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Què</th><th>On</th></tr></thead>
@@ -864,15 +867,26 @@ sudo systemctl reload nginx</pre>
 <!-- === PEU DE NAVEGACIÓ FI === -->
 
 <script>
-  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  // Dissuasió de la còpia: mai al codi, a les taules ni dins de l'editor.
+  // L'alumnat treballa per SSH i ha de poder enganxar les ordres.
   (function () {
-    function editant(node) {
-      return node && node.closest && node.closest('[contenteditable="true"]');
+    var LLIURE = 'pre, code, .cq-table, [contenteditable="true"]';
+    function copiable(node) {
+      if (node && node.nodeType !== 1) { node = node.parentNode; }
+      return !!(node && node.closest && node.closest(LLIURE));
     }
-    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+    function seleccioCopiable() {
+      var s = document.getSelection();
+      if (!s || s.rangeCount === 0) { return false; }
+      return copiable(s.getRangeAt(0).commonAncestorContainer);
+    }
+    ['copy', 'cut'].forEach(function (nom) {
       document.addEventListener(nom, function (e) {
-        if (!editant(e.target)) { e.preventDefault(); }
+        if (!seleccioCopiable()) { e.preventDefault(); }
       });
+    });
+    document.addEventListener('dragstart', function (e) {
+      if (!copiable(e.target)) { e.preventDefault(); }
     });
   })();
 
@@ -899,6 +913,10 @@ sudo systemctl reload nginx</pre>
         } else {
           opt.classList.toggle('cq-selected');
         }
+        options.forEach(function (o) {
+          o.setAttribute('aria-pressed',
+            o.classList.contains('cq-selected') ? 'true' : 'false');
+        });
       });
     });
 
@@ -908,6 +926,7 @@ sudo systemctl reload nginx</pre>
         var isCorrect = opt.dataset.correct === 'true';
         var isSelected = opt.classList.contains('cq-selected');
         opt.classList.remove('cq-selected');
+        opt.setAttribute('aria-pressed', 'false');
         if (isCorrect) {
           opt.classList.add('cq-correct');
         } else if (isSelected) {

@@ -193,7 +193,7 @@
     color: var(--muted);
   }
 
-  .cq-block h4 {
+  .cq-block h2 {
     margin: 4px 0 14px;
     font-family: var(--font-display);
     font-size: 1.4rem;
@@ -244,26 +244,26 @@
   .cq-block[data-kind="pas a pas"]::before,
   .cq-block[data-kind="lliurament"]::before,
   .cq-block[data-kind="resum"]::before { border-color: var(--accent-line); color: var(--accent); }
-  .cq-block[data-kind="objectius"] h4,
-  .cq-block[data-kind="pas a pas"] h4,
-  .cq-block[data-kind="lliurament"] h4,
-  .cq-block[data-kind="resum"] h4 { color: var(--accent); }
+  .cq-block[data-kind="objectius"] h2,
+  .cq-block[data-kind="pas a pas"] h2,
+  .cq-block[data-kind="lliurament"] h2,
+  .cq-block[data-kind="resum"] h2 { color: var(--accent); }
 
   .cq-block[data-kind="recordatori"] { background: var(--warn-soft); border-color: #F5DCC8; }
   .cq-block[data-kind="recordatori"]::before { background: var(--warn-soft); border-color: var(--warn-line); color: var(--warn); }
-  .cq-block[data-kind="recordatori"] h4 { color: var(--warn); }
+  .cq-block[data-kind="recordatori"] h2 { color: var(--warn); }
 
   .cq-block[data-kind="bones pràctiques"] { background: var(--ok-soft); border-color: var(--ok-line); }
   .cq-block[data-kind="bones pràctiques"]::before { background: var(--ok-soft); border-color: var(--ok-line); color: var(--ok); }
-  .cq-block[data-kind="bones pràctiques"] h4 { color: var(--ok); }
+  .cq-block[data-kind="bones pràctiques"] h2 { color: var(--ok); }
 
   .cq-block[data-kind="problemes"] { background: var(--ko-soft); border-color: var(--ko-line); }
   .cq-block[data-kind="problemes"]::before { background: var(--ko-soft); border-color: var(--ko-line); color: var(--ko); }
-  .cq-block[data-kind="problemes"] h4 { color: var(--ko); }
+  .cq-block[data-kind="problemes"] h2 { color: var(--ko); }
 
   /* ==== Traçabilitat amb el currículum ==== */
   .cq-block[data-kind="currículum"] { background: transparent; }
-  .cq-block[data-kind="currículum"] h4 { color: var(--muted); }
+  .cq-block[data-kind="currículum"] h2 { color: var(--muted); }
   .cq-block[data-kind="currículum"] p {
     margin: 0 0 6px;
     font-size: .86rem;
@@ -487,14 +487,17 @@
     a.cq-ref { border-bottom: none; color: inherit; }
   }
   /* ==== Contingut no copiable ====
-     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
-     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
-     queda exclòs. */
+     Dissuasiu, no una protecció: la prosa és per llegir-la al web o a
+     Moodle, no per copiar-la. El codi, les ordres i les taules SÍ que es
+     copien: l'alumnat treballa per SSH i les ha d'enganxar. L'editor
+     treballa amb contenteditable i queda exclòs. */
   .cq-header, .cq-block {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
   }
+  .cq-block pre, .cq-block pre *,
+  .cq-block code, .cq-table, .cq-table *,
   [contenteditable="true"], [contenteditable="true"] * {
     -webkit-user-select: text;
     -moz-user-select: text;
@@ -522,7 +525,7 @@
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h4>Què sabràs fer en acabar</h4>
+  <h2>Què sabràs fer en acabar</h2>
   <ul>
     <li>Diferenciar un <strong>àlies</strong> d'un compte i d'una llista de distribució.</li>
     <li>Explicar per què el correu d'un àlies s'acaba llegint a la bústia d'un altre.</li>
@@ -533,7 +536,7 @@
 
 <!-- ============ 2 · ÀLIES ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Àlies: un redirector, no una bústia</h4>
+  <h2>Àlies: un redirector, no una bústia</h2>
   <p>
     Un àlies és una adreça <strong>sense bústia pròpia</strong>: tot el que hi arriba va a la
     bústia d'un compte real.
@@ -547,7 +550,7 @@
 
 <!-- ============ 3 · RECOLLIDA REMOTA ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Recollir el correu d'un àlies des de fora</h4>
+  <h2>Recollir el correu d'un àlies des de fora</h2>
   <p>
     El correu d'un àlies es llegeix amb el compte real, pel port 993, com qualsevol altre.
   </p>
@@ -559,7 +562,7 @@
 
 <!-- ============ 4 · USOS INDEGUTS ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Open relay: la porta que mai s'ha de deixar oberta</h4>
+  <h2>Open relay: la porta que mai s'ha de deixar oberta</h2>
   <p>
     Un <strong>open relay</strong> és un servidor que accepta enviar correu de qualsevol
     persona cap a qualsevol lloc. Els spammers el busquen: l'omplen de brossa en el teu nom i
@@ -573,7 +576,7 @@
 
 <!-- ============ 5 · EXEMPLE ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h4>Dos noms per a un sol missatge</h4>
+  <h2>Dos noms per a un sol missatge</h2>
   <p>
     Bruno escriu a <code>suport@puigcastellar.internal</code> i el missatge acaba a la bústia
     d'anna. Bruno no ho sap: per a ell, l'ha enviat a <code>suport@</code> i prou.
@@ -585,7 +588,7 @@
 
 <!-- ============ 6 · CAS REAL ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h4>L'adreça que sobreviu a qui la respon</h4>
+  <h2>L'adreça que sobreviu a qui la respon</h2>
   <p>
     A la secretaria d'un institut, <code>matricula@</code> l'atén una persona diferent cada
     curs. Si fos un compte, cada canvi voldria dir contrasenya nova i avisar tothom.
@@ -598,7 +601,7 @@
 
 <!-- ============ 7 · OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h4>Comprova tu mateix que no és un open relay</h4>
+  <h2>Comprova tu mateix que no és un open relay</h2>
   <p>
     La prova no configura res: obre una conversa SMTP pel port 25 <strong>sense
     autenticar-se</strong> i demana entregar a un domini de fora. Un servidor sa ho ha de
@@ -618,7 +621,7 @@ print(s.rcpt("victim@gmail.com"))</pre>
 
 <!-- ============ 8 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h4>Criteris professionals</h4>
+  <h2>Criteris professionals</h2>
   <ul>
     <li><strong>Àlies per a adreces públiques</strong> (<code>suport@</code>, <code>direccio@</code>), no dupliquis comptes reals.</li>
     <li><strong>Un àlies no és un compte de reserva</strong>: si dues persones han de llegir
@@ -630,7 +633,7 @@ print(s.rcpt("victim@gmail.com"))</pre>
 
 <!-- ============ 9 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h4>Errors habituals</h4>
+  <h2>Errors habituals</h2>
   <dl class="cq-issues">
     <dt>Voler connectar-se per IMAP amb l'adreça de l'àlies</dt>
     <dd>
@@ -660,7 +663,7 @@ print(s.rcpt("victim@gmail.com"))</pre>
 
 <!-- ============ 10 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h4>Resum</h4>
+  <h2>Resum</h2>
   <ul>
     <li>Un <strong>àlies</strong> no té bústia pròpia: reenvia a un compte real, i es pot canviar sense tocar l'adreça pública.</li>
     <li>IMAPS (993) i POP3S (995) ja escolten: qualsevol client amb credencials vàlides hi pot connectar.</li>
@@ -676,53 +679,53 @@ print(s.rcpt("victim@gmail.com"))</pre>
 
 <!-- ============ 11 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h4>Comprova el que has après</h4>
+  <h2>Comprova el que has après</h2>
 
   <div class="cq-question" data-id="t4-3-alies-vs-compte" data-type="single">
     <div class="statement">Què és un àlies de correu, a diferència d'un compte?</div>
-    <button class="cq-option" data-correct="true">Una adreça sense bústia pròpia que reenvia a una altra</button>
-    <button class="cq-option" data-correct="false">Un compte amb una contrasenya diferent</button>
-    <button class="cq-option" data-correct="false">Una llista amb subscripcions obertes</button>
-    <button class="cq-option" data-correct="false">Un servidor DNS addicional</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Una adreça sense bústia pròpia que reenvia a una altra</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Un compte amb una contrasenya diferent</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Una llista amb subscripcions obertes</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Un servidor DNS addicional</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t4-3-bustia-alies" data-type="single">
     <div class="statement">Un client connecta per IMAP per llegir el correu de <code>suport@</code>. On el llegeix realment?</div>
-    <button class="cq-option" data-correct="false">A la bústia pròpia de <code>suport@</code></button>
-    <button class="cq-option" data-correct="true">A la bústia del compte real al qual apunta l'àlies</button>
-    <button class="cq-option" data-correct="false">Als logs del servidor</button>
-    <button class="cq-option" data-correct="false">No es pot llegir per IMAP un àlies</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">A la bústia pròpia de <code>suport@</code></button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">A la bústia del compte real al qual apunta l'àlies</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Als logs del servidor</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">No es pot llegir per IMAP un àlies</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t4-3-relay" data-type="single">
     <div class="statement">Un client sense autenticar-se intenta enviar correu a un domini extern. Què ha de respondre el servidor?</div>
-    <button class="cq-option" data-correct="false"><code>250 2.0.0 Ok</code></button>
-    <button class="cq-option" data-correct="true"><code>550 5.1.2 Relay not allowed.</code></button>
-    <button class="cq-option" data-correct="false"><code>421 Service unavailable</code></button>
-    <button class="cq-option" data-correct="false">El correu s'envia igualment</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false"><code>250 2.0.0 Ok</code></button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true"><code>550 5.1.2 Relay not allowed.</code></button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false"><code>421 Service unavailable</code></button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El correu s'envia igualment</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t4-3-imap-port" data-type="single">
     <div class="statement">Amb quin port i quin compte llegeixes el correu que ha arribat a un àlies?</div>
-    <button class="cq-option" data-correct="false">Pel 993, amb l'adreça de l'àlies</button>
-    <button class="cq-option" data-correct="true">Pel 993, amb el compte real al qual apunta l'àlies</button>
-    <button class="cq-option" data-correct="false">Pel 25, amb el compte d'administrador</button>
-    <button class="cq-option" data-correct="false">Pel 8080, des de la consola web</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Pel 993, amb l'adreça de l'àlies</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Pel 993, amb el compte real al qual apunta l'àlies</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Pel 25, amb el compte d'administrador</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Pel 8080, des de la consola web</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 </div>
 
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h4>Al currículum</h4>
+  <h2>Al currículum</h2>
   <p><span class="lbl">Contingut 4.1</span> Comptes de correu, àlies i bústies d'usuari.</p>
   <p><span class="lbl">CA 4.4</span> Defineix àlies per als comptes de correu.</p>
   <p><span class="lbl">CA 4.5</span> Aplica mètodes per impedir usos indeguts del servidor de correu electrònic.</p>
@@ -740,15 +743,26 @@ print(s.rcpt("victim@gmail.com"))</pre>
 <!-- === PEU DE NAVEGACIÓ FI === -->
 
 <script>
-  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  // Dissuasió de la còpia: mai al codi, a les taules ni dins de l'editor.
+  // L'alumnat treballa per SSH i ha de poder enganxar les ordres.
   (function () {
-    function editant(node) {
-      return node && node.closest && node.closest('[contenteditable="true"]');
+    var LLIURE = 'pre, code, .cq-table, [contenteditable="true"]';
+    function copiable(node) {
+      if (node && node.nodeType !== 1) { node = node.parentNode; }
+      return !!(node && node.closest && node.closest(LLIURE));
     }
-    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+    function seleccioCopiable() {
+      var s = document.getSelection();
+      if (!s || s.rangeCount === 0) { return false; }
+      return copiable(s.getRangeAt(0).commonAncestorContainer);
+    }
+    ['copy', 'cut'].forEach(function (nom) {
       document.addEventListener(nom, function (e) {
-        if (!editant(e.target)) { e.preventDefault(); }
+        if (!seleccioCopiable()) { e.preventDefault(); }
       });
+    });
+    document.addEventListener('dragstart', function (e) {
+      if (!copiable(e.target)) { e.preventDefault(); }
     });
   })();
 
@@ -775,6 +789,10 @@ print(s.rcpt("victim@gmail.com"))</pre>
         } else {
           opt.classList.toggle('cq-selected');
         }
+        options.forEach(function (o) {
+          o.setAttribute('aria-pressed',
+            o.classList.contains('cq-selected') ? 'true' : 'false');
+        });
       });
     });
 
@@ -784,6 +802,7 @@ print(s.rcpt("victim@gmail.com"))</pre>
         var isCorrect = opt.dataset.correct === 'true';
         var isSelected = opt.classList.contains('cq-selected');
         opt.classList.remove('cq-selected');
+        opt.setAttribute('aria-pressed', 'false');
         if (isCorrect) {
           opt.classList.add('cq-correct');
         } else if (isSelected) {

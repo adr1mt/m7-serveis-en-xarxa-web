@@ -193,7 +193,7 @@
     color: var(--muted);
   }
 
-  .cq-block h4 {
+  .cq-block h2 {
     margin: 4px 0 14px;
     font-family: var(--font-display);
     font-size: 1.4rem;
@@ -244,26 +244,26 @@
   .cq-block[data-kind="pas a pas"]::before,
   .cq-block[data-kind="lliurament"]::before,
   .cq-block[data-kind="resum"]::before { border-color: var(--accent-line); color: var(--accent); }
-  .cq-block[data-kind="objectius"] h4,
-  .cq-block[data-kind="pas a pas"] h4,
-  .cq-block[data-kind="lliurament"] h4,
-  .cq-block[data-kind="resum"] h4 { color: var(--accent); }
+  .cq-block[data-kind="objectius"] h2,
+  .cq-block[data-kind="pas a pas"] h2,
+  .cq-block[data-kind="lliurament"] h2,
+  .cq-block[data-kind="resum"] h2 { color: var(--accent); }
 
   .cq-block[data-kind="recordatori"] { background: var(--warn-soft); border-color: #F5DCC8; }
   .cq-block[data-kind="recordatori"]::before { background: var(--warn-soft); border-color: var(--warn-line); color: var(--warn); }
-  .cq-block[data-kind="recordatori"] h4 { color: var(--warn); }
+  .cq-block[data-kind="recordatori"] h2 { color: var(--warn); }
 
   .cq-block[data-kind="bones pràctiques"] { background: var(--ok-soft); border-color: var(--ok-line); }
   .cq-block[data-kind="bones pràctiques"]::before { background: var(--ok-soft); border-color: var(--ok-line); color: var(--ok); }
-  .cq-block[data-kind="bones pràctiques"] h4 { color: var(--ok); }
+  .cq-block[data-kind="bones pràctiques"] h2 { color: var(--ok); }
 
   .cq-block[data-kind="problemes"] { background: var(--ko-soft); border-color: var(--ko-line); }
   .cq-block[data-kind="problemes"]::before { background: var(--ko-soft); border-color: var(--ko-line); color: var(--ko); }
-  .cq-block[data-kind="problemes"] h4 { color: var(--ko); }
+  .cq-block[data-kind="problemes"] h2 { color: var(--ko); }
 
   /* ==== Traçabilitat amb el currículum ==== */
   .cq-block[data-kind="currículum"] { background: transparent; }
-  .cq-block[data-kind="currículum"] h4 { color: var(--muted); }
+  .cq-block[data-kind="currículum"] h2 { color: var(--muted); }
   .cq-block[data-kind="currículum"] p {
     margin: 0 0 6px;
     font-size: .86rem;
@@ -487,14 +487,17 @@
     a.cq-ref { border-bottom: none; color: inherit; }
   }
   /* ==== Contingut no copiable ====
-     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
-     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
-     queda exclòs. */
+     Dissuasiu, no una protecció: la prosa és per llegir-la al web o a
+     Moodle, no per copiar-la. El codi, les ordres i les taules SÍ que es
+     copien: l'alumnat treballa per SSH i les ha d'enganxar. L'editor
+     treballa amb contenteditable i queda exclòs. */
   .cq-header, .cq-block {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
   }
+  .cq-block pre, .cq-block pre *,
+  .cq-block code, .cq-table, .cq-table *,
   [contenteditable="true"], [contenteditable="true"] * {
     -webkit-user-select: text;
     -moz-user-select: text;
@@ -522,7 +525,7 @@
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h4>Què sabràs fer en acabar</h4>
+  <h2>Què sabràs fer en acabar</h2>
   <ul>
     <li>Explicar per què fer el mateix a vint màquines a mà no escala.</li>
     <li>Descriure el canvi de mentalitat: estat desitjat en lloc de seqüència d'ordres.</li>
@@ -534,7 +537,7 @@
 
 <!-- ============ 2 · EL PROBLEMA D'ESCALAR ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>El problema d'escalar</h4>
+  <h2>El problema d'escalar</h2>
   <p>
     Configurar una màquina a mà és factible. Configurar-ne vint d'iguals, ja no: cada
     persona teclejarà les ordres en un ordre una mica diferent, se n'oblidarà alguna, i al
@@ -545,7 +548,7 @@
 
 <!-- ============ 3 · ESTAT DESITJAT ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Descriure l'estat, no donar ordres</h4>
+  <h2>Descriure l'estat, no donar ordres</h2>
   <p>
     El canvi de mentalitat és aquest: en lloc de donar una seqüència d'ordres -instal·la
     això, després això altre-, es descriu com ha de quedar la màquina: quins paquets hi ha,
@@ -556,7 +559,7 @@
 
 <!-- ============ 4 · IDEMPOTÈNCIA ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Idempotència</h4>
+  <h2>Idempotència</h2>
   <p>
     Que una execució sigui <strong>idempotent</strong> vol dir que executar-la dues vegades
     deixa el sistema exactament igual que executar-la una: la segona passada no troba res
@@ -568,7 +571,7 @@
 
 <!-- ============ 5 · SENSE AGENT ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h4>Sense res a instal·lar</h4>
+  <h2>Sense res a instal·lar</h2>
   <p>
     Una eina d'automatització com Ansible entra a les màquines administrades per SSH, amb el
     mateix protocol que ja coneixes: no cal instal·lar-hi cap programa ni deixar cap procés
@@ -579,7 +582,7 @@
 
 <!-- ============ 6 · LES PECES ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Les peces d'una automatització</h4>
+  <h2>Les peces d'una automatització</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Peça</th><th>Què és</th></tr></thead>
@@ -597,7 +600,7 @@
 
 <!-- ============ 7 · ANSIBLE I LES ALTERNATIVES ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h4>Ansible i les alternatives</h4>
+  <h2>Ansible i les alternatives</h2>
   <p>
     Ansible és l'eina que fareu servir en aquest mòdul, i entra per SSH sense agent, tal com
     s'ha explicat. Puppet i Salt resolen el mateix problema amb un agent instal·lat a cada
@@ -608,7 +611,7 @@
 
 <!-- ============ 8 · OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h4>Llegir el resum d'una execució</h4>
+  <h2>Llegir el resum d'una execució</h2>
 <pre>ansible-playbook -i inventari playbook.yml
 <span class="o">PLAY RECAP
 alumne1 : ok=6 changed=2 unreachable=0 failed=0</span></pre>
@@ -621,7 +624,7 @@ alumne1 : ok=6 changed=2 unreachable=0 failed=0</span></pre>
 
 <!-- ============ 9 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h4>Criteris professionals</h4>
+  <h2>Criteris professionals</h2>
   <ul>
     <li>Descriu l'estat, no la seqüència d'ordres.</li>
     <li>Comprova sempre la segona execució abans de donar un playbook per bo.</li>
@@ -631,7 +634,7 @@ alumne1 : ok=6 changed=2 unreachable=0 failed=0</span></pre>
 
 <!-- ============ 10 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h4>Errors habituals</h4>
+  <h2>Errors habituals</h2>
   <dl class="cq-issues">
     <dt>Un playbook que fa canvis diferents cada vegada que s'executa</dt>
     <dd>
@@ -649,7 +652,7 @@ alumne1 : ok=6 changed=2 unreachable=0 failed=0</span></pre>
 
 <!-- ============ 11 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h4>Resum</h4>
+  <h2>Resum</h2>
   <ul>
     <li>Descriure <strong>l'estat desitjat</strong>, no donar ordres, és el canvi de mentalitat.</li>
     <li><strong>Idempotent</strong>: la segona execució no canvia res.</li>
@@ -662,63 +665,63 @@ alumne1 : ok=6 changed=2 unreachable=0 failed=0</span></pre>
 
 <!-- ============ 12 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h4>Comprova el que has après</h4>
+  <h2>Comprova el que has après</h2>
 
   <div class="cq-question" data-id="t6-4-mentalitat" data-type="single">
     <div class="statement">Quin és el canvi de mentalitat que proposa l'automatització?</div>
-    <button class="cq-option" data-correct="false">Escriure les mateixes ordres però més ràpid</button>
-    <button class="cq-option" data-correct="true">Descriure l'estat desitjat de la màquina en lloc de donar una seqüència d'ordres</button>
-    <button class="cq-option" data-correct="false">Deixar que cada usuari faci la configuració a la seva manera</button>
-    <button class="cq-option" data-correct="false">Substituir SSH per un protocol nou</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Escriure les mateixes ordres però més ràpid</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Descriure l'estat desitjat de la màquina en lloc de donar una seqüència d'ordres</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Deixar que cada usuari faci la configuració a la seva manera</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Substituir SSH per un protocol nou</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t6-4-idempotencia" data-type="single">
     <div class="statement">Un playbook és idempotent quan...</div>
-    <button class="cq-option" data-correct="false">S'executa més ràpid la segona vegada</button>
-    <button class="cq-option" data-correct="true">Executar-lo una segona vegada no fa cap canvi addicional</button>
-    <button class="cq-option" data-correct="false">Necessita menys memòria a cada execució</button>
-    <button class="cq-option" data-correct="false">Es pot executar sense connexió a la màquina administrada</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">S'executa més ràpid la segona vegada</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Executar-lo una segona vegada no fa cap canvi addicional</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Necessita menys memòria a cada execució</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Es pot executar sense connexió a la màquina administrada</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t6-4-agent" data-type="single">
     <div class="statement">Per què Ansible no necessita cap agent instal·lat a les màquines que administra?</div>
-    <button class="cq-option" data-correct="false">Perquè només administra màquines Windows</button>
-    <button class="cq-option" data-correct="true">Perquè hi entra per SSH, amb el mateix protocol d'accés remot que ja coneixes</button>
-    <button class="cq-option" data-correct="false">Perquè les màquines es reinicien abans de cada execució</button>
-    <button class="cq-option" data-correct="false">Perquè només funciona en una única màquina alhora</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè només administra màquines Windows</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Perquè hi entra per SSH, amb el mateix protocol d'accés remot que ja coneixes</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè les màquines es reinicien abans de cada execució</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè només funciona en una única màquina alhora</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t6-4-peces" data-type="multi">
     <div class="statement">Quines d'aquestes són peces d'una automatització amb Ansible? (marca totes les correctes)</div>
-    <button class="cq-option" data-correct="true">Inventari</button>
-    <button class="cq-option" data-correct="true">Handler</button>
-    <button class="cq-option" data-correct="true">Plantilla</button>
-    <button class="cq-option" data-correct="false">Zona secundària</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Inventari</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Handler</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Plantilla</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Zona secundària</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t6-4-alternatives" data-type="single">
     <div class="statement">Quina diferència hi ha entre Ansible i eines com Puppet o Salt?</div>
-    <button class="cq-option" data-correct="false">Ansible no és idempotent i les altres sí</button>
-    <button class="cq-option" data-correct="true">Puppet i Salt fan servir un agent instal·lat a cada màquina administrada; Ansible entra per SSH sense agent</button>
-    <button class="cq-option" data-correct="false">Puppet i Salt no admeten variables</button>
-    <button class="cq-option" data-correct="false">Ansible només serveix per a màquines DHCP</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Ansible no és idempotent i les altres sí</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Puppet i Salt fan servir un agent instal·lat a cada màquina administrada; Ansible entra per SSH sense agent</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Puppet i Salt no admeten variables</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Ansible només serveix per a màquines DHCP</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 </div>
 
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h4>Al currículum</h4>
+  <h2>Al currículum</h2>
   <p><span class="lbl">CA 6.7</span> Realitza proves d'administració remota entre sistemes de diferent naturalesa.</p>
 </div>
 
@@ -734,15 +737,26 @@ alumne1 : ok=6 changed=2 unreachable=0 failed=0</span></pre>
 <!-- === PEU DE NAVEGACIÓ FI === -->
 
 <script>
-  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  // Dissuasió de la còpia: mai al codi, a les taules ni dins de l'editor.
+  // L'alumnat treballa per SSH i ha de poder enganxar les ordres.
   (function () {
-    function editant(node) {
-      return node && node.closest && node.closest('[contenteditable="true"]');
+    var LLIURE = 'pre, code, .cq-table, [contenteditable="true"]';
+    function copiable(node) {
+      if (node && node.nodeType !== 1) { node = node.parentNode; }
+      return !!(node && node.closest && node.closest(LLIURE));
     }
-    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+    function seleccioCopiable() {
+      var s = document.getSelection();
+      if (!s || s.rangeCount === 0) { return false; }
+      return copiable(s.getRangeAt(0).commonAncestorContainer);
+    }
+    ['copy', 'cut'].forEach(function (nom) {
       document.addEventListener(nom, function (e) {
-        if (!editant(e.target)) { e.preventDefault(); }
+        if (!seleccioCopiable()) { e.preventDefault(); }
       });
+    });
+    document.addEventListener('dragstart', function (e) {
+      if (!copiable(e.target)) { e.preventDefault(); }
     });
   })();
 
@@ -769,6 +783,10 @@ alumne1 : ok=6 changed=2 unreachable=0 failed=0</span></pre>
         } else {
           opt.classList.toggle('cq-selected');
         }
+        options.forEach(function (o) {
+          o.setAttribute('aria-pressed',
+            o.classList.contains('cq-selected') ? 'true' : 'false');
+        });
       });
     });
 
@@ -778,6 +796,7 @@ alumne1 : ok=6 changed=2 unreachable=0 failed=0</span></pre>
         var isCorrect = opt.dataset.correct === 'true';
         var isSelected = opt.classList.contains('cq-selected');
         opt.classList.remove('cq-selected');
+        opt.setAttribute('aria-pressed', 'false');
         if (isCorrect) {
           opt.classList.add('cq-correct');
         } else if (isSelected) {

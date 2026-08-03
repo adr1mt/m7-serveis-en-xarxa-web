@@ -193,7 +193,7 @@
     color: var(--muted);
   }
 
-  .cq-block h4 {
+  .cq-block h2 {
     margin: 4px 0 14px;
     font-family: var(--font-display);
     font-size: 1.4rem;
@@ -244,26 +244,26 @@
   .cq-block[data-kind="pas a pas"]::before,
   .cq-block[data-kind="lliurament"]::before,
   .cq-block[data-kind="resum"]::before { border-color: var(--accent-line); color: var(--accent); }
-  .cq-block[data-kind="objectius"] h4,
-  .cq-block[data-kind="pas a pas"] h4,
-  .cq-block[data-kind="lliurament"] h4,
-  .cq-block[data-kind="resum"] h4 { color: var(--accent); }
+  .cq-block[data-kind="objectius"] h2,
+  .cq-block[data-kind="pas a pas"] h2,
+  .cq-block[data-kind="lliurament"] h2,
+  .cq-block[data-kind="resum"] h2 { color: var(--accent); }
 
   .cq-block[data-kind="recordatori"] { background: var(--warn-soft); border-color: #F5DCC8; }
   .cq-block[data-kind="recordatori"]::before { background: var(--warn-soft); border-color: var(--warn-line); color: var(--warn); }
-  .cq-block[data-kind="recordatori"] h4 { color: var(--warn); }
+  .cq-block[data-kind="recordatori"] h2 { color: var(--warn); }
 
   .cq-block[data-kind="bones pràctiques"] { background: var(--ok-soft); border-color: var(--ok-line); }
   .cq-block[data-kind="bones pràctiques"]::before { background: var(--ok-soft); border-color: var(--ok-line); color: var(--ok); }
-  .cq-block[data-kind="bones pràctiques"] h4 { color: var(--ok); }
+  .cq-block[data-kind="bones pràctiques"] h2 { color: var(--ok); }
 
   .cq-block[data-kind="problemes"] { background: var(--ko-soft); border-color: var(--ko-line); }
   .cq-block[data-kind="problemes"]::before { background: var(--ko-soft); border-color: var(--ko-line); color: var(--ko); }
-  .cq-block[data-kind="problemes"] h4 { color: var(--ko); }
+  .cq-block[data-kind="problemes"] h2 { color: var(--ko); }
 
   /* ==== Traçabilitat amb el currículum ==== */
   .cq-block[data-kind="currículum"] { background: transparent; }
-  .cq-block[data-kind="currículum"] h4 { color: var(--muted); }
+  .cq-block[data-kind="currículum"] h2 { color: var(--muted); }
   .cq-block[data-kind="currículum"] p {
     margin: 0 0 6px;
     font-size: .86rem;
@@ -487,14 +487,17 @@
     a.cq-ref { border-bottom: none; color: inherit; }
   }
   /* ==== Contingut no copiable ====
-     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
-     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
-     queda exclòs. */
+     Dissuasiu, no una protecció: la prosa és per llegir-la al web o a
+     Moodle, no per copiar-la. El codi, les ordres i les taules SÍ que es
+     copien: l'alumnat treballa per SSH i les ha d'enganxar. L'editor
+     treballa amb contenteditable i queda exclòs. */
   .cq-header, .cq-block {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
   }
+  .cq-block pre, .cq-block pre *,
+  .cq-block code, .cq-table, .cq-table *,
   [contenteditable="true"], [contenteditable="true"] * {
     -webkit-user-select: text;
     -moz-user-select: text;
@@ -522,7 +525,7 @@
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h4>Què sabràs fer en acabar</h4>
+  <h2>Què sabràs fer en acabar</h2>
   <ul>
     <li>Explicar, en una frase, per què encaminament i NAT ja deixen sortir tota una xarxa.</li>
     <li>Distingir una passarel·la de xarxa d'una passarel·la d'aplicació.</li>
@@ -533,7 +536,7 @@
 
 <!-- ============ 2 · REPAS ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>El que ja tens muntat</h4>
+  <h2>El que ja tens muntat</h2>
   <p>
     A <a class="cq-ref" href="../../RA1/index.html">RA1</a> vas donar Internet a una xarxa
     privada amb una màquina de dues targetes: encaminament actiu i NAT a la targeta que surt
@@ -548,7 +551,7 @@
 
 <!-- ============ 3 · DUES ALTURES ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Dues altures per a una passarel·la</h4>
+  <h2>Dues altures per a una passarel·la</h2>
   <p>
     Una passarel·la de xarxa reenvia paquets sense obrir-los: no sap si dins hi ha una pàgina
     web, un correu o un vídeo. Una passarel·la d'<strong>aplicació</strong> sí que entén el
@@ -570,7 +573,7 @@
 
 <!-- ============ 4 · PER QUÈ VOLER LA D'APLICACIÓ ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Per què un centre en vol una d'aplicació</h4>
+  <h2>Per què un centre en vol una d'aplicació</h2>
   <p>
     Amb la passarel·la de xarxa ja hi ha Internet. El que hi guanya una empresa o un centre amb
     una passarel·la d'aplicació és <strong>saber qui visita què</strong> —cada petició queda
@@ -587,7 +590,7 @@
 
 <!-- ============ 5 · OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h4>Per on surt el trànsit</h4>
+  <h2>Per on surt el trànsit</h2>
   <p>
     Per comprovar que l'encaminament segueix actiu i per on surt un paquet, aquestes dues ordres
     ja les coneixes del <a class="cq-ref" href="../../RA1/index.html">RA1</a>:
@@ -604,7 +607,7 @@ ip route
 
 <!-- ============ 6 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h4>Criteris professionals</h4>
+  <h2>Criteris professionals</h2>
   <ul>
     <li><strong>No confonguis les dues altures</strong>: una passarel·la de xarxa mai no veurà una URL.</li>
     <li><strong>Afegeix la d'aplicació quan calgui registre o filtratge</strong>, no per defecte.</li>
@@ -614,7 +617,7 @@ ip route
 
 <!-- ============ 7 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h4>Errors habituals</h4>
+  <h2>Errors habituals</h2>
   <dl class="cq-issues">
     <dt>Pensar que un proxy HTTP substitueix el NAT</dt>
     <dd>
@@ -631,7 +634,7 @@ ip route
 
 <!-- ============ 8 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h4>Resum</h4>
+  <h2>Resum</h2>
   <ul>
     <li>Encaminament i NAT, ja de <a class="cq-ref" href="../../RA1/index.html">RA1</a>, donen sortida a tota la xarxa: és la passarel·la de <strong>xarxa</strong>.</li>
     <li>Una passarel·la d'<strong>aplicació</strong> entén el protocol i decideix segons el contingut de la petició.</li>
@@ -643,53 +646,53 @@ ip route
 
 <!-- ============ 9 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h4>Comprova el que has après</h4>
+  <h2>Comprova el que has après</h2>
 
   <div class="cq-question" data-id="t8-1-altures" data-type="single">
     <div class="statement">Quina diferència hi ha entre una passarel·la de xarxa i una d'aplicació?</div>
-    <button class="cq-option" data-correct="false">La de xarxa és més ràpida però no fa NAT</button>
-    <button class="cq-option" data-correct="true">La de xarxa reenvia paquets sense mirar-ne el contingut; la d'aplicació entén el protocol i decideix segons què es demana</button>
-    <button class="cq-option" data-correct="false">Només n'hi pot haver una de les dues activa alhora</button>
-    <button class="cq-option" data-correct="false">La d'aplicació no necessita encaminament</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">La de xarxa és més ràpida però no fa NAT</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">La de xarxa reenvia paquets sense mirar-ne el contingut; la d'aplicació entén el protocol i decideix segons què es demana</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Només n'hi pot haver una de les dues activa alhora</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">La d'aplicació no necessita encaminament</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t8-1-filtratge" data-type="single">
     <div class="statement">Què pot filtrar una passarel·la de xarxa que no pugui una passarel·la d'aplicació?</div>
-    <button class="cq-option" data-correct="true">Res: la d'aplicació pot filtrar tot el que fa la de xarxa i encara més</button>
-    <button class="cq-option" data-correct="false">El domini de destí</button>
-    <button class="cq-option" data-correct="false">El contingut de la pàgina</button>
-    <button class="cq-option" data-correct="false">L'usuari que fa la petició</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Res: la d'aplicació pot filtrar tot el que fa la de xarxa i encara més</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El domini de destí</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El contingut de la pàgina</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">L'usuari que fa la petició</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t8-1-convivencia" data-type="single">
     <div class="statement">Un centre afegeix un proxy HTTP a la seva xarxa. Què passa amb l'encaminament i el NAT que ja tenia?</div>
-    <button class="cq-option" data-correct="false">Deixen de fer falta</button>
-    <button class="cq-option" data-correct="true">Segueixen actius: el proxy s'hi afegeix per al trànsit web</button>
-    <button class="cq-option" data-correct="false">Es desactiven automàticament</button>
-    <button class="cq-option" data-correct="false">Passen a fer la mateixa feina que el proxy</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Deixen de fer falta</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Segueixen actius: el proxy s'hi afegeix per al trànsit web</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Es desactiven automàticament</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Passen a fer la mateixa feina que el proxy</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t8-1-perque" data-type="multi">
     <div class="statement">Per què voldria una organització una passarel·la d'aplicació, si la de xarxa ja dona Internet?</div>
-    <button class="cq-option" data-correct="true">Per registrar qui visita què</button>
-    <button class="cq-option" data-correct="true">Per filtrar per contingut o per domini</button>
-    <button class="cq-option" data-correct="true">Per aprofitar una memòria cau</button>
-    <button class="cq-option" data-correct="false">Perquè el NAT no funciona amb HTTP</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Per registrar qui visita què</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Per filtrar per contingut o per domini</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Per aprofitar una memòria cau</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè el NAT no funciona amb HTTP</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 </div>
 
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h4>Al currículum</h4>
+  <h2>Al currículum</h2>
   <p><span class="lbl">Contingut 8.1</span> Passarel·les a nivell d'aplicació.</p>
   <p><span class="lbl">Contingut 8.3</span> Encaminament de trànsit entre interfícies de xarxa.</p>
   <p><span class="lbl">CA 8.3</span> Reconeix i diferencia les característiques i possibilitats de l'aplicació seleccionada.</p>
@@ -708,15 +711,26 @@ ip route
 <!-- === PEU DE NAVEGACIÓ FI === -->
 
 <script>
-  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  // Dissuasió de la còpia: mai al codi, a les taules ni dins de l'editor.
+  // L'alumnat treballa per SSH i ha de poder enganxar les ordres.
   (function () {
-    function editant(node) {
-      return node && node.closest && node.closest('[contenteditable="true"]');
+    var LLIURE = 'pre, code, .cq-table, [contenteditable="true"]';
+    function copiable(node) {
+      if (node && node.nodeType !== 1) { node = node.parentNode; }
+      return !!(node && node.closest && node.closest(LLIURE));
     }
-    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+    function seleccioCopiable() {
+      var s = document.getSelection();
+      if (!s || s.rangeCount === 0) { return false; }
+      return copiable(s.getRangeAt(0).commonAncestorContainer);
+    }
+    ['copy', 'cut'].forEach(function (nom) {
       document.addEventListener(nom, function (e) {
-        if (!editant(e.target)) { e.preventDefault(); }
+        if (!seleccioCopiable()) { e.preventDefault(); }
       });
+    });
+    document.addEventListener('dragstart', function (e) {
+      if (!copiable(e.target)) { e.preventDefault(); }
     });
   })();
 
@@ -743,6 +757,10 @@ ip route
         } else {
           opt.classList.toggle('cq-selected');
         }
+        options.forEach(function (o) {
+          o.setAttribute('aria-pressed',
+            o.classList.contains('cq-selected') ? 'true' : 'false');
+        });
       });
     });
 
@@ -752,6 +770,7 @@ ip route
         var isCorrect = opt.dataset.correct === 'true';
         var isSelected = opt.classList.contains('cq-selected');
         opt.classList.remove('cq-selected');
+        opt.setAttribute('aria-pressed', 'false');
         if (isCorrect) {
           opt.classList.add('cq-correct');
         } else if (isSelected) {

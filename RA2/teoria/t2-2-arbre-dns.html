@@ -193,7 +193,7 @@
     color: var(--muted);
   }
 
-  .cq-block h4 {
+  .cq-block h2 {
     margin: 4px 0 14px;
     font-family: var(--font-display);
     font-size: 1.4rem;
@@ -244,26 +244,26 @@
   .cq-block[data-kind="pas a pas"]::before,
   .cq-block[data-kind="lliurament"]::before,
   .cq-block[data-kind="resum"]::before { border-color: var(--accent-line); color: var(--accent); }
-  .cq-block[data-kind="objectius"] h4,
-  .cq-block[data-kind="pas a pas"] h4,
-  .cq-block[data-kind="lliurament"] h4,
-  .cq-block[data-kind="resum"] h4 { color: var(--accent); }
+  .cq-block[data-kind="objectius"] h2,
+  .cq-block[data-kind="pas a pas"] h2,
+  .cq-block[data-kind="lliurament"] h2,
+  .cq-block[data-kind="resum"] h2 { color: var(--accent); }
 
   .cq-block[data-kind="recordatori"] { background: var(--warn-soft); border-color: #F5DCC8; }
   .cq-block[data-kind="recordatori"]::before { background: var(--warn-soft); border-color: var(--warn-line); color: var(--warn); }
-  .cq-block[data-kind="recordatori"] h4 { color: var(--warn); }
+  .cq-block[data-kind="recordatori"] h2 { color: var(--warn); }
 
   .cq-block[data-kind="bones pràctiques"] { background: var(--ok-soft); border-color: var(--ok-line); }
   .cq-block[data-kind="bones pràctiques"]::before { background: var(--ok-soft); border-color: var(--ok-line); color: var(--ok); }
-  .cq-block[data-kind="bones pràctiques"] h4 { color: var(--ok); }
+  .cq-block[data-kind="bones pràctiques"] h2 { color: var(--ok); }
 
   .cq-block[data-kind="problemes"] { background: var(--ko-soft); border-color: var(--ko-line); }
   .cq-block[data-kind="problemes"]::before { background: var(--ko-soft); border-color: var(--ko-line); color: var(--ko); }
-  .cq-block[data-kind="problemes"] h4 { color: var(--ko); }
+  .cq-block[data-kind="problemes"] h2 { color: var(--ko); }
 
   /* ==== Traçabilitat amb el currículum ==== */
   .cq-block[data-kind="currículum"] { background: transparent; }
-  .cq-block[data-kind="currículum"] h4 { color: var(--muted); }
+  .cq-block[data-kind="currículum"] h2 { color: var(--muted); }
   .cq-block[data-kind="currículum"] p {
     margin: 0 0 6px;
     font-size: .86rem;
@@ -487,14 +487,17 @@
     a.cq-ref { border-bottom: none; color: inherit; }
   }
   /* ==== Contingut no copiable ====
-     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
-     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
-     queda exclòs. */
+     Dissuasiu, no una protecció: la prosa és per llegir-la al web o a
+     Moodle, no per copiar-la. El codi, les ordres i les taules SÍ que es
+     copien: l'alumnat treballa per SSH i les ha d'enganxar. L'editor
+     treballa amb contenteditable i queda exclòs. */
   .cq-header, .cq-block {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
   }
+  .cq-block pre, .cq-block pre *,
+  .cq-block code, .cq-table, .cq-table *,
   [contenteditable="true"], [contenteditable="true"] * {
     -webkit-user-select: text;
     -moz-user-select: text;
@@ -522,7 +525,7 @@
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h4>Què sabràs fer en acabar</h4>
+  <h2>Què sabràs fer en acabar</h2>
   <ul>
     <li>Llegir un nom de domini d'esquerra a dreta i saber què és cada part.</li>
     <li>Explicar què és una zona d'autoritat i què és una delegació.</li>
@@ -534,7 +537,7 @@
 
 <!-- ============ 2 · L'ARBRE ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Una base de dades reparida entre tots</h4>
+  <h2>Una base de dades reparida entre tots</h2>
   <p>
     Ningú té la llista sencera de noms d'Internet: seria impossible de mantenir. El DNS és una
     base de dades <strong>distribuïda i jeràrquica</strong>, en forma d'arbre invertit.
@@ -553,7 +556,7 @@
 
 <!-- ============ 3 · ZONES I DELEGACIÓ ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Zones d'autoritat i delegació</h4>
+  <h2>Zones d'autoritat i delegació</h2>
   <p>
     Cada tros de l'arbre té un responsable. Aquest tros es diu <strong>zona d'autoritat</strong>:
     el conjunt de noms dels quals un servidor concret té les dades bones.
@@ -572,7 +575,7 @@
 
 <!-- ============ 4 · DOS TIPUS DE SERVIDOR ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Recursiu o autoritatiu</h4>
+  <h2>Recursiu o autoritatiu</h2>
   <p>
     Es diuen tots dos «servidor DNS», però fan feines oposades. No confondre'ls és el que més
     ajuda a entendre el servei.
@@ -598,7 +601,7 @@
 
 <!-- ============ 5 · EXEMPLE ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h4>Una resolució, salt a salt</h4>
+  <h2>Una resolució, salt a salt</h2>
   <p>
     Preguntes per <code>moodle.elpuig.xeill.net</code> i el recursiu no en sap res. Comença per
     dalt i va baixant:
@@ -632,7 +635,7 @@
 
 <!-- ============ 6 · TTL I CAU ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>El TTL: quant dura una resposta</h4>
+  <h2>El TTL: quant dura una resposta</h2>
   <p>
     Cada resposta DNS ve amb un <strong>TTL</strong> (<em>Time To Live</em>), en segons. És el
     temps que qui la rep la pot guardar abans de tornar a preguntar. El decideix
@@ -651,7 +654,7 @@
 
 <!-- ============ 7 · CAS REAL ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h4>«He canviat la IP i mig món encara veu l'antiga»</h4>
+  <h2>«He canviat la IP i mig món encara veu l'antiga»</h2>
   <p>
     Una empresa canvia de servidor i actualitza el registre. Uns usuaris veuen la web nova
     immediatament i altres continuen a l'antiga durant hores. No hi ha cap error: cadascú té la
@@ -669,7 +672,7 @@
 
 <!-- ============ 7 · CAS REAL ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h4>El resolutor obert que va acabar en un atac</h4>
+  <h2>El resolutor obert que va acabar en un atac</h2>
   <p>
     Un servidor DNS que accepta consultes de tot Internet i fa recursió és un
     <strong>resolutor obert</strong>. No és només una imprudència: és una arma.
@@ -687,7 +690,7 @@
 
 <!-- ============ 8 · OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h4>Recórrer l'arbre amb dig</h4>
+  <h2>Recórrer l'arbre amb dig</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Mira qui té l'autoritat</strong> sobre un domini conegut:</p>
@@ -724,7 +727,7 @@
 
 <!-- ============ 9 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h4>Criteris professionals</h4>
+  <h2>Criteris professionals</h2>
   <ul>
     <li><strong>Un recursiu no s'obre a Internet.</strong> Serveix només la teva xarxa; si no, l'usaran per a atacs.</li>
     <li><strong>Un autoritatiu no fa recursió.</strong> Respon de la seva zona i prou.</li>
@@ -736,7 +739,7 @@
 
 <!-- ============ 10 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h4>Errors habituals</h4>
+  <h2>Errors habituals</h2>
   <dl class="cq-issues">
     <dt>El <code>+trace</code> escup línies de <code>network unreachable</code></dt>
     <dd>
@@ -766,7 +769,7 @@
 
 <!-- ============ 11 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h4>Resum</h4>
+  <h2>Resum</h2>
   <ul>
     <li>El DNS és un <strong>arbre</strong>: arrel, TLD, dominis i subdominis, llegit de dreta a esquerra.</li>
     <li>Una <strong>zona d'autoritat</strong> és el tros del qual un servidor té les dades bones.</li>
@@ -796,64 +799,64 @@
 
 <!-- ============ 12 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h4>Comprova el que has après</h4>
+  <h2>Comprova el que has après</h2>
 
   <div class="cq-question" data-id="t2-2-lectura" data-type="single">
     <div class="statement">A <code>aula3.smx.institut.cat</code>, quin és el TLD?</div>
-    <button class="cq-option" data-correct="false"><code>aula3</code></button>
-    <button class="cq-option" data-correct="false"><code>institut</code></button>
-    <button class="cq-option" data-correct="true"><code>cat</code></button>
-    <button class="cq-option" data-correct="false"><code>smx</code></button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false"><code>aula3</code></button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false"><code>institut</code></button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true"><code>cat</code></button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false"><code>smx</code></button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t2-2-tipus" data-type="single">
     <div class="statement">Quina és la diferència principal entre un servidor recursiu i un d'autoritatiu?</div>
-    <button class="cq-option" data-correct="false">El recursiu treballa amb UDP i l'autoritatiu amb TCP</button>
-    <button class="cq-option" data-correct="true">El recursiu busca la resposta per als clients; l'autoritatiu només respon de la seva zona</button>
-    <button class="cq-option" data-correct="false">L'autoritatiu té memòria cau i el recursiu no</button>
-    <button class="cq-option" data-correct="false">El recursiu només serveix noms inventats</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El recursiu treballa amb UDP i l'autoritatiu amb TCP</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">El recursiu busca la resposta per als clients; l'autoritatiu només respon de la seva zona</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">L'autoritatiu té memòria cau i el recursiu no</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El recursiu només serveix noms inventats</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t2-2-delegacio" data-type="single">
     <div class="statement">Què vol dir que una zona està delegada?</div>
-    <button class="cq-option" data-correct="true">Que la responsabilitat d'una branca passa a un altre servidor de noms</button>
-    <button class="cq-option" data-correct="false">Que la zona s'ha copiat a un servidor secundari</button>
-    <button class="cq-option" data-correct="false">Que el domini ha caducat</button>
-    <button class="cq-option" data-correct="false">Que el servidor deixa de fer recursió</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Que la responsabilitat d'una branca passa a un altre servidor de noms</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que la zona s'ha copiat a un servidor secundari</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que el domini ha caducat</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que el servidor deixa de fer recursió</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t2-2-ttl" data-type="single">
     <div class="statement">Has canviat una adreça a la teva zona i un client encara veu l'antiga. Què ho explica millor?</div>
-    <button class="cq-option" data-correct="false">El client té l'adreça a <code>/etc/hosts</code> segur</button>
-    <button class="cq-option" data-correct="true">Té la resposta antiga a la memòria cau i encara no s'ha esgotat el TTL</button>
-    <button class="cq-option" data-correct="false">El servidor autoritatiu ha deixat de respondre</button>
-    <button class="cq-option" data-correct="false">Cal reiniciar el client perquè agafi el canvi</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El client té l'adreça a <code>/etc/hosts</code> segur</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Té la resposta antiga a la memòria cau i encara no s'ha esgotat el TTL</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El servidor autoritatiu ha deixat de respondre</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Cal reiniciar el client perquè agafi el canvi</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t2-2-afirmacions" data-type="multi">
     <div class="statement">Selecciona totes les afirmacions certes</div>
-    <button class="cq-option" data-correct="true">Els noms es llegeixen de dreta a esquerra, de més general a més concret.</button>
-    <button class="cq-option" data-correct="true">Un recursiu obert a tot Internet és un problema de seguretat.</button>
-    <button class="cq-option" data-correct="false">Els servidors arrel guarden tots els noms d'Internet.</button>
-    <button class="cq-option" data-correct="true">Convé tenir dos servidors de noms per zona.</button>
-    <button class="cq-option" data-correct="false">El TTL el decideix el client que pregunta.</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Els noms es llegeixen de dreta a esquerra, de més general a més concret.</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Un recursiu obert a tot Internet és un problema de seguretat.</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Els servidors arrel guarden tots els noms d'Internet.</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Convé tenir dos servidors de noms per zona.</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El TTL el decideix el client que pregunta.</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 </div>
 
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h4>Al currículum</h4>
+  <h2>Al currículum</h2>
   <p><span class="lbl">Contingut 2.1</span> Sistemes de noms plans i jeràrquics.</p>
   <p><span class="lbl">CA 2.3</span> Descriu l'estructura, nomenclatura i funcionalitat dels sistemes de noms jeràrquics.</p>
 </div>
@@ -870,15 +873,26 @@
 <!-- === PEU DE NAVEGACIÓ FI === -->
 
 <script>
-  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  // Dissuasió de la còpia: mai al codi, a les taules ni dins de l'editor.
+  // L'alumnat treballa per SSH i ha de poder enganxar les ordres.
   (function () {
-    function editant(node) {
-      return node && node.closest && node.closest('[contenteditable="true"]');
+    var LLIURE = 'pre, code, .cq-table, [contenteditable="true"]';
+    function copiable(node) {
+      if (node && node.nodeType !== 1) { node = node.parentNode; }
+      return !!(node && node.closest && node.closest(LLIURE));
     }
-    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+    function seleccioCopiable() {
+      var s = document.getSelection();
+      if (!s || s.rangeCount === 0) { return false; }
+      return copiable(s.getRangeAt(0).commonAncestorContainer);
+    }
+    ['copy', 'cut'].forEach(function (nom) {
       document.addEventListener(nom, function (e) {
-        if (!editant(e.target)) { e.preventDefault(); }
+        if (!seleccioCopiable()) { e.preventDefault(); }
       });
+    });
+    document.addEventListener('dragstart', function (e) {
+      if (!copiable(e.target)) { e.preventDefault(); }
     });
   })();
 
@@ -905,6 +919,10 @@
         } else {
           opt.classList.toggle('cq-selected');
         }
+        options.forEach(function (o) {
+          o.setAttribute('aria-pressed',
+            o.classList.contains('cq-selected') ? 'true' : 'false');
+        });
       });
     });
 
@@ -914,6 +932,7 @@
         var isCorrect = opt.dataset.correct === 'true';
         var isSelected = opt.classList.contains('cq-selected');
         opt.classList.remove('cq-selected');
+        opt.setAttribute('aria-pressed', 'false');
         if (isCorrect) {
           opt.classList.add('cq-correct');
         } else if (isSelected) {

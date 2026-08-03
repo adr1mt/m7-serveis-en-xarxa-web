@@ -193,7 +193,7 @@
     color: var(--muted);
   }
 
-  .cq-block h4 {
+  .cq-block h2 {
     margin: 4px 0 14px;
     font-family: var(--font-display);
     font-size: 1.4rem;
@@ -244,26 +244,26 @@
   .cq-block[data-kind="pas a pas"]::before,
   .cq-block[data-kind="lliurament"]::before,
   .cq-block[data-kind="resum"]::before { border-color: var(--accent-line); color: var(--accent); }
-  .cq-block[data-kind="objectius"] h4,
-  .cq-block[data-kind="pas a pas"] h4,
-  .cq-block[data-kind="lliurament"] h4,
-  .cq-block[data-kind="resum"] h4 { color: var(--accent); }
+  .cq-block[data-kind="objectius"] h2,
+  .cq-block[data-kind="pas a pas"] h2,
+  .cq-block[data-kind="lliurament"] h2,
+  .cq-block[data-kind="resum"] h2 { color: var(--accent); }
 
   .cq-block[data-kind="recordatori"] { background: var(--warn-soft); border-color: #F5DCC8; }
   .cq-block[data-kind="recordatori"]::before { background: var(--warn-soft); border-color: var(--warn-line); color: var(--warn); }
-  .cq-block[data-kind="recordatori"] h4 { color: var(--warn); }
+  .cq-block[data-kind="recordatori"] h2 { color: var(--warn); }
 
   .cq-block[data-kind="bones pràctiques"] { background: var(--ok-soft); border-color: var(--ok-line); }
   .cq-block[data-kind="bones pràctiques"]::before { background: var(--ok-soft); border-color: var(--ok-line); color: var(--ok); }
-  .cq-block[data-kind="bones pràctiques"] h4 { color: var(--ok); }
+  .cq-block[data-kind="bones pràctiques"] h2 { color: var(--ok); }
 
   .cq-block[data-kind="problemes"] { background: var(--ko-soft); border-color: var(--ko-line); }
   .cq-block[data-kind="problemes"]::before { background: var(--ko-soft); border-color: var(--ko-line); color: var(--ko); }
-  .cq-block[data-kind="problemes"] h4 { color: var(--ko); }
+  .cq-block[data-kind="problemes"] h2 { color: var(--ko); }
 
   /* ==== Traçabilitat amb el currículum ==== */
   .cq-block[data-kind="currículum"] { background: transparent; }
-  .cq-block[data-kind="currículum"] h4 { color: var(--muted); }
+  .cq-block[data-kind="currículum"] h2 { color: var(--muted); }
   .cq-block[data-kind="currículum"] p {
     margin: 0 0 6px;
     font-size: .86rem;
@@ -487,14 +487,17 @@
     a.cq-ref { border-bottom: none; color: inherit; }
   }
   /* ==== Contingut no copiable ====
-     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
-     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
-     queda exclòs. */
+     Dissuasiu, no una protecció: la prosa és per llegir-la al web o a
+     Moodle, no per copiar-la. El codi, les ordres i les taules SÍ que es
+     copien: l'alumnat treballa per SSH i les ha d'enganxar. L'editor
+     treballa amb contenteditable i queda exclòs. */
   .cq-header, .cq-block {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
   }
+  .cq-block pre, .cq-block pre *,
+  .cq-block code, .cq-table, .cq-table *,
   [contenteditable="true"], [contenteditable="true"] * {
     -webkit-user-select: text;
     -moz-user-select: text;
@@ -522,7 +525,7 @@
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h4>Què sabràs fer en acabar</h4>
+  <h2>Què sabràs fer en acabar</h2>
   <ul>
     <li>Explicar la idea de mòdul: es pot activar i desactivar, i només s'activa el que cal.</li>
     <li>Distingir codi que s'executa al client del que s'executa al servidor.</li>
@@ -533,7 +536,7 @@
 
 <!-- ============ 2 · LA IDEA DE MÒDUL ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>La idea de mòdul</h4>
+  <h2>La idea de mòdul</h2>
   <p>
     Un servidor web, de sèrie, sap poc més que servir fitxers del disc. El xifrat, l'autenticació,
     generar pàgines a l'instant o oferir l'estat del propi servidor són funcions que aporten
@@ -548,7 +551,7 @@
 
 <!-- ============ 3 · CODI AL CLIENT O AL SERVIDOR ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Codi al client o al servidor</h4>
+  <h2>Codi al client o al servidor</h2>
   <p>
     Una pàgina pot dur codi que s'executa a cada banda, i la diferència importa:
   </p>
@@ -570,7 +573,7 @@
 
 <!-- ============ 4 · CONTINGUT ESTÀTIC O GENERAT ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h4>Contingut estàtic o generat</h4>
+  <h2>Contingut estàtic o generat</h2>
   <p>
     El contingut <strong>estàtic</strong> és un fitxer del disc que es retorna tal qual. El
     <strong>generat</strong> l'escriu un programa al servidor en cada petició, sovint consultant
@@ -580,7 +583,7 @@
 
 <!-- ============ 5 · EXEMPLE ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h4>Un formulari amb validació doble</h4>
+  <h2>Un formulari amb validació doble</h2>
   <p>
     JavaScript pot avisar a l'instant si un camp és buit, però el servidor ha de tornar a
     comprovar-ho quan rep les dades: la validació del client és comoditat per a l'usuari, no
@@ -590,7 +593,7 @@
 
 <!-- ============ 6 · CAS REAL ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h4>El proxy invers, un altre ús d'un mòdul</h4>
+  <h2>El proxy invers, un altre ús d'un mòdul</h2>
   <p>
     Un mòdul de proxy invers fa que el servidor web reculli les peticions i les passi a un altre
     servei intern, com si les respongués ell mateix. És una manera més d'ampliar què fa el
@@ -600,7 +603,7 @@
 
 <!-- ============ 7 · OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h4>Del codi de servidor no arriba res</h4>
+  <h2>Del codi de servidor no arriba res</h2>
   <p>
     Demanant dues vegades la mateixa pàgina generada al servidor, el client mai rep el codi que
     l'ha construït, només l'HTML resultant:
@@ -615,7 +618,7 @@
 
 <!-- ============ 8 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h4>Criteris professionals</h4>
+  <h2>Criteris professionals</h2>
   <ul>
     <li>Activa només els <strong>mòduls</strong> que el lloc necessita de veritat.</li>
     <li>Tota validació important es repeteix al <strong>servidor</strong>, mai només al client.</li>
@@ -625,7 +628,7 @@
 
 <!-- ============ 9 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h4>Errors habituals</h4>
+  <h2>Errors habituals</h2>
   <dl class="cq-issues">
     <dt>Confiar en una validació feta només en JavaScript</dt>
     <dd>
@@ -644,7 +647,7 @@
 
 <!-- ============ 10 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h4>Resum</h4>
+  <h2>Resum</h2>
   <ul>
     <li>El servidor serveix fitxers; xifrat, autenticació i contingut generat els aporten <strong>mòduls</strong>.</li>
     <li>JavaScript s'executa al <strong>client</strong> i es pot llegir; el codi de servidor no arriba mai al client.</li>
@@ -656,53 +659,53 @@
 
 <!-- ============ 11 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h4>Comprova el que has après</h4>
+  <h2>Comprova el que has après</h2>
 
   <div class="cq-question" data-id="t5-5-modul" data-type="single">
     <div class="statement">Què és un mòdul en un servidor web?</div>
-    <button class="cq-option" data-correct="true">Una peça que amplia el servidor i es pot activar o desactivar</button>
-    <button class="cq-option" data-correct="false">Un fitxer HTML estàtic</button>
-    <button class="cq-option" data-correct="false">El nom del lloc per defecte</button>
-    <button class="cq-option" data-correct="false">Un certificat autofirmat</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Una peça que amplia el servidor i es pot activar o desactivar</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Un fitxer HTML estàtic</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El nom del lloc per defecte</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Un certificat autofirmat</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t5-5-client-servidor" data-type="single">
     <div class="statement">Quina diferència hi ha entre JavaScript i PHP pel que fa al client?</div>
-    <button class="cq-option" data-correct="false">Cap, tots dos arriben sencers al client</button>
-    <button class="cq-option" data-correct="true">JavaScript arriba sencer i es pot llegir; del PHP el client només rep el resultat</button>
-    <button class="cq-option" data-correct="false">PHP arriba sencer i JavaScript només el resultat</button>
-    <button class="cq-option" data-correct="false">Els dos s'executen sempre al servidor</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Cap, tots dos arriben sencers al client</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">JavaScript arriba sencer i es pot llegir; del PHP el client només rep el resultat</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">PHP arriba sencer i JavaScript només el resultat</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Els dos s'executen sempre al servidor</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t5-5-validacio" data-type="single">
     <div class="statement">Per què no n'hi ha prou amb validar un formulari només en JavaScript?</div>
-    <button class="cq-option" data-correct="false">Perquè JavaScript no pot llegir formularis</button>
-    <button class="cq-option" data-correct="true">Perquè qualsevol pot desactivar-lo o modificar-lo des del navegador</button>
-    <button class="cq-option" data-correct="false">Perquè el servidor no accepta dades de formularis</button>
-    <button class="cq-option" data-correct="false">Perquè JavaScript sempre és més lent</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè JavaScript no pot llegir formularis</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Perquè qualsevol pot desactivar-lo o modificar-lo des del navegador</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè el servidor no accepta dades de formularis</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè JavaScript sempre és més lent</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
   <div class="cq-question" data-id="t5-5-estatic-generat" data-type="single">
     <div class="statement">Quina diferència hi ha entre contingut estàtic i contingut generat?</div>
-    <button class="cq-option" data-correct="false">El generat sempre és més ràpid de servir</button>
-    <button class="cq-option" data-correct="true">L'estàtic és un fitxer del disc; el generat l'escriu un programa a cada petició</button>
-    <button class="cq-option" data-correct="false">L'estàtic necessita sempre HTTPS</button>
-    <button class="cq-option" data-correct="false">Són el mateix concepte amb noms diferents</button>
-    <div><button class="cq-check-btn">Comprova la resposta</button></div>
-    <div class="cq-feedback"></div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El generat sempre és més ràpid de servir</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">L'estàtic és un fitxer del disc; el generat l'escriu un programa a cada petició</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">L'estàtic necessita sempre HTTPS</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Són el mateix concepte amb noms diferents</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 </div>
 
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h4>Al currículum</h4>
+  <h2>Al currículum</h2>
   <p><span class="lbl">CA 5.7</span> Diferencia i prova l'execució de codi al servidor i al client.</p>
   <p><span class="lbl">CA 5.8</span> Instal·la mòduls sobre el servidor.</p>
 </div>
@@ -719,15 +722,26 @@
 <!-- === PEU DE NAVEGACIÓ FI === -->
 
 <script>
-  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  // Dissuasió de la còpia: mai al codi, a les taules ni dins de l'editor.
+  // L'alumnat treballa per SSH i ha de poder enganxar les ordres.
   (function () {
-    function editant(node) {
-      return node && node.closest && node.closest('[contenteditable="true"]');
+    var LLIURE = 'pre, code, .cq-table, [contenteditable="true"]';
+    function copiable(node) {
+      if (node && node.nodeType !== 1) { node = node.parentNode; }
+      return !!(node && node.closest && node.closest(LLIURE));
     }
-    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+    function seleccioCopiable() {
+      var s = document.getSelection();
+      if (!s || s.rangeCount === 0) { return false; }
+      return copiable(s.getRangeAt(0).commonAncestorContainer);
+    }
+    ['copy', 'cut'].forEach(function (nom) {
       document.addEventListener(nom, function (e) {
-        if (!editant(e.target)) { e.preventDefault(); }
+        if (!seleccioCopiable()) { e.preventDefault(); }
       });
+    });
+    document.addEventListener('dragstart', function (e) {
+      if (!copiable(e.target)) { e.preventDefault(); }
     });
   })();
 
@@ -754,6 +768,10 @@
         } else {
           opt.classList.toggle('cq-selected');
         }
+        options.forEach(function (o) {
+          o.setAttribute('aria-pressed',
+            o.classList.contains('cq-selected') ? 'true' : 'false');
+        });
       });
     });
 
@@ -763,6 +781,7 @@
         var isCorrect = opt.dataset.correct === 'true';
         var isSelected = opt.classList.contains('cq-selected');
         opt.classList.remove('cq-selected');
+        opt.setAttribute('aria-pressed', 'false');
         if (isCorrect) {
           opt.classList.add('cq-correct');
         } else if (isSelected) {

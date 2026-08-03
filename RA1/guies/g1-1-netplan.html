@@ -193,7 +193,7 @@
     color: var(--muted);
   }
 
-  .cq-block h4 {
+  .cq-block h2 {
     margin: 4px 0 14px;
     font-family: var(--font-display);
     font-size: 1.4rem;
@@ -244,26 +244,26 @@
   .cq-block[data-kind="pas a pas"]::before,
   .cq-block[data-kind="lliurament"]::before,
   .cq-block[data-kind="resum"]::before { border-color: var(--accent-line); color: var(--accent); }
-  .cq-block[data-kind="objectius"] h4,
-  .cq-block[data-kind="pas a pas"] h4,
-  .cq-block[data-kind="lliurament"] h4,
-  .cq-block[data-kind="resum"] h4 { color: var(--accent); }
+  .cq-block[data-kind="objectius"] h2,
+  .cq-block[data-kind="pas a pas"] h2,
+  .cq-block[data-kind="lliurament"] h2,
+  .cq-block[data-kind="resum"] h2 { color: var(--accent); }
 
   .cq-block[data-kind="recordatori"] { background: var(--warn-soft); border-color: #F5DCC8; }
   .cq-block[data-kind="recordatori"]::before { background: var(--warn-soft); border-color: var(--warn-line); color: var(--warn); }
-  .cq-block[data-kind="recordatori"] h4 { color: var(--warn); }
+  .cq-block[data-kind="recordatori"] h2 { color: var(--warn); }
 
   .cq-block[data-kind="bones pràctiques"] { background: var(--ok-soft); border-color: var(--ok-line); }
   .cq-block[data-kind="bones pràctiques"]::before { background: var(--ok-soft); border-color: var(--ok-line); color: var(--ok); }
-  .cq-block[data-kind="bones pràctiques"] h4 { color: var(--ok); }
+  .cq-block[data-kind="bones pràctiques"] h2 { color: var(--ok); }
 
   .cq-block[data-kind="problemes"] { background: var(--ko-soft); border-color: var(--ko-line); }
   .cq-block[data-kind="problemes"]::before { background: var(--ko-soft); border-color: var(--ko-line); color: var(--ko); }
-  .cq-block[data-kind="problemes"] h4 { color: var(--ko); }
+  .cq-block[data-kind="problemes"] h2 { color: var(--ko); }
 
   /* ==== Traçabilitat amb el currículum ==== */
   .cq-block[data-kind="currículum"] { background: transparent; }
-  .cq-block[data-kind="currículum"] h4 { color: var(--muted); }
+  .cq-block[data-kind="currículum"] h2 { color: var(--muted); }
   .cq-block[data-kind="currículum"] p {
     margin: 0 0 6px;
     font-size: .86rem;
@@ -487,14 +487,17 @@
     a.cq-ref { border-bottom: none; color: inherit; }
   }
   /* ==== Contingut no copiable ====
-     Dissuasiu, no una protecció: el material és per llegir-lo al web o a
-     Moodle, no per copiar-lo. L'editor treballa amb contenteditable i
-     queda exclòs. */
+     Dissuasiu, no una protecció: la prosa és per llegir-la al web o a
+     Moodle, no per copiar-la. El codi, les ordres i les taules SÍ que es
+     copien: l'alumnat treballa per SSH i les ha d'enganxar. L'editor
+     treballa amb contenteditable i queda exclòs. */
   .cq-header, .cq-block {
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
   }
+  .cq-block pre, .cq-block pre *,
+  .cq-block code, .cq-table, .cq-table *,
   [contenteditable="true"], [contenteditable="true"] * {
     -webkit-user-select: text;
     -moz-user-select: text;
@@ -522,7 +525,7 @@
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h4>Què hi ha en aquesta guia</h4>
+  <h2>Què hi ha en aquesta guia</h2>
   <p>Documentació oficial: <a href="https://netplan.readthedocs.io">netplan.readthedocs.io</a></p>
   <ul>
     <li>Punt de partida: Ubuntu Server amb dues targetes, <code>enp1s0</code> i <code>enp2s0</code>.</li>
@@ -532,7 +535,7 @@
 
 <!-- ============ 3 · NETPLAN ============ -->
 <div class="cq-block" data-kind="referència">
-  <h4>Netplan: on s'escriu la configuració</h4>
+  <h2>Netplan: on s'escriu la configuració</h2>
   <p>
     A Ubuntu Server la xarxa es configura amb <strong>Netplan</strong>. Tu escrius un fitxer
     <strong>YAML</strong> a <code>/etc/netplan/</code> i Netplan tradueix aquestes instruccions
@@ -553,7 +556,7 @@
 
 <!-- ============ 4 · EXEMPLE ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h4>Un fitxer amb les dues targetes</h4>
+  <h2>Un fitxer amb les dues targetes</h2>
   <p>
     <code>enp1s0</code> per DHCP i <code>enp2s0</code> amb IP fixa. És exactament l'escenari
     que faràs servir a totes les activitats:
@@ -580,7 +583,7 @@
 
 <!-- ============ 4b · MÉS D'UN FITXER ============ -->
 <div class="cq-block" data-kind="observació">
-  <h4>Si a /etc/netplan/ ja hi ha un fitxer, què passa amb el teu?</h4>
+  <h2>Si a /etc/netplan/ ja hi ha un fitxer, què passa amb el teu?</h2>
   <p>
     El nom del que hi trobis depèn de la instal·lació:
     <code>00-installer-config.yaml</code> el deixa l'instal·lador d'Ubuntu Server,
@@ -602,7 +605,7 @@
 
 <!-- ============ 5 · LA PORTA D'ENLLAÇ ============ -->
 <div class="cq-block" data-kind="referència">
-  <h4>La porta d'enllaç va en un sol lloc</h4>
+  <h2>La porta d'enllaç va en un sol lloc</h2>
   <p>
     T'hauràs fixat que a <code>enp2s0</code> no hi ha cap porta d'enllaç. No és cap oblit:
     <strong>un equip només té una ruta per defecte</strong>, i aquí ja la dona el DHCP per
@@ -620,7 +623,7 @@
 
 <!-- ============ 6 · RECORDATORI ============ -->
 <div class="cq-block" data-kind="recordatori">
-  <h4>Canviar la xarxa en remot és arriscat</h4>
+  <h2>Canviar la xarxa en remot és arriscat</h2>
   <p>
     Si configures la xarxa per SSH, un error et pot tallar la connexió i deixar-te fora sense
     manera de tornar a entrar. Fes servir sempre <code>sudo netplan try</code>: aplica els
@@ -631,7 +634,7 @@
 
 <!-- ============ 8 · SOTA NETPLAN ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h4>Què hi ha sota Netplan</h4>
+  <h2>Què hi ha sota Netplan</h2>
   <p>
     Netplan no fa la feina: la reparteix. Quan executes <code>netplan apply</code>, genera
     fitxers <code>.network</code> dins de <code>/run/systemd/network/</code> i qui els llegeix
@@ -649,7 +652,7 @@ cat /run/systemd/network/*enp2s0*</pre>
 
 <!-- ============ 7 · PAS A PAS ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h4>Configurar les dues targetes</h4>
+  <h2>Configurar les dues targetes</h2>
 
   <ol class="cq-steps">
     <li>
@@ -697,7 +700,7 @@ resolvectl status</pre>
 
 <!-- ============ COMPROVACIÓ ============ -->
 <div class="cq-block" data-kind="comprovació">
-  <h4>Comprovar que la xarxa ha quedat com volies</h4>
+  <h2>Comprovar que la xarxa ha quedat com volies</h2>
   <p>Tres ordres, i cadascuna respon una pregunta diferent.</p>
   <ol class="cq-steps">
     <li>
@@ -720,7 +723,7 @@ resolvectl status</pre>
 
 <!-- ============ 9 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h4>Criteris professionals</h4>
+  <h2>Criteris professionals</h2>
   <ul>
     <li><strong>Un sol fitxer</strong> de Netplan per màquina, amb totes les targetes. Diversos fitxers es trepitgen entre ells.</li>
     <li><strong><code>netplan try</code>, mai <code>netplan apply</code></strong>, quan treballis per SSH.</li>
@@ -732,7 +735,7 @@ resolvectl status</pre>
 
 <!-- ============ 10 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h4>Errors habituals</h4>
+  <h2>Errors habituals</h2>
   <dl class="cq-issues">
     <dt>Error de sintaxi en aplicar</dt>
     <dd>
@@ -762,7 +765,7 @@ resolvectl status</pre>
 
 <!-- ============ 11 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h4>Resum</h4>
+  <h2>Resum</h2>
   <ul>
     <li>Configuració <strong>fixa</strong> per a servidors i impressores; <strong>automàtica</strong> per a la resta.</li>
     <li>Netplan escriu a <code>/etc/netplan/*.yaml</code>; qui gestiona la xarxa és <strong>systemd-networkd</strong>.</li>
@@ -804,15 +807,26 @@ resolvectl status</pre>
 <!-- === PEU DE NAVEGACIÓ FI === -->
 
 <script>
-  // Dissuasió de la còpia: no s'aplica mai dins de l'editor.
+  // Dissuasió de la còpia: mai al codi, a les taules ni dins de l'editor.
+  // L'alumnat treballa per SSH i ha de poder enganxar les ordres.
   (function () {
-    function editant(node) {
-      return node && node.closest && node.closest('[contenteditable="true"]');
+    var LLIURE = 'pre, code, .cq-table, [contenteditable="true"]';
+    function copiable(node) {
+      if (node && node.nodeType !== 1) { node = node.parentNode; }
+      return !!(node && node.closest && node.closest(LLIURE));
     }
-    ['copy', 'cut', 'contextmenu', 'dragstart'].forEach(function (nom) {
+    function seleccioCopiable() {
+      var s = document.getSelection();
+      if (!s || s.rangeCount === 0) { return false; }
+      return copiable(s.getRangeAt(0).commonAncestorContainer);
+    }
+    ['copy', 'cut'].forEach(function (nom) {
       document.addEventListener(nom, function (e) {
-        if (!editant(e.target)) { e.preventDefault(); }
+        if (!seleccioCopiable()) { e.preventDefault(); }
       });
+    });
+    document.addEventListener('dragstart', function (e) {
+      if (!copiable(e.target)) { e.preventDefault(); }
     });
   })();
 
@@ -839,6 +853,10 @@ resolvectl status</pre>
         } else {
           opt.classList.toggle('cq-selected');
         }
+        options.forEach(function (o) {
+          o.setAttribute('aria-pressed',
+            o.classList.contains('cq-selected') ? 'true' : 'false');
+        });
       });
     });
 
@@ -848,6 +866,7 @@ resolvectl status</pre>
         var isCorrect = opt.dataset.correct === 'true';
         var isSelected = opt.classList.contains('cq-selected');
         opt.classList.remove('cq-selected');
+        opt.setAttribute('aria-pressed', 'false');
         if (isCorrect) {
           opt.classList.add('cq-correct');
         } else if (isSelected) {
