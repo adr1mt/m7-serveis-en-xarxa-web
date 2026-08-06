@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>RA4 · Correu electrònic — Serveis en Xarxa (0227)</title>
+<title>A7.2 · Escenaris i seguretat — Serveis en Xarxa (0227)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -511,103 +511,182 @@
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
-    <a href="../index.html">‹ Serveis en Xarxa (0227)</a>
-    <span class="pos">RA4 · 4/8</span>
+    <a href="../index.html">‹ RA7 · Desplegament de xarxes sense fils segures</a>
+    <span class="pos">A7.2 · 6/7</span>
   </div>
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
+
 <header class="cq-header">
-  <div class="eyebrow">CFGM SMX · Mòdul 0227</div>
-  <h1>Serveis en Xarxa</h1>
-  <p class="lede">RA4 · Gestió de servidors de correu electrònic</p>
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA7 · A7.2</div>
+  <h1>Escenaris i seguretat</h1>
+  <p class="lede">Quatre canvis a la xarxa que has muntat, i què passa amb cadascun.</p>
 </header>
 
-<div class="cq-block" data-kind="teoria">
-  <h2>Teoria</h2>
-  <p>Expliquen com funciona el servei de correu.</p>
-  <ul class="cq-index">
-    <li><a href="teoria/t4-1-com-viatja-un-correu.html">
-      <span class="ref">T4.1</span>
-      <span class="ttl">Com viatja un correu electrònic
-        <span class="sub">MUA, MTA, MDA, SMTP, IMAP i el registre MX</span></span></a></li>
-    <li><a href="teoria/t4-2-servidor-de-correu.html">
-      <span class="ref">T4.2</span>
-      <span class="ttl">Com és per dins un servidor de correu
-        <span class="sub">Peces separades o servei únic, ports i certificats</span></span></a></li>
-    <li><a href="teoria/t4-3-alies-imap-i-abus.html">
-      <span class="ref">T4.3</span>
-      <span class="ttl">Àlies, IMAP i usos indeguts
-        <span class="sub">Recollida remota i tancar el relay obert</span></span></a></li>
-  </ul>
-</div>
-
-<div class="cq-block" data-kind="guies">
-  <h2>Guies</h2>
-  <ul class="cq-index">
-    <li><a href="guies/g4-1-stalwart.html">
-      <span class="ref">G4.1</span>
-      <span class="ttl">Guia: Stalwart
-        <span class="sub">Instal·lació, assistent, comptes i àlies</span></span></a></li>
-    <li><a href="guies/g4-2-thunderbird.html">
-      <span class="ref">G4.2</span>
-      <span class="ttl">Guia: Thunderbird
-        <span class="sub">Compte manual amb 465, 993 i certificat autofirmat</span></span></a></li>
-  </ul>
-</div>
-
-<div class="cq-block" data-kind="activitats">
-  <h2>Activitats</h2>
+<!-- ============ OBJECTIUS ============ -->
+<div class="cq-block" data-kind="objectius">
+  <h2>Què has de saber abans de començar</h2>
   <p>
-    Cada activitat es fa sobre una <strong>màquina nova</strong> a isardVDI, amb les targetes
-    <code>puigcastellar1</code> i <code>personal1</code>. La xarxa interna d'aquest RA és la
-    <code>192.168.1.0/24</code>.
+    Teories <a class="cq-ref" href="../teoria/t7-1-fonaments-sense-fils.html">T7.1</a> (canals) i <a class="cq-ref" href="../teoria/t7-3-seguretat-sense-fils.html">T7.3</a> (WEP, WPA2, xarxa de convidats). La guia <a class="cq-ref" href="../guies/g7-1-packet-tracer.html">G7.1</a> és el
+    manual dels panells que tocaràs.
   </p>
-  <ul class="cq-index">
-    <li><a href="activitats/a4-1-servidor-de-correu.html">
-      <span class="ref">A4.1</span>
-      <span class="ttl">El correu intern del centre
-        <span class="sub">Servidor propi i dos comptes que es parlen</span></span></a></li>
-    <li><a href="activitats/a4-2-alies-i-abus.html">
-      <span class="ref">A4.2</span>
-      <span class="ttl">Bústia compartida i porta tancada
-        <span class="sub">Àlies, client gràfic i prova de relay obert</span></span></a></li>
-  </ul>
+  <p>
+    Continues sobre la maqueta de l'<a class="cq-ref" href="a7-1-la-xarxa-sense-fils-de-l-aula.html">A7.1</a>. Cada escenari és un canvi petit amb una
+    conseqüència observable: la feina és provocar-la, capturar-la i explicar-la.
+  </p>
 </div>
 
-<div class="cq-block" data-kind="ordre recomanat">
-  <h2>En quin ordre fer-ho</h2>
+<!-- ============ ESCENARI ============ -->
+<div class="cq-block" data-kind="escenari">
+  <h2>Amb què treballaràs</h2>
   <p>
-    Primer entens el servei, després tens el manual a mà per fer les activitats.</p>
+    El mateix fitxer de Packet Tracer de l'<a class="cq-ref" href="a7-1-la-xarxa-sense-fils-de-l-aula.html">A7.1</a>, amb l'encaminador i els tres clients ja
+    connectats. No cal muntar res de nou: hi faràs modificacions i desaràs una còpia del
+    fitxer per a cada escenari.
+  </p>
+  <p>
+    Per a la xarxa de convidats hi afegiràs un punt d'accés, perquè aquest encaminador
+    només emet un SSID.
+  </p>
+</div>
+
+<!-- ============ ENUNCIAT ============ -->
+<div class="cq-block" data-kind="enunciat">
+  <h2>Què has de fer</h2>
+  <ol>
+    <li><strong>Canvi de canal.</strong> Passa la xarxa a un altre canal no solapat i
+      comprova que els clients hi continuen connectats.</li>
+    <li><strong>DHCP esgotat.</strong> Redueix el rang a dues adreces i intenta
+      connectar-hi els tres clients.</li>
+    <li><strong>Xarxa de convidats.</strong> Afegeix un punt d'accés amb un SSID obert i
+      connecta-hi un client nou, sense tocar la xarxa principal.</li>
+    <li><strong>WEP contra WPA2.</strong> Posa el punt d'accés de convidats amb WEP i
+      compara'l amb la xarxa principal.</li>
+  </ol>
+</div>
+
+<!-- ============ ON BUSCAR ============ -->
+<div class="cq-block" data-kind="enunciat">
+  <h2>D'on has de treure cada cosa</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
-      <thead><tr><th>Llegeix</th><th>Tingues a mà</th><th>Fes</th></tr></thead>
+      <thead><tr><th>Què has de fer</th><th>On ho tens</th></tr></thead>
       <tbody>
-        <tr><td><a class="cq-ref" href="teoria/t4-1-com-viatja-un-correu.html">T4.1</a> · <a class="cq-ref" href="teoria/t4-2-servidor-de-correu.html">T4.2</a></td><td><a class="cq-ref" href="guies/g4-1-stalwart.html">G4.1</a> · <a class="cq-ref" href="guies/g4-2-thunderbird.html">G4.2</a></td><td><a class="cq-ref" href="activitats/a4-1-servidor-de-correu.html">A4.1</a> — el correu intern del centre</td></tr>
-        <tr><td><a class="cq-ref" href="teoria/t4-3-alies-imap-i-abus.html">T4.3</a></td><td><a class="cq-ref" href="guies/g4-1-stalwart.html">G4.1</a> · <a class="cq-ref" href="guies/g4-2-thunderbird.html">G4.2</a></td><td><a class="cq-ref" href="activitats/a4-2-alies-i-abus.html">A4.2</a> — bústia compartida i porta tancada</td></tr>
+        <tr><td>Canviar el canal</td><td>Guia <a class="cq-ref" href="../guies/g7-1-packet-tracer.html">G7.1</a>, pas a pas del nom i el canal</td></tr>
+        <tr><td>Retallar el rang del DHCP</td><td>Guia <a class="cq-ref" href="../guies/g7-1-packet-tracer.html">G7.1</a>, pas a pas de la xarxa interna</td></tr>
+        <tr><td>Afegir i configurar un punt d'accés</td><td>Guia <a class="cq-ref" href="../guies/g7-1-packet-tracer.html">G7.1</a>, pas a pas del punt d'accés</td></tr>
+        <tr><td>Canviar el mode de seguretat</td><td>Guia <a class="cq-ref" href="../guies/g7-1-packet-tracer.html">G7.1</a>, pas a pas de la seguretat</td></tr>
+        <tr><td>Quins canals no se solapen</td><td>Teoria <a class="cq-ref" href="../teoria/t7-1-fonaments-sense-fils.html">T7.1</a></td></tr>
+        <tr><td>Per què WEP està descartat</td><td>Teoria <a class="cq-ref" href="../teoria/t7-3-seguretat-sense-fils.html">T7.3</a></td></tr>
+        <tr><td>Què fa que una xarxa de convidats ho sigui</td><td>Teoria <a class="cq-ref" href="../teoria/t7-3-seguretat-sense-fils.html">T7.3</a></td></tr>
       </tbody>
     </table>
   </div>
 </div>
 
+<!-- ============ RECORDATORI ============ -->
 <div class="cq-block" data-kind="recordatori">
-  <h2>Sense DNS no hi ha correu</h2>
+  <h2>Un escenari no és una captura</h2>
   <p>
-    Aquest RA es recolza en el <a class="cq-ref" href="../RA2/index.html">RA2</a>: un servidor de correu només rep missatges
-    d'altres dominis si el DNS anuncia el seu <strong>registre MX</strong>. Si tens dubtes de
-    com es publica un registre en una zona, torna a la <a class="cq-ref" href="../RA2/teoria/t2-4-primari-secundari.html">T2.4</a> abans de començar.
+    De cada escenari s'espera el canvi, l'efecte i el motiu. La captura sola no diu res:
+    ha d'anar acompanyada del que hi ha passat i de per què passa això i no una altra
+    cosa.
+  </p>
+  <p>
+    El tercer client de l'escenari del DHCP és l'exemple clar: la captura mostra un
+    client sense adreça, i el que s'avalua és que sàpigues dir per què l'aparell no li
+    n'ha donat cap.
+  </p>
+</div>
+
+<!-- ============ OBSERVACIÓ ============ -->
+<div class="cq-block" data-kind="observació">
+  <h2>El simulador no ho ensenya tot</h2>
+  <p>
+    Al simulador, WEP i WPA2 es configuren igual de fàcil i les dues xarxes funcionen: la
+    diferència entre elles no es veu en pantalla. Per això aquest escenari es tanca amb
+    una explicació escrita, no amb una prova.
+  </p>
+  <p>
+    El mateix passa amb l'aïllament de la xarxa de convidats: aquí es limita a un SSID a
+    part, i qui hauria de garantir que no arriba a la xarxa interna és un equip que el
+    simulador no reprodueix.
+  </p>
+</div>
+
+<!-- ============ COMPROVACIÓ ============ -->
+<div class="cq-block" data-kind="comprovació">
+  <h2>Com sabràs que ho has fet bé</h2>
+  <ul>
+    <li>Després de canviar de canal, els tres clients continuen amb la mateixa IP i el
+      ping a la porta d'enllaç respon.</li>
+    <li>Amb el rang retallat a dues adreces, dos clients tenen IP correcta i el tercer
+      es queda sense: el seu <code>ipconfig</code> ho mostra.</li>
+    <li>Els dos SSID són visibles alhora des d'un client, i el client nou es connecta al
+      de convidats sense demanar cap clau.</li>
+    <li>El client de convidats no fa servir la clau de la xarxa principal en cap moment.</li>
+    <li>Tens un fitxer desat, o una captura, per a cadascun dels quatre escenaris.</li>
+  </ul>
+</div>
+
+<!-- ============ PROBLEMES ============ -->
+<div class="cq-block" data-kind="problemes">
+  <h2>Si alguna cosa no va</h2>
+  <dl class="cq-issues">
+    <dt>El tercer client rep adreça igualment</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> El rang no s'ha retallat de veritat, o un client
+        conserva l'adreça d'abans del canvi.</p>
+      <p><span class="lbl">Solució</span> Revisa el nombre màxim d'usuaris i força els
+        clients a demanar adreça de nou.</p>
+    </dd>
+    <dt>Els clients cauen en canviar de canal</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> És normal: es tornen a associar en uns segons.</p>
+      <p><span class="lbl">Solució</span> Espera't i comprova la IP: si canvia de xarxa,
+        el problema és un altre.</p>
+    </dd>
+    <dt>El client de convidats no arriba a connectar-se</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> El punt d'accés no està connectat a un port
+        Ethernet de l'encaminador, o el SSID és igual que el principal.</p>
+      <p><span class="lbl">Solució</span> Comprova el cable i posa-li un SSID clarament
+        diferent.</p>
+    </dd>
+  </dl>
+</div>
+
+<!-- ============ LLIURAMENT ============ -->
+<div class="cq-block" data-kind="lliurament">
+  <h2>Què has d'entregar</h2>
+  <p>
+    Un document tècnic amb els quatre escenaris. De cadascun: què has canviat, la captura
+    que demostra l'efecte i dues o tres línies explicant per què passa.
+  </p>
+  <p>
+    Respon-hi també, en prosa: <strong>per què una xarxa de convidats oberta pot ser una
+    decisió raonable en una empresa, i què s'hi ha de garantir perquè ho sigui?</strong>
   </p>
 </div>
 
 
+<!-- ============ CURRÍCULUM ============ -->
+<div class="cq-block" data-kind="currículum">
+  <h2>Al currículum</h2>
+  <p><span class="lbl">CA 7.2</span> Reconeix els protocols, modes de funcionament i principals paràmetres de configuració del punt d'accés.</p>
+  <p><span class="lbl">CA 7.3</span> Selecciona la configuració més idònia sobre diferents escenaris de prova.</p>
+  <p><span class="lbl">CA 7.4</span> Estableix un mecanisme adequat de seguretat per a les comunicacions sense fils.</p>
+</div>
+
 <!-- === PEU DE NAVEGACIÓ INICI === -->
 <nav class="cq-pager">
-  <a class="prev" href="../RA3/index.html">
-    <span class="dir">Anterior · RA3</span>
-    <span class="ttl">RA3 · Instal·lació de serveis de transferència de fitxers</span></a>
-  <a class="next" href="../RA5/index.html">
-    <span class="dir">Següent · RA5</span>
-    <span class="ttl">RA5 · Gestió de servidors web</span></a>
+  <a class="prev" href="a7-1-la-xarxa-sense-fils-de-l-aula.html">
+    <span class="dir">Anterior · A7.1</span>
+    <span class="ttl">La xarxa sense fils de l'aula</span></a>
+  <a class="next" href="a7-3-cobertura-real.html">
+    <span class="dir">Següent · A7.3</span>
+    <span class="ttl">Cobertura real</span></a>
 </nav>
 <!-- === PEU DE NAVEGACIÓ FI === -->
 

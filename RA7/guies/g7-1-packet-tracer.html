@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>RA4 · Correu electrònic — Serveis en Xarxa (0227)</title>
+<title>G7.1 · Guia: Packet Tracer sense fils — Serveis en Xarxa (0227)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -511,103 +511,305 @@
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
-    <a href="../index.html">‹ Serveis en Xarxa (0227)</a>
-    <span class="pos">RA4 · 4/8</span>
+    <a href="../index.html">‹ RA7 · Desplegament de xarxes sense fils segures</a>
+    <span class="pos">G7.1 · 4/7</span>
   </div>
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
+
 <header class="cq-header">
-  <div class="eyebrow">CFGM SMX · Mòdul 0227</div>
-  <h1>Serveis en Xarxa</h1>
-  <p class="lede">RA4 · Gestió de servidors de correu electrònic</p>
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA7 · G7.1</div>
+  <h1>Guia: Packet Tracer sense fils</h1>
+  <p class="lede">Manual de l'encaminador sense fil i del punt d'accés del simulador.</p>
 </header>
 
-<div class="cq-block" data-kind="teoria">
-  <h2>Teoria</h2>
-  <p>Expliquen com funciona el servei de correu.</p>
-  <ul class="cq-index">
-    <li><a href="teoria/t4-1-com-viatja-un-correu.html">
-      <span class="ref">T4.1</span>
-      <span class="ttl">Com viatja un correu electrònic
-        <span class="sub">MUA, MTA, MDA, SMTP, IMAP i el registre MX</span></span></a></li>
-    <li><a href="teoria/t4-2-servidor-de-correu.html">
-      <span class="ref">T4.2</span>
-      <span class="ttl">Com és per dins un servidor de correu
-        <span class="sub">Peces separades o servei únic, ports i certificats</span></span></a></li>
-    <li><a href="teoria/t4-3-alies-imap-i-abus.html">
-      <span class="ref">T4.3</span>
-      <span class="ttl">Àlies, IMAP i usos indeguts
-        <span class="sub">Recollida remota i tancar el relay obert</span></span></a></li>
+<!-- ============ 1 · OBJECTIUS ============ -->
+<div class="cq-block" data-kind="objectius">
+  <h2>Què hi ha en aquesta guia</h2>
+  <p>Documentació oficial: <a href="https://tutorials.ptnetacad.net/">tutorials.ptnetacad.net</a>,
+  l'ajuda del propi Packet Tracer.</p>
+  <ul>
+    <li>Punt de partida: Packet Tracer obert amb un espai de treball buit.</li>
+    <li>És el manual dels aparells sense fils del simulador: l'encaminador
+    <code>WRT300N</code>, el punt d'accés i els clients.</li>
+    <li>Cobreix la xarxa interna, el SSID, la seguretat i la connexió dels clients.</li>
   </ul>
 </div>
 
-<div class="cq-block" data-kind="guies">
-  <h2>Guies</h2>
-  <ul class="cq-index">
-    <li><a href="guies/g4-1-stalwart.html">
-      <span class="ref">G4.1</span>
-      <span class="ttl">Guia: Stalwart
-        <span class="sub">Instal·lació, assistent, comptes i àlies</span></span></a></li>
-    <li><a href="guies/g4-2-thunderbird.html">
-      <span class="ref">G4.2</span>
-      <span class="ttl">Guia: Thunderbird
-        <span class="sub">Compte manual amb 465, 993 i certificat autofirmat</span></span></a></li>
-  </ul>
-</div>
-
-<div class="cq-block" data-kind="activitats">
-  <h2>Activitats</h2>
-  <p>
-    Cada activitat es fa sobre una <strong>màquina nova</strong> a isardVDI, amb les targetes
-    <code>puigcastellar1</code> i <code>personal1</code>. La xarxa interna d'aquest RA és la
-    <code>192.168.1.0/24</code>.
-  </p>
-  <ul class="cq-index">
-    <li><a href="activitats/a4-1-servidor-de-correu.html">
-      <span class="ref">A4.1</span>
-      <span class="ttl">El correu intern del centre
-        <span class="sub">Servidor propi i dos comptes que es parlen</span></span></a></li>
-    <li><a href="activitats/a4-2-alies-i-abus.html">
-      <span class="ref">A4.2</span>
-      <span class="ttl">Bústia compartida i porta tancada
-        <span class="sub">Àlies, client gràfic i prova de relay obert</span></span></a></li>
-  </ul>
-</div>
-
-<div class="cq-block" data-kind="ordre recomanat">
-  <h2>En quin ordre fer-ho</h2>
-  <p>
-    Primer entens el servei, després tens el manual a mà per fer les activitats.</p>
+<!-- ============ 2 · REFERÈNCIA · ELS APARELLS ============ -->
+<div class="cq-block" data-kind="referència">
+  <h2>Quin aparell és cada cosa</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
-      <thead><tr><th>Llegeix</th><th>Tingues a mà</th><th>Fes</th></tr></thead>
+      <thead><tr><th>Aparell</th><th>On és al panell</th><th>Què fa</th></tr></thead>
       <tbody>
-        <tr><td><a class="cq-ref" href="teoria/t4-1-com-viatja-un-correu.html">T4.1</a> · <a class="cq-ref" href="teoria/t4-2-servidor-de-correu.html">T4.2</a></td><td><a class="cq-ref" href="guies/g4-1-stalwart.html">G4.1</a> · <a class="cq-ref" href="guies/g4-2-thunderbird.html">G4.2</a></td><td><a class="cq-ref" href="activitats/a4-1-servidor-de-correu.html">A4.1</a> — el correu intern del centre</td></tr>
-        <tr><td><a class="cq-ref" href="teoria/t4-3-alies-imap-i-abus.html">T4.3</a></td><td><a class="cq-ref" href="guies/g4-1-stalwart.html">G4.1</a> · <a class="cq-ref" href="guies/g4-2-thunderbird.html">G4.2</a></td><td><a class="cq-ref" href="activitats/a4-2-alies-i-abus.html">A4.2</a> — bústia compartida i porta tancada</td></tr>
+        <tr><td><code>WRT300N</code></td><td>Network Devices › Wireless Devices</td><td>Encaminador sense fil: AP, commutador, DHCP i NAT</td></tr>
+        <tr><td><code>AccessPoint-PT</code></td><td>Network Devices › Wireless Devices</td><td>Punt d'accés: pont entre l'aire i el cable</td></tr>
+        <tr><td><code>Laptop-PT</code></td><td>End Devices</td><td>Client; ve amb targeta de cable i cal canviar-li el mòdul</td></tr>
+        <tr><td><code>Smartphone</code>, <code>Tablet</code></td><td>End Devices</td><td>Clients sense fils de sèrie</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    Els aparells es configuren fent-hi clic. L'encaminador té una pestanya
+    <strong>GUI</strong> que imita el panell web d'un router domèstic; el punt d'accés i
+    els clients es configuren des de la pestanya <strong>Config</strong>.
+  </p>
+</div>
+
+<!-- ============ 3 · REFERÈNCIA · LES PESTANYES DE LA GUI ============ -->
+<div class="cq-block" data-kind="referència">
+  <h2>Les pestanyes de la GUI de l'encaminador</h2>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Pestanya</th><th>Què s'hi configura</th></tr></thead>
+      <tbody>
+        <tr><td>Setup › Basic Setup</td><td>Connexió d'Internet, IP de la xarxa interna i servidor DHCP</td></tr>
+        <tr><td>Wireless › Basic Wireless Settings</td><td>Nom de la xarxa (SSID) i canal</td></tr>
+        <tr><td>Wireless › Wireless Security</td><td>Mode de seguretat i clau</td></tr>
+        <tr><td>Wireless › Wireless MAC Filter</td><td>Llista d'adreces MAC admeses o bloquejades</td></tr>
+        <tr><td>Access Restrictions</td><td>Polítiques d'accés a Internet</td></tr>
+        <tr><td>Administration</td><td>Contrasenya del panell i valors de fàbrica</td></tr>
+        <tr><td>Status</td><td>Estat de l'encaminador, de la xarxa local i de la sense fils</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="cq-note">
+    <span class="lbl">Save Settings</span>
+    Cada pestanya té el seu botó <strong>Save Settings</strong> al final de la pàgina.
+    Si en canvies de pestanya sense prémer-lo, els canvis d'aquella pantalla es perden
+    sense cap avís.
+  </div>
+</div>
+
+<!-- ============ 4 · PAS A PAS · XARXA INTERNA I DHCP ============ -->
+<div class="cq-block" data-kind="pas a pas">
+  <h2>La xarxa interna i el DHCP</h2>
+  <ol class="cq-steps">
+    <li>
+      <p><strong>Posa l'encaminador a l'espai de treball</strong>: Network Devices ›
+      Wireless Devices › <code>WRT300N</code>. Fes-hi clic i ves a la pestanya
+      <strong>GUI</strong>.</p>
+    </li>
+    <li>
+      <p><strong>A Setup › Basic Setup, apartat Network Setup</strong>, escriu l'adreça
+      de l'encaminador dins de la xarxa interna i la màscara:</p>
+<pre><span class="c">IP Address    192.168.1.1</span>
+<span class="c">Subnet Mask   255.255.255.0</span></pre>
+    </li>
+    <li>
+      <p><strong>Just a sota, a DHCP Server Settings</strong>, deixa el servidor a
+      <code>Enabled</code> i acota el rang:</p>
+<pre><span class="c">Start IP Address         192.168.1.100</span>
+<span class="c">Maximum number of Users  50</span></pre>
+      <p>El rang no s'escriu amb l'adreça final: es dona la primera i quantes n'hi
+      caben. Amb aquests valors va de la <code>.100</code> a la <code>.149</code>.</p>
+    </li>
+    <li>
+      <p><strong>Prem Save Settings</strong>, al final de la pàgina.</p>
+    </li>
+  </ol>
+</div>
+
+<!-- ============ 5 · PAS A PAS · SSID I CANAL ============ -->
+<div class="cq-block" data-kind="pas a pas">
+  <h2>El nom de la xarxa i el canal</h2>
+  <ol class="cq-steps">
+    <li>
+      <p><strong>Ves a Wireless › Basic Wireless Settings.</strong></p>
+    </li>
+    <li>
+      <p><strong>Escriu el nom de la xarxa</strong> a <code>Network Name (SSID)</code>.
+      Substitueix el nom que ve de sèrie: deixar-lo posat és el primer error d'un
+      desplegament real.</p>
+    </li>
+    <li>
+      <p><strong>Tria el canal</strong> a <code>Standard Channel</code>. A la banda de
+      2.4 GHz, l'1, el 6 o l'11. L'opció <code>Auto</code> el deixa triar a l'aparell.</p>
+    </li>
+    <li>
+      <p><strong>Prem Save Settings.</strong> El SSID nou ja s'emet: els clients de
+      l'espai de treball el veuran a la seva llista de xarxes.</p>
+    </li>
+  </ol>
+</div>
+
+<!-- ============ 6 · PAS A PAS · SEGURETAT ============ -->
+<div class="cq-block" data-kind="pas a pas">
+  <h2>Posar seguretat a la xarxa</h2>
+  <ol class="cq-steps">
+    <li>
+      <p><strong>Ves a Wireless › Wireless Security.</strong> De sèrie,
+      <code>Security Mode</code> està a <code>Disabled</code>: la xarxa és oberta.</p>
+    </li>
+    <li>
+      <p><strong>Tria el mode.</strong> La llista és sempre la mateixa:</p>
+<pre><span class="c">Disabled · WEP · WPA Personal · WPA2 Personal</span>
+<span class="c">WPA Enterprise · WPA2 Enterprise</span></pre>
+      <p>Per a una xarxa amb clau compartida, <code>WPA2 Personal</code>.</p>
+    </li>
+    <li>
+      <p><strong>Deixa el xifratge a <code>AES</code></strong> i escriu la clau a
+      <code>Passphrase</code>.</p>
+    </li>
+    <li>
+      <p><strong>Prem Save Settings.</strong> Els clients que ja estaven connectats
+      cauen: s'hi han de tornar a connectar amb la clau nova.</p>
+    </li>
+  </ol>
+  <div class="cq-note">
+    <span class="lbl">Personal i Enterprise</span>
+    Els modes <code>Enterprise</code> demanen l'adreça i la clau d'un servidor RADIUS;
+    els <code>Personal</code>, només una contrasenya compartida.
+  </div>
+</div>
+
+<!-- ============ 7 · PAS A PAS · CONNECTAR UN PORTÀTIL ============ -->
+<div class="cq-block" data-kind="pas a pas">
+  <h2>Connectar un portàtil a la xarxa</h2>
+  <ol class="cq-steps">
+    <li>
+      <p><strong>Posa-li la targeta sense fils.</strong> El portàtil ve amb una targeta
+      de cable. Fes-hi clic, ves a <strong>Physical</strong>, <strong>apaga'l</strong>
+      amb l'interruptor, arrossega la targeta de cable fora del lateral i posa-hi el
+      mòdul <code>WPC300N</code>. Torna a encendre'l.</p>
+    </li>
+    <li>
+      <p><strong>Ves a Desktop › PC Wireless</strong> i obre la pestanya
+      <strong>Connect</strong>: hi surten les xarxes que detecta.</p>
+    </li>
+    <li>
+      <p><strong>Tria el teu SSID i prem Connect.</strong> Si la xarxa té seguretat,
+      escriu-hi la clau i confirma.</p>
+    </li>
+    <li>
+      <p><strong>Comprova la configuració rebuda</strong> a Desktop › Command Prompt:</p>
+<pre>ipconfig
+<span class="o">IP Address....................: 192.168.1.100</span>
+<span class="o">Subnet Mask...................: 255.255.255.0</span>
+<span class="o">Default Gateway...............: 192.168.1.1</span></pre>
+    </li>
+  </ol>
+  <div class="cq-note">
+    <span class="lbl">Mòbils i tauletes</span>
+    El <code>Smartphone</code> i la <code>Tablet</code> ja porten targeta sense fils:
+    s'hi connecten des de Config › Wireless0, sense canviar cap mòdul.
+  </div>
+</div>
+
+<!-- ============ 8 · PAS A PAS · AFEGIR UN PUNT D'ACCÉS ============ -->
+<div class="cq-block" data-kind="pas a pas">
+  <h2>Afegir un punt d'accés a la mateixa xarxa</h2>
+  <ol class="cq-steps">
+    <li>
+      <p><strong>Posa un <code>AccessPoint-PT</code></strong> a l'espai de treball.</p>
+    </li>
+    <li>
+      <p><strong>Connecta'l amb cable de coure</strong> des del seu port
+      <code>Port 0</code> fins a un dels ports <strong>Ethernet</strong> de
+      l'encaminador. No facis servir el port <code>Internet</code>: aquell és la
+      sortida cap a fora.</p>
+    </li>
+    <li>
+      <p><strong>Configura'l a Config › Port 1</strong>, la seva interfície sense fils:
+      hi tens el <code>SSID</code>, el <code>Channel</code> i l'apartat
+      <code>Authentication</code>, amb les opcions <code>Disabled</code>,
+      <code>WEP</code>, <code>WPA-PSK</code>, <code>WPA2-PSK</code> i les d'empresa.</p>
+    </li>
+    <li>
+      <p><strong>Posa-li un SSID diferent</strong> del de l'encaminador i un canal que
+      no se solapi amb el seu. Els clients que s'hi connectin rebran l'adreça del
+      mateix DHCP de l'encaminador: el punt d'accés no en reparteix cap.</p>
+    </li>
+  </ol>
+</div>
+
+<!-- ============ 9 · COMPROVACIÓ ============ -->
+<div class="cq-block" data-kind="comprovació">
+  <h2>Comprovació de conjunt</h2>
+  <p>Tot des del Command Prompt d'un client connectat per l'aire:</p>
+<pre>ipconfig
+<span class="c">l'adreça ha de caure dins del rang del DHCP</span>
+
+ping 192.168.1.1
+<span class="c">la porta d'enllaç ha de respondre</span>
+
+ping 192.168.1.101
+<span class="c">un altre client de la mateixa xarxa</span></pre>
+  <p>
+    Si l'adreça comença per <code>169.254</code>, el client no ha rebut resposta del
+    DHCP: està associat a la xarxa, però sense configuració.
+  </p>
+</div>
+
+<!-- ============ 10 · BONES PRÀCTIQUES ============ -->
+<div class="cq-block" data-kind="bones pràctiques">
+  <h2>Criteris professionals</h2>
+  <ul>
+    <li><strong>Save Settings a cada pestanya</strong>, abans de canviar-ne.</li>
+    <li><strong>Canvia el SSID de sèrie</strong>: delata el model de l'aparell.</li>
+    <li><strong>Configura la seguretat abans de connectar clients</strong>, i t'estalvies reconnectar-los.</li>
+    <li><strong>Comprova sempre des del client</strong>, no des del panell de l'aparell.</li>
+  </ul>
+</div>
+
+<!-- ============ 11 · PROBLEMES ============ -->
+<div class="cq-block" data-kind="problemes">
+  <h2>Problemes habituals</h2>
+  <dl class="cq-issues">
+    <dt>El portàtil no veu cap xarxa</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Encara porta la targeta de cable: sense mòdul sense fils no hi ha res a escoltar.</p>
+      <p><span class="lbl">Solució</span> Apaga'l, canvia el mòdul per <code>WPC300N</code> i torna a encendre'l.</p>
+    </dd>
+    <dt>El canvi de configuració no té cap efecte</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> S'ha canviat de pestanya sense prémer <code>Save Settings</code>.</p>
+      <p><span class="lbl">Solució</span> Torna-hi, escriu-ho de nou i desa abans de moure't.</p>
+    </dd>
+    <dt>El client s'associa però no té IP</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> El servidor DHCP està desactivat, o el rang és massa curt i ja s'ha esgotat.</p>
+      <p><span class="lbl">Solució</span> Revisa DHCP Server Settings i amplia el nombre màxim d'usuaris.</p>
+    </dd>
+    <dt>El client no accepta la clau</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> El mode de seguretat del client i el de l'aparell no coincideixen.</p>
+      <p><span class="lbl">Solució</span> Han de coincidir tots dos: mode i clau, exactament iguals.</p>
+    </dd>
+  </dl>
+</div>
+
+<!-- ============ 12 · RESUM ============ -->
+<div class="cq-block" data-kind="resum">
+  <h2>Fitxa ràpida</h2>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Què vols fer</th><th>On es fa</th></tr></thead>
+      <tbody>
+        <tr><td>IP de la xarxa interna</td><td>GUI › Setup › Basic Setup › Network Setup</td></tr>
+        <tr><td>Rang del DHCP</td><td>GUI › Setup › Basic Setup › DHCP Server Settings</td></tr>
+        <tr><td>Nom de la xarxa i canal</td><td>GUI › Wireless › Basic Wireless Settings</td></tr>
+        <tr><td>Seguretat i clau</td><td>GUI › Wireless › Wireless Security</td></tr>
+        <tr><td>Filtratge per MAC</td><td>GUI › Wireless › Wireless MAC Filter</td></tr>
+        <tr><td>Estat de la xarxa sense fils</td><td>GUI › Status › Wireless Network</td></tr>
+        <tr><td>Configurar un punt d'accés</td><td>Config › Port 1</td></tr>
+        <tr><td>Connectar un portàtil</td><td>Desktop › PC Wireless › Connect</td></tr>
+        <tr><td>Veure la IP d'un client</td><td>Desktop › Command Prompt › <code>ipconfig</code></td></tr>
       </tbody>
     </table>
   </div>
 </div>
 
-<div class="cq-block" data-kind="recordatori">
-  <h2>Sense DNS no hi ha correu</h2>
-  <p>
-    Aquest RA es recolza en el <a class="cq-ref" href="../RA2/index.html">RA2</a>: un servidor de correu només rep missatges
-    d'altres dominis si el DNS anuncia el seu <strong>registre MX</strong>. Si tens dubtes de
-    com es publica un registre en una zona, torna a la <a class="cq-ref" href="../RA2/teoria/t2-4-primari-secundari.html">T2.4</a> abans de començar.
-  </p>
-</div>
-
-
 <!-- === PEU DE NAVEGACIÓ INICI === -->
 <nav class="cq-pager">
-  <a class="prev" href="../RA3/index.html">
-    <span class="dir">Anterior · RA3</span>
-    <span class="ttl">RA3 · Instal·lació de serveis de transferència de fitxers</span></a>
-  <a class="next" href="../RA5/index.html">
-    <span class="dir">Següent · RA5</span>
-    <span class="ttl">RA5 · Gestió de servidors web</span></a>
+  <a class="prev" href="../teoria/t7-3-seguretat-sense-fils.html">
+    <span class="dir">Anterior · T7.3</span>
+    <span class="ttl">Seguretat de les xarxes sense fils</span></a>
+  <a class="next" href="../activitats/a7-1-la-xarxa-sense-fils-de-l-aula.html">
+    <span class="dir">Següent · A7.1</span>
+    <span class="ttl">La xarxa sense fils de l'aula</span></a>
 </nav>
 <!-- === PEU DE NAVEGACIÓ FI === -->
 

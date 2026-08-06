@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>RA4 · Correu electrònic — Serveis en Xarxa (0227)</title>
+<title>T7.1 · Fonaments de les xarxes sense fils — Serveis en Xarxa (0227)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -511,103 +511,253 @@
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
-    <a href="../index.html">‹ Serveis en Xarxa (0227)</a>
-    <span class="pos">RA4 · 4/8</span>
+    <a href="../index.html">‹ RA7 · Desplegament de xarxes sense fils segures</a>
+    <span class="pos">T7.1 · 1/7</span>
   </div>
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
+
 <header class="cq-header">
-  <div class="eyebrow">CFGM SMX · Mòdul 0227</div>
-  <h1>Serveis en Xarxa</h1>
-  <p class="lede">RA4 · Gestió de servidors de correu electrònic</p>
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA7 · T7.1</div>
+  <h1>Fonaments de les xarxes sense fils</h1>
+  <p class="lede">Un cable que no es veu, compartit per tothom qui hi és a prop.</p>
 </header>
 
+<!-- ============ 1 · OBJECTIUS ============ -->
+<div class="cq-block" data-kind="objectius">
+  <h2>Què sabràs fer en acabar</h2>
+  <ul>
+    <li>Explicar per què el Wi-Fi és un medi compartit i què hi canvia respecte del cable.</li>
+    <li>Distingir el Wi-Fi d'Internet i dir què aporta cadascun.</li>
+    <li>Triar entre 2.4 GHz, 5 GHz i 6 GHz segons la situació.</li>
+    <li>Dir quins són els canals que no se solapen a 2.4 GHz i per què importa.</li>
+    <li>Enumerar les quatre fases per les quals passa un client fins a tenir IP.</li>
+  </ul>
+</div>
+
+<!-- ============ 2 · MEDI COMPARTIT ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Teoria</h2>
-  <p>Expliquen com funciona el servei de correu.</p>
-  <ul class="cq-index">
-    <li><a href="teoria/t4-1-com-viatja-un-correu.html">
-      <span class="ref">T4.1</span>
-      <span class="ttl">Com viatja un correu electrònic
-        <span class="sub">MUA, MTA, MDA, SMTP, IMAP i el registre MX</span></span></a></li>
-    <li><a href="teoria/t4-2-servidor-de-correu.html">
-      <span class="ref">T4.2</span>
-      <span class="ttl">Com és per dins un servidor de correu
-        <span class="sub">Peces separades o servei únic, ports i certificats</span></span></a></li>
-    <li><a href="teoria/t4-3-alies-imap-i-abus.html">
-      <span class="ref">T4.3</span>
-      <span class="ttl">Àlies, IMAP i usos indeguts
-        <span class="sub">Recollida remota i tancar el relay obert</span></span></a></li>
-  </ul>
-</div>
-
-<div class="cq-block" data-kind="guies">
-  <h2>Guies</h2>
-  <ul class="cq-index">
-    <li><a href="guies/g4-1-stalwart.html">
-      <span class="ref">G4.1</span>
-      <span class="ttl">Guia: Stalwart
-        <span class="sub">Instal·lació, assistent, comptes i àlies</span></span></a></li>
-    <li><a href="guies/g4-2-thunderbird.html">
-      <span class="ref">G4.2</span>
-      <span class="ttl">Guia: Thunderbird
-        <span class="sub">Compte manual amb 465, 993 i certificat autofirmat</span></span></a></li>
-  </ul>
-</div>
-
-<div class="cq-block" data-kind="activitats">
-  <h2>Activitats</h2>
+  <h2>El cable que no hi és</h2>
   <p>
-    Cada activitat es fa sobre una <strong>màquina nova</strong> a isardVDI, amb les targetes
-    <code>puigcastellar1</code> i <code>personal1</code>. La xarxa interna d'aquest RA és la
-    <code>192.168.1.0/24</code>.
+    Una xarxa sense fils fa la mateixa feina que un cable de xarxa: transportar trames
+    entre dispositius. El que canvia és el medi. L'aire no és de ningú i el fa servir
+    tothom alhora, així que només pot parlar-hi un dispositiu a la vegada: la resta
+    espera el seu torn.
   </p>
-  <ul class="cq-index">
-    <li><a href="activitats/a4-1-servidor-de-correu.html">
-      <span class="ref">A4.1</span>
-      <span class="ttl">El correu intern del centre
-        <span class="sub">Servidor propi i dos comptes que es parlen</span></span></a></li>
-    <li><a href="activitats/a4-2-alies-i-abus.html">
-      <span class="ref">A4.2</span>
-      <span class="ttl">Bústia compartida i porta tancada
-        <span class="sub">Àlies, client gràfic i prova de relay obert</span></span></a></li>
-  </ul>
+  <p>
+    D'aquí surten les tres conseqüències que expliquen gairebé tots els problemes de
+    Wi-Fi. La velocitat anunciada es <strong>reparteix</strong> entre qui està
+    connectat. Qualsevol altra emissió a la mateixa freqüència
+    <strong>interfereix</strong>. I com que el senyal viatja per l'aire, el pot
+    <strong>escoltar</strong> qualsevol que hi sigui a prop.
+  </p>
 </div>
 
-<div class="cq-block" data-kind="ordre recomanat">
-  <h2>En quin ordre fer-ho</h2>
+<!-- ============ 3 · WI-FI NO ÉS INTERNET ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h2>Wi-Fi no vol dir Internet</h2>
   <p>
-    Primer entens el servei, després tens el manual a mà per fer les activitats.</p>
+    El Wi-Fi és la manera d'arribar a la xarxa local, no la connexió a Internet. Són
+    dues coses independents: es pot estar connectat al Wi-Fi de casa amb la línia
+    d'Internet caiguda, i tot el que hi ha a la xarxa local —una impressora, un
+    servidor de fitxers— continua funcionant.
+  </p>
+  <p>
+    Quan algú diu «no hi ha Wi-Fi» normalment vol dir una de tres coses: que no veu la
+    xarxa, que no s'hi pot connectar, o que s'hi ha connectat però no surt a Internet.
+    Distingir-les és el primer pas de qualsevol diagnòstic.
+  </p>
+</div>
+
+<!-- ============ 4 · BANDES ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h2>Les bandes: 2.4, 5 i 6 GHz</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
-      <thead><tr><th>Llegeix</th><th>Tingues a mà</th><th>Fes</th></tr></thead>
+      <thead><tr><th>Banda</th><th>Avantatge</th><th>Inconvenient</th></tr></thead>
       <tbody>
-        <tr><td><a class="cq-ref" href="teoria/t4-1-com-viatja-un-correu.html">T4.1</a> · <a class="cq-ref" href="teoria/t4-2-servidor-de-correu.html">T4.2</a></td><td><a class="cq-ref" href="guies/g4-1-stalwart.html">G4.1</a> · <a class="cq-ref" href="guies/g4-2-thunderbird.html">G4.2</a></td><td><a class="cq-ref" href="activitats/a4-1-servidor-de-correu.html">A4.1</a> — el correu intern del centre</td></tr>
-        <tr><td><a class="cq-ref" href="teoria/t4-3-alies-imap-i-abus.html">T4.3</a></td><td><a class="cq-ref" href="guies/g4-1-stalwart.html">G4.1</a> · <a class="cq-ref" href="guies/g4-2-thunderbird.html">G4.2</a></td><td><a class="cq-ref" href="activitats/a4-2-alies-i-abus.html">A4.2</a> — bústia compartida i porta tancada</td></tr>
+        <tr><td>2.4 GHz</td><td>Arriba lluny i travessa millor les parets</td><td>Poc espai i molt saturada: microones, Bluetooth, veïns</td></tr>
+        <tr><td>5 GHz</td><td>Molts més canals i més velocitat</td><td>Menys abast i pitjor amb obstacles</td></tr>
+        <tr><td>6 GHz</td><td>Espai nou i pràcticament buit</td><td>Abast curt i només amb equips recents (Wi-Fi 6E i posteriors)</td></tr>
       </tbody>
     </table>
   </div>
-</div>
-
-<div class="cq-block" data-kind="recordatori">
-  <h2>Sense DNS no hi ha correu</h2>
   <p>
-    Aquest RA es recolza en el <a class="cq-ref" href="../RA2/index.html">RA2</a>: un servidor de correu només rep missatges
-    d'altres dominis si el DNS anuncia el seu <strong>registre MX</strong>. Si tens dubtes de
-    com es publica un registre en una zona, torna a la <a class="cq-ref" href="../RA2/teoria/t2-4-primari-secundari.html">T2.4</a> abans de començar.
+    La regla pràctica: com més alta és la freqüència, més velocitat i menys abast.
+    Per a un magatzem gran o un dispositiu llunyà, 2.4 GHz. Per a una aula amb molta
+    gent i l'AP a la vista, 5 o 6 GHz.
   </p>
 </div>
 
+<!-- ============ 5 · CANALS ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h2>Canals i interferències</h2>
+  <p>
+    Cada banda es reparteix en <strong>canals</strong>. A 2.4 GHz n'hi ha tretze, però
+    són tan amples que se sobreposen entre ells: només <strong>1, 6 i 11</strong> no
+    se solapen. Dos punts d'accés en canals veïns —el 4 i el 6— es fan més mal que si
+    compartissin el mateix canal: se senten a mitges i no es poden repartir el torn.
+  </p>
+  <p>
+    Si dos AP comparteixen canal, es reparteixen el temps i tot va més lent, però
+    funciona. Per això la planificació d'una zona amb diversos AP consisteix a
+    alternar 1, 6 i 11 de manera que dos veïns mai coincideixin.
+  </p>
+</div>
+
+<!-- ============ 6 · ESTÀNDARDS ============ -->
+<div class="cq-block" data-kind="teoria">
+  <h2>L'estàndard no ho és tot</h2>
+  <p>
+    Els estàndards 802.11 van pujant de xifra —Wi-Fi 5, Wi-Fi 6, Wi-Fi 6E, Wi-Fi 7— i
+    cadascun promet més velocitat. Aquesta xifra és el màxim teòric de laboratori:
+    un dispositiu sol, a un metre i sense ningú més emetent.
+  </p>
+  <p>
+    A la realitat mana la velocitat més baixa dels dos extrems, i un client vell
+    obliga tota la conversa a anar al seu ritme. Comprar l'últim punt d'accés no
+    millora res si els portàtils són de fa vuit anys, si l'AP està dins d'un armari o
+    si hi ha vint veïns al mateix canal.
+  </p>
+</div>
+
+<!-- ============ 7 · OBSERVACIÓ ============ -->
+<div class="cq-block" data-kind="observació">
+  <h2>Què passa quan et connectes</h2>
+  <p>
+    Entre triar la xarxa i poder navegar hi ha quatre passos, i cadascun pot fallar
+    per un motiu diferent:
+  </p>
+  <ol>
+    <li><strong>Detecció</strong>: el client escolta les emissions dels AP i en llegeix el SSID.</li>
+    <li><strong>Autenticació</strong>: demostra que sap la clau (o no cal, si la xarxa és oberta).</li>
+    <li><strong>Associació</strong>: l'AP l'accepta i queda enganxat a aquesta xarxa.</li>
+    <li><strong>Configuració</strong>: el DHCP li dona IP, màscara, porta d'enllaç i DNS.</li>
+  </ol>
+  <p>
+    Un client «connectat però sense Internet» sol haver superat els tres primers
+    passos i haver fallat el quart: està associat, però sense configuració de xarxa.
+  </p>
+</div>
+
+<!-- ============ 8 · BONES PRÀCTIQUES ============ -->
+<div class="cq-block" data-kind="bones pràctiques">
+  <h2>Criteris professionals</h2>
+  <ul>
+    <li><strong>Mira l'aire abans de configurar</strong>: quins SSID hi ha i quins canals ocupen.</li>
+    <li><strong>A 2.4 GHz, només 1, 6 o 11</strong>: qualsevol altre canal molesta els veïns i a tu.</li>
+    <li><strong>Compta els clients, no els megabits</strong>: la velocitat es reparteix.</li>
+    <li><strong>Col·loca l'AP a la vista</strong>: dins d'un armari metàl·lic no hi ha estàndard que salvi.</li>
+  </ul>
+</div>
+
+<!-- ============ 9 · PROBLEMES ============ -->
+<div class="cq-block" data-kind="problemes">
+  <h2>Errors habituals</h2>
+  <dl class="cq-issues">
+    <dt>Confondre el Wi-Fi amb la connexió a Internet</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> A casa, el mateix aparell fa les dues feines.</p>
+      <p><span class="lbl">Solució</span> El Wi-Fi et porta a la xarxa local; a Internet t'hi porta la línia contractada.</p>
+    </dd>
+    <dt>Triar el canal 3 o el 9 «perquè estan lliures»</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Es mira quin número no fa servir ningú, no quin espai ocupa.</p>
+      <p><span class="lbl">Solució</span> A 2.4 GHz els canals se solapen: fora de l'1, el 6 i l'11 es molesta a tothom.</p>
+    </dd>
+    <dt>Esperar la velocitat de la caixa</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> La xifra anunciada és un màxim teòric amb un sol client.</p>
+      <p><span class="lbl">Solució</span> Es reparteix entre tothom i baixa amb la distància, els obstacles i els clients antics.</p>
+    </dd>
+  </dl>
+</div>
+
+<!-- ============ 10 · RESUM ============ -->
+<div class="cq-block" data-kind="resum">
+  <h2>Resum</h2>
+  <ul>
+    <li>L'aire és un <strong>medi compartit</strong>: es reparteix, interfereix i s'escolta.</li>
+    <li><strong>Wi-Fi ≠ Internet</strong>: el Wi-Fi és l'accés a la xarxa local.</li>
+    <li><strong>2.4 GHz</strong> arriba lluny; <strong>5 i 6 GHz</strong> van més ràpid i arriben menys.</li>
+    <li>A 2.4 GHz només <strong>1, 6 i 11</strong> no se solapen.</li>
+    <li>Connectar-se són quatre passos: detecció, autenticació, associació i DHCP.</li>
+    <li>Següent: <a class="cq-ref" href="t7-2-punt-d-acces-i-encaminador.html">T7.2</a>, l'aparell que emet aquesta xarxa.</li>
+  </ul>
+</div>
+
+<!-- ============ 11 · QUIZ ============ -->
+<div class="cq-block" data-kind="quiz">
+  <h2>Comprova el que has après</h2>
+
+  <div class="cq-question" data-id="t7-1-medi" data-type="single">
+    <div class="statement">Per què la velocitat d'una xarxa Wi-Fi baixa quan s'hi connecta més gent?</div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè el punt d'accés es queda sense memòria</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Perquè l'aire és un medi compartit i el temps d'emissió es reparteix</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè el DHCP tarda més a repartir adreces</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè cada client baixa la freqüència de la banda</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
+  </div>
+
+  <div class="cq-question" data-id="t7-1-internet" data-type="single">
+    <div class="statement">Cau la línia d'Internet de casa, però el Wi-Fi del router segueix encès. Què passa?</div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Els dispositius no es poden connectar al Wi-Fi</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Es connecten al Wi-Fi i es veuen entre ells, però no surten a Internet</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El Wi-Fi canvia automàticament de banda</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El DHCP deixa de repartir adreces</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
+  </div>
+
+  <div class="cq-question" data-id="t7-1-canals" data-type="single">
+    <div class="statement">Quins canals de la banda de 2.4 GHz no se solapen entre ells?</div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Del 1 al 13, cap no se solapa</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">L'1, el 6 i l'11</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El 2, el 7 i el 12</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Només els parells</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
+  </div>
+
+  <div class="cq-question" data-id="t7-1-banda" data-type="single">
+    <div class="statement">Un dispositiu és lluny de l'AP i hi ha dues parets pel mig. Quina banda prioritzes?</div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">2.4 GHz, perquè arriba més lluny i travessa millor els obstacles</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">6 GHz, perquè és la més nova</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">5 GHz, perquè té més canals</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">És igual: la banda no afecta l'abast</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
+  </div>
+
+  <div class="cq-question" data-id="t7-1-fases" data-type="single">
+    <div class="statement">Un portàtil apareix connectat a la xarxa però sense accés. Quina fase ha fallat?</div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">La detecció del SSID</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">L'autenticació</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">L'obtenció de configuració per DHCP</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">L'associació amb el punt d'accés</button>
+    <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
+    <div class="cq-feedback" role="status" aria-live="polite"></div>
+  </div>
+</div>
+
+
+<!-- ============ CURRÍCULUM ============ -->
+<div class="cq-block" data-kind="currículum">
+  <h2>Al currículum</h2>
+  <p><span class="lbl">CA 7.2</span> Reconeix els protocols, modes de funcionament i principals paràmetres de configuració del punt d'accés.</p>
+  <p><span class="lbl">CA 7.3</span> Selecciona la configuració més idònia sobre diferents escenaris de prova.</p>
+</div>
 
 <!-- === PEU DE NAVEGACIÓ INICI === -->
 <nav class="cq-pager">
-  <a class="prev" href="../RA3/index.html">
-    <span class="dir">Anterior · RA3</span>
-    <span class="ttl">RA3 · Instal·lació de serveis de transferència de fitxers</span></a>
-  <a class="next" href="../RA5/index.html">
-    <span class="dir">Següent · RA5</span>
-    <span class="ttl">RA5 · Gestió de servidors web</span></a>
+  <a class="prev" href="../index.html">
+    <span class="dir">Torna a · RA7</span>
+    <span class="ttl">RA7 · Desplegament de xarxes sense fils segures</span></a>
+  <a class="next" href="t7-2-punt-d-acces-i-encaminador.html">
+    <span class="dir">Següent · T7.2</span>
+    <span class="ttl">El punt d'accés i l'encaminador sense fil</span></a>
 </nav>
 <!-- === PEU DE NAVEGACIÓ FI === -->
 

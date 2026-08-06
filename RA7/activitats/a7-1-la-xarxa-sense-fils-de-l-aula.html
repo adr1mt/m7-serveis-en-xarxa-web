@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>RA4 · Correu electrònic — Serveis en Xarxa (0227)</title>
+<title>A7.1 · La xarxa sense fils de l'aula — Serveis en Xarxa (0227)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -511,103 +511,182 @@
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
-    <a href="../index.html">‹ Serveis en Xarxa (0227)</a>
-    <span class="pos">RA4 · 4/8</span>
+    <a href="../index.html">‹ RA7 · Desplegament de xarxes sense fils segures</a>
+    <span class="pos">A7.1 · 5/7</span>
   </div>
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
+
 <header class="cq-header">
-  <div class="eyebrow">CFGM SMX · Mòdul 0227</div>
-  <h1>Serveis en Xarxa</h1>
-  <p class="lede">RA4 · Gestió de servidors de correu electrònic</p>
+  <div class="eyebrow">0227 · Serveis en Xarxa · RA7 · A7.1</div>
+  <h1>La xarxa sense fils de l'aula</h1>
+  <p class="lede">Muntar la xarxa sencera al simulador i demostrar-la des dels clients.</p>
 </header>
 
-<div class="cq-block" data-kind="teoria">
-  <h2>Teoria</h2>
-  <p>Expliquen com funciona el servei de correu.</p>
-  <ul class="cq-index">
-    <li><a href="teoria/t4-1-com-viatja-un-correu.html">
-      <span class="ref">T4.1</span>
-      <span class="ttl">Com viatja un correu electrònic
-        <span class="sub">MUA, MTA, MDA, SMTP, IMAP i el registre MX</span></span></a></li>
-    <li><a href="teoria/t4-2-servidor-de-correu.html">
-      <span class="ref">T4.2</span>
-      <span class="ttl">Com és per dins un servidor de correu
-        <span class="sub">Peces separades o servei únic, ports i certificats</span></span></a></li>
-    <li><a href="teoria/t4-3-alies-imap-i-abus.html">
-      <span class="ref">T4.3</span>
-      <span class="ttl">Àlies, IMAP i usos indeguts
-        <span class="sub">Recollida remota i tancar el relay obert</span></span></a></li>
-  </ul>
-</div>
-
-<div class="cq-block" data-kind="guies">
-  <h2>Guies</h2>
-  <ul class="cq-index">
-    <li><a href="guies/g4-1-stalwart.html">
-      <span class="ref">G4.1</span>
-      <span class="ttl">Guia: Stalwart
-        <span class="sub">Instal·lació, assistent, comptes i àlies</span></span></a></li>
-    <li><a href="guies/g4-2-thunderbird.html">
-      <span class="ref">G4.2</span>
-      <span class="ttl">Guia: Thunderbird
-        <span class="sub">Compte manual amb 465, 993 i certificat autofirmat</span></span></a></li>
-  </ul>
-</div>
-
-<div class="cq-block" data-kind="activitats">
-  <h2>Activitats</h2>
+<!-- ============ OBJECTIUS ============ -->
+<div class="cq-block" data-kind="objectius">
+  <h2>Què has de saber abans de començar</h2>
   <p>
-    Cada activitat es fa sobre una <strong>màquina nova</strong> a isardVDI, amb les targetes
-    <code>puigcastellar1</code> i <code>personal1</code>. La xarxa interna d'aquest RA és la
-    <code>192.168.1.0/24</code>.
+    Teories <a class="cq-ref" href="../teoria/t7-1-fonaments-sense-fils.html">T7.1</a> (bandes i canals) i <a class="cq-ref" href="../teoria/t7-2-punt-d-acces-i-encaminador.html">T7.2</a> (què fa cada aparell). La guia <a class="cq-ref" href="../guies/g7-1-packet-tracer.html">G7.1</a> és el
+    manual de tot el que hauràs de tocar al simulador.
   </p>
-  <ul class="cq-index">
-    <li><a href="activitats/a4-1-servidor-de-correu.html">
-      <span class="ref">A4.1</span>
-      <span class="ttl">El correu intern del centre
-        <span class="sub">Servidor propi i dos comptes que es parlen</span></span></a></li>
-    <li><a href="activitats/a4-2-alies-i-abus.html">
-      <span class="ref">A4.2</span>
-      <span class="ttl">Bústia compartida i porta tancada
-        <span class="sub">Àlies, client gràfic i prova de relay obert</span></span></a></li>
-  </ul>
+  <p>
+    Muntaràs de zero la xarxa sense fils d'una aula petita: un encaminador sense fil que
+    reparteix adreces, una xarxa protegida i tres clients connectats per l'aire.
+  </p>
 </div>
 
-<div class="cq-block" data-kind="ordre recomanat">
-  <h2>En quin ordre fer-ho</h2>
+<!-- ============ ESCENARI ============ -->
+<div class="cq-block" data-kind="escenari">
+  <h2>Amb què treballaràs</h2>
   <p>
-    Primer entens el servei, després tens el manual a mà per fer les activitats.</p>
+    Aquesta activitat no es fa a isardVDI: cap màquina virtual del centre té targeta
+    sense fils. Es fa amb <strong>Packet Tracer</strong>, sobre un fitxer nou i buit que
+    guardaràs amb el teu nom.
+  </p>
+  <p>
+    Necessites un encaminador sense fil, dos portàtils i un mòbil o una tauleta. Tot
+    l'escenari viu dins del fitxer del simulador: no hi ha cap aparell real.
+  </p>
+</div>
+
+<!-- ============ ENUNCIAT ============ -->
+<div class="cq-block" data-kind="enunciat">
+  <h2>Què has de fer</h2>
+  <ol>
+    <li>Munta un encaminador sense fil amb la xarxa interna
+      <code>192.168.1.0/24</code> i ell mateix com a porta d'enllaç.</li>
+    <li>Activa el servidor DHCP amb un rang que comenci a la <code>.100</code> i
+      admeti com a molt 50 clients.</li>
+    <li>Posa a la xarxa un SSID triat per tu i un canal que no se solapi amb cap
+      altre.</li>
+    <li>Protegeix-la amb WPA2 i una clau que decideixis tu.</li>
+    <li>Connecta-hi tres clients per l'aire: dos portàtils i un dispositiu mòbil.</li>
+  </ol>
+</div>
+
+<!-- ============ ON BUSCAR ============ -->
+<div class="cq-block" data-kind="enunciat">
+  <h2>D'on has de treure cada cosa</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
-      <thead><tr><th>Llegeix</th><th>Tingues a mà</th><th>Fes</th></tr></thead>
+      <thead><tr><th>Què has de fer</th><th>On ho tens</th></tr></thead>
       <tbody>
-        <tr><td><a class="cq-ref" href="teoria/t4-1-com-viatja-un-correu.html">T4.1</a> · <a class="cq-ref" href="teoria/t4-2-servidor-de-correu.html">T4.2</a></td><td><a class="cq-ref" href="guies/g4-1-stalwart.html">G4.1</a> · <a class="cq-ref" href="guies/g4-2-thunderbird.html">G4.2</a></td><td><a class="cq-ref" href="activitats/a4-1-servidor-de-correu.html">A4.1</a> — el correu intern del centre</td></tr>
-        <tr><td><a class="cq-ref" href="teoria/t4-3-alies-imap-i-abus.html">T4.3</a></td><td><a class="cq-ref" href="guies/g4-1-stalwart.html">G4.1</a> · <a class="cq-ref" href="guies/g4-2-thunderbird.html">G4.2</a></td><td><a class="cq-ref" href="activitats/a4-2-alies-i-abus.html">A4.2</a> — bústia compartida i porta tancada</td></tr>
+        <tr><td>Posar l'aparell i obrir-ne el panell</td><td>Guia <a class="cq-ref" href="../guies/g7-1-packet-tracer.html">G7.1</a>, referència dels aparells</td></tr>
+        <tr><td>IP de la xarxa interna i DHCP</td><td>Guia <a class="cq-ref" href="../guies/g7-1-packet-tracer.html">G7.1</a>, pas a pas de la xarxa interna</td></tr>
+        <tr><td>SSID i canal</td><td>Guia <a class="cq-ref" href="../guies/g7-1-packet-tracer.html">G7.1</a>, pas a pas del nom i el canal</td></tr>
+        <tr><td>Seguretat WPA2</td><td>Guia <a class="cq-ref" href="../guies/g7-1-packet-tracer.html">G7.1</a>, pas a pas de la seguretat</td></tr>
+        <tr><td>Posar targeta sense fils a un portàtil</td><td>Guia <a class="cq-ref" href="../guies/g7-1-packet-tracer.html">G7.1</a>, pas a pas de connectar un portàtil</td></tr>
+        <tr><td>Quin canal triar i per què</td><td>Teoria <a class="cq-ref" href="../teoria/t7-1-fonaments-sense-fils.html">T7.1</a></td></tr>
+        <tr><td>Per què no es toca el port d'Internet</td><td>Teoria <a class="cq-ref" href="../teoria/t7-2-punt-d-acces-i-encaminador.html">T7.2</a></td></tr>
       </tbody>
     </table>
   </div>
 </div>
 
+<!-- ============ RECORDATORI ============ -->
 <div class="cq-block" data-kind="recordatori">
-  <h2>Sense DNS no hi ha correu</h2>
+  <h2>El rang no s'escriu com al <a class="cq-ref" href="../../RA1/index.html">RA1</a></h2>
   <p>
-    Aquest RA es recolza en el <a class="cq-ref" href="../RA2/index.html">RA2</a>: un servidor de correu només rep missatges
-    d'altres dominis si el DNS anuncia el seu <strong>registre MX</strong>. Si tens dubtes de
-    com es publica un registre en una zona, torna a la <a class="cq-ref" href="../RA2/teoria/t2-4-primari-secundari.html">T2.4</a> abans de començar.
+    Al Kea del <a class="cq-ref" href="../../RA1/index.html">RA1</a> un rang es dona amb la primera i l'última adreça. Aquest panell
+    treballa d'una altra manera: es dona l'adreça inicial i el <strong>nombre màxim
+    d'usuaris</strong>, i el final el calcula ell.
+  </p>
+  <p>
+    És la mateixa idea amb una altra forma de dir-la. Quan comprovis el resultat, mira
+    quina adreça acaba rebent el primer client: és la manera de saber si el rang que has
+    escrit és el que et pensaves.
+  </p>
+</div>
+
+<!-- ============ OBSERVACIÓ ============ -->
+<div class="cq-block" data-kind="observació">
+  <h2>Una captura del panell no demostra res</h2>
+  <p>
+    Que el panell de l'encaminador digui que el DHCP està actiu no vol dir que cap
+    client hagi rebut adreça. La prova de que la xarxa funciona és sempre des del
+    client: la seva IP, la seva porta d'enllaç i un ping que respon.
+  </p>
+  <p>
+    Per això les captures que valen són les del <code>Command Prompt</code> dels
+    clients, no les de la configuració que hi has escrit.
+  </p>
+</div>
+
+<!-- ============ COMPROVACIÓ ============ -->
+<div class="cq-block" data-kind="comprovació">
+  <h2>Com sabràs que ho has fet bé</h2>
+  <ul>
+    <li>Els tres clients apareixen connectats a la teva xarxa, i cap amb cable.</li>
+    <li>A cada client, <code>ipconfig</code> mostra una adreça dins del rang que has
+      definit i la porta d'enllaç <code>192.168.1.1</code>.</li>
+    <li><code>ping 192.168.1.1</code> respon des dels tres clients.</li>
+    <li>Un ping entre dos clients respon en tots dos sentits.</li>
+    <li>Un client al qual no li dones la clau correcta no arriba a connectar-se.</li>
+  </ul>
+</div>
+
+<!-- ============ PROBLEMES ============ -->
+<div class="cq-block" data-kind="problemes">
+  <h2>Si alguna cosa no va</h2>
+  <dl class="cq-issues">
+    <dt>El portàtil no troba la xarxa</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Encara té la targeta de cable, o el SSID no s'ha
+        arribat a desar.</p>
+      <p><span class="lbl">Solució</span> Canvia-li el mòdul amb el portàtil apagat i
+        comprova el SSID al panell de l'encaminador.</p>
+    </dd>
+    <dt>La IP del client comença per 169.254</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> S'ha associat a la xarxa, però no ha rebut cap
+        resposta del servidor DHCP.</p>
+      <p><span class="lbl">Solució</span> Revisa que el DHCP estigui activat i que el
+        rang tingui adreces lliures.</p>
+    </dd>
+    <dt>El ping entre clients no respon</dt>
+    <dd>
+      <p><span class="lbl">Causa</span> Els clients estan en xarxes diferents, o un
+        encara té configuració estàtica d'una prova anterior.</p>
+      <p><span class="lbl">Solució</span> Comprova amb <code>ipconfig</code> que tots
+        tres tenen adreces de la mateixa xarxa i obtingudes per DHCP.</p>
+    </dd>
+  </dl>
+</div>
+
+<!-- ============ LLIURAMENT ============ -->
+<div class="cq-block" data-kind="lliurament">
+  <h2>Què has d'entregar</h2>
+  <p>
+    El fitxer de Packet Tracer i un document tècnic amb el SSID, el canal, el mode de
+    seguretat i el rang DHCP que has fet servir, més la captura de l'<code>ipconfig</code>
+    i del ping de cadascun dels tres clients.
+  </p>
+  <p>
+    Respon-hi també, en prosa: <strong>per què connectar la xarxa de l'aula al port
+    d'Internet d'aquest aparell, en lloc de a un port LAN, canviaria completament el
+    resultat?</strong>
   </p>
 </div>
 
 
+<!-- ============ CURRÍCULUM ============ -->
+<div class="cq-block" data-kind="currículum">
+  <h2>Al currículum</h2>
+  <p><span class="lbl">CA 7.1</span> Instal·la un punt d'accés sense fil dins d'una xarxa local.</p>
+  <p><span class="lbl">CA 7.6</span> Instal·la un encaminador sense fil amb connexió a xarxa pública i serveis sense fils de xarxa local.</p>
+  <p><span class="lbl">CA 7.7</span> Configura i prova l'encaminador des dels ordinadors de la xarxa local.</p>
+</div>
+
 <!-- === PEU DE NAVEGACIÓ INICI === -->
 <nav class="cq-pager">
-  <a class="prev" href="../RA3/index.html">
-    <span class="dir">Anterior · RA3</span>
-    <span class="ttl">RA3 · Instal·lació de serveis de transferència de fitxers</span></a>
-  <a class="next" href="../RA5/index.html">
-    <span class="dir">Següent · RA5</span>
-    <span class="ttl">RA5 · Gestió de servidors web</span></a>
+  <a class="prev" href="../guies/g7-1-packet-tracer.html">
+    <span class="dir">Anterior · G7.1</span>
+    <span class="ttl">Guia: Packet Tracer sense fils</span></a>
+  <a class="next" href="a7-2-escenaris-i-seguretat.html">
+    <span class="dir">Següent · A7.2</span>
+    <span class="ttl">Escenaris i seguretat</span></a>
 </nav>
 <!-- === PEU DE NAVEGACIÓ FI === -->
 
