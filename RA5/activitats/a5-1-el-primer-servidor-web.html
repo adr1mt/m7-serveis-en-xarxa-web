@@ -61,6 +61,9 @@
       IA— en lloc de la pàgina per defecte.</li>
     <li>Deixar-la accessible des del navegador de l'aula, per la IP que
       tingui el servidor a <code>puigcastellar1</code>.</li>
+    <li>Activar el mòdul de PHP i publicar-hi dues proves més: una pàgina
+      que <strong>generi el servidor</strong> i una pàgina amb un
+      <strong>JavaScript</strong> que escrigui alguna cosa al navegador.</li>
   </ol>
 </div>
 
@@ -77,6 +80,8 @@
     <li>Què queda registrat de cada accés, i què vol dir cada camp d'una
       línia del registre.</li>
     <li>Què es veu en visitar <code>/server-status</code>.</li>
+    <li>Què arriba de veritat al navegador de cadascuna de les dues proves,
+      mirant el codi font de la resposta i no la pàgina ja pintada.</li>
   </ul>
 </div>
 
@@ -93,6 +98,10 @@
           <td>Guia <a class="cq-ref" href="../guies/g5-1-apache.html">G5.1</a>, estructura de <code>/etc/apache2</code></td></tr>
         <tr><td>Activar <code>mod_status</code> i llegir-ne la sortida</td>
           <td>Guia <a class="cq-ref" href="../guies/g5-1-apache.html">G5.1</a>, pas a pas de mòduls</td></tr>
+        <tr><td>Activar el mòdul de PHP i fer-ne una pàgina de prova</td>
+          <td>Guia <a class="cq-ref" href="../guies/g5-1-apache.html">G5.1</a>, pas a pas de mòduls</td></tr>
+        <tr><td>Qui executa cada codi i què n'arriba al client</td>
+          <td>Teoria <a class="cq-ref" href="../teoria/t5-5-moduls-i-codi.html">T5.5</a></td></tr>
         <tr><td>Per què el servei escolta en eixos ports</td>
           <td>Teoria <a class="cq-ref" href="../teoria/t5-1-com-funciona-un-servei-web.html">T5.1</a></td></tr>
       </tbody>
@@ -135,6 +144,10 @@
       <code>LISTEN</code>.</li>
     <li>El registre d'accessos creix amb una línia nova cada vegada que el
       client visita la pàgina.</li>
+    <li>De la pàgina generada al servidor, <code>curl</code> retorna el
+      resultat i <strong>cap fragment del codi</strong> que l'ha construït.</li>
+    <li>De la pàgina amb JavaScript, <code>curl</code> retorna el codi
+      <strong>sencer</strong>, tal com el rep el navegador.</li>
   </ul>
 </div>
 
@@ -165,12 +178,15 @@
   <h2>Què has d'entregar</h2>
   <p>
     Un <strong>document tècnic</strong> amb la resposta a cada pregunta
-    d'exploració, una captura de la teua pàgina i una de
-    <code>/server-status</code>.
+    d'exploració, una captura de la teua pàgina, una de
+    <code>/server-status</code> i la sortida de <code>curl</code> de les dues
+    proves de codi.
   </p>
   <p>
     Respon-hi també: <strong>per què <code>/server-status</code> no s'hauria
-    de deixar accessible des de qualsevol client d'internet?</strong>
+    de deixar accessible des de qualsevol client d'internet?</strong> I:
+    <strong>per què una validació feta només amb JavaScript no protegeix el
+    servidor?</strong>
   </p>
 </div>
 
@@ -180,6 +196,8 @@
   <h2>Al currículum</h2>
   <p><span class="lbl">CA 5.2</span> Instal·la un servidor web.</p>
   <p><span class="lbl">CA 5.6</span> Comprova l'accés dels usuaris al servidor.</p>
+  <p><span class="lbl">CA 5.7</span> Diferencia i prova l'execució de codi al servidor i al client.</p>
+  <p><span class="lbl">CA 5.8</span> Instal·la mòduls sobre el servidor.</p>
 </div>
 
 <!-- === PEU DE NAVEGACIÓ INICI === -->

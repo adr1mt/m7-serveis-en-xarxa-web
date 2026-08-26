@@ -31,8 +31,9 @@
     proxy-cau). La guia <a class="cq-ref" href="../guies/g8-1-squid.html">G8.1</a> és el manual que consultaràs mentre treballes.
   </p>
   <p>
-    Muntaràs un proxy Squid a <code>puigcastellar1</code>, comprovaràs per dins com
-    treballa i demostraràs que un client hi navega a través, sense sortir mai en directe.
+    Muntaràs un proxy Squid entre <code>personal1</code> i <code>puigcastellar1</code>,
+    comprovaràs per dins com treballa i demostraràs que un client de la xarxa interna
+    hi navega a través, sense sortir mai en directe.
   </p>
 </div>
 
@@ -43,12 +44,13 @@
     <table class="cq-table">
       <thead><tr><th>Màquina</th><th>Targeta</th><th>Paper</th></tr></thead>
       <tbody>
-        <tr><td>Ubuntu Server</td><td>puigcastellar1</td><td>Squid</td></tr>
-        <tr><td>Ubuntu Desktop</td><td>puigcastellar1</td><td>Client</td></tr>
+        <tr><td>Ubuntu Server</td><td>personal1 i puigcastellar1</td><td>Squid</td></tr>
+        <tr><td>Ubuntu Desktop</td><td>personal1</td><td>Client</td></tr>
       </tbody>
     </table>
   </div>
-  <p><strong>Dues màquines noves</strong> a isardVDI, totes dues a la mateixa xarxa.</p>
+  <p><strong>Dues màquines noves</strong> a isardVDI. El client només arriba a la
+    xarxa pública mitjançant el proxy; no activis el reenviament IP.</p>
 </div>
 
 <!-- ============ ENUNCIAT ============ -->
@@ -56,13 +58,13 @@
   <h2>Què has de fer</h2>
   <ol>
     <li>Instal·la Squid al servidor i fes-lo escoltar al port <code>8080</code>.</li>
-    <li>Deixa passar només els clients de la xarxa d'aula i denega la resta per
+    <li>Deixa passar només els clients de <code>personal1</code> i denega la resta per
       defecte.</li>
-    <li>Configura el navegador del client perquè hi surti sempre a través del proxy,
-      mai en directe.</li>
+    <li>Configura el navegador del client amb la IP de Squid a <code>personal1</code>
+      perquè surti sempre a través del proxy, mai en directe.</li>
     <li>Explora: quants processos ha llançat Squid, què conté cada fitxer de registre,
-      i el valor real de les directives de port, caché en disc i caché en memòria.</li>
-    <li>Provoca i localitza al registre un <strong>acert de caché</strong>: demana dos
+      i el valor real de les directives de port, cau en disc i cau en memòria.</li>
+    <li>Provoca i localitza al registre un <strong>encert de cau</strong>: demana dos
       cops la mateixa pàgina i troba la línia que ho demostra.</li>
     <li>Consulta l'estat del proxy amb <code>squidclient</code>, des del mateix
       servidor.</li>
@@ -80,7 +82,7 @@
         <tr><td>Permetre només la xarxa de clients</td><td>Guia <a class="cq-ref" href="../guies/g8-1-squid.html">G8.1</a>, pas a pas i referència d'ACL</td></tr>
         <tr><td>Configurar el navegador i provar sense navegador</td><td>Guia <a class="cq-ref" href="../guies/g8-1-squid.html">G8.1</a>, pas a pas</td></tr>
         <tr><td>Trobar processos, directives i registres</td><td>Guia <a class="cq-ref" href="../guies/g8-1-squid.html">G8.1</a>, referència de squid.conf</td></tr>
-        <tr><td>Llegir el registre i identificar acert i fallada</td><td>Guia <a class="cq-ref" href="../guies/g8-1-squid.html">G8.1</a>, pas a pas de registres</td></tr>
+        <tr><td>Llegir el registre i identificar encert i fallada</td><td>Guia <a class="cq-ref" href="../guies/g8-1-squid.html">G8.1</a>, pas a pas de registres</td></tr>
         <tr><td>Consultar l'estat amb squidclient</td><td>Guia <a class="cq-ref" href="../guies/g8-1-squid.html">G8.1</a>, referència final</td></tr>
         <tr><td>Per què el proxy és una altura diferent del NAT</td><td>Teories <a class="cq-ref" href="../teoria/t8-1-de-la-xarxa-local-a-internet.html">T8.1</a> i <a class="cq-ref" href="../teoria/t8-2-el-proxy-cau.html">T8.2</a></td></tr>
       </tbody>
@@ -107,7 +109,7 @@
     separats, i cadascun explica una cosa diferent del que passa dins del proxy.
   </p>
   <p>
-    Un acert de caché no és un concepte abstracte: és una línia concreta al registre,
+    Un encert de cau no és un concepte abstracte: és una línia concreta al registre,
     amb una etiqueta diferent de la de la primera petició. Torna a demanar el mateix
     objecte i compara les dues línies.
   </p>
@@ -122,8 +124,10 @@
     <li>Escolta al 8080, no al 3128: <code>sudo ss -tlnp | grep squid</code>.</li>
     <li>Un client de fora de la xarxa permesa rep <code>TCP_DENIED</code> en provar el
       proxy.</li>
-    <li>El client navega amb el proxy configurat i, si el desactiva, deixa d'arribar
-      a través seu.</li>
+    <li>El client de <code>personal1</code> navega amb el proxy configurat i deixa
+      d'arribar a Internet si el desactiva.</li>
+    <li>El servidor no reenvia paquets: <code>sysctl net.ipv4.ip_forward</code> mostra
+      <code>0</code>.</li>
     <li><code>squidclient mgr:info</code>, executat al servidor, respon amb
       informació de l'estat del proxy.</li>
   </ul>
@@ -150,12 +154,12 @@
         d'ordres, que sempre hi passa.</p>
     </dd>
 
-    <dt>No trobes cap acert de caché al registre</dt>
+    <dt>No trobes cap encert de cau al registre</dt>
     <dd>
       <p><span class="lbl">Causa</span> Has demanat objectes diferents cada vegada, o
-        la caché en disc no s'ha activat.</p>
+        la cau en disc no s'ha activat.</p>
       <p><span class="lbl">Solució</span> Repeteix exactament la mateixa petició i
-        mira el valor de la directiva de caché en disc.</p>
+        mira el valor de la directiva de cau en disc.</p>
     </dd>
   </dl>
 </div>
@@ -165,9 +169,9 @@
   <h2>Què has d'entregar</h2>
   <p>
     Un document tècnic amb el port final de Squid, els valors trobats de les
-    directives de caché en disc i en memòria, la sortida de <code>squidclient
-    mgr:info</code>, i les línies del registre que demostren la fallada i l'acert
-    de caché d'una mateixa petició.
+    directives de cau en disc i en memòria, la sortida de <code>squidclient
+    mgr:info</code>, les línies del registre que demostren la fallada i l'encert
+    de cau d'una mateixa petició, i la prova que el client no surt sense el proxy.
   </p>
   <p>
     Respon-hi també, en prosa: <strong>quina diferència hi ha entre un proxy i un

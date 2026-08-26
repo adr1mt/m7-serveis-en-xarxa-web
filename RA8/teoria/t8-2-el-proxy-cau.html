@@ -28,7 +28,7 @@
   <h2>Què sabràs fer en acabar</h2>
   <ul>
     <li>Explicar què fa un proxy com a intermediari entre client i servidor.</li>
-    <li>Distingir un acert d'un fallada de memòria cau.</li>
+    <li>Distingir un encert d'una fallada de memòria cau.</li>
     <li>Diferenciar el mode explícit del transparent, i dir l'avantatge i el preu de cadascun.</li>
     <li>Explicar per què el proxy no veu el contingut d'una connexió HTTPS.</li>
     <li>Distingir un proxy directe d'un proxy invers.</li>
@@ -53,10 +53,10 @@
 
 <!-- ============ 3 · MEMÒRIA CAU ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Acert i fallada de memòria cau</h2>
+  <h2>Encert i fallada de memòria cau</h2>
   <p>
     Quan un client demana un objecte, el proxy mira si ja el té guardat. Si sí, és un
-    <strong>acert</strong> (<em>hit</em>) i respon a l'instant sense sortir a Internet. Si no,
+    <strong>encert</strong> (<em>hit</em>) i respon a l'instant sense sortir a Internet. Si no,
     és una <strong>fallada</strong> (<em>miss</em>): el va a buscar, el guarda i el serveix.
   </p>
   <p>
@@ -113,7 +113,7 @@
 <div class="cq-block" data-kind="observació">
   <h2>Llegir el registre d'accessos</h2>
   <p>
-    Un registre de proxy anota, per cada petició, si ha estat acert o fallada de memòria cau:
+    Un registre de proxy anota, per cada petició, si ha estat encert o fallada de memòria cau:
   </p>
 <pre>tail -f /var/log/squid/access.log
 <span class="o">1723 TCP_MISS/200 GET http://example.org/img.png</span>
@@ -161,7 +161,7 @@
   <h2>Resum</h2>
   <ul>
     <li>Un proxy és un <strong>intermediari</strong>: el client hi parla, i el proxy fa la petició real.</li>
-    <li>Guanys: control, registre i memòria <strong>cau</strong> (acert o fallada).</li>
+    <li>Guanys: control, registre i memòria <strong>cau</strong> (encert o fallada).</li>
     <li><strong>Explícit</strong>: el client el coneix. <strong>Transparent</strong>: es desvia el trànsit sense avisar, i només amb HTTP.</li>
     <li>Amb <strong>HTTPS</strong> el proxy només veu el destí, no el contingut.</li>
     <li>Proxy <strong>directe</strong> per als clients de dins; proxy <strong>invers</strong> per als servidors de dins.</li>
