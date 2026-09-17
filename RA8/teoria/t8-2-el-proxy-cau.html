@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA8 · T8.2</div>
   <h1>El proxy-cau</h1>
   <p class="lede">Un intermediari que parla en nom del client i pot recordar el que ja ha demanat.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-sabras-fer-en-acabar">Què sabràs fer en acabar</a></li><li><a href="#un-intermediari-no-un-simple-encaminador">Un intermediari, no un simple encaminador</a></li><li><a href="#encert-i-fallada-de-memoria-cau">Encert i fallada de memòria cau</a></li><li><a href="#mode-explicit-o-transparent">Mode explícit o transparent</a></li><li><a href="#el-limit-serios-https">El límit seriós: HTTPS</a></li><li><a href="#proxy-directe-i-proxy-invers">Proxy directe i proxy invers</a></li><li><a href="#llegir-el-registre-d-accessos">Llegir el registre d&#x27;accessos</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#resum">Resum</a></li><li><a href="#comprova-el-que-has-apres">Comprova el que has après</a></li><li><a href="#al-curriculum">Al currículum</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què sabràs fer en acabar</h2>
+  <h2 id="que-sabras-fer-en-acabar">Què sabràs fer en acabar</h2>
   <ul>
     <li>Explicar què fa un proxy com a intermediari entre client i servidor.</li>
     <li>Distingir un encert d'una fallada de memòria cau.</li>
@@ -37,7 +41,7 @@
 
 <!-- ============ 2 · INTERMEDIARI ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Un intermediari, no un simple encaminador</h2>
+  <h2 id="un-intermediari-no-un-simple-encaminador">Un intermediari, no un simple encaminador</h2>
   <p>
     Amb un proxy, el client no parla amb el servidor de destí: parla amb el proxy, i és el
     proxy qui fa la petició real i li torna la resposta. Des del punt de vista del servidor de
@@ -53,7 +57,7 @@
 
 <!-- ============ 3 · MEMÒRIA CAU ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Encert i fallada de memòria cau</h2>
+  <h2 id="encert-i-fallada-de-memoria-cau">Encert i fallada de memòria cau</h2>
   <p>
     Quan un client demana un objecte, el proxy mira si ja el té guardat. Si sí, és un
     <strong>encert</strong> (<em>hit</em>) i respon a l'instant sense sortir a Internet. Si no,
@@ -69,7 +73,7 @@
 
 <!-- ============ 4 · EXPLÍCIT O TRANSPARENT ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Mode explícit o transparent</h2>
+  <h2 id="mode-explicit-o-transparent">Mode explícit o transparent</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th></th><th>Explícit</th><th>Transparent</th></tr></thead>
@@ -89,7 +93,7 @@
 
 <!-- ============ 5 · EL LÍMIT DE HTTPS ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>El límit seriós: HTTPS</h2>
+  <h2 id="el-limit-serios-https">El límit seriós: HTTPS</h2>
   <p>
     Amb HTTPS, el proxy veu <strong>cap a on</strong> va la connexió —el nom del servidor de
     destí— però no el contingut: ni la URL sencera, ni les dades, van xifrades d'extrem a
@@ -100,7 +104,7 @@
 
 <!-- ============ 6 · DIRECTE I INVERS ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Proxy directe i proxy invers</h2>
+  <h2 id="proxy-directe-i-proxy-invers">Proxy directe i proxy invers</h2>
   <p>
     Tot el que s'ha vist fins ara és un <strong>proxy directe</strong>: treballa per als
     clients de dins, que hi surten a demanar coses de fora. Un <strong>proxy invers</strong> fa
@@ -111,7 +115,7 @@
 
 <!-- ============ 7 · OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h2>Llegir el registre d'accessos</h2>
+  <h2 id="llegir-el-registre-d-accessos">Llegir el registre d'accessos</h2>
   <p>
     Un registre de proxy anota, per cada petició, si ha estat encert o fallada de memòria cau:
   </p>
@@ -126,7 +130,7 @@
 
 <!-- ============ 8 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2>Criteris professionals</h2>
+  <h2 id="criteris-professionals">Criteris professionals</h2>
   <ul>
     <li><strong>No confiïs la memòria cau per a HTTPS</strong>: la major part del trànsit d'avui ja no es pot cachejar.</li>
     <li><strong>Tria explícit si pots</strong>: és més fàcil de diagnosticar que el transparent.</li>
@@ -136,7 +140,7 @@
 
 <!-- ============ 9 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Errors habituals</h2>
+  <h2 id="errors-habituals">Errors habituals</h2>
   <dl class="cq-issues">
     <dt>Esperar que el proxy cachegi tot el trànsit web</dt>
     <dd>
@@ -158,7 +162,7 @@
 
 <!-- ============ 10 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h2>Resum</h2>
+  <h2 id="resum">Resum</h2>
   <ul>
     <li>Un proxy és un <strong>intermediari</strong>: el client hi parla, i el proxy fa la petició real.</li>
     <li>Guanys: control, registre i memòria <strong>cau</strong> (encert o fallada).</li>
@@ -171,9 +175,9 @@
 
 <!-- ============ 11 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h2>Comprova el que has après</h2>
+  <h2 id="comprova-el-que-has-apres">Comprova el que has après</h2>
 
-  <div class="cq-question" data-id="t8-2-intermediari" data-type="single">
+  <div class="cq-question" data-id="t8-2-intermediari" data-type="single" data-explanation="El client connecta al proxy i el proxy inicia una altra connexió al destí.">
     <div class="statement">Amb un proxy configurat, amb qui parla realment el client?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Directament amb el servidor de destí</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Amb el proxy, que fa la petició real en nom seu</button>
@@ -183,7 +187,7 @@
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t8-2-hit" data-type="single">
+  <div class="cq-question" data-id="t8-2-hit" data-type="single" data-explanation="HIT indica que l’objecte s’ha servit des de la cau; cal un recurs cacheable i fresc.">
     <div class="statement">Un registre de proxy marca una petició com <code>TCP_HIT</code>. Què vol dir?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que la petició s'ha denegat</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Que el proxy ja tenia l'objecte guardat i no ha calgut anar a buscar-lo</button>
@@ -193,7 +197,7 @@
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t8-2-transparent" data-type="single">
+  <div class="cq-question" data-id="t8-2-transparent" data-type="single" data-explanation="El mode transparent requereix desviar trànsit; el mode explícit requereix configurar el client.">
     <div class="statement">Quina limitació té el mode transparent?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Cal configurar cada navegador a mà</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Només funciona amb HTTP en clar, no amb HTTPS</button>
@@ -203,7 +207,7 @@
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t8-2-https" data-type="single">
+  <div class="cq-question" data-id="t8-2-https" data-type="single" data-explanation="Sense inspecció TLS, CONNECT no revela a Squid el contingut de la pàgina HTTPS.">
     <div class="statement">Amb una connexió HTTPS a través d'un proxy, què en pot veure el proxy?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Tot el contingut, igual que amb HTTP</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Cap a quin servidor va la connexió, però no el contingut</button>
@@ -213,7 +217,7 @@
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t8-2-directe-invers" data-type="single">
+  <div class="cq-question" data-id="t8-2-directe-invers" data-type="single" data-explanation="El proxy directe representa els clients; l’invers presenta un servei als clients externs.">
     <div class="statement">Quina diferència hi ha entre proxy directe i proxy invers?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El directe és per a HTTPS i l'invers per a HTTP</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">El directe treballa per als clients de dins; l'invers, per als servidors de dins</button>
@@ -227,7 +231,7 @@
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h2>Al currículum</h2>
+  <h2 id="al-curriculum">Al currículum</h2>
   <p><span class="lbl">Contingut 8.2</span> Emmagatzematge en memòria cau.</p>
   <p><span class="lbl">CA 8.3</span> Reconeix i diferencia les característiques i possibilitats de l'aplicació seleccionada.</p>
   <p><span class="lbl">CA 8.6</span> Implementa mecanismes per accelerar les comunicacions entre la xarxa privada local i la pública.</p>

@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,7 +17,7 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA4 · G4.1</div>
   <h1>Guia: Stalwart</h1>
@@ -25,7 +26,7 @@
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què hi ha en aquesta guia</h2>
+  <h2 id="que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</h2>
   <p>Documentació oficial: <a href="https://github.com/stalwartlabs/stalwart">github.com/stalwartlabs/stalwart</a></p>
   <ul>
     <li>Punt de partida: Ubuntu Server 26.04 acabat d'instal·lar, amb sortida a Internet.</li>
@@ -36,7 +37,7 @@
 
 <!-- ============ 2 · PAS A PAS · INSTAL·LACIÓ ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h2>Instal·lar Stalwart i completar l'assistent</h2>
+  <h2 id="installar-stalwart-i-completar-l-assistent">Instal·lar Stalwart i completar l'assistent</h2>
 
   <ol class="cq-steps">
     <li>
@@ -53,9 +54,7 @@ sudo sh install.sh</pre>
     </li>
 
     <li>
-      <p><strong>Recupera la contrasenya temporal d'administrador.</strong> Només es mostra
-      aquesta vegada, als logs: si la perds, no hi ha manera de recuperar-la i cal esborrar la
-      configuració perquè Stalwart torni a generar-ne una altra.</p>
+      <p><strong>Recupera la contrasenya temporal d’administrador.</strong> Només es mostra al registre durant el bootstrap. Desa-la de manera segura i canvia-la en completar l’assistent. Si es perd, no esborris la configuració ni la base de dades: conserva una còpia de la VM i consulta la recuperació suportada per la versió instal·lada amb el professor.</p>
 <pre>sudo journalctl -u stalwart -n 200 --no-pager \
   | grep -A8 "bootstrap mode"</pre>
       <p>
@@ -109,7 +108,7 @@ sudo sh install.sh</pre>
 
 <!-- ============ 3 · PAS A PAS · COMPTES I ÀLIES ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h2>Crear comptes i àlies</h2>
+  <h2 id="crear-comptes-i-alies">Crear comptes i àlies</h2>
   <p>
     Tot es fa des de la consola web, amb l'administrador que ha generat l'assistent.
   </p>
@@ -148,35 +147,61 @@ sudo sh install.sh</pre>
 
 <!-- ============ 4 · COMPROVACIÓ ============ -->
 <div class="cq-block" data-kind="comprovació">
-  <h2>Comprovar que entrega i que es pot llegir</h2>
+  <h2 id="comprovar-que-entrega-i-que-es-pot-llegir">Comprovar que entrega i que es pot llegir</h2>
   <p>
-    Dos scripts de Python, executats al servidor mateix.
+    Dos scripts autònoms de Python, executats en processos nous al servidor mateix. Utilitza les credencials que has creat; no les incloguis a l’entrega.
   </p>
 
   <ol class="cq-steps">
     <li>
       <p><strong>Envia un correu a l'àlies</strong>, autenticat pel port 465:</p>
-<pre>import smtplib, ssl
+<pre>import smtplib, ssl, getpass
+from email.message import EmailMessage
+from uuid import uuid4
+H = input("Servidor de correu: ")
+user = input("Compte emissor: ")
+password = getpass.getpass("Contrasenya emissor: ")
+alias = input("Àlies destinatari: ")
+token = "prova-alias-" + uuid4().hex
+print("Identificador per cercar al receptor:", token)
 c = ssl.create_default_context()
-c.check_hostname = False; c.verify_mode = ssl.CERT_NONE
-H = "mail.puigcastellar.internal"
-s = smtplib.SMTP_SSL(H, 465, context=c)
-s.login("bruno@puigcastellar.internal", "Bruno_2026pw!")
-s.sendmail("bruno@puigcastellar.internal",
-    ["suport@puigcastellar.internal"], "Subject: hola\n\nProva")
-s.quit()</pre>
+<span class="c"># Excepció només per al certificat autofirmat del laboratori.</span>
+c.check_hostname = False
+c.verify_mode = ssl.CERT_NONE
+msg = EmailMessage()
+msg["From"] = user
+msg["To"] = alias
+msg["Subject"] = token
+msg.set_content("Prova única de lliurament a l’àlies: " + token)
+with smtplib.SMTP_SSL(H, 465, context=c) as server:
+    server.login(user, password)
+    server.send_message(msg)</pre>
     </li>
 
     <li>
       <p><strong>Llegeix-lo per IMAP</strong> amb el compte d'anna, la bústia real:</p>
-<pre>import imaplib
-m = imaplib.IMAP4_SSL(H, 993, ssl_context=c)
-m.login("anna@puigcastellar.internal", "Anna_2026pw!")
-m.select("INBOX")
-print(m.search(None, "ALL"))</pre>
+<pre>import imaplib, ssl, getpass
+H = input("Servidor de correu: ")
+user = input("Compte de la bústia real: ")
+password = getpass.getpass("Contrasenya receptor: ")
+token = input("Identificador imprès per l’emissor: ")
+c = ssl.create_default_context()
+<span class="c"># Excepció només per al certificat autofirmat del laboratori.</span>
+c.check_hostname = False
+c.verify_mode = ssl.CERT_NONE
+with imaplib.IMAP4_SSL(H, 993, ssl_context=c) as mailbox:
+    mailbox.login(user, password)
+    mailbox.select("INBOX")
+    status, data = mailbox.uid("search", None, "SUBJECT", token)
+    assert status == "OK" and data[0], "No s’ha trobat el missatge"
+    for uid in data[0].split():
+        status, message = mailbox.uid("fetch", uid, "(BODY.PEEK[])")
+        assert status == "OK"
+        for part in message:
+            if isinstance(part, tuple):
+                print(part[1].decode(errors="replace"))</pre>
       <p>El missatge hi és, encara que l'hagis enviat a <code>suport@</code>. A les
-      capçaleres, <code>Delivered-To</code> conserva l'adreça de l'àlies: així es veu per
-      quina porta va entrar el correu.</p>
+      capçaleres i el cos pots comprovar el destinatari i l’identificador únic; compara’ls amb l’emissor i la configuració de l’àlies.</p>
     </li>
   </ol>
 
@@ -189,7 +214,7 @@ print(m.search(None, "ALL"))</pre>
 
 <!-- ============ 5 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2>Criteris professionals</h2>
+  <h2 id="criteris-professionals">Criteris professionals</h2>
   <ul>
     <li><strong>Apunta les dues contrasenyes</strong> (bootstrap i admin final) en un lloc segur:
     no es tornen a mostrar.</li>
@@ -204,7 +229,7 @@ print(m.search(None, "ALL"))</pre>
 
 <!-- ============ 6 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Errors habituals</h2>
+  <h2 id="errors-habituals">Errors habituals</h2>
 
   <dl class="cq-issues">
     <dt>No trobo cap fitxer de configuració per editar</dt>
@@ -222,7 +247,7 @@ print(m.search(None, "ALL"))</pre>
     <dt>La contrasenya de bootstrap ja no surt enlloc</dt>
     <dd>
       <p><span class="lbl">Causa</span> Només es mostra un cop als logs, i s'ha perdut o el bootstrap ja ha expirat.</p>
-      <p><span class="lbl">Solució</span> Esborra la configuració i deixa que Stalwart en generi una altra en tornar a arrencar en bootstrap mode.</p>
+      <p><span class="lbl">Solució</span> No esborris l’estat: conté comptes i missatges. Anota la versió instal·lada i conserva una còpia de la VM abans d’intervenir. La recuperació s’ha de validar en una còpia, comprovant comptes i missatges abans i després; aquesta prova queda pendent del laboratori.</p>
     </dd>
 
     <dt>Els canvis no es noten després de tocar la configuració</dt>
@@ -247,7 +272,7 @@ print(m.search(None, "ALL"))</pre>
 
 <!-- ============ 7 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h2>Fitxa ràpida</h2>
+  <h2 id="fitxa-rapida">Fitxa ràpida</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Què</th><th>On</th></tr></thead>

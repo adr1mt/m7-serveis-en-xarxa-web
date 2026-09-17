@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA8 · G8.1</div>
   <h1>Guia: Squid</h1>
   <p class="lede">Manual de configuració del proxy-cau, de la instal·lació al control d'accés.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</a></li><li><a href="#installar-squid-i-comprovar-que-arrenca">Instal·lar Squid i comprovar que arrenca</a></li><li><a href="#el-fitxer-squid-conf">El fitxer squid.conf</a></li><li><a href="#control-d-acces-acl-i-http-access">Control d&#x27;accés: ACL i http_access</a></li><li><a href="#canviar-el-port-a-8080">Canviar el port a 8080</a></li><li><a href="#permetre-la-xarxa-local">Permetre la xarxa local</a></li><li><a href="#configurar-el-client">Configurar el client</a></li><li><a href="#bloquejar-per-domini-paraula-horari-i-port">Bloquejar per domini, paraula, horari i port</a></li><li><a href="#llegir-el-registre-d-accessos">Llegir el registre d&#x27;accessos</a></li><li><a href="#gestor-http-local-i-mode-transparent">Gestor HTTP local i mode transparent</a></li><li><a href="#comprovar-ho-de-conjunt-des-del-client">Comprovar-ho de conjunt des del client</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#fitxa-rapida">Fitxa ràpida</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què hi ha en aquesta guia</h2>
+  <h2 id="que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</h2>
   <p>Documentació oficial: <a href="http://www.squid-cache.org/Doc/config/">squid-cache.org/Doc/config</a>
   i la wiki: <a href="https://wiki.squid-cache.org/">wiki.squid-cache.org</a>.</p>
   <ul>
@@ -38,7 +42,7 @@
 
 <!-- ============ 2 · PAS A PAS · INSTAL·LACIÓ ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h2>Instal·lar Squid i comprovar que arrenca</h2>
+  <h2 id="installar-squid-i-comprovar-que-arrenca">Instal·lar Squid i comprovar que arrenca</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Instal·la el paquet:</strong></p>
@@ -62,7 +66,9 @@ sudo apt install squid</pre>
 
 <!-- ============ 3 · REFERÈNCIA · SQUID.CONF ============ -->
 <div class="cq-block" data-kind="referència">
-  <h2>El fitxer squid.conf</h2>
+  <h2 id="el-fitxer-squid-conf">El fitxer squid.conf</h2>
+<p>El gestor de Squid 7 utilitza HTTP. Conserva aquestes regles <strong>abans de qualsevol allow de clients</strong>; les ACL localhost i manager són les predefinides de Squid:</p><pre>http_access allow localhost manager
+http_access deny manager</pre><p>Consulta local: <code>curl --noproxy '*' http://127.0.0.1:8080/squid-internal-mgr/info</code>. Des d’un client aquesta mateixa ruta ha de quedar denegada. <a href="https://wiki.squid-cache.org/Features/CacheManager/Index">Documentació oficial del gestor</a>. Contrastat documentalment; pendent d’execució en Ubuntu 26.04.</p>
   <p>
     Tota la configuració viu en un únic fitxer de text,
     <code>/etc/squid/squid.conf</code>. Les directives per començar:
@@ -89,7 +95,7 @@ sudo apt install squid</pre>
 
 <!-- ============ 4 · REFERÈNCIA · ACL I HTTP_ACCESS ============ -->
 <div class="cq-block" data-kind="referència">
-  <h2>Control d'accés: ACL i http_access</h2>
+  <h2 id="control-d-acces-acl-i-http-access">Control d'accés: ACL i http_access</h2>
   <p>
     <code>acl &lt;nom&gt; &lt;tipus&gt; &lt;valor&gt;</code> defineix una
     <strong>condició</strong>: no fa res per si sola, només posa nom a un criteri.
@@ -121,7 +127,7 @@ sudo apt install squid</pre>
 
 <!-- ============ 5 · PAS A PAS · CANVIAR EL PORT ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h2>Canviar el port a 8080</h2>
+  <h2 id="canviar-el-port-a-8080">Canviar el port a 8080</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Edita la directiva <code>http_port</code>:</strong></p>
@@ -155,7 +161,7 @@ sudo apt install squid</pre>
 
 <!-- ============ 6 · PAS A PAS · PERMETRE LA XARXA LOCAL ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h2>Permetre la xarxa local</h2>
+  <h2 id="permetre-la-xarxa-local">Permetre la xarxa local</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Busca el lloc on van les teves regles.</strong> El fitxer ja porta
@@ -187,7 +193,7 @@ sudo squid -k reconfigure</pre>
 
 <!-- ============ 7 · PAS A PAS · CONFIGURAR EL CLIENT ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h2>Configurar el client</h2>
+  <h2 id="configurar-el-client">Configurar el client</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Firefox:</strong> Configuració → Xarxa → Configuració de la
@@ -205,7 +211,7 @@ sudo squid -k reconfigure</pre>
 
 <!-- ============ 8 · PAS A PAS · BLOQUEJOS ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h2>Bloquejar per domini, paraula, horari i port</h2>
+  <h2 id="bloquejar-per-domini-paraula-horari-i-port">Bloquejar per domini, paraula, horari i port</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Per domini</strong>, amb el punt inicial perquè agafi també els
@@ -246,7 +252,7 @@ http_access deny all</pre>
 
 <!-- ============ 9 · PAS A PAS · LLEGIR EL REGISTRE ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h2>Llegir el registre d'accessos</h2>
+  <h2 id="llegir-el-registre-d-accessos">Llegir el registre d'accessos</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Segueix el registre en directe</strong> mentre navegues:</p>
@@ -264,17 +270,16 @@ http_access deny all</pre>
           </tbody>
         </table>
       </div>
-      <p>Torna a demanar la mateixa pàgina i compara: la primera vegada surt
-      <code>TCP_MISS</code>, la segona, un encert.</p>
+      <p>Demana dues vegades l’objecte HTTP cacheable controlat de comprovació i compara els registres. Un objecte fresc emmagatzemat pot donar HIT; repetir una pàgina qualsevol no ho garanteix.</p>
     </li>
   </ol>
 </div>
 
 <!-- ============ 10 · REFERÈNCIA · SQUIDCLIENT I TRANSPARENT ============ -->
 <div class="cq-block" data-kind="referència">
-  <h2>squidclient i el mode transparent</h2>
+  <h2 id="gestor-http-local-i-mode-transparent">Gestor HTTP local i mode transparent</h2>
   <p>
-    <code>squidclient mgr:info</code>, executat al mateix servidor, consulta
+    <code>curl --noproxy '*' http://127.0.0.1:8080/squid-internal-mgr/info</code>, executat al mateix servidor, consulta
     l'estat intern del proxy sense passar per un navegador.
   </p>
   <p>
@@ -287,7 +292,10 @@ http_access deny all</pre>
 
 <!-- ============ 11 · COMPROVACIÓ ============ -->
 <div class="cq-block" data-kind="comprovació">
-  <h2>Comprovar-ho de conjunt des del client</h2>
+  <h2 id="comprovar-ho-de-conjunt-des-del-client">Comprovar-ho de conjunt des del client</h2>
+<p>El professor proporciona un origen HTTP de prova a puigcastellar1 amb <code>/prova.txt</code>, un text únic i <code>Cache-Control: public, max-age=300</code>. Consulta’n l’adreça amb <code>ip -brief a</code> a l’origen i substitueix IP-ORIGEN. Permet aquest origen en la política de prova. Des del client, usa la mateixa URL sense paràmetres:</p><pre>curl -x http://192.168.1.8:8080 -i http://IP-ORIGEN/prova.txt
+curl -x http://192.168.1.8:8080 -i http://IP-ORIGEN/prova.txt</pre><p>Identifica primera petició MISS i segona HIT al registre del proxy; si no apareix, conserva les capçaleres i explica què impedeix emmagatzemar l’objecte. No provoquis HIT sobre trànsit HTTPS/CONNECT.</p>
+<p>Per provar la cau usa un objecte <strong>HTTP controlat</strong> amb Cache-Control: public, max-age=300, sense cookies ni autenticació. Conserva les capçaleres i demana la mateixa URL dues vegades sense recàrrega forçada; relaciona MISS/HIT amb access.log. Repetir qualsevol web no garanteix un HIT. Amb HTTPS/CONNECT sense inspecció TLS només es filtra el destí i el port, no el camí ni les paraules dins de la pàgina. Prova permisos i denegacions sota la política final.</p>
   <ol class="cq-steps">
     <li>
       <p><strong>Navega a través del proxy</strong> i que arribi:</p>
@@ -309,7 +317,7 @@ http_access deny all</pre>
 
 <!-- ============ 12 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2>Criteris professionals</h2>
+  <h2 id="criteris-professionals">Criteris professionals</h2>
   <ul>
     <li><strong><code>squid -k parse</code> abans de recarregar</strong>, sempre:
     un error de sintaxi no avisa sol.</li>
@@ -326,7 +334,7 @@ http_access deny all</pre>
 
 <!-- ============ 13 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Errors habituals</h2>
+  <h2 id="errors-habituals">Errors habituals</h2>
   <dl class="cq-issues">
     <dt>El bloqueig no funciona i el domini es continua veient</dt>
     <dd>
@@ -380,7 +388,7 @@ http_access deny all</pre>
 
 <!-- ============ 14 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h2>Fitxa ràpida</h2>
+  <h2 id="fitxa-rapida">Fitxa ràpida</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Què</th><th>On</th></tr></thead>
@@ -401,7 +409,7 @@ http_access deny all</pre>
         <tr><td><code>squid -k reconfigure</code></td><td>Rellegir la configuració en calent</td></tr>
         <tr><td><code>systemctl restart squid</code></td><td>Reiniciar (obligatori si canvia el port)</td></tr>
         <tr><td><code>curl -x http://IP:8080 URL</code></td><td>Provar el proxy sense navegador</td></tr>
-        <tr><td><code>squidclient mgr:info</code></td><td>Consultar l'estat del proxy</td></tr>
+        <tr><td><code>curl --noproxy '*' http://127.0.0.1:8080/squid-internal-mgr/info</code></td><td>Consultar l'estat del proxy</td></tr>
       </tbody>
     </table>
   </div>

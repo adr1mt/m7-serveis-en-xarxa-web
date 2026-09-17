@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA8 · T8.4</div>
   <h1>Publicar un servei intern</h1>
   <p class="lede">El problema invers: ara qui truca ve de fora i vol arribar a un servidor de dins.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-sabras-fer-en-acabar">Què sabràs fer en acabar</a></li><li><a href="#ara-la-peticio-ve-de-fora">Ara la petició ve de fora</a></li><li><a href="#redirigir-un-port-o-fer-de-proxy-invers">Redirigir un port o fer de proxy invers</a></li><li><a href="#que-hi-guanya-el-proxy-invers">Què hi guanya el proxy invers</a></li><li><a href="#el-servidor-intern-no-surt-enlloc">El servidor intern no surt enlloc</a></li><li><a href="#comprovar-qui-respon-des-de-fora">Comprovar qui respon des de fora</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#resum">Resum</a></li><li><a href="#comprova-el-que-has-apres">Comprova el que has après</a></li><li><a href="#al-curriculum">Al currículum</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què sabràs fer en acabar</h2>
+  <h2 id="que-sabras-fer-en-acabar">Què sabràs fer en acabar</h2>
   <ul>
     <li>Explicar el problema invers al de <a class="cq-ref" href="t8-1-de-la-xarxa-local-a-internet.html">T8.1</a>: qui és de fora i vol un servei de dins.</li>
     <li>Distingir redirigir un port de fer un proxy invers.</li>
@@ -36,7 +40,8 @@
 
 <!-- ============ 2 · EL PROBLEMA INVERS ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Ara la petició ve de fora</h2>
+  <h2 id="ara-la-peticio-ve-de-fora">Ara la petició ve de fora</h2>
+<p>El nom del backend no és una protecció. L’aïllament depèn de xarxes separades, rutes i ACL que permeten només els orígens autoritzats; continua sent necessari encara que algú conegui el nom i l’adreça.</p>
   <p>
     Fins ara, qui sortia era el client de dins cap a Internet. Ara el cas és el contrari: hi ha
     un servidor a la xarxa interna i algú de fora —un client qualsevol d'Internet— vol
@@ -47,7 +52,7 @@
 
 <!-- ============ 3 · DUES MANERES ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Redirigir un port o fer de proxy invers</h2>
+  <h2 id="redirigir-un-port-o-fer-de-proxy-invers">Redirigir un port o fer de proxy invers</h2>
   <p>
     Igual que a <a class="cq-ref" href="t8-1-de-la-xarxa-local-a-internet.html">T8.1</a> hi havia dues altures per sortir, n'hi ha dues per entrar.
   </p>
@@ -71,7 +76,7 @@
 
 <!-- ============ 4 · QUÈ GUANYA EL PROXY INVERS ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Què hi guanya el proxy invers</h2>
+  <h2 id="que-hi-guanya-el-proxy-invers">Què hi guanya el proxy invers</h2>
   <p>
     En atendre ell la connexió, el proxy invers pot ser l'únic lloc on es xifra amb HTTPS i on
     viu el certificat: el servidor intern no necessita saber-ne res, ni tenir-lo instal·lat. I
@@ -82,19 +87,13 @@
 
 <!-- ============ 5 · PER QUÈ NO ES PUBLICA EL SERVIDOR INTERN ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>El servidor intern no surt enlloc</h2>
-  <p>
-    El servidor intern <strong>no es publica al DNS</strong> ni se li permet acceptar
-    connexions de ningú que no sigui la passarel·la: si algú de fora en conegués l'adreça, es
-    podria saltar el proxy invers i tot el control que aporta. Aquesta zona de la xarxa, feta
-    perquè només hi entri el que ha passat abans per una passarel·la controlada, és el que es
-    coneix com a <strong>zona desmilitaritzada</strong>.
-  </p>
+  <h2 id="el-servidor-intern-no-surt-enlloc">El servidor intern no surt enlloc</h2>
+  <p>El DNS públic apunta al frontal perquè és el punt d’entrada. El backend només accepta el servei des del frontal gràcies a la segmentació i les ACL. Conèixer la IP o el nom del backend no ha de permetre saltar-se el frontal. Una DMZ és un segment amb controls de connexió; no es defineix per ocultar noms.</p>
 </div>
 
 <!-- ============ 6 · OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h2>Comprovar qui respon des de fora</h2>
+  <h2 id="comprovar-qui-respon-des-de-fora">Comprovar qui respon des de fora</h2>
   <p>
     Des d'un client de fora, cal comprovar que només respon la màquina del davant:
   </p>
@@ -109,7 +108,7 @@
 
 <!-- ============ 7 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2>Criteris professionals</h2>
+  <h2 id="criteris-professionals">Criteris professionals</h2>
   <ul>
     <li><strong>Un únic punt visible des de fora</strong>: el servidor intern mai no hi respon directament.</li>
     <li><strong>El certificat viu a la passarel·la</strong>, no cal repetir-lo a cada servidor intern.</li>
@@ -119,7 +118,7 @@
 
 <!-- ============ 8 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Errors habituals</h2>
+  <h2 id="errors-habituals">Errors habituals</h2>
   <dl class="cq-issues">
     <dt>El servidor intern respon directament des de fora</dt>
     <dd>
@@ -141,21 +140,21 @@
 
 <!-- ============ 9 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h2>Resum</h2>
+  <h2 id="resum">Resum</h2>
   <ul>
     <li>Publicar un servei intern és el problema <strong>invers</strong> a sortir a Internet.</li>
     <li><strong>Redirigir un port</strong> (xarxa) canvia el destí del paquet; el <strong>proxy invers</strong> (aplicació) atén ell mateix la petició.</li>
     <li>El proxy invers centralitza el <strong>certificat HTTPS</strong> i deixa una <strong>única màquina visible</strong> des de fora.</li>
-    <li>El servidor intern no es publica al DNS ni accepta connexions de ningú més: és una <strong>zona desmilitaritzada</strong>.</li>
-    <li>Amb això es tanca el <a class="cq-ref" href="../index.html">RA8</a>: a partir d'aquí, <a class="cq-ref" href="../guies/g8-1-squid.html">G8.1</a> mostra com muntar-ho amb Squid.</li>
+    <li>L’aïllament del servidor intern es verifica amb segmentació i ACL; el DNS no substitueix aquests controls.</li>
+    <li>Amb això es tanca el <a class="cq-ref" href="../index.html">RA8</a>: el proxy invers amb Apache es documenta a <a class="cq-ref" href="../../RA5/guies/g5-1-apache.html">G5.1</a> i el proxy explícit Squid a <a class="cq-ref" href="../guies/g8-1-squid.html">G8.1</a>.</li>
   </ul>
 </div>
 
 <!-- ============ 10 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h2>Comprova el que has après</h2>
+  <h2 id="comprova-el-que-has-apres">Comprova el que has après</h2>
 
-  <div class="cq-question" data-id="t8-4-invers" data-type="single">
+  <div class="cq-question" data-id="t8-4-invers" data-type="single" data-explanation="El proxy invers rep la petició externa i obre una connexió al servidor intern.">
     <div class="statement">Quin problema resol un proxy invers?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que els clients de dins puguin sortir a Internet</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Que algú de fora arribi a un servei de dins sense contactar-lo directament</button>
@@ -165,7 +164,7 @@
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t8-4-redirigir-vs-invers" data-type="single">
+  <div class="cq-question" data-id="t8-4-redirigir-vs-invers" data-type="single" data-explanation="DNAT modifica l’adreça de destí; el proxy invers termina la connexió i en crea una altra.">
     <div class="statement">Quina diferència hi ha entre redirigir un port i fer proxy invers?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Redirigir un port només funciona amb HTTPS</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Redirigir un port canvia el destí del paquet; el proxy invers atén la petició ell mateix i en fa una de nova cap endins</button>
@@ -175,7 +174,7 @@
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t8-4-certificat" data-type="single">
+  <div class="cq-question" data-id="t8-4-certificat" data-type="single" data-explanation="Terminar HTTPS al frontal centralitza el certificat d’aquell punt d’entrada.">
     <div class="statement">Per què es posa el certificat HTTPS al proxy invers i no al servidor intern?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Perquè és un únic punt de xifratge, i el servidor intern no ha de saber res d'HTTPS</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè el servidor intern no pot instal·lar certificats</button>
@@ -185,17 +184,17 @@
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t8-4-dns" data-type="single">
-    <div class="statement">Per què el servidor intern no s'ha de publicar al DNS?</div>
+  <div class="cq-question" data-id="t8-4-dns" data-type="single" data-explanation="Publicar només el frontal al DNS orienta els clients; l’aïllament depèn de xarxa, rutes i ACL.">
+    <div class="statement">Per què el DNS públic del servei apunta al frontal?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè el DNS no permet noms interns</button>
-    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Perquè un nom públic deixaria una via per saltar-se el proxy invers</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Per dirigir els clients al punt d’entrada previst; l’aïllament del backend el garanteixen la xarxa i les ACL</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè els servidors interns no tenen adreça IP</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè trencaria la memòria cau</button>
     <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t8-4-dmz" data-type="single">
+  <div class="cq-question" data-id="t8-4-dmz" data-type="single" data-explanation="Una DMZ o xarxa de servei requereix segmentació i controls; el secret del nom no la protegeix.">
     <div class="statement">Quina idea descriu millor «zona desmilitaritzada» en aquest context?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Una xarxa sense cap tallafoc actiu</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Una zona pensada perquè només hi entri trànsit que ja ha passat per una passarel·la controlada</button>
@@ -209,7 +208,7 @@
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h2>Al currículum</h2>
+  <h2 id="al-curriculum">Al currículum</h2>
   <p><span class="lbl">Contingut 8.1</span> Passarel·les a nivell d'aplicació.</p>
   <p><span class="lbl">CA 8.10</span> Implanta i verifica la configuració per accedir des d'una xarxa pública a un servei d'una xarxa privada local.</p>
 </div>

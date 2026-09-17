@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · T1.2</div>
   <h1>Encaminament i NAT</h1>
   <p class="lede">Per què un client amb IP correcta encara no té Internet.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-sabras-fer-en-acabar">Què sabràs fer en acabar</a></li><li><a href="#tinc-ip-pero-no-tinc-internet">Tinc IP, però no tinc Internet</a></li><li><a href="#encaminament-deixar-passar-els-paquets">Encaminament: deixar passar els paquets</a></li><li><a href="#nat-qui-signa-la-carta">NAT: qui signa la carta</a></li><li><a href="#l-escenari-de-les-activitats">L&#x27;escenari de les activitats</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#resum">Resum</a></li><li><a href="#comprova-el-que-has-apres">Comprova el que has après</a></li><li><a href="#al-curriculum">Al currículum</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què sabràs fer en acabar</h2>
+  <h2 id="que-sabras-fer-en-acabar">Què sabràs fer en acabar</h2>
   <ul>
     <li>Explicar per què un client amb IP correcta encara no té Internet.</li>
     <li>Activar l'encaminament de paquets de forma permanent.</li>
@@ -36,7 +40,7 @@
 
 <!-- ============ 2 · EL PROBLEMA ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Tinc IP, però no tinc Internet</h2>
+  <h2 id="tinc-ip-pero-no-tinc-internet">Tinc IP, però no tinc Internet</h2>
   <p>
     El client ha rebut la seva configuració per DHCP i la porta d'enllaç apunta al teu servidor.
     Fa <code>ping</code> a Internet i no passa res. DHCP ha funcionat perfectament: el que falla
@@ -52,7 +56,7 @@
 
 <!-- ============ 3 · ENCAMINAMENT ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Encaminament: deixar passar els paquets</h2>
+  <h2 id="encaminament-deixar-passar-els-paquets">Encaminament: deixar passar els paquets</h2>
   <p>
     Un Linux amb dues targetes de xarxa <strong>no reenvia res</strong> entre elles. Per
     seguretat, ve desactivat de fàbrica: si no ho actives, cada targeta viu la seva vida.
@@ -67,7 +71,7 @@
 
 <!-- ============ 4 · NAT ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>NAT: qui signa la carta</h2>
+  <h2 id="nat-qui-signa-la-carta">NAT: qui signa la carta</h2>
   <p>
     Els clients tenen adreces privades, per exemple <code>192.168.1.50</code>. Aquestes adreces
     <strong>no existeixen a Internet</strong>: cap servidor de fora sabria com respondre-hi.
@@ -86,7 +90,7 @@
 
 <!-- ============ 5 · L'ESCENARI ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h2>L'escenari de les activitats</h2>
+  <h2 id="l-escenari-de-les-activitats">L'escenari de les activitats</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Targeta</th><th>Xarxa</th><th>Paper</th></tr></thead>
@@ -120,7 +124,7 @@
 
 <!-- ============ BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2>Criteris professionals</h2>
+  <h2 id="criteris-professionals">Criteris professionals</h2>
   <ul>
     <li><strong>Diagnostica per capes</strong>, de dins cap a fora: ruta al client, el servidor, una IP d'Internet i, l'últim de tot, un nom.</li>
     <li><strong>Encaminar i traduir són dues coses</strong>: activar-ne una i oblidar l'altra és la fallada més freqüent d'aquest RA.</li>
@@ -132,7 +136,7 @@
 
 <!-- ============ PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Errors habituals</h2>
+  <h2 id="errors-habituals">Errors habituals</h2>
   <dl class="cq-issues">
     <dt>El client té IP i porta d'enllaç, però no surt</dt>
     <dd>
@@ -162,7 +166,7 @@
 
 <!-- ============ 11 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h2>Resum</h2>
+  <h2 id="resum">Resum</h2>
   <ul>
     <li>Un client amb IP correcta encara necessita <strong>encaminament</strong> i <strong>NAT</strong> per sortir a Internet.</li>
     <li>L'encaminament s'activa amb <code>net.ipv4.ip_forward=1</code>, permanent a <code>/etc/sysctl.d/</code>.</li>
@@ -178,9 +182,9 @@
 
 <!-- ============ 12 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h2>Comprova el que has après</h2>
+  <h2 id="comprova-el-que-has-apres">Comprova el que has après</h2>
 
-  <div class="cq-question" data-id="t1-2-forward" data-type="single">
+  <div class="cq-question" data-id="t1-2-forward" data-type="single" data-explanation="ip_forward controla el reenviament IPv4; no diu si hi ha NAT o regles de filtratge.">
     <div class="statement">Què significa que <code>/proc/sys/net/ipv4/ip_forward</code> valgui <code>0</code>?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">El servidor no passa paquets d'una targeta a l'altra</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El servidor no té cap targeta de xarxa activa</button>
@@ -190,7 +194,7 @@
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t1-2-nat" data-type="single">
+  <div class="cq-question" data-id="t1-2-nat" data-type="single" data-explanation="Masquerade modifica l’origen i manté l’estat necessari per retornar les respostes al client.">
     <div class="statement">Per a què serveix el NAT (<em>masquerade</em>)?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Per repartir adreces IP als clients</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Per canviar l'adreça privada d'origen per la del servidor, i que la resposta pugui tornar</button>
@@ -200,8 +204,8 @@
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t1-2-permanent" data-type="single">
-    <div class="statement">Després de reiniciar, el client torna a quedar-se sense Internet. Què ha passat?</div>
+  <div class="cq-question" data-id="t1-2-permanent" data-type="single" data-explanation="Els canvis en memòria es perden al reinici si no hi ha configuració persistent que els carregui.">
+    <div class="statement">Abans de reiniciar, el reenviament i les regles NAT funcionaven, però només s’havien aplicat en memòria. Després del reinici ip_forward és 0 i no hi ha regles NAT. Què falta?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">La concessió DHCP ha caducat</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">La configuració es va fer només per a la sessió i no s'ha desat en fitxers</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El servidor ha canviat d'adreça MAC</button>
@@ -210,8 +214,8 @@
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t1-2-diagnostic" data-type="single">
-    <div class="statement">Al client, <code>ping 9.9.9.9</code> funciona però <code>ping www.upc.edu</code> no. Què falla?</div>
+  <div class="cq-question" data-id="t1-2-diagnostic" data-type="single" data-explanation="L’error explícit de resolució i el DNS incorrecte rebut per DHCP dirigeixen el diagnòstic cap a aquesta opció.">
+    <div class="statement">Al client, ping 9.9.9.9 funciona, però ping www.upc.edu indica un error de resolució del nom. resolvectl mostra un servidor DNS incorrecte rebut per DHCP. Què cal revisar?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">L'encaminament</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El NAT</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">El DNS que reparteix el servidor DHCP</button>
@@ -220,7 +224,7 @@
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t1-2-certes" data-type="multi">
+  <div class="cq-question" data-id="t1-2-certes" data-type="multi" data-explanation="Encaminament, traducció d’adreces i resolució de noms són funcions independents.">
     <div class="statement">Selecciona totes les afirmacions certes</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">L'encaminament ve desactivat per defecte a Linux.</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">El <em>masquerade</em> s'aplica a la targeta que surt a Internet.</button>
@@ -235,7 +239,7 @@
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h2>Al currículum</h2>
+  <h2 id="al-curriculum">Al currículum</h2>
   <p><span class="lbl">Contingut 8.3</span> Encaminament de trànsit entre interfícies de xarxa.</p>
   <p><span class="lbl">CA 8.8</span> Estableix un mecanisme que permeti reenviar trànsit entre dues o més interfícies d'un mateix sistema.</p>
 </div>

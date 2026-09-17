@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA4 · T4.2</div>
   <h1>Com és per dins un servidor de correu</h1>
   <p class="lede">Peces separades o servei únic, ports que ha d'obrir i on viu la configuració.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-sabras-fer-en-acabar">Què sabràs fer en acabar</a></li><li><a href="#peces-separades-o-un-sol-servei">Peces separades o un sol servei</a></li><li><a href="#els-ports-que-ha-d-obrir">Els ports que ha d&#x27;obrir</a></li><li><a href="#on-viu-la-configuracio">On viu la configuració</a></li><li><a href="#el-certificat-que-ningu-ha-signat">El certificat que ningú ha signat</a></li><li><a href="#per-a-qui-existeixen-les-eines-tot-en-un">Per a qui existeixen les eines tot-en-un</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#resum">Resum</a></li><li><a href="#comprova-el-que-has-apres">Comprova el que has après</a></li><li><a href="#al-curriculum">Al currículum</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què sabràs fer en acabar</h2>
+  <h2 id="que-sabras-fer-en-acabar">Què sabràs fer en acabar</h2>
   <ul>
     <li>Distingir un servidor fet de <strong>peces separades</strong> d'un de <strong>servei únic</strong>, i dir-ne exemples.</li>
     <li>Enumerar els ports que ha d'obrir un servidor de correu i saber quins fa servir el client.</li>
@@ -37,7 +41,7 @@
 
 <!-- ============ 2 · PECES SEPARADES O SERVEI ÚNIC ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Peces separades o un sol servei</h2>
+  <h2 id="peces-separades-o-un-sol-servei">Peces separades o un sol servei</h2>
   <p>
     A la <a class="cq-ref" href="t4-1-com-viatja-un-correu.html">T4.1</a> has vist que el correu necessita un MTA que transporti i un MDA que guardi la
     bústia. Són dos <em>papers</em>, i cada producte tria si els reparteix o els ajunta.
@@ -59,7 +63,7 @@
 
 <!-- ============ 3 · ELS PORTS QUE HA D'OBRIR ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Els ports que ha d'obrir</h2>
+  <h2 id="els-ports-que-ha-d-obrir">Els ports que ha d'obrir</h2>
   <p>
     Un servidor de correu no escolta per un sol port: n'obre un per cada conversa diferent
     que ha d'atendre.
@@ -77,14 +81,14 @@
   </div>
   <p>
     El client pot enviar pel <strong>587</strong>, que comença en clar i puja a TLS amb
-    <code>STARTTLS</code>, o pel <strong>465</strong>, xifrat des del primer byte. Avui es
+    <code>STARTTLS</code>, o pel <strong>465</strong>, amb TLS implícit abans de la conversa SMTP. Avui es
     prefereix el 465, i és el que obren els servidors moderns.
   </p>
 </div>
 
 <!-- ============ 4 · ON VIU LA CONFIGURACIÓ ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>On viu la configuració</h2>
+  <h2 id="on-viu-la-configuracio">On viu la configuració</h2>
   <p>
     Al <a class="cq-ref" href="../../RA2/index.html">RA2</a> i al <a class="cq-ref" href="../../RA3/index.html">RA3</a> la configuració era un fitxer de text —<code>named.conf</code>,
     <code>vsftpd.conf</code>— que obries amb <code>nano</code>. No tots els serveis ho fan així.
@@ -97,7 +101,7 @@
 
 <!-- ============ 5 · EXEMPLE: CERTIFICAT AUTOFIRMAT ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h2>El certificat que ningú ha signat</h2>
+  <h2 id="el-certificat-que-ningu-ha-signat">El certificat que ningú ha signat</h2>
   <p>
     Sense domini públic ni ACME/Let's Encrypt actiu, un servidor de correu es genera un
     certificat <strong>autofirmat</strong> la primera vegada que arrenca. És vàlid per xifrar la
@@ -114,7 +118,7 @@
 
 <!-- ============ 6 · CAS REAL ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h2>Per a qui existeixen les eines tot-en-un</h2>
+  <h2 id="per-a-qui-existeixen-les-eines-tot-en-un">Per a qui existeixen les eines tot-en-un</h2>
   <p>
     Stalwart, Mailcow o Mail-in-a-Box existeixen per a qui no té equip per mantenir
     Postfix+Dovecot+Rspamd com a peces separades: petites organitzacions i departaments IT
@@ -128,7 +132,7 @@
 
 <!-- ============ 7 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2>Criteris professionals</h2>
+  <h2 id="criteris-professionals">Criteris professionals</h2>
   <ul>
     <li><strong>465 abans que 587</strong> per a l'enviament del client.</li>
     <li><strong>No obris cap port que no calgui</strong>: cada port obert és una porta a vigilar.</li>
@@ -139,7 +143,7 @@
 
 <!-- ============ 8 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Errors habituals</h2>
+  <h2 id="errors-habituals">Errors habituals</h2>
   <dl class="cq-issues">
     <dt>Buscar un fitxer de configuració que no existeix</dt>
     <dd>
@@ -169,7 +173,7 @@
 
 <!-- ============ 9 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h2>Resum</h2>
+  <h2 id="resum">Resum</h2>
   <ul>
     <li>Els papers d'MTA i MDA els poden fer <strong>dos programes</strong> (Postfix+Dovecot) o <strong>un de sol</strong> (Stalwart, Mailcow).</li>
     <li>Ports del servidor: <strong>25</strong> entre servidors, <strong>465</strong> i <strong>993</strong>/<strong>995</strong> per al client.</li>
@@ -182,9 +186,9 @@
 
 <!-- ============ 10 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h2>Comprova el que has après</h2>
+  <h2 id="comprova-el-que-has-apres">Comprova el que has après</h2>
 
-  <div class="cq-question" data-id="t4-2-peces" data-type="single">
+  <div class="cq-question" data-id="t4-2-peces" data-type="single" data-explanation="Es poden separar transport i bústies en productes diferents o integrar-los en un servei.">
     <div class="statement">Què vol dir que un servidor de correu sigui de «servei únic»?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Que un sol programa fa d'MTA i d'MDA alhora</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que només admet un compte d'usuari</button>
@@ -194,17 +198,17 @@
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t4-2-config" data-type="single">
+  <div class="cq-question" data-id="t4-2-config" data-type="single" data-explanation="Una consola web no implica absència de fitxers auxiliars; cal gestionar cada dada amb les eines suportades.">
     <div class="statement">Un servei guarda la configuració en una base de dades i es toca des d'una consola web. Quina conseqüència té?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que la configuració es perd en reiniciar</button>
-    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Que no hi ha cap fitxer de text per obrir amb un editor</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Que els valors desats a la base de dades s’han de gestionar amb les eines del servei; això no exclou fitxers auxiliars</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que no es pot fer cap còpia de seguretat</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que deixa de necessitar contrasenya d'administrador</button>
     <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t4-2-ports" data-type="single">
+  <div class="cq-question" data-id="t4-2-ports" data-type="single" data-explanation="Un port escoltant només acredita un listener: encara cal provar autenticació i lliurament.">
     <div class="statement">Quins ports fa servir un client de correu contra un servidor modern?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">587 i 143</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">25 i 110</button>
@@ -214,7 +218,7 @@
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t4-2-autofirmat" data-type="single">
+  <div class="cq-question" data-id="t4-2-autofirmat" data-type="single" data-explanation="Un certificat autofirmat pot xifrar; el client encara ha de validar el nom i establir confiança.">
     <div class="statement">El client avisa que el certificat del servidor és autofirmat. Què vol dir exactament?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que la connexió viatja en clar</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Que la connexió va xifrada, però cap autoritat de confiança acredita qui és el servidor</button>
@@ -228,7 +232,7 @@
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h2>Al currículum</h2>
+  <h2 id="al-curriculum">Al currículum</h2>
   <p><span class="lbl">Contingut 4.2</span> Protocols i serveis de descàrrega de correu.</p>
   <p><span class="lbl">CA 4.1</span> Descriu els protocols que intervenen en l'enviament i la recollida del correu electrònic.</p>
 </div>

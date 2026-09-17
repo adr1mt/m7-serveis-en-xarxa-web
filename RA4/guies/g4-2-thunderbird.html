@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,7 +17,7 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA4 · G4.2</div>
   <h1>Guia: Thunderbird</h1>
@@ -25,7 +26,8 @@
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què hi ha en aquesta guia</h2>
+  <h2 id="que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</h2>
+<p>El client ha de tenir Thunderbird instal·lat abans de quedar només a personal1. Si la imatge no l’inclou, instal·la’l amb una connexió temporal a puigcastellar1 i retira aquesta connexió abans de les proves de correu.</p>
   <p>Documentació oficial: <a href="https://support.mozilla.org/products/thunderbird">support.mozilla.org</a></p>
   <ul>
     <li>Es fa a la màquina <strong>Desktop</strong>, amb el servidor de la <a class="cq-ref" href="g4-1-stalwart.html">G4.1</a> ja funcionant.</li>
@@ -35,7 +37,7 @@
 
 <!-- ============ 2 · PAS A PAS ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h2>Instal·lar i configurar el compte</h2>
+  <h2 id="installar-i-configurar-el-compte">Instal·lar i configurar el compte</h2>
 
   <ol class="cq-steps">
     <li>
@@ -89,7 +91,7 @@ sudo apt install -y thunderbird</pre>
 
 <!-- ============ 3 · COMPROVACIÓ ============ -->
 <div class="cq-block" data-kind="comprovació">
-  <h2>Com saber que el compte funciona</h2>
+  <h2 id="com-saber-que-el-compte-funciona">Com saber que el compte funciona</h2>
   <ul>
     <li>La safata d'entrada es carrega sense cap error de connexió.</li>
     <li>Un correu enviat des d'aquest compte cap a l'altre compte del servidor arriba i es
@@ -101,7 +103,7 @@ sudo apt install -y thunderbird</pre>
 
 <!-- ============ BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2>Criteris professionals</h2>
+  <h2 id="criteris-professionals">Criteris professionals</h2>
   <ul>
     <li><strong>Configuració manual</strong> en un servidor propi: la detecció automàtica
     busca registres que la teva xarxa interna no publica.</li>
@@ -116,7 +118,7 @@ sudo apt install -y thunderbird</pre>
 
 <!-- ============ 4 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Errors habituals</h2>
+  <h2 id="errors-habituals">Errors habituals</h2>
   <dl class="cq-issues">
     <dt>Thunderbird no troba el servidor</dt>
     <dd>
@@ -146,7 +148,7 @@ sudo apt install -y thunderbird</pre>
 
 <!-- ============ 5 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h2>Fitxa ràpida</h2>
+  <h2 id="fitxa-rapida">Fitxa ràpida</h2>
   <ul>
     <li>Entrant: <strong>IMAP, 993, SSL/TLS</strong>. Sortint: <strong>SMTP, 465, SSL/TLS</strong>.</li>
     <li>Usuari: sempre l'<strong>adreça sencera</strong>; autenticació, contrasenya normal.</li>

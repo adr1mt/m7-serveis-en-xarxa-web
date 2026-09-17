@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · T1.0</div>
   <h1>Repàs d'adreçament</h1>
   <p class="lede">El mínim de xarxes que necessites tenir clar abans de començar el mòdul.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-sabras-fer-en-acabar">Què sabràs fer en acabar</a></li><li><a href="#dues-adreces-per-a-cada-targeta">Dues adreces per a cada targeta</a></li><li><a href="#la-mascara-parteix-l-adreca-en-dos">La màscara parteix l&#x27;adreça en dos</a></li><li><a href="#les-mascares-que-faras-servir">Les màscares que faràs servir</a></li><li><a href="#les-mascares-no-acaben-sempre-en-un-punt">Les màscares no acaben sempre en un punt</a></li><li><a href="#desglossar-la-xarxa-192-168-1-0-24">Desglossar la xarxa 192.168.1.0/24</a></li><li><a href="#adreces-privades-i-publiques">Adreces privades i públiques</a></li><li><a href="#quantes-adreces-necessites">Quantes adreces necessites</a></li><li><a href="#llegir-la-teva-propia-xarxa">Llegir la teva pròpia xarxa</a></li><li><a href="#confusions-habituals">Confusions habituals</a></li><li><a href="#resum">Resum</a></li><li><a href="#comprova-el-que-has-apres">Comprova el que has après</a></li><li><a href="#al-curriculum">Al currículum</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què sabràs fer en acabar</h2>
+  <h2 id="que-sabras-fer-en-acabar">Què sabràs fer en acabar</h2>
   <ul>
     <li>Diferenciar l'adreça MAC de l'adreça IP.</li>
     <li>Interpretar una màscara escrita en format CIDR (<code>/24</code>).</li>
@@ -36,7 +40,7 @@
 
 <!-- ============ 2 · MAC I IP ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Dues adreces per a cada targeta</h2>
+  <h2 id="dues-adreces-per-a-cada-targeta">Dues adreces per a cada targeta</h2>
   <p>
     Cada targeta de xarxa té <strong>dues</strong> adreces, i fan feines diferents:
   </p>
@@ -58,7 +62,7 @@
 
 <!-- ============ 3 · IP I MÀSCARA ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>La màscara parteix l'adreça en dos</h2>
+  <h2 id="la-mascara-parteix-l-adreca-en-dos">La màscara parteix l'adreça en dos</h2>
   <p>
     Una adreça IPv4 són quatre números de 0 a 255, i sempre va acompanyada d'una
     <strong>màscara</strong>. La màscara diu quina part de l'adreça identifica la
@@ -78,7 +82,7 @@
 
 <!-- ============ 4 · CIDR ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Les màscares que faràs servir</h2>
+  <h2 id="les-mascares-que-faras-servir">Les màscares que faràs servir</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>CIDR</th><th>Màscara</th><th>Adreces</th><th>Equips</th></tr></thead>
@@ -99,7 +103,7 @@
 
 <!-- ============ MÀSCARES NO RODONES ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Les màscares no acaben sempre en un punt</h2>
+  <h2 id="les-mascares-no-acaben-sempre-en-un-punt">Les màscares no acaben sempre en un punt</h2>
   <p>
     El <code>/24</code>, el <code>/16</code> i el <code>/8</code> són còmodes perquè cauen just
     entre dos números de l'adreça. Però la màscara pot ser <strong>qualsevol valor entre /0 i
@@ -121,7 +125,7 @@
 
 <!-- ============ 5 · EXEMPLE ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h2>Desglossar la xarxa 192.168.1.0/24</h2>
+  <h2 id="desglossar-la-xarxa-192-168-1-0-24">Desglossar la xarxa 192.168.1.0/24</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Adreça</th><th>Què és</th><th>Es pot fer servir?</th></tr></thead>
@@ -141,7 +145,7 @@
 
 <!-- ============ 6 · RANGS PRIVATS ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Adreces privades i públiques</h2>
+  <h2 id="adreces-privades-i-publiques">Adreces privades i públiques</h2>
   <p>
     Hi ha tres rangs reservats per a xarxes internes. <strong>No existeixen a Internet</strong>:
     els pots fer servir a casa, a l'institut i a l'empresa sense demanar permís a ningú.
@@ -165,7 +169,7 @@
 
 <!-- ============ 5 · CALCULAR EL RANG ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Quantes adreces necessites</h2>
+  <h2 id="quantes-adreces-necessites">Quantes adreces necessites</h2>
   <p>
     Les activitats et demanaran rangs per a un nombre concret d'equips. El càlcul és una resta,
     però has de comptar bé: <strong>els dos extrems del rang hi entren</strong>.
@@ -199,7 +203,7 @@
 
 <!-- ============ 7 · OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h2>Llegir la teva pròpia xarxa</h2>
+  <h2 id="llegir-la-teva-propia-xarxa">Llegir la teva pròpia xarxa</h2>
 
   <ol class="cq-steps">
     <li>
@@ -242,7 +246,7 @@ print('Equips:', n.num_addresses - 2)"</pre>
 
 <!-- ============ 8 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Confusions habituals</h2>
+  <h2 id="confusions-habituals">Confusions habituals</h2>
   <dl class="cq-issues">
     <dt>Dos equips no es veuen tot i tenir IP</dt>
     <dd>
@@ -266,7 +270,7 @@ print('Equips:', n.num_addresses - 2)"</pre>
 
 <!-- ============ 9 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h2>Resum</h2>
+  <h2 id="resum">Resum</h2>
   <ul>
     <li>La <strong>MAC</strong> ve de fàbrica i és local; la <strong>IP</strong> es configura i serveix arreu.</li>
     <li>La <strong>màscara</strong> parteix l'adreça en part de xarxa i part d'equip.</li>
@@ -295,9 +299,9 @@ print('Equips:', n.num_addresses - 2)"</pre>
 
 <!-- ============ 10 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h2>Comprova el que has après</h2>
+  <h2 id="comprova-el-que-has-apres">Comprova el que has après</h2>
 
-  <div class="cq-question" data-id="t1-0-cidr" data-type="single">
+  <div class="cq-question" data-id="t1-0-cidr" data-type="single" data-explanation="El prefix CIDR indica quants bits identifiquen la xarxa; els altres identifiquen els hosts.">
     <div class="statement">Quina màscara correspon a <code>/24</code>?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">255.255.0.0</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">255.255.255.0</button>
@@ -307,7 +311,7 @@ print('Equips:', n.num_addresses - 2)"</pre>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t1-0-equips" data-type="single">
+  <div class="cq-question" data-id="t1-0-equips" data-type="single" data-explanation="En una subxarxa IPv4 convencional cal descomptar les adreces de xarxa i difusió.">
     <div class="statement">Quants equips es poden connectar a la xarxa <code>192.168.1.0/24</code>?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">256</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">255</button>
@@ -317,7 +321,7 @@ print('Equips:', n.num_addresses - 2)"</pre>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t1-0-difusio-mascara" data-type="single">
+  <div class="cq-question" data-id="t1-0-difusio-mascara" data-type="single" data-explanation="La màscara determina els límits: no es poden deduir només de l’últim octet.">
     <div class="statement">Quina és l'adreça de difusió de la xarxa <code>10.0.0.0/8</code>?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">10.0.0.255</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">10.255.255.255</button>
@@ -327,7 +331,7 @@ print('Equips:', n.num_addresses - 2)"</pre>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t1-0-privada" data-type="single">
+  <div class="cq-question" data-id="t1-0-privada" data-type="single" data-explanation="Una adreça privada es reutilitza en xarxes internes i no s’encamina globalment a Internet.">
     <div class="statement">Quina d'aquestes adreces <em>no</em> és privada?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">10.5.4.3</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">172.16.0.10</button>
@@ -337,7 +341,7 @@ print('Equips:', n.num_addresses - 2)"</pre>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t1-0-mateixa-xarxa" data-type="single">
+  <div class="cq-question" data-id="t1-0-mateixa-xarxa" data-type="single" data-explanation="Dos equips comparteixen subxarxa si l’adreça de xarxa calculada amb la màscara coincideix.">
     <div class="statement">Els equips <code>192.168.1.10/24</code> i <code>192.168.2.10/24</code> es poden parlar directament?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Sí, comparteixen els dos primers números</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">No, amb <code>/24</code> la part de xarxa són els tres primers i no coincideix</button>
@@ -347,7 +351,7 @@ print('Equips:', n.num_addresses - 2)"</pre>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t1-0-certes" data-type="multi">
+  <div class="cq-question" data-id="t1-0-certes" data-type="multi" data-explanation="Adreça, màscara i ruta tenen funcions diferents: identificar l’equip, la subxarxa i la sortida.">
     <div class="statement">Selecciona totes les afirmacions certes</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">L'adreça MAC ve de fàbrica amb la targeta.</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">L'última adreça d'una xarxa és la de difusió i no s'assigna.</button>
@@ -362,7 +366,7 @@ print('Equips:', n.num_addresses - 2)"</pre>
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h2>Al currículum</h2>
+  <h2 id="al-curriculum">Al currículum</h2>
   <p><span class="lbl">Contingut 1.1</span> Adreça IP, màscara de xarxa, porta d'enllaç.</p>
 </div>
 

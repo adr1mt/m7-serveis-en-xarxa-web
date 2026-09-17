@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA8 · A8.3</div>
   <h1>Web corporativa segura</h1>
   <p class="lede">DNS propi, proxy invers i un servidor intern que ningú no pot tocar en directe.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-has-de-saber-abans-de-comencar">Què has de saber abans de començar</a></li><li><a href="#amb-que-treballaras">Amb què treballaràs</a></li><li><a href="#que-has-de-fer">Què has de fer</a></li><li><a href="#d-on-has-de-treure-cada-cosa">D&#x27;on has de treure cada cosa</a></li><li><a href="#el-client-no-ha-de-tocar-mai-el-fitxer-hosts">El client no ha de tocar mai el fitxer hosts</a></li><li><a href="#el-frontal-es-l-unica-maquina-que-existeix-des-de-fora">El frontal és l&#x27;única màquina que existeix des de fora</a></li><li><a href="#com-sabras-que-ho-has-fet-be">Com sabràs que ho has fet bé</a></li><li><a href="#si-alguna-cosa-no-va">Si alguna cosa no va</a></li><li><a href="#que-has-d-entregar">Què has d&#x27;entregar</a></li><li><a href="#al-curriculum">Al currículum</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què has de saber abans de començar</h2>
+  <h2 id="que-has-de-saber-abans-de-comencar">Què has de saber abans de començar</h2>
   <p>
     Teoria <a class="cq-ref" href="../teoria/t8-4-publicar-un-servei-intern.html">T8.4</a> (redirigir un port o fer de proxy invers, i per què el servidor
     intern no es publica). Guies <a class="cq-ref" href="../../RA5/guies/g5-1-apache.html">G5.1</a> (proxy invers amb Apache), <a class="cq-ref" href="../../RA2/guies/g2-1-bind9.html">G2.1</a> (zona pròpia
@@ -42,23 +46,24 @@
 
 <!-- ============ ESCENARI ============ -->
 <div class="cq-block" data-kind="escenari">
-  <h2>Amb què treballaràs</h2>
+  <h2 id="amb-que-treballaras">Amb què treballaràs</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Màquina</th><th>Targeta</th><th>Paper</th></tr></thead>
       <tbody>
-        <tr><td>Frontal</td><td>puigcastellar1</td><td>DNS propi + proxy invers HTTPS</td></tr>
-        <tr><td>Interna</td><td>puigcastellar1</td><td>Web real, zona pública i privada</td></tr>
+        <tr><td>Frontal</td><td>puigcastellar1 + personal1 (192.168.1.8/24)</td><td>DNS propi + proxy invers HTTPS</td></tr>
+        <tr><td>Interna</td><td>només personal1 (192.168.1.9/24)</td><td>Web real, zona pública i privada</td></tr>
         <tr><td>Client</td><td>puigcastellar1</td><td>DNS apuntant al frontal</td></tr>
       </tbody>
     </table>
   </div>
-  <p><strong>Tres màquines noves</strong> a isardVDI, totes a la mateixa xarxa.</p>
+  <p><strong>Tres màquines noves</strong> a isardVDI, amb xarxa externa i interna separades; la IP externa del frontal es consulta amb <code>ip -brief a</code>.</p>
 </div>
 
 <!-- ============ ENUNCIAT ============ -->
 <div class="cq-block" data-kind="enunciat">
-  <h2>Què has de fer</h2>
+  <h2 id="que-has-de-fer">Què has de fer</h2>
+<p>No activis encaminament general al frontal. El proxy invers obre la connexió al backend; el tallafoc intern permet HTTP només des de 192.168.1.8 i SSH des del frontal per administrar. Si el backend necessita paquets, instal·la’ls amb connexió externa temporal i retira-la abans de comprovar l’aïllament.</p>
   <ol>
     <li>Al frontal, munta una zona DNS pròpia per a <code>securesoft.test</code> que
       resolgui el domini cap a la seva pròpia adreça. No hi publiquis el servidor
@@ -77,7 +82,7 @@
 
 <!-- ============ ON BUSCAR ============ -->
 <div class="cq-block" data-kind="enunciat">
-  <h2>D'on has de treure cada cosa</h2>
+  <h2 id="d-on-has-de-treure-cada-cosa">D'on has de treure cada cosa</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Què has de fer</th><th>On ho tens</th></tr></thead>
@@ -96,7 +101,7 @@
 
 <!-- ============ RECORDATORI ============ -->
 <div class="cq-block" data-kind="recordatori">
-  <h2>El client no ha de tocar mai el fitxer hosts</h2>
+  <h2 id="el-client-no-ha-de-tocar-mai-el-fitxer-hosts">El client no ha de tocar mai el fitxer hosts</h2>
   <p>
     Si resols el nom afegint una línia a <code>/etc/hosts</code> del client, l'activitat
     no compleix el seu objectiu: el que s'avalua és que el DNS propi del frontal
@@ -107,7 +112,7 @@
 
 <!-- ============ OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h2>El frontal és l'única màquina que existeix des de fora</h2>
+  <h2 id="el-frontal-es-l-unica-maquina-que-existeix-des-de-fora">El frontal és l'única màquina que existeix des de fora</h2>
   <p>
     Des del client, cal que la resolució i la connexió passin sempre pel frontal, i
     que una petició directa contra l'adreça del servidor intern no obtingui mai
@@ -123,12 +128,11 @@
 
 <!-- ============ COMPROVACIÓ ============ -->
 <div class="cq-block" data-kind="comprovació">
-  <h2>Com sabràs que ho has fet bé</h2>
+  <h2 id="com-sabras-que-ho-has-fet-be">Com sabràs que ho has fet bé</h2>
   <ul>
     <li>Des del client, <code>dig securesoft.test</code> respon amb l'adreça del
       frontal, sense cap entrada a <code>/etc/hosts</code>.</li>
-    <li><code>curl -Iv https://securesoft.test/</code> des del client connecta i
-      respon <code>200 OK</code>, amb el contingut del servidor intern.</li>
+    <li><code>curl --cacert frontal.crt -i https://securesoft.test/</code> des del client verifica el certificat del laboratori i retorna <code>200 OK</code> i el contingut intern. Copia el certificat públic al client per un canal verificat i inclou securesoft.test al SAN. Un nom aliè ha de fallar. <code>-k</code> només serveix com a diagnòstic amb excepció TLS; no acredita confiança.</li>
     <li>Des del client, una petició directa a l'adreça del servidor intern al port
       80 no obté resposta.</li>
     <li>Des del frontal, <code>curl http://IP-INTERNA/</code> sí que respon.</li>
@@ -140,7 +144,7 @@
 
 <!-- ============ PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Si alguna cosa no va</h2>
+  <h2 id="si-alguna-cosa-no-va">Si alguna cosa no va</h2>
   <dl class="cq-issues">
     <dt>El client no resol <code>securesoft.test</code></dt>
     <dd>
@@ -188,7 +192,7 @@
 
 <!-- ============ LLIURAMENT ============ -->
 <div class="cq-block" data-kind="lliurament">
-  <h2>Què has d'entregar</h2>
+  <h2 id="que-has-d-entregar">Què has d'entregar</h2>
   <p>
     Un document tècnic amb la sortida de <code>dig securesoft.test</code> des del
     client, la petició HTTPS reeixida, la prova que el servidor intern no respon en
@@ -204,7 +208,7 @@
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h2>Al currículum</h2>
+  <h2 id="al-curriculum">Al currículum</h2>
   <p><span class="lbl">CA 8.2</span> Instal·la una aplicació que actuï de passarel·la entre la xarxa privada local i la pública.</p>
   <p><span class="lbl">CA 8.10</span> Implanta i verifica la configuració per accedir des d'una xarxa pública a un servei d'una xarxa privada local.</p>
 </div>

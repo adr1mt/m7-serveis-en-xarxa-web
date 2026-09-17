@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA3 · A3.3</div>
   <h1>Tancar l'FTP en clar</h1>
   <p class="lede">Veure la contrasenya viatjant, i deixar el servei de manera que ja no es pugui veure.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-has-de-saber-abans-de-comencar">Què has de saber abans de començar</a></li><li><a href="#amb-que-treballaras">Amb què treballaràs</a></li><li><a href="#que-has-de-fer">Què has de fer</a></li><li><a href="#d-on-has-de-treure-cada-cosa">D&#x27;on has de treure cada cosa</a></li><li><a href="#captura-nomes-la-teva-maquina">Captura només la teva màquina</a></li><li><a href="#dues-decisions-que-has-de-prendre-tu">Dues decisions que has de prendre tu</a></li><li><a href="#com-sabras-que-ho-has-fet-be">Com sabràs que ho has fet bé</a></li><li><a href="#si-alguna-cosa-no-va">Si alguna cosa no va</a></li><li><a href="#que-has-d-entregar">Què has d&#x27;entregar</a></li><li><a href="#al-curriculum">Al currículum</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què has de saber abans de començar</h2>
+  <h2 id="que-has-de-saber-abans-de-comencar">Què has de saber abans de començar</h2>
   <p>
     Teories <a class="cq-ref" href="../teoria/t3-2-comptes-i-limits.html">T3.2</a> (comptes i jaules) i <a class="cq-ref" href="../teoria/t3-3-ftps-i-sftp.html">T3.3</a> (FTPS i SFTP), i les guies <a class="cq-ref" href="../guies/g3-1-vsftpd.html">G3.1</a> i <a class="cq-ref" href="../guies/g3-2-sftp.html">G3.2</a>. Et
     convé tenir fresca la captura de trànsit del <a class="cq-ref" href="../../RA1/index.html">RA1</a>.
@@ -39,7 +43,8 @@
 
 <!-- ============ ESCENARI ============ -->
 <div class="cq-block" data-kind="escenari">
-  <h2>Amb què treballaràs</h2>
+  <h2 id="amb-que-treballaras">Amb què treballaràs</h2>
+<p><strong>Preparació del client:</strong> comprova que disposa de les eines de la guia. Si cal instal·lar paquets, connecta’l temporalment a puigcastellar1; després retira aquesta targeta. Les proves finals es fan només a personal1, sense suposar encaminament al servidor.</p>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Màquina</th><th>Targetes</th><th>Adreça</th></tr></thead>
@@ -49,18 +54,14 @@
       </tbody>
     </table>
   </div>
-  <p>
-    Aquesta activitat <strong>continua l'<a class="cq-ref" href="a3-1-servidor-ftp.html">A3.1</a></strong>: treballa sobre la mateixa màquina, amb el
-    servidor d'usuaris locals ja muntat i funcionant. És l'excepció del mòdul, i és a posta:
-    l'objectiu és veure el mateix servei abans i després de xifrar-lo.
-  </p>
+  <p>Parteix de dues <strong>màquines noves</strong> a isardVDI. Amb <a class="cq-ref" href="../guies/g3-1-vsftpd.html">G3.1</a> prepara un usuari local enjaulat i comprova que pot pujar i baixar un fitxer per FTP. En aquesta mateixa pràctica compararàs el servei abans i després del xifratge; no reutilitzis discos anteriors.</p>
 </div>
 
 <!-- ============ ENUNCIAT ============ -->
 <div class="cq-block" data-kind="enunciat">
-  <h2>Què has de fer</h2>
+  <h2 id="que-has-de-fer">Què has de fer</h2>
   <ol>
-    <li>Partir del servidor de l'<a class="cq-ref" href="a3-1-servidor-ftp.html">A3.1</a>, amb l'usuari local enjaulat funcionant.</li>
+    <li>Preparar en el servidor nou un usuari local enjaulat amb <a class="cq-ref" href="../guies/g3-1-vsftpd.html">G3.1</a> i comprovar lectura i escriptura abans de capturar l’FTP en clar.</li>
     <li><strong>Capturar</strong> una sessió des del servidor i localitzar l'usuari i la contrasenya al trànsit.</li>
     <li>Activar <strong>FTPS</strong> i forçar-lo, de manera que ja no s'accepti cap sessió en clar.</li>
     <li>Repetir la captura i demostrar que ara no s'hi llegeix res.</li>
@@ -80,7 +81,7 @@
 
 <!-- ============ ON BUSCAR ============ -->
 <div class="cq-block" data-kind="enunciat">
-  <h2>D'on has de treure cada cosa</h2>
+  <h2 id="d-on-has-de-treure-cada-cosa">D'on has de treure cada cosa</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Què has de fer</th><th>On ho tens</th></tr></thead>
@@ -97,7 +98,7 @@
 
 <!-- ============ RECORDATORI ============ -->
 <div class="cq-block" data-kind="recordatori">
-  <h2>Captura només la teva màquina</h2>
+  <h2 id="captura-nomes-la-teva-maquina">Captura només la teva màquina</h2>
   <p>
     La captura s'ha de fer sobre el teu servidor i la teva sessió. Escoltar el trànsit d'altres
     persones sense permís no és una pràctica d'aula: és una infracció.
@@ -110,7 +111,7 @@
 
 <!-- ============ OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h2>Dues decisions que has de prendre tu</h2>
+  <h2 id="dues-decisions-que-has-de-prendre-tu">Dues decisions que has de prendre tu</h2>
   <p>
     <strong>Si el port 21 ha de continuar obert.</strong> Un cop tens SFTP funcionant, pots
     mantenir l'FTPS o retirar el servei. Tria i argumenta-ho: quines compatibilitats guanyes i què
@@ -125,7 +126,7 @@
 
 <!-- ============ COMPROVACIÓ ============ -->
 <div class="cq-block" data-kind="comprovació">
-  <h2>Com sabràs que ho has fet bé</h2>
+  <h2 id="com-sabras-que-ho-has-fet-be">Com sabràs que ho has fet bé</h2>
   <ul>
     <li>Tens una captura on es llegeixen <code>USER</code> i <code>PASS</code> abans d'activar el TLS.</li>
     <li>Tens la mateixa captura després, on el contingut ja no és llegible.</li>
@@ -138,7 +139,7 @@
 
 <!-- ============ PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Si alguna cosa no va</h2>
+  <h2 id="si-alguna-cosa-no-va">Si alguna cosa no va</h2>
   <dl class="cq-issues">
     <dt>A la captura no surt res</dt>
     <dd>
@@ -168,7 +169,7 @@
 
 <!-- ============ LLIURAMENT ============ -->
 <div class="cq-block" data-kind="lliurament">
-  <h2>Què has d'entregar</h2>
+  <h2 id="que-has-d-entregar">Què has d'entregar</h2>
   <p>
     Un <strong>document tècnic</strong> amb les dues captures comparades, les configuracions
     d'FTPS i d'SFTP, i les proves de cada fila de la taula del que ha de poder i no ha de poder.
@@ -183,7 +184,7 @@
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h2>Al currículum</h2>
+  <h2 id="al-curriculum">Al currículum</h2>
   <p><span class="lbl">CA 3.2</span> Instal·la un servei de transferència de fitxers.</p>
   <p><span class="lbl">CA 3.6</span> Comprova l'accés al servidor, tant en mode actiu com en mode passiu.</p>
   <p><span class="lbl">CA 3.7</span> Realitza proves amb clients en línia d'ordres i en mode gràfic.</p>

@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,15 +17,32 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">CFGM SMX · Mòdul 0227</div>
-  <h1>Serveis en Xarxa</h1>
+  <h1>RA6 · Gestió de mètodes d'accés remot</h1>
   <p class="lede">RA6 · Gestió de mètodes d'accés remot</p>
 </header>
 
+<div class="cq-block" data-kind="ordre recomanat">
+  <h2 id="en-quin-ordre-fer-ho">En quin ordre fer-ho</h2>
+  <p><strong>T</strong>: teoria del servei. <strong>G</strong>: guia del producte. <strong>A</strong>: activitat amb requisits i comprovacions.</p>
+  <p>Les tres activitats d'Ansible són una progressió: cadascuna dona per sabuda l'anterior.</p>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Llegeix</th><th>Tingues a mà</th><th>Fes</th></tr></thead>
+      <tbody>
+        <tr><td><a class="cq-ref" href="teoria/t6-1-administrar-de-lluny.html">T6.1</a> · <a class="cq-ref" href="teoria/t6-2-ssh-per-dins.html">T6.2</a></td><td><a class="cq-ref" href="guies/g6-1-openssh.html">G6.1</a></td><td><a class="cq-ref" href="activitats/a6-1-entrar-sense-contrasenya.html">A6.1</a> — entrar sense contrasenya</td></tr>
+        <tr><td><a class="cq-ref" href="teoria/t6-3-endurir-l-acces-remot.html">T6.3</a></td><td><a class="cq-ref" href="guies/g6-1-openssh.html">G6.1</a> · <a class="cq-ref" href="guies/g6-2-fail2ban.html">G6.2</a></td><td><a class="cq-ref" href="activitats/a6-2-endurir-el-servei.html">A6.2</a> — endurir el servei SSH</td></tr>
+        <tr><td><a class="cq-ref" href="teoria/t6-1-administrar-de-lluny.html">T6.1</a></td><td><a class="cq-ref" href="guies/g6-3-xrdp.html">G6.3</a></td><td><a class="cq-ref" href="activitats/a6-3-l-escriptori-de-lluny.html">A6.3</a> — l'escriptori de lluny</td></tr>
+        <tr><td><a class="cq-ref" href="teoria/t6-4-automatitzar-l-administracio.html">T6.4</a></td><td><a class="cq-ref" href="guies/g6-4-ansible.html">G6.4</a></td><td><a class="cq-ref" href="activitats/a6-4-ansible-dhcp.html">A6.4</a> · <a class="cq-ref" href="activitats/a6-5-ansible-maquines.html">A6.5</a> · <a class="cq-ref" href="activitats/a6-6-ansible-web.html">A6.6</a> — les tres d'Ansible</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
 <div class="cq-block" data-kind="teoria">
-  <h2>Teoria</h2>
+  <h2 id="teoria">Teoria</h2>
   <p>Expliquen com s'administra una màquina que no tens al davant.</p>
   <ul class="cq-index">
     <li><a href="teoria/t6-1-administrar-de-lluny.html">
@@ -47,7 +65,7 @@
 </div>
 
 <div class="cq-block" data-kind="guies">
-  <h2>Guies</h2>
+  <h2 id="guies">Guies</h2>
   <ul class="cq-index">
     <li><a href="guies/g6-1-openssh.html">
       <span class="ref">G6.1</span>
@@ -69,7 +87,7 @@
 </div>
 
 <div class="cq-block" data-kind="activitats">
-  <h2>Activitats</h2>
+  <h2 id="activitats">Activitats</h2>
   <p>
     Cada activitat es fa sobre <strong>màquines noves</strong> a isardVDI, amb la targeta
     <code>puigcastellar1</code>. Les d'Ansible en demanen més d'una: llegeix l'escenari abans
@@ -103,24 +121,10 @@
   </ul>
 </div>
 
-<div class="cq-block" data-kind="ordre recomanat">
-  <h2>En quin ordre fer-ho</h2>
-  <p>Les tres activitats d'Ansible són una progressió: cadascuna dona per sabuda l'anterior.</p>
-  <div class="cq-tablewrap">
-    <table class="cq-table">
-      <thead><tr><th>Llegeix</th><th>Tingues a mà</th><th>Fes</th></tr></thead>
-      <tbody>
-        <tr><td><a class="cq-ref" href="teoria/t6-1-administrar-de-lluny.html">T6.1</a> · <a class="cq-ref" href="teoria/t6-2-ssh-per-dins.html">T6.2</a></td><td><a class="cq-ref" href="guies/g6-1-openssh.html">G6.1</a></td><td><a class="cq-ref" href="activitats/a6-1-entrar-sense-contrasenya.html">A6.1</a> — entrar sense contrasenya</td></tr>
-        <tr><td><a class="cq-ref" href="teoria/t6-3-endurir-l-acces-remot.html">T6.3</a></td><td><a class="cq-ref" href="guies/g6-1-openssh.html">G6.1</a> · <a class="cq-ref" href="guies/g6-2-fail2ban.html">G6.2</a></td><td><a class="cq-ref" href="activitats/a6-2-endurir-el-servei.html">A6.2</a> — endurir el servei SSH</td></tr>
-        <tr><td><a class="cq-ref" href="teoria/t6-1-administrar-de-lluny.html">T6.1</a></td><td><a class="cq-ref" href="guies/g6-3-xrdp.html">G6.3</a></td><td><a class="cq-ref" href="activitats/a6-3-l-escriptori-de-lluny.html">A6.3</a> — l'escriptori de lluny</td></tr>
-        <tr><td><a class="cq-ref" href="teoria/t6-4-automatitzar-l-administracio.html">T6.4</a></td><td><a class="cq-ref" href="guies/g6-4-ansible.html">G6.4</a></td><td><a class="cq-ref" href="activitats/a6-4-ansible-dhcp.html">A6.4</a> · <a class="cq-ref" href="activitats/a6-5-ansible-maquines.html">A6.5</a> · <a class="cq-ref" href="activitats/a6-6-ansible-web.html">A6.6</a> — les tres d'Ansible</td></tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+
 
 <div class="cq-block" data-kind="recordatori">
-  <h2>Ansible no és un servei nou</h2>
+  <h2 id="ansible-no-es-un-servei-nou">Ansible no és un servei nou</h2>
   <p>
     Ansible no s'instal·la a les màquines que administra: entra per SSH i executa el que li
     dius. Tot el que sàpigues del <a class="cq-ref" href="../RA1/index.html">RA1</a>, del <a class="cq-ref" href="../RA2/index.html">RA2</a> o del <a class="cq-ref" href="../RA5/index.html">RA5</a> segueix valent; l'única cosa que

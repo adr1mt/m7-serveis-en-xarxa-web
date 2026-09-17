@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA6 · T6.1</div>
   <h1>Administrar una màquina de lluny</h1>
   <p class="lede">Consola de text o escriptori gràfic: quin protocol tries i per què.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-sabras-fer-en-acabar">Què sabràs fer en acabar</a></li><li><a href="#dues-maneres-d-arribar-hi">Dues maneres d&#x27;arribar-hi</a></li><li><a href="#un-protocol-per-a-cada-mode">Un protocol per a cada mode</a></li><li><a href="#el-mode-text-es-la-norma">El mode text és la norma</a></li><li><a href="#mai-directament-a-internet">Mai directament a Internet</a></li><li><a href="#qui-escolta-a-la-maquina">Qui escolta a la màquina</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#resum">Resum</a></li><li><a href="#comprova-el-que-has-apres">Comprova el que has après</a></li><li><a href="#al-curriculum">Al currículum</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què sabràs fer en acabar</h2>
+  <h2 id="que-sabras-fer-en-acabar">Què sabràs fer en acabar</h2>
   <ul>
     <li>Distingir l'administració en mode text de l'administració amb escriptori gràfic.</li>
     <li>Dir quin protocol i quin port fa servir SSH, RDP i VNC.</li>
@@ -36,7 +40,7 @@
 
 <!-- ============ 2 · DUES MANERES D'ARRIBAR-HI ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Dues maneres d'arribar-hi</h2>
+  <h2 id="dues-maneres-d-arribar-hi">Dues maneres d'arribar-hi</h2>
   <p>
     Gairebé cap servidor s'administra davant de la seva pantalla: viu en un rack, en un
     centre de dades o en una màquina virtual sense monitor. Calen dues coses per fer-hi res:
@@ -52,7 +56,7 @@
 
 <!-- ============ 3 · UN PROTOCOL PER A CADA MODE ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Un protocol per a cada mode</h2>
+  <h2 id="un-protocol-per-a-cada-mode">Un protocol per a cada mode</h2>
   <p>Cada mode té el seu protocol, amb un port i un cost diferents.</p>
   <div class="cq-tablewrap">
     <table class="cq-table">
@@ -68,7 +72,7 @@
 
 <!-- ============ 4 · EL MODE TEXT ÉS LA NORMA ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h2>El mode text és la norma</h2>
+  <h2 id="el-mode-text-es-la-norma">El mode text és la norma</h2>
   <p>
     Administrar per text és el que fas cada dia: obrir un terminal, escriure una ordre i
     llegir la resposta. Costa poc ample de banda i qualsevol connexió, per lenta que sigui,
@@ -84,7 +88,7 @@
 
 <!-- ============ 5 · MAI DIRECTAMENT A INTERNET ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h2>Mai directament a Internet</h2>
+  <h2 id="mai-directament-a-internet">Mai directament a Internet</h2>
   <p>
     RDP i VNC no es publiquen mai directament cap a Internet: sense cap barrera pel mig, són
     dels serveis més escanejats i atacats que hi ha. S'hi arriba sempre per una
@@ -98,7 +102,7 @@
 
 <!-- ============ 6 · OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h2>Qui escolta a la màquina</h2>
+  <h2 id="qui-escolta-a-la-maquina">Qui escolta a la màquina</h2>
   <p>
     Per saber quin servei d'accés remot té un port obert, i quin, es mira amb
     <code>ss</code>:
@@ -115,7 +119,7 @@ LISTEN  0.0.0.0:3389</span></pre>
 
 <!-- ============ 7 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2>Criteris professionals</h2>
+  <h2 id="criteris-professionals">Criteris professionals</h2>
   <ul>
     <li><strong>Text abans que gràfic</strong>: si es pot fer amb SSH, no cal escriptori remot.</li>
     <li><strong>RDP i VNC, sempre darrere de VPN o túnel</strong>, mai exposats directament.</li>
@@ -125,7 +129,7 @@ LISTEN  0.0.0.0:3389</span></pre>
 
 <!-- ============ 8 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Errors habituals</h2>
+  <h2 id="errors-habituals">Errors habituals</h2>
   <dl class="cq-issues">
     <dt>Pensar que l'escriptori gràfic és «més complet» i per tant millor</dt>
     <dd>
@@ -143,7 +147,7 @@ LISTEN  0.0.0.0:3389</span></pre>
 
 <!-- ============ 9 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h2>Resum</h2>
+  <h2 id="resum">Resum</h2>
   <ul>
     <li>Dos modes per administrar de lluny: <strong>consola de text</strong> i <strong>escriptori gràfic</strong>.</li>
     <li>SSH (<strong>22</strong>) és la norma; RDP (<strong>3389</strong>) i VNC (<strong>5900</strong>), l'excepció.</li>
@@ -155,9 +159,9 @@ LISTEN  0.0.0.0:3389</span></pre>
 
 <!-- ============ 10 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h2>Comprova el que has après</h2>
+  <h2 id="comprova-el-que-has-apres">Comprova el que has après</h2>
 
-  <div class="cq-question" data-id="t6-1-mode-norma" data-type="single">
+  <div class="cq-question" data-id="t6-1-mode-norma" data-type="single" data-explanation="El mode d’administració depèn de l’encàrrec i del servei, no d’una preferència universal.">
     <div class="statement">Quin dels dos modes d'administració remota és el normal, i quin l'excepció?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">El mode text és el normal; el gràfic, l'excepció</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El mode gràfic és el normal; el text, l'excepció</button>
@@ -167,7 +171,7 @@ LISTEN  0.0.0.0:3389</span></pre>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t6-1-ports" data-type="single">
+  <div class="cq-question" data-id="t6-1-ports" data-type="single" data-explanation="SSH acostuma a escoltar al 22 i RDP al 3389; comprova sempre la configuració real.">
     <div class="statement">Quin port fa servir RDP per defecte?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">22</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">3389</button>
@@ -177,7 +181,7 @@ LISTEN  0.0.0.0:3389</span></pre>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t6-1-exposicio" data-type="single">
+  <div class="cq-question" data-id="t6-1-exposicio" data-type="single" data-explanation="Exposar un servei remot fa que clients de la xarxa puguin intentar autenticar-se.">
     <div class="statement">Com s'ha d'exposar un servei RDP o VNC?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Directament a Internet, amb una contrasenya forta</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Mai directament: sempre darrere d'una VPN o d'un túnel</button>
@@ -187,7 +191,7 @@ LISTEN  0.0.0.0:3389</span></pre>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t6-1-superficie" data-type="single">
+  <div class="cq-question" data-id="t6-1-superficie" data-type="single" data-explanation="Reduir serveis, orígens i comptes permesos redueix la superfície d’atac.">
     <div class="statement">Per què el mode gràfic remot suposa una superfície d'atac més gran que el mode text?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè sempre fa servir contrasenyes més curtes</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Perquè afegeix un procés més escoltant i més codi que pot fallar</button>
@@ -197,7 +201,7 @@ LISTEN  0.0.0.0:3389</span></pre>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t6-1-ss" data-type="single">
+  <div class="cq-question" data-id="t6-1-ss" data-type="single" data-explanation="ss mostra sockets i adreces d’escolta; no certifica per si sol una sessió remota funcional.">
     <div class="statement">Quina ordre mostra quins serveis d'accés remot escolten i en quin port?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false"><code>dig</code></button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true"><code>ss -lntp</code></button>
@@ -211,7 +215,7 @@ LISTEN  0.0.0.0:3389</span></pre>
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h2>Al currículum</h2>
+  <h2 id="al-curriculum">Al currículum</h2>
   <p><span class="lbl">Contingut 6.1</span> Terminals en mode text.</p>
   <p><span class="lbl">Contingut 6.2</span> Terminals en mode gràfic.</p>
   <p><span class="lbl">CA 6.1</span> Descriu mètodes d'accés i administració remota de sistemes.</p>

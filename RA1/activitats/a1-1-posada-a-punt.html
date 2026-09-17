@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · A1.1</div>
   <h1>Posada a punt del servidor</h1>
   <p class="lede">Deixar la màquina llesta: nom, hora, actualitzacions i les dues targetes de xarxa.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-has-de-saber-abans-de-comencar">Què has de saber abans de començar</a></li><li><a href="#amb-que-treballaras">Amb què treballaràs</a></li><li><a href="#que-has-de-fer">Què has de fer</a></li><li><a href="#d-on-has-de-treure-cada-cosa">D&#x27;on has de treure cada cosa</a></li><li><a href="#estas-treballant-per-ssh">Estàs treballant per SSH</a></li><li><a href="#un-detall-on-gairebe-tothom-ensopega">Un detall on gairebé tothom ensopega</a></li><li><a href="#com-sabras-que-ho-has-fet-be">Com sabràs que ho has fet bé</a></li><li><a href="#si-alguna-cosa-no-va">Si alguna cosa no va</a></li><li><a href="#que-has-d-entregar">Què has d&#x27;entregar</a></li><li><a href="#al-curriculum">Al currículum</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què has de saber abans de començar</h2>
+  <h2 id="que-has-de-saber-abans-de-comencar">Què has de saber abans de començar</h2>
   <p>
     Teoria <a class="cq-ref" href="../teoria/t1-0-repas-adrecament.html">T1.0</a> (adreçament) i guia <a class="cq-ref" href="../guies/g1-1-netplan.html">G1.1</a> (Netplan).
   </p>
@@ -37,7 +41,7 @@
 
 <!-- ============ ESCENARI ============ -->
 <div class="cq-block" data-kind="escenari">
-  <h2>Amb què treballaràs</h2>
+  <h2 id="amb-que-treballaras">Amb què treballaràs</h2>
   <p>
     Una màquina virtual <strong>Ubuntu Server nova</strong> a <strong>isardVDI</strong> amb dues
     targetes de xarxa:
@@ -59,7 +63,7 @@
 
 <!-- ============ ENUNCIAT ============ -->
 <div class="cq-block" data-kind="enunciat">
-  <h2>Què has de fer</h2>
+  <h2 id="que-has-de-fer">Què has de fer</h2>
   <p>
     Acabes de rebre un servidor recent instal·lat i l'has de deixar en condicions per posar-hi
     serveis a sobre. Ha de quedar així:
@@ -68,14 +72,14 @@
     <li>Tots els paquets del sistema <strong>actualitzats</strong>.</li>
     <li>El nom de l'equip (<em>hostname</em>) canviat pel <strong>teu nom propi</strong>, en minúscules i sense accents.</li>
     <li>La <strong>zona horària</strong> correcta per a on som.</li>
-    <li>Les <strong>actualitzacions automàtiques desactivades</strong>, com correspon a un servidor.</li>
+    <li>Les <strong>actualitzacions automàtiques desactivades</strong>, només durant aquesta pràctica per mantenir un estat reproduïble. En explotació cal planificar les actualitzacions de seguretat, amb responsable i calendari.</li>
     <li>Netplan configurat: <code>puigcastellar1</code> automàtica i <code>personal1</code> fixa amb <code>192.168.1.1/24</code> i el DNS de <strong>Quad9</strong>.</li>
   </ol>
 </div>
 
 <!-- ============ ON BUSCAR ============ -->
 <div class="cq-block" data-kind="enunciat">
-  <h2>D'on has de treure cada cosa</h2>
+  <h2 id="d-on-has-de-treure-cada-cosa">D'on has de treure cada cosa</h2>
   <p>Les comandes no te les donem fetes; sí que et diem on trobar-les:</p>
   <div class="cq-tablewrap">
     <table class="cq-table">
@@ -93,7 +97,7 @@
 
 <!-- ============ RECORDATORI ============ -->
 <div class="cq-block" data-kind="recordatori">
-  <h2>Estàs treballant per SSH</h2>
+  <h2 id="estas-treballant-per-ssh">Estàs treballant per SSH</h2>
   <p>
     Un error a la configuració de xarxa et pot deixar fora de la màquina. Aplica els canvis
     <strong>de la manera segura que has vist a la <a class="cq-ref" href="../guies/g1-1-netplan.html">G1.1</a></strong>, no de la ràpida: si perds la
@@ -104,17 +108,13 @@
 
 <!-- ============ OBSERVACIÓ TÈCNICA ============ -->
 <div class="cq-block" data-kind="observació">
-  <h2>Un detall on gairebé tothom ensopega</h2>
+  <h2 id="un-detall-on-gairebe-tothom-ensopega">Un detall on gairebé tothom ensopega</h2>
   <p>
     A <code>personal1</code> <strong>no hi has de posar cap porta d'enllaç</strong>, encara que
     aquesta màquina n'hagi de fer de porta d'enllaç per als seus clients. Són dues coses
     diferents i val la pena que ho tinguis clar abans d'escriure el fitxer.
   </p>
-  <p>
-    Un equip només té <strong>una ruta per defecte</strong>, i aquí ja la dona el DHCP del centre
-    per <code>puigcastellar1</code>, que és per on hi ha Internet. Si hi afegeixes una segona
-    ruta per defecte apuntant a la seva pròpia IP, el servidor perdrà la sortida.
-  </p>
+  <p>En aquest laboratori volem una sortida preferent, aportada pel DHCP de puigcastellar1. No afegeixis una ruta per defecte cap a la mateixa IP del servidor a personal1. En altres dissenys poden coexistir diverses rutes per defecte amb mètriques o taules diferents.</p>
   <p>
     Que els <strong>clients</strong> facin servir la <code>192.168.1.1</code> com a porta
     d'enllaç no s'escriu aquí, sinó a l'opció <code>routers</code> del servidor DHCP. Això és de
@@ -124,7 +124,7 @@
 
 <!-- ============ COMPROVACIÓ ============ -->
 <div class="cq-block" data-kind="comprovació">
-  <h2>Com sabràs que ho has fet bé</h2>
+  <h2 id="com-sabras-que-ho-has-fet-be">Com sabràs que ho has fet bé</h2>
   <p>
     Abans d'entregar, has de poder respondre <strong>sí</strong> a totes aquestes preguntes, amb
     la sortida d'una comanda al davant. Si alguna falla, encara no has acabat.
@@ -140,7 +140,7 @@
 
 <!-- ============ PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Si alguna cosa no va</h2>
+  <h2 id="si-alguna-cosa-no-va">Si alguna cosa no va</h2>
   <dl class="cq-issues">
     <dt>Error de sintaxi en aplicar el Netplan</dt>
     <dd>
@@ -164,7 +164,7 @@
 
 <!-- ============ LLIURAMENT ============ -->
 <div class="cq-block" data-kind="lliurament">
-  <h2>Què has d'entregar</h2>
+  <h2 id="que-has-d-entregar">Què has d'entregar</h2>
   <p>
     Un <strong>document tècnic</strong> on expliquis tot el que has anat fent, amb les captures
     del resultat.
@@ -178,7 +178,7 @@
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h2>Al currículum</h2>
+  <h2 id="al-curriculum">Al currículum</h2>
   <p><span class="lbl">CA 8.1</span> Instal·la i configura el maquinari d'un sistema amb accés a una xarxa privada local i a una de pública.</p>
 </div>
 

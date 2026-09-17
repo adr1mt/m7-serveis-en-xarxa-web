@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · A1.3</div>
   <h1>Servidor DHCP amb Kea</h1>
   <p class="lede">Muntar el servidor DHCP que es fa servir de veritat, amb reserves i sortida a Internet.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-has-de-saber-abans-de-comencar">Què has de saber abans de començar</a></li><li><a href="#amb-que-treballaras">Amb què treballaràs</a></li><li><a href="#que-has-de-fer">Què has de fer</a></li><li><a href="#d-on-has-de-treure-cada-cosa">D&#x27;on has de treure cada cosa</a></li><li><a href="#nomes-per-personal1">Només per personal1</a></li><li><a href="#tres-decisions-que-has-de-prendre-tu">Tres decisions que has de prendre tu</a></li><li><a href="#com-sabras-que-ho-has-fet-be">Com sabràs que ho has fet bé</a></li><li><a href="#si-alguna-cosa-no-va">Si alguna cosa no va</a></li><li><a href="#que-has-d-entregar">Què has d&#x27;entregar</a></li><li><a href="#al-curriculum">Al currículum</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què has de saber abans de començar</h2>
+  <h2 id="que-has-de-saber-abans-de-comencar">Què has de saber abans de començar</h2>
   <p>
     Teories <a class="cq-ref" href="../teoria/t1-1-dhcp-fonaments.html">T1.1</a> (DHCP) i <a class="cq-ref" href="../teoria/t1-2-encaminament-nat.html">T1.2</a> (encaminament i NAT), i les
     guies <a class="cq-ref" href="../guies/g1-2-kea.html">G1.2</a> i <a class="cq-ref" href="../guies/g1-3-nftables.html">G1.3</a>
@@ -40,7 +44,7 @@
 
 <!-- ============ ESCENARI ============ -->
 <div class="cq-block" data-kind="escenari">
-  <h2>Amb què treballaràs</h2>
+  <h2 id="amb-que-treballaras">Amb què treballaràs</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Màquina</th><th>Targetes</th><th>Paper</th></tr></thead>
@@ -58,7 +62,7 @@
 
 <!-- ============ ENUNCIAT ============ -->
 <div class="cq-block" data-kind="enunciat">
-  <h2>Què has de fer</h2>
+  <h2 id="que-has-de-fer">Què has de fer</h2>
   <ol>
     <li>Posar a punt la màquina nova: <em>hostname</em> amb el teu nom i <code>personal1</code> amb la IP fixa <code>10.0.0.1/8</code>.</li>
     <li>Instal·lar Kea i configurar-lo perquè reparteixi adreces <strong>per a 200 dispositius</strong>.</li>
@@ -70,8 +74,8 @@
 
 <!-- ============ ON BUSCAR ============ -->
 <div class="cq-block" data-kind="enunciat">
-  <h2>D'on has de treure cada cosa</h2>
-  <p>Tot el procediment ja l'has vist a la teoria. Aquí tens on és cada part:</p>
+  <h2 id="d-on-has-de-treure-cada-cosa">D'on has de treure cada cosa</h2>
+  <p>Les guies documenten el procediment. Aquí tens on consultar cada part:</p>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Què has de fer</th><th>On ho tens</th></tr></thead>
@@ -88,7 +92,7 @@
 
 <!-- ============ RECORDATORI ============ -->
 <div class="cq-block" data-kind="recordatori">
-  <h2>Només per personal1</h2>
+  <h2 id="nomes-per-personal1">Només per personal1</h2>
   <p>
     Kea ha d'escoltar <strong>només</strong> per la targeta <code>personal1</code>. Si hi poses
     <code>puigcastellar1</code>, el teu servidor començarà a repartir adreces a la xarxa del
@@ -98,15 +102,12 @@
 
 <!-- ============ OBSERVACIÓ TÈCNICA ============ -->
 <div class="cq-block" data-kind="observació">
-  <h2>Tres decisions que has de prendre tu</h2>
+  <h2 id="tres-decisions-que-has-de-prendre-tu">Tres decisions que has de prendre tu</h2>
   <p>
     <strong>La mida del rang.</strong> Han de cabre-hi 200 dispositius exactes. Vigila el càlcul:
     quan dones una adreça inicial i una final, <strong>els dos extrems compten</strong>.
   </p>
-  <p>
-    <strong>On col·loques el rang.</strong> Ha de deixar lloc lliure per al servidor i per a les
-    reserves. Si la IP reservada cau dins del rang automàtic, tens un conflicte esperant.
-  </p>
+  <p>En aquesta pràctica situem les reserves fora del pool com a convenció organitzativa. Kea també permet reserves dins del pool amb la configuració adequada. No confonguis una reserva gestionada amb una IP estàtica que Kea desconeix.</p>
   <p>
     <strong>La MAC del client.</strong> L'has de llegir de la màquina client, i copiar-la, no
     transcriure-la a mà: un caràcter canviat i la reserva no s'aplica mai.
@@ -115,7 +116,8 @@
 
 <!-- ============ COMPROVACIÓ ============ -->
 <div class="cq-block" data-kind="comprovació">
-  <h2>Com sabràs que ho has fet bé</h2>
+  <h2 id="com-sabras-que-ho-has-fet-be">Com sabràs que ho has fet bé</h2>
+<p><strong>DORA i renovació:</strong> una línia de concessió al registre no demostra els quatre missatges. Conserva una captura DHCP del client inicialment sense concessió i identifica Discover, Offer, Request i ACK. Una renovació pot mostrar només Request/ACK. networkctl només gestiona interfícies de systemd-networkd; al Desktop comprova si s’utilitza NetworkManager abans de triar l’eina.</p>
   <p>
     Abans d'entregar, has de poder respondre <strong>sí</strong> a totes aquestes preguntes, amb
     la sortida d'una comanda al davant:
@@ -131,7 +133,7 @@
 
 <!-- ============ PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Si alguna cosa no va</h2>
+  <h2 id="si-alguna-cosa-no-va">Si alguna cosa no va</h2>
   <dl class="cq-issues">
     <dt>Kea no arrenca</dt>
     <dd>
@@ -161,13 +163,13 @@
 
 <!-- ============ LLIURAMENT ============ -->
 <div class="cq-block" data-kind="lliurament">
-  <h2>Què has d'entregar</h2>
+  <h2 id="que-has-d-entregar">Què has d'entregar</h2>
   <p>
     Un <strong>document tècnic</strong> on expliquis tot el que has anat fent, amb les captures
     del resultat.
   </p>
   <p>
-    Respon-hi també, amb les teves paraules: <strong>per què la IP reservada ha de quedar fora del
+    Respon-hi també, amb les teves paraules: <strong>per què en aquest laboratori triem la IP reservada fora del
     rang automàtic?</strong>
   </p>
 </div>
@@ -175,7 +177,7 @@
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h2>Al currículum</h2>
+  <h2 id="al-curriculum">Al currículum</h2>
   <p><span class="lbl">CA 1.1</span> Reconeix el funcionament dels mecanismes automatitzats de configuració dels paràmetres de xarxa.</p>
   <p><span class="lbl">CA 1.3</span> Il·lustra els procediments i pautes d'una sol·licitud de configuració dels paràmetres de xarxa.</p>
   <p><span class="lbl">CA 1.4</span> Instal·la un servei de configuració dinàmica dels paràmetres de xarxa.</p>

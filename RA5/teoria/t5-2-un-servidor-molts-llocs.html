@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA5 · T5.2</div>
   <h1>Un servidor, molts llocs</h1>
   <p class="lede">Una sola màquina, molts webs: el servidor tria pel nom, no per la IP.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-sabras-fer-en-acabar">Què sabràs fer en acabar</a></li><li><a href="#molts-llocs-una-sola-ip">Molts llocs, una sola IP</a></li><li><a href="#la-capcalera-host">La capçalera Host</a></li><li><a href="#el-lloc-per-defecte">El lloc per defecte</a></li><li><a href="#entrar-per-ip-no-es-entrar-pel-nom">Entrar per IP no és entrar pel nom</a></li><li><a href="#qui-resol-el-nom">Qui resol el nom</a></li><li><a href="#canviar-de-lloc-sense-canviar-d-ip">Canviar de lloc sense canviar d&#x27;IP</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#resum">Resum</a></li><li><a href="#comprova-el-que-has-apres">Comprova el que has après</a></li><li><a href="#al-curriculum">Al currículum</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què sabràs fer en acabar</h2>
+  <h2 id="que-sabras-fer-en-acabar">Què sabràs fer en acabar</h2>
   <ul>
     <li>Explicar per què un sol servidor pot allotjar molts llocs web.</li>
     <li>Descriure el paper de la capçalera <code>Host</code> en la petició.</li>
@@ -36,7 +40,7 @@
 
 <!-- ============ 2 · MOLTS LLOCS, UNA IP ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Molts llocs, una sola IP</h2>
+  <h2 id="molts-llocs-una-sola-ip">Molts llocs, una sola IP</h2>
   <p>
     Una màquina pot tenir una sola adreça IP i servir desenes de llocs web diferents. El servidor
     ho fa possible mirant, a cada petició, quin <strong>nom</strong> ha demanat el navegador: no
@@ -51,7 +55,7 @@
 
 <!-- ============ 3 · LA CAPÇALERA HOST ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>La capçalera Host</h2>
+  <h2 id="la-capcalera-host">La capçalera Host</h2>
   <p>
     Cada petició HTTP porta una capçalera <code>Host</code> amb el nom que l'usuari ha escrit al
     navegador. El servidor la llig i decideix quin lloc respon, encara que totes les peticions
@@ -70,7 +74,7 @@
 
 <!-- ============ 4 · LLOC PER DEFECTE ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>El lloc per defecte</h2>
+  <h2 id="el-lloc-per-defecte">El lloc per defecte</h2>
   <p>
     Quan cap lloc configurat coincideix amb el nom demanat, el servidor respon amb el <strong>lloc
     per defecte</strong>. És el que es veu si s'entra per la IP directament: la IP no és cap nom,
@@ -80,7 +84,7 @@
 
 <!-- ============ 5 · EXEMPLE ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h2>Entrar per IP no és entrar pel nom</h2>
+  <h2 id="entrar-per-ip-no-es-entrar-pel-nom">Entrar per IP no és entrar pel nom</h2>
   <p>
     Un usuari escriu la IP del servidor al navegador esperant veure <code>botiga.internal</code>,
     però rep el lloc per defecte: el navegador no ha enviat cap capçalera <code>Host</code> amb
@@ -90,9 +94,9 @@
 
 <!-- ============ 6 · CAS REAL ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h2>Qui resol el nom</h2>
+  <h2 id="qui-resol-el-nom">Qui resol el nom</h2>
   <p>
-    Al laboratori, el fitxer <code>hosts</code> del client fa d'atzucac ràpid per apuntar un nom a
+    Al laboratori, el fitxer <code>hosts</code> del client és una drecera temporal per apuntar un nom a
     una IP sense DNS. En producció, el que funciona és publicar el nom en una zona DNS pròpia
     —com la que vas muntar a <a class="cq-ref" href="../../RA2/index.html">RA2</a>— perquè qualsevol client el resolgui sense tocar-lo a mà.
   </p>
@@ -100,7 +104,7 @@
 
 <!-- ============ 7 · OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h2>Canviar de lloc sense canviar d'IP</h2>
+  <h2 id="canviar-de-lloc-sense-canviar-d-ip">Canviar de lloc sense canviar d'IP</h2>
   <p>
     Es pot forçar la capçalera <code>Host</code> amb <code>curl</code> i veure com respon un
     lloc o un altre contra la mateixa IP:
@@ -114,7 +118,7 @@ curl -H "Host: web2.internal" http://203.0.113.10/
 
 <!-- ============ 8 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2>Criteris professionals</h2>
+  <h2 id="criteris-professionals">Criteris professionals</h2>
   <ul>
     <li>Publica el nom en una zona DNS pròpia; el fitxer <code>hosts</code> és només per a proves.</li>
     <li>Configura sempre un lloc per defecte pensat, no el primer que quedi per casualitat.</li>
@@ -124,7 +128,7 @@ curl -H "Host: web2.internal" http://203.0.113.10/
 
 <!-- ============ 9 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Errors habituals</h2>
+  <h2 id="errors-habituals">Errors habituals</h2>
   <dl class="cq-issues">
     <dt>Entrar per IP i no veure el lloc esperat</dt>
     <dd>
@@ -144,7 +148,7 @@ curl -H "Host: web2.internal" http://203.0.113.10/
 
 <!-- ============ 10 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h2>Resum</h2>
+  <h2 id="resum">Resum</h2>
   <ul>
     <li>Un servidor tria el lloc pel <strong>nom</strong> de la capçalera <code>Host</code>, no per la IP.</li>
     <li>Sense coincidència, respon el <strong>lloc per defecte</strong>.</li>
@@ -156,9 +160,9 @@ curl -H "Host: web2.internal" http://203.0.113.10/
 
 <!-- ============ 11 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h2>Comprova el que has après</h2>
+  <h2 id="comprova-el-que-has-apres">Comprova el que has après</h2>
 
-  <div class="cq-question" data-id="t5-2-host" data-type="single">
+  <div class="cq-question" data-id="t5-2-host" data-type="single" data-explanation="El servidor tria el lloc pel nom de la petició HTTP o HTTPS, encara que comparteixi IP.">
     <div class="statement">Com decideix el servidor quin lloc respon quan diverses webs comparteixen IP?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Per l'ordre d'arribada de les peticions</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Pel nom que porta la capçalera Host de la petició</button>
@@ -168,7 +172,7 @@ curl -H "Host: web2.internal" http://203.0.113.10/
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t5-2-defecte" data-type="single">
+  <div class="cq-question" data-id="t5-2-defecte" data-type="single" data-explanation="Si cap nom coincideix, la configuració determina quin lloc actua com a predeterminat.">
     <div class="statement">Un usuari entra per la IP del servidor. Què veu?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Sempre un error 404</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">El lloc configurat per defecte</button>
@@ -178,7 +182,7 @@ curl -H "Host: web2.internal" http://203.0.113.10/
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t5-2-resolucio" data-type="single">
+  <div class="cq-question" data-id="t5-2-resolucio" data-type="single" data-explanation="El client ha de resoldre el nom abans de connectar; això és independent de configurar el host virtual.">
     <div class="statement">Quina és la manera bona de resoldre el nom d'un lloc en producció?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Escriure'l al fitxer hosts de cada client</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Publicar-lo en una zona DNS pròpia</button>
@@ -188,7 +192,7 @@ curl -H "Host: web2.internal" http://203.0.113.10/
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t5-2-repartiment" data-type="single">
+  <div class="cq-question" data-id="t5-2-repartiment" data-type="single" data-explanation="Diversos llocs poden compartir servidor i IP; cadascun manté contingut i configuració propis.">
     <div class="statement">Quin repartiment és el normal per allotjar diversos llocs en un servidor web?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Per port, un port diferent per lloc</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Per IP, una IP diferent per lloc</button>
@@ -202,7 +206,7 @@ curl -H "Host: web2.internal" http://203.0.113.10/
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h2>Al currículum</h2>
+  <h2 id="al-curriculum">Al currículum</h2>
   <p><span class="lbl">Contingut 5.1</span> Servidors virtuals. Nom d'encapçalament d'ordinador central. Identificació d'un servidor virtual.</p>
   <p><span class="lbl">CA 5.4</span> Verifica les possibilitats per discriminar el lloc de destinació del trànsit entrant.</p>
 </div>

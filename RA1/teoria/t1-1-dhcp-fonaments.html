@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,22 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · T1.1</div>
   <h1>Fonaments de DHCP</h1>
   <p class="lede">Per què les xarxes no es configuren a mà, i què passa quan un equip demana adreça.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#quina-captura-demostra-dora">Quina captura demostra DORA?</a></li><li><a href="#que-sabras-fer-en-acabar">Què sabràs fer en acabar</a></li><li><a href="#ip-fixa-o-ip-automatica">IP fixa o IP automàtica?</a></li><li><a href="#el-problema-que-resol-dhcp">El problema que resol DHCP</a></li><li><a href="#funcionament-el-proces-dora">Funcionament: el procés DORA</a></li><li><a href="#un-dora-missatge-a-missatge">Un DORA, missatge a missatge</a></li><li><a href="#l-adreca-es-presta-no-es-regala">L&#x27;adreça es presta, no es regala</a></li><li><a href="#tres-maneres-d-assignar-adreces">Tres maneres d&#x27;assignar adreces</a></li><li><a href="#el-router-que-algu-va-endollar-a-l-aula">El router que algú va endollar a l&#x27;aula</a></li><li><a href="#veure-el-dora-amb-els-teus-ulls">Veure el DORA amb els teus ulls</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#quan-el-client-no-rep-adreca">Quan el client no rep adreça</a></li><li><a href="#resum">Resum</a></li><li><a href="#comprova-el-que-has-apres">Comprova el que has après</a></li><li><a href="#al-curriculum">Al currículum</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
+
+<div class="cq-block" data-kind="recordatori"><h2 id="quina-captura-demostra-dora">Quina captura demostra DORA?</h2><p>Comprova el gestor de la interfície: networkctl correspon a systemd-networkd. Una captura DHCP permet distingir la descoberta inicial DORA d’una renovació Request/ACK; no dedueixis els quatre missatges d’una única línia del registre de concessió.</p>
+</div>
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què sabràs fer en acabar</h2>
+  <h2 id="que-sabras-fer-en-acabar">Què sabràs fer en acabar</h2>
   <ul>
     <li>Explicar per què les xarxes no es configuren a mà.</li>
     <li>Descriure els quatre passos del procés <strong>DORA</strong>.</li>
@@ -37,7 +44,7 @@
 
 <!-- ============ 2 · ESTÀTICA O DINÀMICA ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>IP fixa o IP automàtica?</h2>
+  <h2 id="ip-fixa-o-ip-automatica">IP fixa o IP automàtica?</h2>
   <p>
     Un equip pot rebre la configuració de dues maneres: <strong>automàtica</strong>, demanant-la
     a un servidor DHCP, o <strong>fixa</strong> (estàtica), escrivint-la tu en un fitxer.
@@ -55,7 +62,7 @@
 
 <!-- ============ 2 · INTRODUCCIÓ ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>El problema que resol DHCP</h2>
+  <h2 id="el-problema-que-resol-dhcp">El problema que resol DHCP</h2>
   <p>
     Perquè un equip funcioni en xarxa necessita quatre dades: <strong>IP</strong>,
     <strong>màscara</strong>, <strong>porta d'enllaç</strong> i <strong>DNS</strong>.
@@ -77,7 +84,7 @@
 
 <!-- ============ 3 · FUNCIONAMENT INTERN ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Funcionament: el procés DORA</h2>
+  <h2 id="funcionament-el-proces-dora">Funcionament: el procés DORA</h2>
   <p>
     Hi ha una pregunta òbvia: si el client encara no té IP, com pot demanar res? Ho fa per
     <strong>difusió</strong> (<em>broadcast</em>), un missatge que arriba a tothom del segment.
@@ -121,7 +128,7 @@
 
 <!-- ============ 4 · EXEMPLE SENZILL ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h2>Un DORA, missatge a missatge</h2>
+  <h2 id="un-dora-missatge-a-missatge">Un DORA, missatge a missatge</h2>
   <p>
     Servidor <code>10.0.0.1</code>, que reparteix a partir de la <code>10.0.0.100</code>.
     Un portàtil s'acaba de connectar:
@@ -147,7 +154,7 @@
 
 <!-- ============ 5 · LA CONCESSIÓ ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>L'adreça es presta, no es regala</h2>
+  <h2 id="l-adreca-es-presta-no-es-regala">L'adreça es presta, no es regala</h2>
   <p>
     El servidor concedeix l'adreça durant un temps limitat: és la <strong>concessió</strong>
     (<em>lease</em>). Quan caduca, l'adreça torna al fons comú i pot anar a un altre equip.
@@ -166,7 +173,7 @@
 
 <!-- ============ 6 · TIPUS D'ASSIGNACIÓ ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Tres maneres d'assignar adreces</h2>
+  <h2 id="tres-maneres-d-assignar-adreces">Tres maneres d'assignar adreces</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead>
@@ -204,7 +211,7 @@
 
 <!-- ============ 7 · CAS REAL ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h2>El router que algú va endollar a l'aula</h2>
+  <h2 id="el-router-que-algu-va-endollar-a-l-aula">El router que algú va endollar a l'aula</h2>
   <p>
     Un alumne connecta un router domèstic a una roseta. Aquell router porta el DHCP activat de
     fàbrica i comença a respondre OFFERs amb la seva pròpia IP com a porta d'enllaç. És el que
@@ -224,10 +231,10 @@
 
 <!-- ============ 9 · OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h2>Veure el DORA amb els teus ulls</h2>
+  <h2 id="veure-el-dora-amb-els-teus-ulls">Veure el DORA amb els teus ulls</h2>
+
   <p>
-    Captura els quatre missatges a <code>puigcastellar1</code>, que rep la configuració del
-    DHCP del centre.
+    Amb systemd-networkd, DORA exigeix un client sense concessió; amb concessió pots observar només Request/ACK.
   </p>
 
   <ol class="cq-steps">
@@ -240,14 +247,14 @@
     <li>
       <p><strong>Deixa <code>tcpdump</code> escoltant</strong> els ports de DHCP:</p>
 <pre>sudo apt install -y tcpdump
-sudo tcpdump -i enp1s0 -n port 67 or port 68</pre>
+sudo tcpdump -i enp1s0 -n -vv port 67 or port 68</pre>
     </li>
 
     <li>
-      <p><strong>Des d'una altra consola</strong>, força una configuració des de zero:</p>
+      <p><strong>Des d’una altra consola</strong>, reconfigura la interfície i observa què passa:</p>
 <pre>sudo networkctl reconfigure enp1s0</pre>
       <p>
-        Ha de ser <code>reconfigure</code>: amb <code>renew</code> només es demana una pròrroga.
+        reconfigure no garanteix DORA; renew renova. Comprova la captura.
       </p>
     </li>
 
@@ -258,8 +265,7 @@ IP 10.0.0.1.67 &gt; 255.255.255.255.68: BOOTP/DHCP, Reply
 IP 0.0.0.0.68 &gt; 255.255.255.255.67: BOOTP/DHCP, Request from 08:00:27:1f:a3:0c
 IP 10.0.0.1.67 &gt; 255.255.255.255.68: BOOTP/DHCP, Reply</span></pre>
       <p>
-        Request, Reply, Request, Reply: DISCOVER, OFFER, REQUEST i ACK. El client parla des de
-        <code>0.0.0.0</code> perquè encara no té adreça.
+        Aquest resum BOOTP no identifica els tipus DHCP. Amb <code>-vv</code>, llegeix l’opció de tipus de missatge per distingir Discover, Offer, Request i ACK.
       </p>
     </li>
 
@@ -267,7 +273,7 @@ IP 10.0.0.1.67 &gt; 255.255.255.255.68: BOOTP/DHCP, Reply</span></pre>
       <p><strong>Compara-ho amb una renovació</strong>, amb la captura oberta:</p>
 <pre>sudo networkctl renew enp1s0</pre>
       <p>
-        Ara només en surten dues, i el client escriu directament al seu servidor.
+        En una renovació habitual apareixen Request/ACK, directament al servidor.
       </p>
 <pre><span class="o">IP 10.0.0.55.68 &gt; 10.0.0.1.67: BOOTP/DHCP, Request from 08:00:27:1f:a3:0c
 IP 10.0.0.1.67 &gt; 10.0.0.55.68: BOOTP/DHCP, Reply</span></pre>
@@ -291,7 +297,7 @@ resolvectl status enp1s0</pre>
 
 <!-- ============ 10 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2>Criteris professionals</h2>
+  <h2 id="criteris-professionals">Criteris professionals</h2>
   <ul>
     <li>
       <strong>Infraestructura fora del rang dinàmic.</strong> Servidor, routers i punts d'accés
@@ -316,7 +322,7 @@ resolvectl status enp1s0</pre>
 
 <!-- ============ 11 · PROBLEMES HABITUALS ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Quan el client no rep adreça</h2>
+  <h2 id="quan-el-client-no-rep-adreca">Quan el client no rep adreça</h2>
   <dl class="cq-issues">
     <dt>El client té una adreça 169.254.x.x</dt>
     <dd>
@@ -340,7 +346,7 @@ resolvectl status enp1s0</pre>
 
 <!-- ============ 12 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h2>Resum</h2>
+  <h2 id="resum">Resum</h2>
   <ul>
     <li>DHCP reparteix IP, màscara, porta d'enllaç i DNS de manera automàtica.</li>
     <li>Va sobre UDP: servidor al port <strong>67</strong>, client al <strong>68</strong>.</li>
@@ -360,7 +366,7 @@ resolvectl status enp1s0</pre>
         <tr><td><code>resolvectl status</code></td><td>Veure el DNS actiu</td></tr>
         <tr><td><code>networkctl status &lt;if&gt;</code></td><td>Estat i concessió de la targeta</td></tr>
         <tr><td><code>networkctl renew &lt;if&gt;</code></td><td>Renovar: dos missatges, al mateix servidor</td></tr>
-        <tr><td><code>networkctl reconfigure &lt;if&gt;</code></td><td>Tornar a començar: el DORA sencer</td></tr>
+        <tr><td><code>networkctl reconfigure &lt;if&gt;</code></td><td>Reconfigurar la interfície; comprovar la seqüència a la captura</td></tr>
         <tr><td><code>tcpdump -n port 67 or port 68</code></td><td>Capturar l'intercanvi DHCP</td></tr>
         <tr><td><code>ss -ulnp | grep :67</code></td><td>Veure si el servidor escolta</td></tr>
       </tbody>
@@ -375,9 +381,9 @@ resolvectl status enp1s0</pre>
 
 <!-- ============ 13 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h2>Comprova el que has après</h2>
+  <h2 id="comprova-el-que-has-apres">Comprova el que has après</h2>
 
-  <div class="cq-question" data-id="t1-1-dora-ordre" data-type="single">
+  <div class="cq-question" data-id="t1-1-dora-ordre" data-type="single" data-explanation="Discover cerca servidors; Offer proposa una concessió; Request la demana i ACK la confirma.">
     <div class="statement">Quin és el tercer pas del procés DORA?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">OFFER — el servidor ofereix una IP</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">REQUEST — el client accepta l'oferta</button>
@@ -387,7 +393,7 @@ resolvectl status enp1s0</pre>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t1-1-ports" data-type="single">
+  <div class="cq-question" data-id="t1-1-ports" data-type="single" data-explanation="DHCPv4 utilitza UDP: el servidor escolta al 67 i el client al 68.">
     <div class="statement">Sobre quin protocol i ports treballa DHCP?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">TCP, ports 67 i 68</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">UDP, port 67 al servidor i 68 al client</button>
@@ -397,7 +403,7 @@ resolvectl status enp1s0</pre>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t1-1-discover-origen" data-type="single">
+  <div class="cq-question" data-id="t1-1-discover-origen" data-type="single" data-explanation="El client inicial encara no té adreça assignada i usa 0.0.0.0 com a origen.">
     <div class="statement">Quina IP d'origen porta el missatge DISCOVER?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">La seva IP anterior, si en tenia</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">0.0.0.0, perquè encara no en té cap</button>
@@ -407,7 +413,7 @@ resolvectl status enp1s0</pre>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t1-1-apipa" data-type="single">
+  <div class="cq-question" data-id="t1-1-apipa" data-type="single" data-explanation="Una IPv4 169.254.x.x és una adreça d’enllaç local; no acredita una concessió DHCP.">
     <div class="statement">Un client acaba amb l'adreça 169.254.12.7. Què vol dir?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que el servidor DHCP li ha donat una adreça privada</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Que no ha rebut cap resposta DHCP i se l'ha posat ell sol</button>
@@ -417,7 +423,7 @@ resolvectl status enp1s0</pre>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t1-1-afirmacions" data-type="multi">
+  <div class="cq-question" data-id="t1-1-afirmacions" data-type="multi" data-explanation="DHCP aporta una concessió temporal i opcions de xarxa; renovar no implica repetir tot el DORA.">
     <div class="statement">Selecciona totes les afirmacions certes sobre DHCP</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Cada concessió té una durada limitada.</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El client tria lliurement la IP que vol.</button>
@@ -432,7 +438,7 @@ resolvectl status enp1s0</pre>
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h2>Al currículum</h2>
+  <h2 id="al-curriculum">Al currículum</h2>
   <p><span class="lbl">Contingut 1.2</span> DHCP. Rangs, exclusions, concessions i reserves.</p>
   <p><span class="lbl">CA 1.1</span> Reconeix el funcionament dels mecanismes automatitzats de configuració dels paràmetres de xarxa.</p>
   <p><span class="lbl">CA 1.2</span> Identifica els avantatges que proporcionen.</p>

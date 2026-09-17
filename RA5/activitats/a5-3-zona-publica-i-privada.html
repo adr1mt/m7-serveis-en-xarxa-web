@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA5 · A5.3</div>
   <h1>Zona pública i zona privada</h1>
   <p class="lede">No tothom que arriba a un lloc HTTPS hi ha d'entrar igual.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-has-de-saber-abans-de-comencar">Què has de saber abans de començar</a></li><li><a href="#amb-que-treballaras">Amb què treballaràs</a></li><li><a href="#que-has-de-fer">Què has de fer</a></li><li><a href="#d-on-has-de-treure-cada-cosa">D&#x27;on has de treure cada cosa</a></li><li><a href="#les-regles-van-dins-del-bloc-https-no-del-que-redirigeix">Les regles van dins del bloc HTTPS, no del que redirigeix</a></li><li><a href="#una-zona-protegida-no-protegeix-les-altres">Una zona protegida no protegeix les altres</a></li><li><a href="#com-sabras-que-ho-has-fet-be">Com sabràs que ho has fet bé</a></li><li><a href="#si-alguna-cosa-no-va">Si alguna cosa no va</a></li><li><a href="#que-has-d-entregar">Què has d&#x27;entregar</a></li><li><a href="#al-curriculum">Al currículum</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què has de saber abans de començar</h2>
+  <h2 id="que-has-de-saber-abans-de-comencar">Què has de saber abans de començar</h2>
   <p>
     Teoria <a class="cq-ref" href="../teoria/t5-4-qui-pot-entrar.html">T5.4</a> (autenticació, autorització i grups). Guia <a class="cq-ref" href="../guies/g5-1-apache.html">G5.1</a> és el manual
     que consultaràs mentre treballes.
@@ -39,17 +43,13 @@
 
 <!-- ============ ESCENARI ============ -->
 <div class="cq-block" data-kind="escenari">
-  <h2>Amb què treballaràs</h2>
-  <p>
-    Continues sobre la <strong>mateixa màquina</strong> de l'<a class="cq-ref" href="a5-2-dos-llocs-i-cadenat.html">A5.2</a>: no en
-    munts cap de nova. El lloc <code>web1.internal</code> per HTTPS ja hi és
-    fet i és sobre el que treballaràs.
-  </p>
+  <h2 id="amb-que-treballaras">Amb què treballaràs</h2>
+  <p>Crea un servidor i un client <strong>nous</strong> a isardVDI. Amb <a class="cq-ref" href="../guies/g5-1-apache.html">G5.1</a> prepara el lloc web1.internal amb HTTPS, resolució del nom al client i una pàgina pública accessible. Comprova aquest estat inicial abans de configurar la zona privada.</p>
 </div>
 
 <!-- ============ ENUNCIAT ============ -->
 <div class="cq-block" data-kind="enunciat">
-  <h2>Què has de fer</h2>
+  <h2 id="que-has-de-fer">Què has de fer</h2>
   <ol>
     <li>Crear tres directoris dins del lloc HTTPS, un per cada zona.</li>
     <li>La primera zona ha de demanar <strong>usuari i contrasenya</strong>
@@ -65,7 +65,7 @@
 
 <!-- ============ ON BUSCAR ============ -->
 <div class="cq-block" data-kind="enunciat">
-  <h2>D'on has de treure cada cosa</h2>
+  <h2 id="d-on-has-de-treure-cada-cosa">D'on has de treure cada cosa</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Què has de fer</th><th>On ho tens</th></tr></thead>
@@ -89,7 +89,7 @@
 
 <!-- ============ RECORDATORI ============ -->
 <div class="cq-block" data-kind="recordatori">
-  <h2>Les regles van dins del bloc HTTPS, no del que redirigeix</h2>
+  <h2 id="les-regles-van-dins-del-bloc-https-no-del-que-redirigeix">Les regles van dins del bloc HTTPS, no del que redirigeix</h2>
   <p>
     El bloc del port 80 només redirigeix al 443: si hi poses les regles de
     control d'accés allà, no protegeixen res, perquè cap petició s'hi queda a
@@ -100,7 +100,7 @@
 
 <!-- ============ OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h2>Una zona protegida no protegeix les altres</h2>
+  <h2 id="una-zona-protegida-no-protegeix-les-altres">Una zona protegida no protegeix les altres</h2>
   <p>
     Cada directori necessita la seua pròpia regla. Si proteges la carpeta de
     contrasenya però no la de grup, la de grup queda tan oberta com si no
@@ -110,7 +110,7 @@
 
 <!-- ============ COMPROVACIÓ ============ -->
 <div class="cq-block" data-kind="comprovació">
-  <h2>Com sabràs que ho has fet bé</h2>
+  <h2 id="com-sabras-que-ho-has-fet-be">Com sabràs que ho has fet bé</h2>
   <ul>
     <li>Sense credencials, <code>curl -I</code> contra la zona de
       contrasenya respon <code>401</code>.</li>
@@ -125,7 +125,7 @@
 
 <!-- ============ PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Si alguna cosa no va</h2>
+  <h2 id="si-alguna-cosa-no-va">Si alguna cosa no va</h2>
   <dl class="cq-issues">
     <dt>L'usuari que no és del grup hi entra igualment</dt>
     <dd>
@@ -147,7 +147,7 @@
 
 <!-- ============ LLIURAMENT ============ -->
 <div class="cq-block" data-kind="lliurament">
-  <h2>Què has d'entregar</h2>
+  <h2 id="que-has-d-entregar">Què has d'entregar</h2>
   <p>
     Un <strong>document tècnic</strong> amb les tres zones documentades i la
     prova que l'usuari del grup hi entra i que l'altre en queda fora.
@@ -161,7 +161,7 @@
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h2>Al currículum</h2>
+  <h2 id="al-curriculum">Al currículum</h2>
   <p><span class="lbl">CA 5.5</span> Configura la seguretat del servidor.</p>
   <p><span class="lbl">CA 5.6</span> Comprova l'accés dels usuaris al servidor.</p>
 </div>

@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA6 · G6.4</div>
   <h1>Guia: Ansible</h1>
   <p class="lede">Manual d'Ansible: inventari, playbooks, variables, plantilles i handlers.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</a></li><li><a href="#installar-ansible-a-la-maquina-de-control">Instal·lar Ansible a la màquina de control</a></li><li><a href="#l-inventari-i-la-primera-prova">L&#x27;inventari i la primera prova</a></li><li><a href="#anatomia-d-un-playbook">Anatomia d&#x27;un playbook</a></li><li><a href="#moduls-habituals">Mòduls habituals</a></li><li><a href="#executar-el-playbook">Executar el playbook</a></li><li><a href="#variables-per-grup">Variables per grup</a></li><li><a href="#plantilles-jinja2">Plantilles Jinja2</a></li><li><a href="#reiniciar-un-servei-nomes-si-cal">Reiniciar un servei només si cal</a></li><li><a href="#comprovar-ho-de-conjunt">Comprovar-ho de conjunt</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#fitxa-rapida">Fitxa ràpida</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què hi ha en aquesta guia</h2>
+  <h2 id="que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</h2>
   <p>Documentació oficial: <a href="https://docs.ansible.com/ansible/latest/">docs.ansible.com/ansible/latest</a>.</p>
   <ul>
     <li>Punt de partida: una màquina de control amb Ansible instal·lat i accés per clau
@@ -38,7 +42,7 @@
 
 <!-- ============ 2 · PAS A PAS · INSTAL·LACIÓ ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h2>Instal·lar Ansible a la màquina de control</h2>
+  <h2 id="installar-ansible-a-la-maquina-de-control">Instal·lar Ansible a la màquina de control</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Instal·la el paquet</strong> i comprova la versió:</p>
@@ -51,7 +55,7 @@ ansible --version</pre>
 
 <!-- ============ 3 · PAS A PAS · INVENTARI ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h2>L'inventari i la primera prova</h2>
+  <h2 id="l-inventari-i-la-primera-prova">L'inventari i la primera prova</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Crea el fitxer <code>hosts</code></strong> amb un grup i l'usuari amb què
@@ -73,7 +77,8 @@ ansible_user=usuari</pre>
 
 <!-- ============ 4 · REFERÈNCIA · ANATOMIA D'UN PLAYBOOK ============ -->
 <div class="cq-block" data-kind="referència">
-  <h2>Anatomia d'un playbook</h2>
+  <h2 id="anatomia-d-un-playbook">Anatomia d'un playbook</h2>
+<p>Al recap, ok inclou totes les tasques reeixides, també les que han modificat l’estat. changed n’és el subconjunt amb canvis. La prova d’una segona execució sense modificacions és changed=0, no ok=0; cal comprovar també failed=0 i unreachable=0.</p>
   <p>
     Un playbook és un fitxer YAML amb una llista de <em>plays</em>. Cada play indica
     <code>hosts</code> (a quin grup de l'inventari s'aplica), <code>become</code> (si cal
@@ -96,7 +101,7 @@ ansible_user=usuari</pre>
 
 <!-- ============ 5 · REFERÈNCIA · MÒDULS ============ -->
 <div class="cq-block" data-kind="referència">
-  <h2>Mòduls habituals</h2>
+  <h2 id="moduls-habituals">Mòduls habituals</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Mòdul</th><th>Paràmetre clau</th></tr></thead>
@@ -124,7 +129,7 @@ ansible_user=usuari</pre>
 
 <!-- ============ 6 · PAS A PAS · EXECUTAR ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h2>Executar el playbook</h2>
+  <h2 id="executar-el-playbook">Executar el playbook</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Executa'l</strong>:</p>
@@ -133,9 +138,7 @@ ansible_user=usuari</pre>
       <code>--ask-become-pass</code> perquè la demani.</p>
     </li>
     <li>
-      <p><strong>Llegeix el resum final</strong>: <code>ok</code> compta les tasques que ja
-      estaven bé, <code>changed</code> les que han fet un canvi de debò, i
-      <code>failed</code> les que han fallat.</p>
+      <p><strong>Llegeix el resum final:</strong> ok compta tasques reeixides, incloses les modificades; changed compta el subconjunt que ha canviat l’estat. failed indica errors i unreachable manca d’accés al node.</p>
     </li>
     <li>
       <p><strong>Torna'l a executar</strong>. Si el playbook és idempotent, la segona
@@ -151,11 +154,11 @@ ansible_user=usuari</pre>
 
 <!-- ============ 7 · VARIABLES ============ -->
 <div class="cq-block" data-kind="referència">
-  <h2>Variables per grup</h2>
+  <h2 id="variables-per-grup">Variables per grup</h2>
   <p>
     Un fitxer <code>group_vars/&lt;grup&gt;.yml</code> es carrega sol quan el seu nom
     coincideix amb el d'un grup de l'inventari: <code>group_vars/servidors.yml</code> per al
-    grup <code>[servidors]</code>. No cal important-lo enlloc del playbook.
+    grup <code>[servidors]</code>. No cal importar-lo enlloc del playbook.
   </p>
 <pre>paquet_web: apache2</pre>
   <p>Dins d'una tasca es fa servir entre claus dobles:</p>
@@ -167,7 +170,7 @@ ansible_user=usuari</pre>
 
 <!-- ============ 8 · PLANTILLES ============ -->
 <div class="cq-block" data-kind="referència">
-  <h2>Plantilles Jinja2</h2>
+  <h2 id="plantilles-jinja2">Plantilles Jinja2</h2>
   <p>
     Un fitxer a <code>templates/*.j2</code> és com qualsevol fitxer de configuració, però
     amb variables entre <code>{{ }}</code>. El mòdul <code>template</code> el processa i
@@ -184,7 +187,7 @@ ansible_user=usuari</pre>
 
 <!-- ============ 9 · PAS A PAS · HANDLERS ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h2>Reiniciar un servei només si cal</h2>
+  <h2 id="reiniciar-un-servei-nomes-si-cal">Reiniciar un servei només si cal</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Declara el handler</strong> al final del playbook:</p>
@@ -210,7 +213,7 @@ ansible_user=usuari</pre>
 
 <!-- ============ 10 · COMPROVACIÓ ============ -->
 <div class="cq-block" data-kind="comprovació">
-  <h2>Comprovar-ho de conjunt</h2>
+  <h2 id="comprovar-ho-de-conjunt">Comprovar-ho de conjunt</h2>
   <ol class="cq-steps">
     <li><p>Executa el playbook dues vegades seguides.</p></li>
     <li><p>A la segona, el resum final no mostra cap tasca <code>changed</code>: tot ha
@@ -220,7 +223,7 @@ ansible_user=usuari</pre>
 
 <!-- ============ 11 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2>Criteris professionals</h2>
+  <h2 id="criteris-professionals">Criteris professionals</h2>
   <ul>
     <li><strong>Mai root per SSH</strong>: connexió amb un usuari normal i
     <code>become: true</code> només on cal elevar privilegis.</li>
@@ -235,7 +238,7 @@ ansible_user=usuari</pre>
 
 <!-- ============ 12 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Errors habituals</h2>
+  <h2 id="errors-habituals">Errors habituals</h2>
   <dl class="cq-issues">
     <dt>El playbook falla amb un error de sintaxi imprecís</dt>
     <dd>
@@ -277,7 +280,7 @@ ansible_user=usuari</pre>
 
 <!-- ============ 13 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h2>Fitxa ràpida</h2>
+  <h2 id="fitxa-rapida">Fitxa ràpida</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Què</th><th>On</th></tr></thead>

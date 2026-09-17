@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA4 · T4.3</div>
   <h1>Àlies, IMAP i usos indeguts</h1>
   <p class="lede">Un àlies que reparteix correu, un client que el recull, i la prova que ningú no en pot fer un trampolí de spam.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-sabras-fer-en-acabar">Què sabràs fer en acabar</a></li><li><a href="#alies-un-redirector-no-una-bustia">Àlies: un redirector, no una bústia</a></li><li><a href="#recollir-el-correu-d-un-alies-des-de-fora">Recollir el correu d&#x27;un àlies des de fora</a></li><li><a href="#open-relay-la-porta-que-mai-s-ha-de-deixar-oberta">Open relay: la porta que mai s&#x27;ha de deixar oberta</a></li><li><a href="#dos-noms-per-a-un-sol-missatge">Dos noms per a un sol missatge</a></li><li><a href="#l-adreca-que-sobreviu-a-qui-la-respon">L&#x27;adreça que sobreviu a qui la respon</a></li><li><a href="#comprova-tu-mateix-que-no-es-un-open-relay">Comprova tu mateix que no és un open relay</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#resum">Resum</a></li><li><a href="#comprova-el-que-has-apres">Comprova el que has après</a></li><li><a href="#al-curriculum">Al currículum</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què sabràs fer en acabar</h2>
+  <h2 id="que-sabras-fer-en-acabar">Què sabràs fer en acabar</h2>
   <ul>
     <li>Diferenciar un <strong>àlies</strong> d'un compte i d'una llista de distribució.</li>
     <li>Explicar per què el correu d'un àlies s'acaba llegint a la bústia d'un altre.</li>
@@ -36,7 +40,7 @@
 
 <!-- ============ 2 · ÀLIES ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Àlies: un redirector, no una bústia</h2>
+  <h2 id="alies-un-redirector-no-una-bustia">Àlies: un redirector, no una bústia</h2>
   <p>
     Un àlies és una adreça <strong>sense bústia pròpia</strong>: tot el que hi arriba va a la
     bústia d'un compte real.
@@ -50,7 +54,7 @@
 
 <!-- ============ 3 · RECOLLIDA REMOTA ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Recollir el correu d'un àlies des de fora</h2>
+  <h2 id="recollir-el-correu-d-un-alies-des-de-fora">Recollir el correu d'un àlies des de fora</h2>
   <p>
     El correu d'un àlies es llegeix amb el compte real, pel port 993, com qualsevol altre.
   </p>
@@ -62,7 +66,7 @@
 
 <!-- ============ 4 · USOS INDEGUTS ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Open relay: la porta que mai s'ha de deixar oberta</h2>
+  <h2 id="open-relay-la-porta-que-mai-s-ha-de-deixar-oberta">Open relay: la porta que mai s'ha de deixar oberta</h2>
   <p>
     Un <strong>open relay</strong> és un servidor que accepta enviar correu de qualsevol
     persona cap a qualsevol lloc. Els spammers el busquen: l'omplen de brossa en el teu nom i
@@ -76,7 +80,7 @@
 
 <!-- ============ 5 · EXEMPLE ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h2>Dos noms per a un sol missatge</h2>
+  <h2 id="dos-noms-per-a-un-sol-missatge">Dos noms per a un sol missatge</h2>
   <p>
     Bruno escriu a <code>suport@puigcastellar.internal</code> i el missatge acaba a la bústia
     d'anna. Bruno no ho sap: per a ell, l'ha enviat a <code>suport@</code> i prou.
@@ -88,7 +92,7 @@
 
 <!-- ============ 6 · CAS REAL ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h2>L'adreça que sobreviu a qui la respon</h2>
+  <h2 id="l-adreca-que-sobreviu-a-qui-la-respon">L'adreça que sobreviu a qui la respon</h2>
   <p>
     A la secretaria d'un institut, <code>matricula@</code> l'atén una persona diferent cada
     curs. Si fos un compte, cada canvi voldria dir contrasenya nova i avisar tothom.
@@ -101,7 +105,7 @@
 
 <!-- ============ 7 · OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h2>Comprova tu mateix que no és un open relay</h2>
+  <h2 id="comprova-tu-mateix-que-no-es-un-open-relay">Comprova tu mateix que no és un open relay</h2>
   <p>
     La prova no configura res: obre una conversa SMTP pel port 25 <strong>sense
     autenticar-se</strong> i demana entregar a un domini de fora. Un servidor sa ho ha de
@@ -121,7 +125,7 @@ print(s.rcpt("victim@gmail.com"))</pre>
 
 <!-- ============ 8 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2>Criteris professionals</h2>
+  <h2 id="criteris-professionals">Criteris professionals</h2>
   <ul>
     <li><strong>Àlies per a adreces públiques</strong> (<code>suport@</code>, <code>direccio@</code>), no dupliquis comptes reals.</li>
     <li><strong>Un àlies no és un compte de reserva</strong>: si dues persones han de llegir
@@ -133,7 +137,7 @@ print(s.rcpt("victim@gmail.com"))</pre>
 
 <!-- ============ 9 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Errors habituals</h2>
+  <h2 id="errors-habituals">Errors habituals</h2>
   <dl class="cq-issues">
     <dt>Voler connectar-se per IMAP amb l'adreça de l'àlies</dt>
     <dd>
@@ -163,7 +167,7 @@ print(s.rcpt("victim@gmail.com"))</pre>
 
 <!-- ============ 10 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h2>Resum</h2>
+  <h2 id="resum">Resum</h2>
   <ul>
     <li>Un <strong>àlies</strong> no té bústia pròpia: reenvia a un compte real, i es pot canviar sense tocar l'adreça pública.</li>
     <li>IMAPS (993) i POP3S (995) ja escolten: qualsevol client amb credencials vàlides hi pot connectar.</li>
@@ -179,9 +183,9 @@ print(s.rcpt("victim@gmail.com"))</pre>
 
 <!-- ============ 11 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h2>Comprova el que has après</h2>
+  <h2 id="comprova-el-que-has-apres">Comprova el que has après</h2>
 
-  <div class="cq-question" data-id="t4-3-alies-vs-compte" data-type="single">
+  <div class="cq-question" data-id="t4-3-alies-vs-compte" data-type="single" data-explanation="Un àlies redirigeix una adreça cap a una destinació; no és necessàriament un compte amb credencials.">
     <div class="statement">Què és un àlies de correu, a diferència d'un compte?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Una adreça sense bústia pròpia que reenvia a una altra</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Un compte amb una contrasenya diferent</button>
@@ -191,7 +195,7 @@ print(s.rcpt("victim@gmail.com"))</pre>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t4-3-bustia-alies" data-type="single">
+  <div class="cq-question" data-id="t4-3-bustia-alies" data-type="single" data-explanation="Els missatges arriben a la bústia de destinació de l’àlies, que és la que cal consultar.">
     <div class="statement">Un client connecta per IMAP per llegir el correu de <code>suport@</code>. On el llegeix realment?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">A la bústia pròpia de <code>suport@</code></button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">A la bústia del compte real al qual apunta l'àlies</button>
@@ -201,7 +205,7 @@ print(s.rcpt("victim@gmail.com"))</pre>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t4-3-relay" data-type="single">
+  <div class="cq-question" data-id="t4-3-relay" data-type="single" data-explanation="Rebre correu extern per a un compte local és legítim; retransmetre cap a fora sense autorització és relay obert.">
     <div class="statement">Un client sense autenticar-se intenta enviar correu a un domini extern. Què ha de respondre el servidor?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false"><code>250 2.0.0 Ok</code></button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true"><code>550 5.1.2 Relay not allowed.</code></button>
@@ -211,7 +215,7 @@ print(s.rcpt("victim@gmail.com"))</pre>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t4-3-imap-port" data-type="single">
+  <div class="cq-question" data-id="t4-3-imap-port" data-type="single" data-explanation="IMAPS al 993 utilitza TLS des de l’inici de la sessió de recollida.">
     <div class="statement">Amb quin port i quin compte llegeixes el correu que ha arribat a un àlies?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Pel 993, amb l'adreça de l'àlies</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Pel 993, amb el compte real al qual apunta l'àlies</button>
@@ -225,7 +229,7 @@ print(s.rcpt("victim@gmail.com"))</pre>
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h2>Al currículum</h2>
+  <h2 id="al-curriculum">Al currículum</h2>
   <p><span class="lbl">Contingut 4.1</span> Comptes de correu, àlies i bústies d'usuari.</p>
   <p><span class="lbl">CA 4.4</span> Defineix àlies per als comptes de correu.</p>
   <p><span class="lbl">CA 4.5</span> Aplica mètodes per impedir usos indeguts del servidor de correu electrònic.</p>

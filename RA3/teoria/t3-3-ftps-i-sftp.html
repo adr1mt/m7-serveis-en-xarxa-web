@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA3 · T3.3</div>
   <h1>FTPS i SFTP</h1>
   <p class="lede">Dues maneres de xifrar, i per què no són la mateixa cosa.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-sabras-fer-en-acabar">Què sabràs fer en acabar</a></li><li><a href="#tres-noms-que-sonen-igual">Tres noms que sonen igual</a></li><li><a href="#ftps-tls-damunt-de-l-ftp">FTPS: TLS damunt de l&#x27;FTP</a></li><li><a href="#sftp-un-subsistema-de-ssh">SFTP: un subsistema de SSH</a></li><li><a href="#els-escaners-no-dormen">Els escàners no dormen</a></li><li><a href="#mira-la-contrasenya-passar-en-clar">Mira la contrasenya passar en clar</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#resum">Resum</a></li><li><a href="#comprova-el-que-has-apres">Comprova el que has après</a></li><li><a href="#al-curriculum">Al currículum</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què sabràs fer en acabar</h2>
+  <h2 id="que-sabras-fer-en-acabar">Què sabràs fer en acabar</h2>
   <ul>
     <li>Distingir <strong>FTP</strong>, <strong>FTPS</strong> i <strong>SFTP</strong>, i saber quin és quin.</li>
     <li>Veure amb un capturador que l'FTP en clar ensenya la contrasenya.</li>
@@ -37,7 +41,7 @@
 
 <!-- ============ 2 · TRES NOMS ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Tres noms que sonen igual</h2>
+  <h2 id="tres-noms-que-sonen-igual">Tres noms que sonen igual</h2>
   <p>
     La confusió és universal i val la pena aclarir-la d'entrada: <strong>SFTP no és FTP amb una
     <em>s</em></strong>. No comparteixen ni protocol ni servidor.
@@ -60,14 +64,14 @@
 
 <!-- ============ 3 · FTPS ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>FTPS: TLS damunt de l'FTP</h2>
+  <h2 id="ftps-tls-damunt-de-l-ftp">FTPS: TLS damunt de l'FTP</h2>
   <p>
     Hi ha dues maneres d'encaixar-hi el TLS. En <strong>explícit</strong>, el client connecta al
     port 21 de sempre i demana xifrar amb l'ordre <code>AUTH TLS</code>. És el normal, i el que
     fan tots els clients d'avui.
   </p>
   <p>
-    En <strong>implícit</strong>, la connexió va xifrada des del primer byte per un port propi, el
+    En <strong>implícit</strong>, la connexió estableix TLS abans de la conversa FTP, per un port propi, el
     990. És anterior a l'estàndard i està en desús.
   </p>
   <p>
@@ -78,7 +82,7 @@
 
 <!-- ============ 4 · SFTP ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>SFTP: un subsistema de SSH</h2>
+  <h2 id="sftp-un-subsistema-de-ssh">SFTP: un subsistema de SSH</h2>
   <p>
     Si la màquina té servidor SSH, ja té SFTP: ve activat de sèrie i qualsevol usuari que
     pugui fer SSH pot fer SFTP.
@@ -88,21 +92,12 @@
     <strong>no</strong> vols donar una consola ni deixar passejar per la màquina. Per això se
     li limita què pot fer:
   </p>
-  <div class="cq-tablewrap">
-    <table class="cq-table">
-      <thead><tr><th>Directiva</th><th>Què fa</th></tr></thead>
-      <tbody>
-        <tr><td><code>ForceCommand internal-sftp</code></td><td>Només SFTP: res de consola</td></tr>
-        <tr><td><code>ChrootDirectory</code></td><td>L'enjaula en un directori</td></tr>
-        <tr><td><code>AllowTcpForwarding no</code></td><td>Li tanca els túnels</td></tr>
-      </tbody>
-    </table>
-  </div>
+  <p>La configuració concreta del producte es documenta a <a class="cq-ref" href="../guies/g3-2-sftp.html">G3.2</a>. Aquí importa identificar els permisos, límits i serveis que s’han de permetre o restringir.</p>
 </div>
 
 <!-- ============ 7 · CAS REAL ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h2>Els escàners no dormen</h2>
+  <h2 id="els-escaners-no-dormen">Els escàners no dormen</h2>
   <p>
     Qualsevol adreça pública rep, cada dia, intents automàtics de connexió als ports coneguts. El
     21 és dels més visitats: els robots hi proven parells d'usuari i contrasenya habituals i
@@ -119,7 +114,7 @@
 </div>
 
 <div class="cq-block" data-kind="observació">
-  <h2>Mira la contrasenya passar en clar</h2>
+  <h2 id="mira-la-contrasenya-passar-en-clar">Mira la contrasenya passar en clar</h2>
   <ol class="cq-steps">
 <li>
       <p><strong>Captura una sessió FTP en clar.</strong> En una terminal:</p>
@@ -135,7 +130,7 @@ sudo tcpdump -i lo -A -n port 21</pre>
 
 <!-- ============ BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2>Criteris professionals</h2>
+  <h2 id="criteris-professionals">Criteris professionals</h2>
   <ul>
     <li><strong>SFTP com a primera opció</strong>: un sol port, cap certificat i ja el tens instal·lat.</li>
     <li><strong>Activar el xifratge no és obligar-lo</strong>: si no el forces, el client pot seguir enviant-ho tot en clar.</li>
@@ -147,7 +142,7 @@ sudo tcpdump -i lo -A -n port 21</pre>
 
 <!-- ============ PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Errors habituals</h2>
+  <h2 id="errors-habituals">Errors habituals</h2>
   <dl class="cq-issues">
     <dt>Es confonen FTPS i SFTP</dt>
     <dd>
@@ -177,7 +172,7 @@ sudo tcpdump -i lo -A -n port 21</pre>
 
 <!-- ============ 11 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h2>Resum</h2>
+  <h2 id="resum">Resum</h2>
   <ul>
     <li><strong>FTPS</strong> és FTP dins de TLS, mateix servidor i mateix port 21.</li>
     <li><strong>SFTP</strong> és un subsistema de <strong>SSH</strong>, port 22, i no té res a veure amb FTP.</li>
@@ -194,9 +189,9 @@ sudo tcpdump -i lo -A -n port 21</pre>
 
 <!-- ============ 12 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h2>Comprova el que has après</h2>
+  <h2 id="comprova-el-que-has-apres">Comprova el que has après</h2>
 
-  <div class="cq-question" data-id="t3-3-sftp" data-type="single">
+  <div class="cq-question" data-id="t3-3-sftp" data-type="single" data-explanation="SFTP és un protocol sobre SSH; FTPS és FTP protegit amb TLS.">
     <div class="statement">Quin servei has de tenir en marxa per oferir SFTP?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El servidor FTP amb el TLS activat</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true"><code>ssh</code>, que ja porta el subsistema SFTP</button>
@@ -206,7 +201,7 @@ sudo tcpdump -i lo -A -n port 21</pre>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t3-3-ports" data-type="single">
+  <div class="cq-question" data-id="t3-3-ports" data-type="single" data-explanation="SFTP acostuma a utilitzar SSH al 22; FTPS explícit comença la conversa FTP al 21.">
     <div class="statement">Per quins ports treballen FTPS explícit i SFTP?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">990 i 21</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">21 i 22</button>
@@ -216,7 +211,7 @@ sudo tcpdump -i lo -A -n port 21</pre>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t3-3-forca" data-type="single">
+  <div class="cq-question" data-id="t3-3-forca" data-type="single" data-explanation="Oferir TLS no impedeix l’accés en clar: cal exigir-lo també a autenticació i dades.">
     <div class="statement">Has posat <code>ssl_enable=YES</code> i prou. Què passa?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que ningú no pot connectar</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Que es pot xifrar, però qui vulgui encara pot entrar en clar</button>
@@ -226,7 +221,7 @@ sudo tcpdump -i lo -A -n port 21</pre>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t3-3-chroot" data-type="single">
+  <div class="cq-question" data-id="t3-3-chroot" data-type="single" data-explanation="La jaula SFTP restringeix directoris; restringir la consola i els túnels exigeix controls addicionals.">
     <div class="statement">L'SFTP es tanca just després d'autenticar. Què mires primer?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El mode passiu del client</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Els permisos del <code>ChrootDirectory</code> i de tota la ruta per sobre</button>
@@ -236,7 +231,7 @@ sudo tcpdump -i lo -A -n port 21</pre>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t3-3-afirmacions" data-type="multi">
+  <div class="cq-question" data-id="t3-3-afirmacions" data-type="multi" data-explanation="Xifratge, autenticació i restricció de permisos resolen problemes diferents.">
     <div class="statement">Selecciona totes les afirmacions certes</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">SFTP no fa servir cap canal de dades separat.</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">FTPS explícit comença en clar i demana xifrar amb <code>AUTH TLS</code>.</button>
@@ -251,7 +246,7 @@ sudo tcpdump -i lo -A -n port 21</pre>
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h2>Al currículum</h2>
+  <h2 id="al-curriculum">Al currículum</h2>
   <p><span class="lbl">Contingut 3.2</span> Ordres de control, autenticació, gestió i transferència de fitxers. Mode text i binari.</p>
   <p><span class="lbl">CA 3.1</span> Estableix la utilitat i mode d'operació del servei de transferència de fitxers.</p>
 </div>

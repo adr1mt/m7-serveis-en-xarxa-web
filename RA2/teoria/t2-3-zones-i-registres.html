@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA2 · T2.3</div>
   <h1>Zones i registres</h1>
   <p class="lede">Què és una zona, què hi ha dins i quins registres necessites.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-sabras-fer-en-acabar">Què sabràs fer en acabar</a></li><li><a href="#dues-zones-per-a-la-mateixa-xarxa">Dues zones per a la mateixa xarxa</a></li><li><a href="#la-capcalera-de-tota-zona-el-registre-soa">La capçalera de tota zona: el registre SOA</a></li><li><a href="#els-tipus-de-registre-que-faras-servir">Els tipus de registre que faràs servir</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#resum">Resum</a></li><li><a href="#comprova-el-que-has-apres">Comprova el que has après</a></li><li><a href="#al-curriculum">Al currículum</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què sabràs fer en acabar</h2>
+  <h2 id="que-sabras-fer-en-acabar">Què sabràs fer en acabar</h2>
   <ul>
     <li>Distingir una zona <strong>directa</strong> d'una d'<strong>inversa</strong>.</li>
     <li>Escriure un fitxer de zona amb el registre <strong>SOA</strong> ben posat.</li>
@@ -37,7 +41,7 @@
 
 <!-- ============ 2 · DUES ZONES ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Dues zones per a la mateixa xarxa</h2>
+  <h2 id="dues-zones-per-a-la-mateixa-xarxa">Dues zones per a la mateixa xarxa</h2>
   <p>
     Fins ara el teu servidor repetia el que deien els altres. Ara tindrà dades pròpies: serà
     <strong>autoritatiu</strong> d'una zona teva.
@@ -61,7 +65,7 @@
 
 <!-- ============ 4 · EL SOA ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>La capçalera de tota zona: el registre SOA</h2>
+  <h2 id="la-capcalera-de-tota-zona-el-registre-soa">La capçalera de tota zona: el registre SOA</h2>
   <p>
     Tot fitxer de zona comença igual: el TTL per defecte i un registre <strong>SOA</strong>
     (<em>Start Of Authority</em>), que declara qui mana a la zona i cada quan s'ha de revisar.
@@ -87,7 +91,7 @@
 
 <!-- ============ 7 · REGISTRES ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Els tipus de registre que faràs servir</h2>
+  <h2 id="els-tipus-de-registre-que-faras-servir">Els tipus de registre que faràs servir</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Tipus</th><th>Per a què</th></tr></thead>
@@ -110,7 +114,7 @@
 
 <!-- ============ BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2>Criteris professionals</h2>
+  <h2 id="criteris-professionals">Criteris professionals</h2>
   <ul>
     <li><strong>Apuja el serial a cada canvi</strong>: si no, per a la resta del món la zona no s'ha tocat.</li>
     <li><strong>Escriu els noms sencers amb punt final</strong> quan vulguis un nom absolut; és l'error tipogràfic que més costa de veure.</li>
@@ -122,7 +126,7 @@
 
 <!-- ============ PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Errors habituals</h2>
+  <h2 id="errors-habituals">Errors habituals</h2>
   <dl class="cq-issues">
     <dt>Has canviat un registre i ningú no ho nota</dt>
     <dd>
@@ -152,7 +156,7 @@
 
 <!-- ============ 12 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h2>Resum</h2>
+  <h2 id="resum">Resum</h2>
   <ul>
     <li>Cada xarxa vol <strong>dues zones</strong>: la directa i la inversa <code>in-addr.arpa</code>.</li>
     <li>El servidor que té l'original d'una zona n'és el <strong>primari</strong>.</li>
@@ -171,9 +175,9 @@
 
 <!-- ============ 13 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h2>Comprova el que has après</h2>
+  <h2 id="comprova-el-que-has-apres">Comprova el que has après</h2>
 
-  <div class="cq-question" data-id="t2-3-inversa" data-type="single">
+  <div class="cq-question" data-id="t2-3-inversa" data-type="single" data-explanation="La zona inversa utilitza PTR per relacionar una adreça amb un nom.">
     <div class="statement">Com es diu la zona inversa de la xarxa <code>192.168.1.0/24</code>?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false"><code>192.168.1.in-addr.arpa</code></button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true"><code>1.168.192.in-addr.arpa</code></button>
@@ -183,7 +187,7 @@
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t2-3-serial" data-type="single">
+  <div class="cq-question" data-id="t2-3-serial" data-type="single" data-explanation="El secundari compara el serial del SOA per saber si hi ha una versió nova.">
     <div class="statement">Has canviat un registre però no has tocat el serial. Què passa?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">La zona no es carrega i el servei s'atura</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">El servidor secundari no detecta el canvi i continua amb les dades antigues</button>
@@ -193,7 +197,7 @@
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t2-3-punt" data-type="single">
+  <div class="cq-question" data-id="t2-3-punt" data-type="single" data-explanation="El punt final indica un nom absolut; sense ell es pot afegir l’origen de la zona.">
     <div class="statement">Dins de la zona <code>adria.internal</code>, què vol dir la línia <code>web IN A 192.168.1.20</code>?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Que <code>web.adria.internal</code> té l'adreça <code>192.168.1.20</code></button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que <code>web</code> és un àlies de la zona</button>
@@ -203,17 +207,17 @@
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t2-3-cname" data-type="single">
-    <div class="statement">Quina d'aquestes línies és incorrecta?</div>
-    <button type="button" aria-pressed="false" class="cq-option" data-correct="true"><code>intranet IN CNAME 192.168.1.8</code></button>
+  <div class="cq-question" data-id="t2-3-cname" data-type="single" data-explanation="A assigna una IPv4. CNAME apunta a un nom, fins i tot si el text del destí sembla una IP.">
+    <div class="statement">Quina línia assigna una IPv4 al nom www?</div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false"><code>intranet IN CNAME 192.168.1.8</code></button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false"><code>intranet IN CNAME www.adria.internal.</code></button>
-    <button type="button" aria-pressed="false" class="cq-option" data-correct="false"><code>www IN A 192.168.1.8</code></button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true"><code>www IN A 192.168.1.8</code></button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false"><code>8 IN PTR ns1.adria.internal.</code></button>
     <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t2-3-afirmacions" data-type="multi">
+  <div class="cq-question" data-id="t2-3-afirmacions" data-type="multi" data-explanation="La zona necessita coherència de SOA, serial i registres; un àlies no assigna una adreça.">
     <div class="statement">Selecciona totes les afirmacions certes</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">El registre PTR viu a la zona inversa.</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Una zona s'ha de validar abans de recarregar-la.</button>
@@ -228,7 +232,7 @@
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h2>Al currículum</h2>
+  <h2 id="al-curriculum">Al currículum</h2>
   <p><span class="lbl">Contingut 2.2</span> Zones primàries i secundàries. Transferències de zona. Tipus de registres.</p>
   <p><span class="lbl">CA 2.3</span> Descriu l'estructura, nomenclatura i funcionalitat dels sistemes de noms jeràrquics.</p>
   <p><span class="lbl">CA 2.6</span> Afegeix registres de noms d'una zona nova, amb opcions de servidors de correu i àlies.</p>

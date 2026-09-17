@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA2 · T2.2</div>
   <h1>L'arbre del DNS</h1>
   <p class="lede">Com és possible que un sistema amb milers de milions de noms respongui en mil·lisegons.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-sabras-fer-en-acabar">Què sabràs fer en acabar</a></li><li><a href="#una-base-de-dades-repartida-entre-tots">Una base de dades repartida entre tots</a></li><li><a href="#zones-d-autoritat-i-delegacio">Zones d&#x27;autoritat i delegació</a></li><li><a href="#recursiu-o-autoritatiu">Recursiu o autoritatiu</a></li><li><a href="#una-resolucio-salt-a-salt">Una resolució, salt a salt</a></li><li><a href="#el-ttl-quant-dura-una-resposta">El TTL: quant dura una resposta</a></li><li><a href="#he-canviat-la-ip-i-mig-mon-encara-veu-l-antiga">«He canviat la IP i mig món encara veu l&#x27;antiga»</a></li><li><a href="#el-resolutor-obert-que-va-acabar-en-un-atac">El resolutor obert que va acabar en un atac</a></li><li><a href="#recorrer-l-arbre-amb-dig">Recórrer l&#x27;arbre amb dig</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#resum">Resum</a></li><li><a href="#comprova-el-que-has-apres">Comprova el que has après</a></li><li><a href="#al-curriculum">Al currículum</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què sabràs fer en acabar</h2>
+  <h2 id="que-sabras-fer-en-acabar">Què sabràs fer en acabar</h2>
   <ul>
     <li>Llegir un nom de domini d'esquerra a dreta i saber què és cada part.</li>
     <li>Explicar què és una zona d'autoritat i què és una delegació.</li>
@@ -37,7 +41,7 @@
 
 <!-- ============ 2 · L'ARBRE ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Una base de dades reparida entre tots</h2>
+  <h2 id="una-base-de-dades-repartida-entre-tots">Una base de dades repartida entre tots</h2>
   <p>
     Ningú té la llista sencera de noms d'Internet: seria impossible de mantenir. El DNS és una
     base de dades <strong>distribuïda i jeràrquica</strong>, en forma d'arbre invertit.
@@ -56,7 +60,7 @@
 
 <!-- ============ 3 · ZONES I DELEGACIÓ ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Zones d'autoritat i delegació</h2>
+  <h2 id="zones-d-autoritat-i-delegacio">Zones d'autoritat i delegació</h2>
   <p>
     Cada tros de l'arbre té un responsable. Aquest tros es diu <strong>zona d'autoritat</strong>:
     el conjunt de noms dels quals un servidor concret té les dades bones.
@@ -75,7 +79,7 @@
 
 <!-- ============ 4 · DOS TIPUS DE SERVIDOR ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Recursiu o autoritatiu</h2>
+  <h2 id="recursiu-o-autoritatiu">Recursiu o autoritatiu</h2>
   <p>
     Es diuen tots dos «servidor DNS», però fan feines oposades. No confondre'ls és el que més
     ajuda a entendre el servei.
@@ -101,7 +105,7 @@
 
 <!-- ============ 5 · EXEMPLE ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h2>Una resolució, salt a salt</h2>
+  <h2 id="una-resolucio-salt-a-salt">Una resolució, salt a salt</h2>
   <p>
     Preguntes per <code>moodle.elpuig.xeill.net</code> i el recursiu no en sap res. Comença per
     dalt i va baixant:
@@ -135,7 +139,7 @@
 
 <!-- ============ 6 · TTL I CAU ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>El TTL: quant dura una resposta</h2>
+  <h2 id="el-ttl-quant-dura-una-resposta">El TTL: quant dura una resposta</h2>
   <p>
     Cada resposta DNS ve amb un <strong>TTL</strong> (<em>Time To Live</em>), en segons. És el
     temps que qui la rep la pot guardar abans de tornar a preguntar. El decideix
@@ -154,7 +158,7 @@
 
 <!-- ============ 7 · CAS REAL ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h2>«He canviat la IP i mig món encara veu l'antiga»</h2>
+  <h2 id="he-canviat-la-ip-i-mig-mon-encara-veu-l-antiga">«He canviat la IP i mig món encara veu l'antiga»</h2>
   <p>
     Una empresa canvia de servidor i actualitza el registre. Uns usuaris veuen la web nova
     immediatament i altres continuen a l'antiga durant hores. No hi ha cap error: cadascú té la
@@ -172,7 +176,7 @@
 
 <!-- ============ 7 · CAS REAL ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h2>El resolutor obert que va acabar en un atac</h2>
+  <h2 id="el-resolutor-obert-que-va-acabar-en-un-atac">El resolutor obert que va acabar en un atac</h2>
   <p>
     Un servidor DNS que accepta consultes de tot Internet i fa recursió és un
     <strong>resolutor obert</strong>. No és només una imprudència: és una arma.
@@ -190,7 +194,7 @@
 
 <!-- ============ 8 · OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h2>Recórrer l'arbre amb dig</h2>
+  <h2 id="recorrer-l-arbre-amb-dig">Recórrer l'arbre amb dig</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Mira qui té l'autoritat</strong> sobre un domini conegut:</p>
@@ -199,7 +203,7 @@
 
     <li>
       <p><strong>Pregunta directament a l'autoritatiu</strong>, saltant-te tota la cadena:</p>
-<pre>dig @&lt;un dels NS&gt; www.upc.edu +short</pre>
+<pre>dig @&lt;un dels NS&gt; www.upc.edu</pre>
       <p>La resposta arriba amb la marca <code>aa</code> (<em>authoritative answer</em>).</p>
     </li>
 
@@ -227,7 +231,7 @@
 
 <!-- ============ 9 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2>Criteris professionals</h2>
+  <h2 id="criteris-professionals">Criteris professionals</h2>
   <ul>
     <li><strong>Un recursiu no s'obre a Internet.</strong> Serveix només la teva xarxa; si no, l'usaran per a atacs.</li>
     <li><strong>Un autoritatiu no fa recursió.</strong> Respon de la seva zona i prou.</li>
@@ -239,7 +243,7 @@
 
 <!-- ============ 10 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Errors habituals</h2>
+  <h2 id="errors-habituals">Errors habituals</h2>
   <dl class="cq-issues">
     <dt>El <code>+trace</code> escup línies de <code>network unreachable</code></dt>
     <dd>
@@ -269,7 +273,7 @@
 
 <!-- ============ 11 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h2>Resum</h2>
+  <h2 id="resum">Resum</h2>
   <ul>
     <li>El DNS és un <strong>arbre</strong>: arrel, TLD, dominis i subdominis, llegit de dreta a esquerra.</li>
     <li>Una <strong>zona d'autoritat</strong> és el tros del qual un servidor té les dades bones.</li>
@@ -299,9 +303,9 @@
 
 <!-- ============ 12 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h2>Comprova el que has après</h2>
+  <h2 id="comprova-el-que-has-apres">Comprova el que has après</h2>
 
-  <div class="cq-question" data-id="t2-2-lectura" data-type="single">
+  <div class="cq-question" data-id="t2-2-lectura" data-type="single" data-explanation="El DNS distribueix autoritat entre zones; no és una única llista central de tots els noms.">
     <div class="statement">A <code>aula3.smx.institut.cat</code>, quin és el TLD?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false"><code>aula3</code></button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false"><code>institut</code></button>
@@ -311,7 +315,7 @@
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t2-2-tipus" data-type="single">
+  <div class="cq-question" data-id="t2-2-tipus" data-type="single" data-explanation="Un resolvedor cerca respostes; un autoritatiu respon per les zones que gestiona.">
     <div class="statement">Quina és la diferència principal entre un servidor recursiu i un d'autoritatiu?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El recursiu treballa amb UDP i l'autoritatiu amb TCP</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">El recursiu busca la resposta per als clients; l'autoritatiu només respon de la seva zona</button>
@@ -321,7 +325,7 @@
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t2-2-delegacio" data-type="single">
+  <div class="cq-question" data-id="t2-2-delegacio" data-type="single" data-explanation="La delegació assenyala els servidors responsables d’una part de l’arbre amb registres NS.">
     <div class="statement">Què vol dir que una zona està delegada?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Que la responsabilitat d'una branca passa a un altre servidor de noms</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que la zona s'ha copiat a un servidor secundari</button>
@@ -331,7 +335,7 @@
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t2-2-ttl" data-type="single">
+  <div class="cq-question" data-id="t2-2-ttl" data-type="single" data-explanation="El TTL limita quant temps es pot conservar una resposta a la memòria cau.">
     <div class="statement">Has canviat una adreça a la teva zona i un client encara veu l'antiga. Què ho explica millor?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El client té l'adreça a <code>/etc/hosts</code> segur</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Té la resposta antiga a la memòria cau i encara no s'ha esgotat el TTL</button>
@@ -341,7 +345,7 @@
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t2-2-afirmacions" data-type="multi">
+  <div class="cq-question" data-id="t2-2-afirmacions" data-type="multi" data-explanation="Autoritat, recursió i memòria cau són papers diferents; la bandera aa indica una resposta autoritativa.">
     <div class="statement">Selecciona totes les afirmacions certes</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Els noms es llegeixen de dreta a esquerra, de més general a més concret.</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Un recursiu obert a tot Internet és un problema de seguretat.</button>
@@ -356,7 +360,7 @@
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h2>Al currículum</h2>
+  <h2 id="al-curriculum">Al currículum</h2>
   <p><span class="lbl">Contingut 2.1</span> Sistemes de noms plans i jeràrquics.</p>
   <p><span class="lbl">CA 2.3</span> Descriu l'estructura, nomenclatura i funcionalitat dels sistemes de noms jeràrquics.</p>
 </div>

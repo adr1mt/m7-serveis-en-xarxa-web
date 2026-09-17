@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA2 · T2.4</div>
   <h1>Primari i secundari</h1>
   <p class="lede">Per què tota zona vol dos servidors i com es copia entre ells.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-sabras-fer-en-acabar">Què sabràs fer en acabar</a></li><li><a href="#un-sol-servidor-de-noms-es-un-sol-punt-de-fallada">Un sol servidor de noms és un sol punt de fallada</a></li><li><a href="#qui-fa-que">Qui fa què</a></li><li><a href="#com-viatja-la-zona">Com viatja la zona</a></li><li><a href="#una-transferencia-oberta-es-el-mapa-de-la-teva-xarxa">Una transferència oberta és el mapa de la teva xarxa</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#resum">Resum</a></li><li><a href="#comprova-el-que-has-apres">Comprova el que has après</a></li><li><a href="#al-curriculum">Al currículum</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què sabràs fer en acabar</h2>
+  <h2 id="que-sabras-fer-en-acabar">Què sabràs fer en acabar</h2>
   <ul>
     <li>Explicar per què tota zona vol dos servidors com a mínim.</li>
     <li>Configurar un servidor <strong>secundari</strong> que es descarregui la zona.</li>
@@ -37,7 +41,7 @@
 
 <!-- ============ 2 · PER QUÈ ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Un sol servidor de noms és un sol punt de fallada</h2>
+  <h2 id="un-sol-servidor-de-noms-es-un-sol-punt-de-fallada">Un sol servidor de noms és un sol punt de fallada</h2>
   <p>
     Si la teva zona la serveix una màquina i aquella màquina cau, els seus noms deixen d'existir
     per a tothom. No és que vagi lent: simplement no hi ha resposta.
@@ -55,7 +59,7 @@
 
 <!-- ============ 3 · ELS DOS PAPERS ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Qui fa què</h2>
+  <h2 id="qui-fa-que">Qui fa què</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th></th><th>Primari</th><th>Secundari</th></tr></thead>
@@ -75,7 +79,7 @@
 
 <!-- ============ 4 · LA TRANSFERÈNCIA ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Com viatja la zona</h2>
+  <h2 id="com-viatja-la-zona">Com viatja la zona</h2>
   <p>
     La còpia es diu <strong>transferència de zona</strong> i, a diferència de les consultes
     normals, va per <strong>TCP</strong>, també al port 53: pot ser molta informació de cop.
@@ -107,7 +111,7 @@
 
 <!-- ============ 6 · SEGURETAT ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h2>Una transferència oberta és el mapa de la teva xarxa</h2>
+  <h2 id="una-transferencia-oberta-es-el-mapa-de-la-teva-xarxa">Una transferència oberta és el mapa de la teva xarxa</h2>
   <p>
     Una zona conté totes les màquines amb nom i adreça. Si qualsevol se la pot descarregar, li
     estàs regalant l'inventari sencer: servidors, impressores, còpies de seguretat i com es diu
@@ -126,7 +130,7 @@
 
 <!-- ============ BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2>Criteris professionals</h2>
+  <h2 id="criteris-professionals">Criteris professionals</h2>
   <ul>
     <li><strong>Dos servidors per zona com a mínim</strong>, i en xarxes o alimentacions diferents si pots.</li>
     <li><strong>Es toca només el primari</strong>: editar la còpia del secundari és treball que la pròxima transferència s'endurà.</li>
@@ -138,7 +142,7 @@
 
 <!-- ============ PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Errors habituals</h2>
+  <h2 id="errors-habituals">Errors habituals</h2>
   <dl class="cq-issues">
     <dt>El secundari no es descarrega la zona</dt>
     <dd>
@@ -168,11 +172,11 @@
 
 <!-- ============ 10 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h2>Resum</h2>
+  <h2 id="resum">Resum</h2>
   <ul>
     <li>Tota zona vol <strong>dos servidors</strong>; tots dos responen com a autoritatius.</li>
     <li>El <strong>primari</strong> té l'original; el <strong>secundari</strong> se'l descarrega.</li>
-    <li>La transferència va per <strong>TCP</strong> al port 53 i s'anomena <strong>AXFR</strong>.</li>
+    <li>La transferència va per <strong>TCP</strong> al port 53 i s’anomena <strong>AXFR</strong> quan copia tota la zona; IXFR transfereix només els canvis.</li>
     <li>El <strong>serial</strong> és el que dispara la còpia; sense apujar-lo, no passa res.</li>
     <li>Transferència <strong>tancada</strong> a qui no sigui secundari: una zona oberta és el mapa de la xarxa.</li>
   </ul>
@@ -187,9 +191,9 @@
 
 <!-- ============ 11 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h2>Comprova el que has après</h2>
+  <h2 id="comprova-el-que-has-apres">Comprova el que has après</h2>
 
-  <div class="cq-question" data-id="t2-4-transport" data-type="single">
+  <div class="cq-question" data-id="t2-4-transport" data-type="single" data-explanation="La transferència completa AXFR utilitza TCP; IXFR pot transferir només diferències.">
     <div class="statement">Per quin protocol de transport viatja una transferència de zona?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">UDP, port 53</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">TCP, port 53</button>
@@ -199,7 +203,7 @@
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t2-4-serial" data-type="single">
+  <div class="cq-question" data-id="t2-4-serial" data-type="single" data-explanation="Sense incrementar el serial, el secundari no identifica el canvi com una versió nova.">
     <div class="statement">Què fa que el secundari es descarregui la zona altra vegada?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que hagi passat el TTL</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Que el serial del primari sigui més alt que el seu</button>
@@ -209,7 +213,7 @@
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t2-4-fitxer" data-type="single">
+  <div class="cq-question" data-id="t2-4-fitxer" data-type="single" data-explanation="La còpia secondary la manté el servei a partir del primary; no s’edita com una zona original.">
     <div class="statement">Al servidor secundari, qui escriu el fitxer de zona?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">L'administrador, copiant-lo del primari</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">El mateix servidor, en fer la transferència</button>
@@ -219,7 +223,7 @@
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t2-4-seguretat" data-type="single">
+  <div class="cq-question" data-id="t2-4-seguretat" data-type="single" data-explanation="Una transferència oberta revela la zona sencera; cal limitar els destinataris autoritzats.">
     <div class="statement">Per què s'ha de limitar qui es pot descarregar una zona sencera?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè les transferències consumeixen molta memòria</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Perquè qui es descarrega la zona obté l'inventari sencer de la xarxa</button>
@@ -229,7 +233,7 @@
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t2-4-afirmacions" data-type="multi">
+  <div class="cq-question" data-id="t2-4-afirmacions" data-type="multi" data-explanation="Primary i secondary poden respondre autoritativament; la còpia depèn del serial i de les autoritzacions.">
     <div class="statement">Selecciona totes les afirmacions certes</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">El secundari respon amb la mateixa autoritat que el primari.</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">A la zona hi ha d'haver un registre NS per a cada servidor.</button>
@@ -244,7 +248,7 @@
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h2>Al currículum</h2>
+  <h2 id="al-curriculum">Al currículum</h2>
   <p><span class="lbl">Contingut 2.2</span> Zones primàries i secundàries. Transferències de zona. Tipus de registres.</p>
 </div>
 

@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,15 +17,18 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA3 · G3.1</div>
   <h1>Guia: vsftpd</h1>
   <p class="lede">Usuaris locals enjaulats, accés anònim, límits i FTPS.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</a></li><li><a href="#un-paquet-un-servei-un-fitxer">Un paquet, un servei, un fitxer</a></li><li><a href="#les-directives-que-has-de-decidir">Les directives que has de decidir</a></li><li><a href="#configuracio-per-a-usuaris-locals-enjaulats">Configuració per a usuaris locals enjaulats</a></li><li><a href="#l-arrel-del-chroot-no-pot-ser-escrivible">L&#x27;arrel del chroot no pot ser escrivible</a></li><li><a href="#muntar-el-servidor-amb-usuaris-enjaulats">Muntar el servidor amb usuaris enjaulats</a></li><li><a href="#les-directives-de-l-acces-anonim">Les directives de l&#x27;accés anònim</a></li><li><a href="#repositori-public-de-nomes-lectura-amb-limits">Repositori públic de només lectura, amb límits</a></li><li><a href="#publicar-un-repositori-anonim">Publicar un repositori anònim</a></li><li><a href="#les-directives-de-ftps">Les directives de FTPS</a></li><li><a href="#xifrar-les-sessions-amb-ftps">Xifrar les sessions amb FTPS</a></li><li><a href="#comprovar-ho-des-del-client">Comprovar-ho des del client</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#fitxa-rapida">Fitxa ràpida</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <div class="cq-block" data-kind="objectius">
-  <h2>Què hi ha en aquesta guia</h2>
+  <h2 id="que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</h2>
   <p>Documentació oficial: <a href="https://security.appspot.com/vsftpd.html">security.appspot.com/vsftpd.html</a></p>
   <ul>
     <li>Punt de partida: Ubuntu Server amb IP fixa a la targeta interna.</li>
@@ -34,7 +38,8 @@
 
 <!-- ============ 2 · UN SOL FITXER ============ -->
 <div class="cq-block" data-kind="referència">
-  <h2>Un paquet, un servei, un fitxer</h2>
+  <h2 id="un-paquet-un-servei-un-fitxer">Un paquet, un servei, un fitxer</h2>
+<p>max_per_ip limita les connexions d’una IP abans de saber quin usuari entrarà. És un límit global de la instància, compartit per sessions anònimes i autenticades; user_config_dir no el converteix en un límit per perfil. En <a class="cq-ref" href="../activitats/a3-2-ftp-public-i-limits.html">A3.2</a> el límit és de dues sessions per IP, en total.</p>
   <p>
     <strong>vsftpd</strong> (<em>Very Secure FTP Daemon</em>) és el servidor FTP estàndard a
     Debian i Ubuntu des de fa vint anys, i el que fan servir servidors públics grans. Tota la
@@ -59,7 +64,7 @@
 
 <!-- ============ 3 · LES DIRECTIVES ============ -->
 <div class="cq-block" data-kind="referència">
-  <h2>Les directives que has de decidir</h2>
+  <h2 id="les-directives-que-has-de-decidir">Les directives que has de decidir</h2>
   <p>
     De sèrie, vsftpd deixa entrar els usuaris del sistema però <strong>no</strong> els deixa
     escriure ni els tanca enlloc. Aquestes són les que has de tocar:
@@ -84,7 +89,7 @@
 
 <!-- ============ 5 · EXEMPLE ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h2>Configuració per a usuaris locals enjaulats</h2>
+  <h2 id="configuracio-per-a-usuaris-locals-enjaulats">Configuració per a usuaris locals enjaulats</h2>
   <p>Aquestes són les línies que canvies o afegeixes a <code>/etc/vsftpd.conf</code>:</p>
 <pre><span class="c"># Qui entra</span>
 anonymous_enable=NO
@@ -116,7 +121,7 @@ userlist_deny=NO</pre>
 
 <!-- ============ 6 · LA TRAMPA DEL CHROOT ============ -->
 <div class="cq-block" data-kind="observació">
-  <h2>L'arrel del chroot no pot ser escrivible</h2>
+  <h2 id="l-arrel-del-chroot-no-pot-ser-escrivible">L'arrel del chroot no pot ser escrivible</h2>
   <p>
     L'arrel de la gàbia és el directori que digui <code>local_root</code>. Si l'usuari hi pot
     escriure, vsftpd no el deixa entrar i li respon
@@ -132,7 +137,7 @@ userlist_deny=NO</pre>
 
 <!-- ============ 8 · PAS A PAS ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h2>Muntar el servidor amb usuaris enjaulats</h2>
+  <h2 id="muntar-el-servidor-amb-usuaris-enjaulats">Muntar el servidor amb usuaris enjaulats</h2>
 
   <ol class="cq-steps">
     <li>
@@ -198,7 +203,7 @@ systemctl status vsftpd</pre>
 
 <!-- ============ 3 · DIRECTIVES D'ANÒNIM ============ -->
 <div class="cq-block" data-kind="referència">
-  <h2>Les directives de l'accés anònim</h2>
+  <h2 id="les-directives-de-l-acces-anonim">Les directives de l'accés anònim</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Directiva</th><th>Què decideix</th></tr></thead>
@@ -220,7 +225,7 @@ systemctl status vsftpd</pre>
 
 <!-- ============ 5 · EXEMPLE ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h2>Repositori públic de només lectura, amb límits</h2>
+  <h2 id="repositori-public-de-nomes-lectura-amb-limits">Repositori públic de només lectura, amb límits</h2>
 <pre><span class="c"># Anònim, només baixar</span>
 anonymous_enable=YES
 anon_root=/srv/ftp
@@ -246,7 +251,7 @@ idle_session_timeout=120</pre>
 
 <!-- ============ 8 · PAS A PAS ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h2>Publicar un repositori anònim</h2>
+  <h2 id="publicar-un-repositori-anonim">Publicar un repositori anònim</h2>
 
   <ol class="cq-steps">
     <li>
@@ -314,7 +319,7 @@ sudo chmod a+r /srv/ftp/public/gran.bin</pre>
 
 <!-- ============ 5 · EXEMPLE ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h2>Les directives de FTPS</h2>
+  <h2 id="les-directives-de-ftps">Les directives de FTPS</h2>
   <p>FTPS, a <code>/etc/vsftpd.conf</code>, amb el certificat que ja porta el sistema:</p>
 <pre>ssl_enable=YES
 force_local_logins_ssl=YES
@@ -333,7 +338,7 @@ rsa_private_key_file=/etc/ssl/private/ssl-cert-snakeoil.key</pre>
 </div>
 
 <div class="cq-block" data-kind="pas a pas">
-  <h2>Xifrar les sessions amb FTPS</h2>
+  <h2 id="xifrar-les-sessions-amb-ftps">Xifrar les sessions amb FTPS</h2>
   <p>Amb el servidor d'usuaris locals ja muntat:</p>
 
   <ol class="cq-steps">
@@ -367,7 +372,7 @@ lftp -u alumne1 -e "set ssl:verify-certificate no" \
 
 <!-- ============ COMPROVACIÓ ============ -->
 <div class="cq-block" data-kind="comprovació">
-  <h2>Comprovar-ho des del client</h2>
+  <h2 id="comprovar-ho-des-del-client">Comprovar-ho des del client</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>El servei ha arrencat de debò.</strong> Amb una directiva desconeguda,
@@ -389,7 +394,7 @@ lftp -u alumne1 -e "set ssl:verify-certificate no" \
 </div>
 
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2>Criteris professionals</h2>
+  <h2 id="criteris-professionals">Criteris professionals</h2>
   <ul>
     <li><strong>Còpia del fitxer original</strong> abans de la primera edició.</li>
     <li><strong>L'arrel del chroot, mai escrivible</strong>: el servei es nega a arrencar.</li>
@@ -400,7 +405,7 @@ lftp -u alumne1 -e "set ssl:verify-certificate no" \
 </div>
 
 <div class="cq-block" data-kind="problemes">
-  <h2>Errors habituals</h2>
+  <h2 id="errors-habituals">Errors habituals</h2>
   <dl class="cq-issues">
 <dt><code>500 OOPS: refusing to run with writable root inside chroot()</code></dt>
     <dd>
@@ -455,7 +460,7 @@ lftp -u alumne1 -e "set ssl:verify-certificate no" \
 </div>
 
 <div class="cq-block" data-kind="resum">
-  <h2>Fitxa ràpida</h2>
+  <h2 id="fitxa-rapida">Fitxa ràpida</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Comanda</th><th>Per a què serveix</th></tr></thead>

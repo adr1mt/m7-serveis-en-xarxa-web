@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · G1.2</div>
   <h1>Guia: Kea</h1>
   <p class="lede">El servidor DHCP: instal·lació, rang, opcions i reserves.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</a></li><li><a href="#per-que-kea-i-no-una-altra-cosa">Per què Kea i no una altra cosa</a></li><li><a href="#el-fitxer-de-configuracio-bloc-a-bloc">El fitxer de configuració, bloc a bloc</a></li><li><a href="#una-configuracio-completa-i-minima">Una configuració completa i mínima</a></li><li><a href="#reservar-una-ip-per-a-un-equip-concret">Reservar una IP per a un equip concret</a></li><li><a href="#muntar-el-servidor">Muntar el servidor</a></li><li><a href="#comprovar-que-reparteix-adreces">Comprovar que reparteix adreces</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#resum">Resum</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què hi ha en aquesta guia</h2>
+  <h2 id="que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</h2>
   <p>Documentació oficial: <a href="https://kea.readthedocs.io">kea.readthedocs.io</a></p>
   <ul>
     <li>La targeta interna ha de tenir <strong>IP fixa</strong> abans de començar: guia <a class="cq-ref" href="g1-1-netplan.html">G1.1</a>.</li>
@@ -35,7 +39,7 @@
 
 <!-- ============ 2 · QUÈ ÉS KEA ============ -->
 <div class="cq-block" data-kind="referència">
-  <h2>Per què Kea i no una altra cosa</h2>
+  <h2 id="per-que-kea-i-no-una-altra-cosa">Per què Kea i no una altra cosa</h2>
   <p>
     Durant vint anys, el servidor DHCP de Linux va ser <code>isc-dhcp-server</code>. La
     fundació que el mantenia el va donar per acabat el 2022 i el va substituir per
@@ -55,7 +59,7 @@
 
 <!-- ============ 3 · ANATOMIA DEL FITXER ============ -->
 <div class="cq-block" data-kind="referència">
-  <h2>El fitxer de configuració, bloc a bloc</h2>
+  <h2 id="el-fitxer-de-configuracio-bloc-a-bloc">El fitxer de configuració, bloc a bloc</h2>
   <p>
     Tot viu a <code>/etc/kea/kea-dhcp4.conf</code>. Sembla llarg, però només hi ha quatre coses
     que hagis de tocar:
@@ -79,7 +83,7 @@
 
 <!-- ============ 4 · EXEMPLE ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h2>Una configuració completa i mínima</h2>
+  <h2 id="una-configuracio-completa-i-minima">Una configuració completa i mínima</h2>
   <p>Xarxa <code>192.168.1.0/24</code>, servidor a la <code>.1</code>, repartint de la 100 a la 200:</p>
 <pre>{
 "Dhcp4": {
@@ -118,7 +122,7 @@
 
 <!-- ============ 6 · RESERVES ============ -->
 <div class="cq-block" data-kind="referència">
-  <h2>Reservar una IP per a un equip concret</h2>
+  <h2 id="reservar-una-ip-per-a-un-equip-concret">Reservar una IP per a un equip concret</h2>
   <p>
     Una <strong>reserva</strong> lliga una adreça MAC a una IP: aquell equip rebrà sempre la
     mateixa. S'escriu dins de la subxarxa, just després de <code>option-data</code>:
@@ -133,16 +137,12 @@
           "ip-address": "192.168.1.11"
         }
       ]</pre>
-  <p>
-    L'adreça reservada ha d'estar <strong>dins de la subxarxa</strong> però
-    <strong>fora del <code>pool</code></strong>. Si la poses dins del rang, Kea la podria haver
-    donat abans a un altre equip.
-  </p>
+  <p>La reserva ha de pertànyer a la subxarxa. <strong>Kea admet reserves dins i fora del pool</strong>, segons la configuració. En aquest laboratori les situem fora per separar-les visualment del rang automàtic. Una IP estàtica no gestionada pel DHCP sí que ha de quedar exclosa del pool.</p>
 </div>
 
 <!-- ============ 7 · PAS A PAS ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h2>Muntar el servidor</h2>
+  <h2 id="muntar-el-servidor">Muntar el servidor</h2>
   <p>
     Punt de partida: la targeta <code>personal1</code> ja ha de tenir IP fixa (guia <a class="cq-ref" href="g1-1-netplan.html">G1.1</a>). Sense
     això, Kea no arrencarà.
@@ -214,7 +214,8 @@ sudo systemctl status kea-dhcp4-server</pre>
 
 <!-- ============ COMPROVACIÓ ============ -->
 <div class="cq-block" data-kind="comprovació">
-  <h2>Comprovar que reparteix adreces</h2>
+  <h2 id="comprovar-que-reparteix-adreces">Comprovar que reparteix adreces</h2>
+<p><strong>DORA i renovació:</strong> una línia de concessió al registre no demostra els quatre missatges. Conserva una captura DHCP del client inicialment sense concessió i identifica Discover, Offer, Request i ACK. Una renovació pot mostrar només Request/ACK. networkctl només gestiona interfícies de systemd-networkd; al Desktop comprova si s’utilitza NetworkManager abans de triar l’eina.</p>
   <ol class="cq-steps">
     <li>
       <p><strong>El servei està actiu</strong> i escolta pel port UDP 67:</p>
@@ -225,7 +226,7 @@ ss -ulnp | grep :67</pre>
       <p><strong>Un client rep adreça.</strong> Amb el registre obert al servidor, engega el
       client i mira què hi passa:</p>
 <pre>journalctl -u kea-dhcp4-server -f</pre>
-      <p>Hi han de sortir les quatre passes del DORA amb la MAC del client.</p>
+      <p>El registre acredita la concessió i la MAC del client. Per demostrar els quatre missatges del DORA utilitza la captura DHCP indicada abans.</p>
     </li>
     <li>
       <p><strong>La concessió ha quedat desada:</strong></p>
@@ -238,7 +239,7 @@ ss -ulnp | grep :67</pre>
 
 <!-- ============ 8 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2>Criteris professionals</h2>
+  <h2 id="criteris-professionals">Criteris professionals</h2>
   <ul>
     <li><strong>Valida sempre abans d'arrencar</strong> amb <code>sudo -u _kea kea-dhcp4 -t</code>. Estalvia la meitat dels problemes.</li>
     <li><strong>Còpia de l'original.</strong> És la teva marxa enrere si t'hi perds.</li>
@@ -250,7 +251,7 @@ ss -ulnp | grep :67</pre>
 
 <!-- ============ 9 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Errors habituals</h2>
+  <h2 id="errors-habituals">Errors habituals</h2>
   <dl class="cq-issues">
     <dt>El servei no arrenca</dt>
     <dd>
@@ -280,12 +281,12 @@ ss -ulnp | grep :67</pre>
 
 <!-- ============ 10 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h2>Resum</h2>
+  <h2 id="resum">Resum</h2>
   <ul>
     <li><strong>Kea</strong> substitueix <code>isc-dhcp-server</code>. La documentació antiga no serveix.</li>
     <li>Es configura en <strong>JSON</strong> a <code>/etc/kea/kea-dhcp4.conf</code>.</li>
     <li>Quatre blocs a tocar: <code>interfaces-config</code>, <code>subnet</code>, <code>pools</code> i <code>option-data</code>.</li>
-    <li>Les <strong>reserves</strong> van dins de la subxarxa i fora del <em>pool</em>.</li>
+    <li>Les <strong>reserves</strong> van dins de la subxarxa; aquí les situem fora del <em>pool</em> per organització.</li>
     <li>Al comptar adreces d'un rang, <strong>els dos extrems hi entren</strong>.</li>
   </ul>
 

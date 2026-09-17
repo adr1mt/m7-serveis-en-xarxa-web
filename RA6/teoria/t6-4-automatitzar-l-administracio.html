@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA6 · T6.4</div>
   <h1>Automatitzar l'administració</h1>
   <p class="lede">Descriure l'estat desitjat en lloc de donar ordres, i que la segona passada no canviï res.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-sabras-fer-en-acabar">Què sabràs fer en acabar</a></li><li><a href="#el-problema-d-escalar">El problema d&#x27;escalar</a></li><li><a href="#descriure-l-estat-no-donar-ordres">Descriure l&#x27;estat, no donar ordres</a></li><li><a href="#idempotencia">Idempotència</a></li><li><a href="#sense-res-a-installar">Sense res a instal·lar</a></li><li><a href="#les-peces-d-una-automatitzacio">Les peces d&#x27;una automatització</a></li><li><a href="#ansible-i-les-alternatives">Ansible i les alternatives</a></li><li><a href="#llegir-el-resum-d-una-execucio">Llegir el resum d&#x27;una execució</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#resum">Resum</a></li><li><a href="#comprova-el-que-has-apres">Comprova el que has après</a></li><li><a href="#al-curriculum">Al currículum</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què sabràs fer en acabar</h2>
+  <h2 id="que-sabras-fer-en-acabar">Què sabràs fer en acabar</h2>
   <ul>
     <li>Explicar per què fer el mateix a vint màquines a mà no escala.</li>
     <li>Descriure el canvi de mentalitat: estat desitjat en lloc de seqüència d'ordres.</li>
@@ -37,7 +41,8 @@
 
 <!-- ============ 2 · EL PROBLEMA D'ESCALAR ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>El problema d'escalar</h2>
+  <h2 id="el-problema-d-escalar">El problema d'escalar</h2>
+<p>Al recap, ok inclou totes les tasques reeixides, també les que han modificat l’estat. changed n’és el subconjunt amb canvis. La prova d’una segona execució sense modificacions és changed=0, no ok=0; cal comprovar també failed=0 i unreachable=0.</p>
   <p>
     Configurar una màquina a mà és factible. Configurar-ne vint d'iguals, ja no: cada
     persona teclejarà les ordres en un ordre una mica diferent, se n'oblidarà alguna, i al
@@ -48,7 +53,7 @@
 
 <!-- ============ 3 · ESTAT DESITJAT ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Descriure l'estat, no donar ordres</h2>
+  <h2 id="descriure-l-estat-no-donar-ordres">Descriure l'estat, no donar ordres</h2>
   <p>
     El canvi de mentalitat és aquest: en lloc de donar una seqüència d'ordres -instal·la
     això, després això altre-, es descriu com ha de quedar la màquina: quins paquets hi ha,
@@ -59,7 +64,7 @@
 
 <!-- ============ 4 · IDEMPOTÈNCIA ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Idempotència</h2>
+  <h2 id="idempotencia">Idempotència</h2>
   <p>
     Que una execució sigui <strong>idempotent</strong> vol dir que executar-la dues vegades
     deixa el sistema exactament igual que executar-la una: la segona passada no troba res
@@ -71,7 +76,7 @@
 
 <!-- ============ 5 · SENSE AGENT ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h2>Sense res a instal·lar</h2>
+  <h2 id="sense-res-a-installar">Sense res a instal·lar</h2>
   <p>
     Una eina d'automatització com Ansible entra a les màquines administrades per SSH, amb el
     mateix protocol que ja coneixes: no cal instal·lar-hi cap programa ni deixar cap procés
@@ -82,7 +87,7 @@
 
 <!-- ============ 6 · LES PECES ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Les peces d'una automatització</h2>
+  <h2 id="les-peces-d-una-automatitzacio">Les peces d'una automatització</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Peça</th><th>Què és</th></tr></thead>
@@ -100,7 +105,7 @@
 
 <!-- ============ 7 · ANSIBLE I LES ALTERNATIVES ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h2>Ansible i les alternatives</h2>
+  <h2 id="ansible-i-les-alternatives">Ansible i les alternatives</h2>
   <p>
     Ansible és l'eina que fareu servir en aquest mòdul, i entra per SSH sense agent, tal com
     s'ha explicat. Puppet i Salt resolen el mateix problema amb un agent instal·lat a cada
@@ -111,20 +116,16 @@
 
 <!-- ============ 8 · OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h2>Llegir el resum d'una execució</h2>
+  <h2 id="llegir-el-resum-d-una-execucio">Llegir el resum d'una execució</h2>
 <pre>ansible-playbook -i inventari playbook.yml
 <span class="o">PLAY RECAP
 alumne1 : ok=6 changed=2 unreachable=0 failed=0</span></pre>
-  <p>
-    El resum final diu quantes tasques no han calgut fer res (<code>ok</code>) i quantes
-    n'han fet (<code>changed</code>). Si la segona passada torna <code>changed=0</code> a
-    totes les tasques, l'execució ha estat idempotent de veritat.
-  </p>
+  <p>El resum final compta tasques reeixides amb ok i, dins d’aquest grup, les que han canviat l’estat amb changed. Executa una segona passada: changed=0, failed=0 i unreachable=0, amb el servei funcional, mostren que aquesta passada no ha modificat res.</p>
 </div>
 
 <!-- ============ 9 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2>Criteris professionals</h2>
+  <h2 id="criteris-professionals">Criteris professionals</h2>
   <ul>
     <li>Descriu l'estat, no la seqüència d'ordres.</li>
     <li>Comprova sempre la segona execució abans de donar un playbook per bo.</li>
@@ -134,7 +135,7 @@ alumne1 : ok=6 changed=2 unreachable=0 failed=0</span></pre>
 
 <!-- ============ 10 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Errors habituals</h2>
+  <h2 id="errors-habituals">Errors habituals</h2>
   <dl class="cq-issues">
     <dt>Un playbook que fa canvis diferents cada vegada que s'executa</dt>
     <dd>
@@ -152,7 +153,7 @@ alumne1 : ok=6 changed=2 unreachable=0 failed=0</span></pre>
 
 <!-- ============ 11 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h2>Resum</h2>
+  <h2 id="resum">Resum</h2>
   <ul>
     <li>Descriure <strong>l'estat desitjat</strong>, no donar ordres, és el canvi de mentalitat.</li>
     <li><strong>Idempotent</strong>: la segona execució no canvia res.</li>
@@ -165,9 +166,9 @@ alumne1 : ok=6 changed=2 unreachable=0 failed=0</span></pre>
 
 <!-- ============ 12 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h2>Comprova el que has après</h2>
+  <h2 id="comprova-el-que-has-apres">Comprova el que has après</h2>
 
-  <div class="cq-question" data-id="t6-4-mentalitat" data-type="single">
+  <div class="cq-question" data-id="t6-4-mentalitat" data-type="single" data-explanation="Un playbook declara l’estat desitjat; els mòduls decideixen els canvis necessaris.">
     <div class="statement">Quin és el canvi de mentalitat que proposa l'automatització?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Escriure les mateixes ordres però més ràpid</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Descriure l'estat desitjat de la màquina en lloc de donar una seqüència d'ordres</button>
@@ -177,7 +178,7 @@ alumne1 : ok=6 changed=2 unreachable=0 failed=0</span></pre>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t6-4-idempotencia" data-type="single">
+  <div class="cq-question" data-id="t6-4-idempotencia" data-type="single" data-explanation="Idempotència significa que tornar a aplicar l’estat no introdueix canvis innecessaris.">
     <div class="statement">Un playbook és idempotent quan...</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">S'executa més ràpid la segona vegada</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Executar-lo una segona vegada no fa cap canvi addicional</button>
@@ -187,7 +188,7 @@ alumne1 : ok=6 changed=2 unreachable=0 failed=0</span></pre>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t6-4-agent" data-type="single">
+  <div class="cq-question" data-id="t6-4-agent" data-type="single" data-explanation="Ansible pot administrar per SSH sense agent propi, però necessita els prerequisits del mòdul al node.">
     <div class="statement">Per què Ansible no necessita cap agent instal·lat a les màquines que administra?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè només administra màquines Windows</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Perquè hi entra per SSH, amb el mateix protocol d'accés remot que ja coneixes</button>
@@ -197,7 +198,7 @@ alumne1 : ok=6 changed=2 unreachable=0 failed=0</span></pre>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t6-4-peces" data-type="multi">
+  <div class="cq-question" data-id="t6-4-peces" data-type="multi" data-explanation="Inventari selecciona nodes; variables aporten dades, plantilles generen fitxers i handlers reaccionen a canvis.">
     <div class="statement">Quines d'aquestes són peces d'una automatització amb Ansible? (marca totes les correctes)</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Inventari</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Handler</button>
@@ -207,10 +208,10 @@ alumne1 : ok=6 changed=2 unreachable=0 failed=0</span></pre>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t6-4-alternatives" data-type="single">
-    <div class="statement">Quina diferència hi ha entre Ansible i eines com Puppet o Salt?</div>
+  <div class="cq-question" data-id="t6-4-alternatives" data-type="single" data-explanation="La comparació és amb el desplegament habitual amb agents; Salt també disposa de modalitat SSH.">
+    <div class="statement">En el desplegament habitual de Puppet i Salt amb agents, quina diferència hi ha respecte d’Ansible per SSH?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Ansible no és idempotent i les altres sí</button>
-    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Puppet i Salt fan servir un agent instal·lat a cada màquina administrada; Ansible entra per SSH sense agent</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">En aquest desplegament Puppet i Salt fan servir un agent instal·lat a cada màquina administrada; Ansible entra per SSH sense agent</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Puppet i Salt no admeten variables</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Ansible només serveix per a màquines DHCP</button>
     <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
@@ -221,7 +222,7 @@ alumne1 : ok=6 changed=2 unreachable=0 failed=0</span></pre>
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h2>Al currículum</h2>
+  <h2 id="al-curriculum">Al currículum</h2>
   <p><span class="lbl">CA 6.7</span> Realitza proves d'administració remota entre sistemes de diferent naturalesa.</p>
 </div>
 

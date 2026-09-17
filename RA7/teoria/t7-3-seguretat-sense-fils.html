@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -17,16 +18,19 @@
 <!-- === NAVEGACIÓ FI === -->
 
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA7 · T7.3</div>
   <h1>Seguretat de les xarxes sense fils</h1>
   <p class="lede">Al cable cal endollar-se; a l'aire, només cal ser a prop.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-sabras-fer-en-acabar">Què sabràs fer en acabar</a></li><li><a href="#qui-es-a-prop-ja-hi-es">Qui és a prop, ja hi és</a></li><li><a href="#de-wep-a-wpa3">De WEP a WPA3</a></li><li><a href="#una-contrasenya-per-a-tothom-o-una-per-persona">Una contrasenya per a tothom, o una per persona</a></li><li><a href="#la-clau-que-sap-tothom">La clau que sap tothom</a></li><li><a href="#la-xarxa-de-convidats">La xarxa de convidats</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#resum">Resum</a></li><li><a href="#comprova-el-que-has-apres">Comprova el que has après</a></li><li><a href="#al-curriculum">Al currículum</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què sabràs fer en acabar</h2>
+  <h2 id="que-sabras-fer-en-acabar">Què sabràs fer en acabar</h2>
   <ul>
     <li>Explicar per què una xarxa sense fils necessita xifratge i una de cablejada no tant.</li>
     <li>Ordenar WEP, WPA2 i WPA3 i dir per què WEP està descartat.</li>
@@ -38,7 +42,7 @@
 
 <!-- ============ 2 · PER QUÈ XIFRAR ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Qui és a prop, ja hi és</h2>
+  <h2 id="qui-es-a-prop-ja-hi-es">Qui és a prop, ja hi és</h2>
   <p>
     Per entrar en una xarxa cablejada cal accedir a l'edifici i endollar-se a una roseta.
     En una de sense fils, el senyal surt per les finestres: qualsevol que sigui al carrer
@@ -54,7 +58,7 @@
 
 <!-- ============ 3 · WEP, WPA2 I WPA3 ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>De WEP a WPA3</h2>
+  <h2 id="de-wep-a-wpa3">De WEP a WPA3</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Mecanisme</th><th>Estat</th><th>Per què</th></tr></thead>
@@ -75,7 +79,7 @@
 
 <!-- ============ 4 · PSK I ENTERPRISE ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Una contrasenya per a tothom, o una per persona</h2>
+  <h2 id="una-contrasenya-per-a-tothom-o-una-per-persona">Una contrasenya per a tothom, o una per persona</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th></th><th>Personal (PSK)</th><th>Enterprise</th></tr></thead>
@@ -92,7 +96,7 @@
 
 <!-- ============ 5 · CAS REAL ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h2>La clau que sap tothom</h2>
+  <h2 id="la-clau-que-sap-tothom">La clau que sap tothom</h2>
   <p>
     Una empresa de quaranta persones té una sola clau Wi-Fi, escrita en un post-it a
     recepció. Marxa un treballador i se l'emporta al cap; la mateixa clau és al mòbil
@@ -108,7 +112,7 @@
 
 <!-- ============ 6 · CONVIDATS ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>La xarxa de convidats</h2>
+  <h2 id="la-xarxa-de-convidats">La xarxa de convidats</h2>
   <p>
     Una xarxa de convidats és un SSID a part per a qui només necessita sortir a Internet:
     visites, mòbils personals, dispositius que no són de l'organització. La feina la fa
@@ -124,7 +128,7 @@
 
 <!-- ============ 7 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2>Criteris professionals</h2>
+  <h2 id="criteris-professionals">Criteris professionals</h2>
   <ul>
     <li><strong>WPA2 com a mínim, WPA3 si els clients ho suporten.</strong> WEP mai.</li>
     <li><strong>Enterprise quan hi hagi usuaris</strong>: la baixa d'una persona no pot obligar a tocar tota l'organització.</li>
@@ -135,7 +139,7 @@
 
 <!-- ============ 8 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Errors habituals</h2>
+  <h2 id="errors-habituals">Errors habituals</h2>
   <dl class="cq-issues">
     <dt>Deixar WEP «perquè un aparell vell no admet res més»</dt>
     <dd>
@@ -157,7 +161,7 @@
 
 <!-- ============ 9 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h2>Resum</h2>
+  <h2 id="resum">Resum</h2>
   <ul>
     <li>A l'aire, ser a prop ja és estar dins: el xifratge és obligatori.</li>
     <li><strong>WEP està trencat</strong>; <strong>WPA2</strong> és el mínim i <strong>WPA3</strong> el recomanat.</li>
@@ -170,9 +174,9 @@
 
 <!-- ============ 10 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h2>Comprova el que has après</h2>
+  <h2 id="comprova-el-que-has-apres">Comprova el que has après</h2>
 
-  <div class="cq-question" data-id="t7-3-per-que-xifrar" data-type="single">
+  <div class="cq-question" data-id="t7-3-per-que-xifrar" data-type="single" data-explanation="El medi radioelèctric es pot escoltar; el xifratge protegeix el contingut transportat.">
     <div class="statement">Per què una xarxa sense fils necessita xifratge més que una de cablejada?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Perquè el senyal surt de l'edifici i qualsevol que sigui a prop el pot capturar</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè el Wi-Fi és més lent i necessita comprimir les dades</button>
@@ -182,7 +186,7 @@
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t7-3-wep" data-type="single">
+  <div class="cq-question" data-id="t7-3-wep" data-type="single" data-explanation="WEP té debilitats conegudes i no és una opció adequada de protecció.">
     <div class="statement">Per què no es fa servir WEP avui dia?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè només funciona a la banda de 5 GHz</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Perquè la clau es pot recuperar capturant trànsit en pocs minuts</button>
@@ -192,7 +196,7 @@
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t7-3-enterprise" data-type="single">
+  <div class="cq-question" data-id="t7-3-enterprise" data-type="single" data-explanation="Enterprise autentica identitats individuals amb infraestructura d’autenticació.">
     <div class="statement">Marxa una persona de l'empresa. Què passa amb cada model?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Amb PSK cal canviar la clau a tothom; amb Enterprise n'hi ha prou a desactivar el seu usuari</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Amb tots dos models n'hi ha prou a canviar la clau del punt d'accés</button>
@@ -202,7 +206,7 @@
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t7-3-convidats" data-type="single">
+  <div class="cq-question" data-id="t7-3-convidats" data-type="single" data-explanation="Una xarxa de convidats ha de tenir aïllament i permisos limitats respecte de la interna.">
     <div class="statement">Què fa que una xarxa de convidats sigui realment una xarxa de convidats?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que el SSID porti la paraula «convidats»</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Que estigui aïllada de la xarxa interna i només permeti sortir a Internet</button>
@@ -212,7 +216,7 @@
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t7-3-mac" data-type="single">
+  <div class="cq-question" data-id="t7-3-mac" data-type="single" data-explanation="Una MAC es pot observar i suplantar; filtrar-la no substitueix l’autenticació i el xifratge.">
     <div class="statement">Quin valor real té filtrar per adreça MAC?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Substitueix el xifratge si la llista és curta</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Cap com a barrera: les MAC viatgen en clar i es poden copiar</button>
@@ -226,7 +230,7 @@
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h2>Al currículum</h2>
+  <h2 id="al-curriculum">Al currículum</h2>
   <p><span class="lbl">Contingut 7.3</span> Seguretat en xarxes sense fils.</p>
   <p><span class="lbl">CA 7.4</span> Estableix un mecanisme adequat de seguretat per a les comunicacions sense fils.</p>
 </div>

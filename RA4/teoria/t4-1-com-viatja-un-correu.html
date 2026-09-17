@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,24 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA4 · T4.1</div>
   <h1>Com viatja un correu electrònic</h1>
   <p class="lede">Els actors, els protocols i el camí exacte que segueix un missatge del remitent al destinatari.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#ports-del-laboratori">Ports del laboratori</a></li><li><a href="#que-sabras-fer-en-acabar">Què sabràs fer en acabar</a></li><li><a href="#tres-papers-tres-programes-diferents">Tres papers, tres programes diferents</a></li><li><a href="#un-protocol-per-a-cada-tram-del-viatge">Un protocol per a cada tram del viatge</a></li><li><a href="#imap-i-pop3-es-queda-o-es-baixa">IMAP i POP3: es queda o es baixa</a></li><li><a href="#una-conversa-smtp-vista-per-dins">Una conversa SMTP vista per dins</a></li><li><a href="#d-anna-a-bruno-pas-a-pas">D&#x27;anna a bruno, pas a pas</a></li><li><a href="#observa-el-viatge-sense-muntar-res">Observa el viatge sense muntar res</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#resum">Resum</a></li><li><a href="#comprova-el-que-has-apres">Comprova el que has après</a></li><li><a href="#al-curriculum">Al currículum</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
+
+<div class="cq-block" data-kind="recordatori"><h2 id="ports-del-laboratori">Ports del laboratori</h2><p>Els ports 465 per enviar autenticat i 993 per IMAP xifrat són la <strong>configuració del laboratori</strong>. Els ports d’altres modalitats s’expliquen per comprendre el servei; no afegeixis listeners 587 ni 143 a Stalwart en aquestes pràctiques.</p>
+</div>
+
+
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què sabràs fer en acabar</h2>
+  <h2 id="que-sabras-fer-en-acabar">Què sabràs fer en acabar</h2>
   <ul>
     <li>Distingir el <strong>MUA</strong>, el <strong>MTA</strong> i el <strong>MDA</strong>, i posar-hi un exemple real de cada un.</li>
     <li>Associar cada protocol de correu amb el seu port.</li>
@@ -37,7 +46,8 @@
 
 <!-- ============ 2 · ELS TRES ACTORS ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Tres papers, tres programes diferents</h2>
+  <h2 id="tres-papers-tres-programes-diferents">Tres papers, tres programes diferents</h2>
+
   <p>
     Cap correu viatja sol: sempre hi intervenen tres tipus de programari, cadascun amb una feina
     concreta. Confondre'ls és l'origen de la majoria de dubtes d'aquest RA.
@@ -86,7 +96,7 @@
 
 <!-- ============ 3 · PROTOCOLS I PORTS ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Un protocol per a cada tram del viatge</h2>
+  <h2 id="un-protocol-per-a-cada-tram-del-viatge">Un protocol per a cada tram del viatge</h2>
   <p>
     El correu no fa servir un sol protocol de cap a cap: n'hi ha un per enviar i un altre per
     recollir, i cadascun té la seva versió xifrada.
@@ -112,7 +122,7 @@
 
 <!-- ============ 4 · IMAP VS POP3 ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>IMAP i POP3: es queda o es baixa</h2>
+  <h2 id="imap-i-pop3-es-queda-o-es-baixa">IMAP i POP3: es queda o es baixa</h2>
   <p>
     La diferència no és de seguretat, és de <strong>on viu el correu</strong>. Amb IMAP el missatge
     es queda al servidor i el client només en mostra una còpia sincronitzada; amb POP3 el client el
@@ -136,7 +146,7 @@
 
 <!-- ============ 5 · EXEMPLE: DIÀLEG SMTP ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h2>Una conversa SMTP vista per dins</h2>
+  <h2 id="una-conversa-smtp-vista-per-dins">Una conversa SMTP vista per dins</h2>
   <p>
     Igual que amb FTP a la <a class="cq-ref" href="../../RA3/teoria/t3-1-ftp-fonaments.html">T3.1</a>, darrere de "s'ha enviat el correu" hi ha un diàleg de text amb
     ordres i codis. Aquest és el que fa un MTA en entregar un missatge a un altre:
@@ -168,7 +178,7 @@ QUIT
 
 <!-- ============ 6 · CAS REAL: EL VIATGE COMPLET ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h2>D'anna a bruno, pas a pas</h2>
+  <h2 id="d-anna-a-bruno-pas-a-pas">D'anna a bruno, pas a pas</h2>
   <p>
     <code>anna@puigcastellar.internal</code> envia un correu a
     <code>bruno@personal.internal</code>. El seu MUA no sap on és <code>personal.internal</code>:
@@ -189,7 +199,7 @@ QUIT
 
 <!-- ============ 7 · OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h2>Observa el viatge sense muntar res</h2>
+  <h2 id="observa-el-viatge-sense-muntar-res">Observa el viatge sense muntar res</h2>
   <p>
     Aquí no configures res: només mires, amb eines de consulta, com un domini real anuncia
     el seu servei de correu. Muntar-ne un és feina de les guies del RA.
@@ -235,19 +245,19 @@ sudo apt install -y bind9-dnsutils</pre>
 
 <!-- ============ 8 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2>Criteris professionals</h2>
+  <h2 id="criteris-professionals">Criteris professionals</h2>
   <ul>
     <li><strong>Submission (587 o 465) per als clients</strong>, mai el 25 directe: el 25 és per a servidors.</li>
     <li><strong>IMAP com a opció per defecte</strong>: POP3 només quan de debò cal correu local i prou.</li>
-    <li><strong>Comprova el MX abans que res</strong>: sense ell, cap correu extern arriba, es configuri el que es configuri.</li>
+    <li><strong>Comprova el MX abans que res</strong>: és el mecanisme habitual; si no hi ha MX, SMTP pot intentar l’A/AAAA del domini com a destí implícit.</li>
     <li><strong>Respecta les prioritats</strong>: el servidor de reserva no és decoratiu, s'ha de mantenir viu.</li>
-    <li><strong>Mai open relay</strong>: un MTA només ha d'acceptar correu dels seus propis usuaris.</li>
+    <li><strong>Mai open relay</strong>: un MTA pot rebre correu extern per a destinataris locals; ha de rebutjar el relay extern no autoritzat.</li>
   </ul>
 </div>
 
 <!-- ============ 9 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Errors habituals</h2>
+  <h2 id="errors-habituals">Errors habituals</h2>
   <dl class="cq-issues">
     <dt>Configurar el client de correu pel port 25</dt>
     <dd>
@@ -258,7 +268,7 @@ sudo apt install -y bind9-dnsutils</pre>
     <dt>Creure que sense registre MX el correu arriba igual</dt>
     <dd>
       <p><span class="lbl">Causa</span> El domini només té registre A i es dona per fet que "amb la IP ja n'hi ha prou".</p>
-      <p><span class="lbl">Solució</span> Sense MX, cap MTA sap a qui trucar: el registre A del domini no serveix per a correu.</p>
+      <p><span class="lbl">Solució</span> Configura MX explícits per indicar els receptors. Si no hi ha MX, SMTP preveu un destí implícit amb l’A/AAAA del domini; això no garanteix que hi hagi un servidor escoltant ni que accepti el correu.</p>
     </dd>
 
     <dt>Pensar que IMAP i POP3 són dues formes de fer el mateix</dt>
@@ -271,13 +281,13 @@ sudo apt install -y bind9-dnsutils</pre>
 
 <!-- ============ 10 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h2>Resum</h2>
+  <h2 id="resum">Resum</h2>
   <ul>
     <li><strong>MUA</strong> escriu i llegeix, <strong>MTA</strong> transporta per SMTP, <strong>MDA</strong> guarda la bústia.</li>
     <li>SMTP: <strong>25</strong> entre servidors, <strong>587 o 465</strong> del client cap al seu servidor.</li>
     <li>Recollida: <strong>IMAP/IMAPS</strong> (143/993) deixa el correu al servidor; <strong>POP3/POP3S</strong> (110/995) el baixa.</li>
     <li>Abans d'entregar, el MTA consulta el <strong>registre MX</strong> i després el <strong>registre A</strong> del nom que hi apareix.</li>
-    <li>Un servidor mai accepta correu de qui no és seu: evitar l'<strong>open relay</strong>.</li>
+    <li>Un servidor pot rebre correu extern per a comptes locals; ha de rebutjar la retransmissió externa no autoritzada (<strong>open relay</strong>).</li>
   </ul>
 
   <p style="margin-top:16px">
@@ -288,9 +298,9 @@ sudo apt install -y bind9-dnsutils</pre>
 
 <!-- ============ 11 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h2>Comprova el que has après</h2>
+  <h2 id="comprova-el-que-has-apres">Comprova el que has après</h2>
 
-  <div class="cq-question" data-id="t4-1-actors" data-type="single">
+  <div class="cq-question" data-id="t4-1-actors" data-type="single" data-explanation="El client prepara el correu; els agents de transport l’encaminen i el receptor el desa a la bústia.">
     <div class="statement">Quin dels tres actors és Dovecot, en un servidor típic?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">MUA</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">MTA</button>
@@ -300,7 +310,7 @@ sudo apt install -y bind9-dnsutils</pre>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t4-1-ports" data-type="single">
+  <div class="cq-question" data-id="t4-1-ports" data-type="single" data-explanation="El laboratori usa 465 per enviar autenticat i 993 per recollir amb IMAP xifrat; el 25 connecta MTA.">
     <div class="statement">Un client de correu envia un missatge des de casa cap al seu propi servidor. Quin port fa servir?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">25</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">587</button>
@@ -310,7 +320,7 @@ sudo apt install -y bind9-dnsutils</pre>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t4-1-imap-pop3" data-type="single">
+  <div class="cq-question" data-id="t4-1-imap-pop3" data-type="single" data-explanation="IMAP sincronitza la bústia del servidor; POP3 està orientat a descarregar missatges.">
     <div class="statement">Per què avui la majoria de serveis fan servir IMAP en lloc de POP3?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè IMAP no necessita cap connexió a Internet</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Perquè el correu es queda al servidor i es manté sincronitzat entre dispositius</button>
@@ -320,7 +330,7 @@ sudo apt install -y bind9-dnsutils</pre>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t4-1-mx" data-type="single">
+  <div class="cq-question" data-id="t4-1-mx" data-type="single" data-explanation="SMTP cerca habitualment MX i després les adreces dels receptors; sense MX hi ha un fallback A/AAAA.">
     <div class="statement">Un servidor vol entregar un correu a un domini extern. Quin és el primer pas al DNS?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Consultar directament el registre A del domini</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Consultar el registre MX del domini</button>
@@ -334,7 +344,7 @@ sudo apt install -y bind9-dnsutils</pre>
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h2>Al currículum</h2>
+  <h2 id="al-curriculum">Al currículum</h2>
   <p><span class="lbl">Contingut 4.2</span> Protocols i serveis de descàrrega de correu.</p>
   <p><span class="lbl">CA 4.1</span> Descriu els protocols que intervenen en l'enviament i la recollida del correu electrònic.</p>
 </div>

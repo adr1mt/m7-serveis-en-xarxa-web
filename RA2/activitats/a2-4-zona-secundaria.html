@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA2 · A2.4</div>
   <h1>Zona secundària per parelles</h1>
   <p class="lede">La teva zona, servida també des del servidor d'un company.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-has-de-saber-abans-de-comencar">Què has de saber abans de començar</a></li><li><a href="#amb-que-treballaras">Amb què treballaràs</a></li><li><a href="#que-has-de-fer">Què has de fer</a></li><li><a href="#d-on-has-de-treure-cada-cosa">D&#x27;on has de treure cada cosa</a></li><li><a href="#autoritza-el-company-no-tothom">Autoritza el company, no tothom</a></li><li><a href="#com-demostrar-que-la-replica-es-de-veritat">Com demostrar que la rèplica és de veritat</a></li><li><a href="#com-sabras-que-ho-has-fet-be">Com sabràs que ho has fet bé</a></li><li><a href="#si-alguna-cosa-no-va">Si alguna cosa no va</a></li><li><a href="#que-has-d-entregar">Què has d&#x27;entregar</a></li><li><a href="#al-curriculum">Al currículum</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què has de saber abans de començar</h2>
+  <h2 id="que-has-de-saber-abans-de-comencar">Què has de saber abans de començar</h2>
   <p>
     Teoria <a class="cq-ref" href="../teoria/t2-4-primari-secundari.html">T2.4</a> (primari i secundari), guia <a class="cq-ref" href="../guies/g2-1-bind9.html">G2.1</a>, i tenir feta l'activitat
     <strong>6</strong>: cal una zona pròpia funcionant per poder-la transferir.
@@ -39,7 +43,8 @@
 
 <!-- ============ ESCENARI ============ -->
 <div class="cq-block" data-kind="escenari">
-  <h2>Amb què treballaràs</h2>
+  <h2 id="amb-que-treballaras">Amb què treballaràs</h2>
+<p>Cada membre crea un servidor nou a isardVDI amb puigcastellar1 i personal1. A personal1, utilitzeu 192.168.1.8/24 i 192.168.1.9/24. Amb <a class="cq-ref" href="../guies/g2-1-bind9.html">G2.1</a> cadascú prepara una zona primary pròpia, amb SOA, NS i A, i comprova la resposta autoritativa abans d’afegir la zona secondary.</p>
   <p>
     Es treballa <strong>per parelles</strong>. Els dos servidors han de veure's per xarxa, així
     que aquesta vegada tots dos van a la <strong>mateixa xarxa</strong>: poseu-vos d'acord amb el
@@ -62,7 +67,7 @@
 
 <!-- ============ ENUNCIAT ============ -->
 <div class="cq-block" data-kind="enunciat">
-  <h2>Què has de fer</h2>
+  <h2 id="que-has-de-fer">Què has de fer</h2>
   <ol>
     <li>Posar-vos d'acord en les adreces dels dos servidors i comprovar que us feu <code>ping</code>.</li>
     <li>Afegir a la teva zona un registre <strong>NS per al servidor del company</strong>, i el seu registre A si cal.</li>
@@ -74,7 +79,7 @@
 
 <!-- ============ ON BUSCAR ============ -->
 <div class="cq-block" data-kind="enunciat">
-  <h2>D'on has de treure cada cosa</h2>
+  <h2 id="d-on-has-de-treure-cada-cosa">D'on has de treure cada cosa</h2>
   <p>Les comandes no te les donem fetes; sí que et diem on trobar-les:</p>
   <div class="cq-tablewrap">
     <table class="cq-table">
@@ -92,7 +97,7 @@
 
 <!-- ============ RECORDATORI ============ -->
 <div class="cq-block" data-kind="recordatori">
-  <h2>Autoritza el company, no tothom</h2>
+  <h2 id="autoritza-el-company-no-tothom">Autoritza el company, no tothom</h2>
   <p>
     És temptador posar <code>allow-transfer { any; };</code> perquè funcioni de seguida. No ho
     facis: qui es descarrega la teva zona obté el mapa sencer de la teva xarxa. Posa-hi la IP del
@@ -102,7 +107,7 @@
 
 <!-- ============ OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h2>Com demostrar que la rèplica és de veritat</h2>
+  <h2 id="com-demostrar-que-la-replica-es-de-veritat">Com demostrar que la rèplica és de veritat</h2>
   <p>
     Que el secundari respongui no vol dir gran cosa: potser el que veus és la resposta del
     primari. La prova bona té tres passos.
@@ -120,7 +125,7 @@
 
 <!-- ============ COMPROVACIÓ ============ -->
 <div class="cq-block" data-kind="comprovació">
-  <h2>Com sabràs que ho has fet bé</h2>
+  <h2 id="com-sabras-que-ho-has-fet-be">Com sabràs que ho has fet bé</h2>
   <p>
     Abans d'entregar, has de poder respondre <strong>sí</strong> a totes aquestes preguntes, amb
     la sortida d'una comanda al davant:
@@ -136,7 +141,7 @@
 
 <!-- ============ PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Si alguna cosa no va</h2>
+  <h2 id="si-alguna-cosa-no-va">Si alguna cosa no va</h2>
   <dl class="cq-issues">
     <dt><code>Transfer failed</code> als registres del secundari</dt>
     <dd>
@@ -160,7 +165,7 @@
 
 <!-- ============ LLIURAMENT ============ -->
 <div class="cq-block" data-kind="lliurament">
-  <h2>Què has d'entregar</h2>
+  <h2 id="que-has-d-entregar">Què has d'entregar</h2>
   <p>
     Un <strong>document tècnic</strong> on expliquis tot el que has anat fent, amb els teus
     fitxers de configuració i les captures del resultat. Indica-hi amb qui has treballat i quina
@@ -175,7 +180,7 @@
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h2>Al currículum</h2>
+  <h2 id="al-curriculum">Al currículum</h2>
   <p><span class="lbl">CA 2.7</span> Treballa en grup per realitzar transferències de zona entre dos o més servidors.</p>
   <p><span class="lbl">CA 2.8</span> Comprova el funcionament correcte del servidor.</p>
 </div>

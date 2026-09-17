@@ -3,42 +3,48 @@
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: url("fonts/ubuntu-500.ttf") format("truetype");
+  src: url("fonts/ubuntu-500.woff2") format("woff2"),
+       url("fonts/ubuntu-500.ttf") format("truetype");
 }
 @font-face {
   font-family: "Ubuntu";
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url("fonts/ubuntu-700.ttf") format("truetype");
+  src: url("fonts/ubuntu-700.woff2") format("woff2"),
+       url("fonts/ubuntu-700.ttf") format("truetype");
 }
 @font-face {
   font-family: "Source Sans 3";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("fonts/source-sans-3-400.ttf") format("truetype");
+  src: url("fonts/source-sans-3-400.woff2") format("woff2"),
+       url("fonts/source-sans-3-400.ttf") format("truetype");
 }
 @font-face {
   font-family: "Source Sans 3";
   font-style: normal;
   font-weight: 600;
   font-display: swap;
-  src: url("fonts/source-sans-3-600.ttf") format("truetype");
+  src: url("fonts/source-sans-3-600.woff2") format("woff2"),
+       url("fonts/source-sans-3-600.ttf") format("truetype");
 }
 @font-face {
   font-family: "JetBrains Mono";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("fonts/jetbrains-mono-400.ttf") format("truetype");
+  src: url("fonts/jetbrains-mono-400.woff2") format("woff2"),
+       url("fonts/jetbrains-mono-400.ttf") format("truetype");
 }
 @font-face {
   font-family: "JetBrains Mono";
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: url("fonts/jetbrains-mono-500.ttf") format("truetype");
+  src: url("fonts/jetbrains-mono-500.woff2") format("woff2"),
+       url("fonts/jetbrains-mono-500.ttf") format("truetype");
 }
 
 /* === SINAPSI-CSS INICI =======================================
@@ -519,22 +525,21 @@
     .cq-nav, .cq-pager { display: none; }
     a.cq-ref { border-bottom: none; color: inherit; }
   }
-  /* ==== Contingut no copiable ====
-     Dissuasiu, no una protecció: la prosa és per llegir-la al web o a
-     Moodle, no per copiar-la. El codi, les ordres i les taules SÍ que es
-     copien: l'alumnat treballa per SSH i les ha d'enganxar. L'editor
-     treballa amb contenteditable i queda exclòs. */
-  .cq-header, .cq-block {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    user-select: none;
-  }
-  .cq-block pre, .cq-block pre *,
-  .cq-block code, .cq-table, .cq-table *,
-  [contenteditable="true"], [contenteditable="true"] * {
-    -webkit-user-select: text;
-    -moz-user-select: text;
-    user-select: text;
+  .cq-skip { position: absolute; left: 16px; top: -100px; z-index: 20; background: white; padding: 12px; }
+  .cq-skip:focus { top: 8px; }
+  :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+  [id] { scroll-margin-top: 90px; }
+  .cq-search-input { box-sizing: border-box; width: 100%; padding: 12px; font: inherit; }
+  @page { margin: 14mm; }
+  @media print {
+    .cq-block { break-inside: auto; }
+    .cq-block::before { position: static; display: inline-block; margin-bottom: 6pt; }
+    h2 { break-after: avoid; }
+    .dora-flow, .cq-steps > li { break-inside: avoid; }
+    .cq-block pre { white-space: pre-wrap; overflow-wrap: anywhere; overflow: visible; }
+    .cq-table td:first-child > code:only-child { white-space: normal; }
+    thead { display: table-header-group; }
+    .cq-skip, .cq-toc, .cq-search { display: none; }
   }
 
 /* === SINAPSI-CSS FI ======================================== */

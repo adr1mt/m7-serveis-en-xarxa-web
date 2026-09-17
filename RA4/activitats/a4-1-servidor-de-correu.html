@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA4 · A4.1</div>
   <h1>El correu intern del centre</h1>
   <p class="lede">Munta un servidor de correu propi i demostra que dos comptes es poden escriure.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-has-de-saber-abans-de-comencar">Què has de saber abans de començar</a></li><li><a href="#amb-que-treballaras">Amb què treballaràs</a></li><li><a href="#que-has-de-fer">Què has de fer</a></li><li><a href="#d-on-has-de-treure-cada-cosa">D&#x27;on has de treure cada cosa</a></li><li><a href="#la-contrasenya-de-bootstrap-nomes-surt-un-cop">La contrasenya de bootstrap només surt un cop</a></li><li><a href="#aqui-no-hi-ha-fitxers-de-configuracio-per-editar">Aquí no hi ha fitxers de configuració per editar</a></li><li><a href="#com-sabras-que-ho-has-fet-be">Com sabràs que ho has fet bé</a></li><li><a href="#si-alguna-cosa-no-va">Si alguna cosa no va</a></li><li><a href="#que-has-d-entregar">Què has d&#x27;entregar</a></li><li><a href="#al-curriculum">Al currículum</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què has de saber abans de començar</h2>
+  <h2 id="que-has-de-saber-abans-de-comencar">Què has de saber abans de començar</h2>
   <p>
     Teories <a class="cq-ref" href="../teoria/t4-1-com-viatja-un-correu.html">T4.1</a> (actors i protocols del correu) i <a class="cq-ref" href="../teoria/t4-2-servidor-de-correu.html">T4.2</a>
     (com és per dins un servidor de correu). Les guies <a class="cq-ref" href="../guies/g4-1-stalwart.html">G4.1</a> i
@@ -40,7 +44,8 @@
 
 <!-- ============ ESCENARI ============ -->
 <div class="cq-block" data-kind="escenari">
-  <h2>Amb què treballaràs</h2>
+  <h2 id="amb-que-treballaras">Amb què treballaràs</h2>
+<p><strong>Preparació del client:</strong> comprova que disposa de les eines de la guia. Si cal instal·lar paquets, connecta’l temporalment a puigcastellar1; després retira aquesta targeta. Les proves finals es fan només a personal1, sense suposar encaminament al servidor.</p>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Màquina</th><th>Targetes</th><th>Adreça</th></tr></thead>
@@ -58,7 +63,7 @@
 
 <!-- ============ ENUNCIAT ============ -->
 <div class="cq-block" data-kind="enunciat">
-  <h2>Què has de fer</h2>
+  <h2 id="que-has-de-fer">Què has de fer</h2>
   <ol>
     <li>Instal·lar Stalwart al servidor amb el domini <code>puigcastellar.internal</code> i el
       hostname <code>mail.puigcastellar.internal</code>.</li>
@@ -74,7 +79,7 @@
 
 <!-- ============ ON BUSCAR ============ -->
 <div class="cq-block" data-kind="enunciat">
-  <h2>D'on has de treure cada cosa</h2>
+  <h2 id="d-on-has-de-treure-cada-cosa">D'on has de treure cada cosa</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Què has de fer</th><th>On ho tens</th></tr></thead>
@@ -92,7 +97,7 @@
 
 <!-- ============ RECORDATORI ============ -->
 <div class="cq-block" data-kind="recordatori">
-  <h2>La contrasenya de bootstrap només surt un cop</h2>
+  <h2 id="la-contrasenya-de-bootstrap-nomes-surt-un-cop">La contrasenya de bootstrap només surt un cop</h2>
   <p>
     En arrencar per primera vegada, Stalwart genera una contrasenya d'administrador temporal i
     la mostra <strong>només un cop</strong>, als registres del servei. Si no la copies llavors,
@@ -106,7 +111,7 @@
 
 <!-- ============ OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h2>Aquí no hi ha fitxers de configuració per editar</h2>
+  <h2 id="aqui-no-hi-ha-fitxers-de-configuracio-per-editar">Aquí no hi ha fitxers de configuració per editar</h2>
   <p>
     A diferència de vsftpd o BIND, Stalwart es configura <strong>tot des de la consola web</strong>.
     El fitxer <code>/etc/stalwart/config.json</code> només guarda on desa les dades; dominis,
@@ -125,7 +130,7 @@
 
 <!-- ============ COMPROVACIÓ ============ -->
 <div class="cq-block" data-kind="comprovació">
-  <h2>Com sabràs que ho has fet bé</h2>
+  <h2 id="com-sabras-que-ho-has-fet-be">Com sabràs que ho has fet bé</h2>
   <ul>
     <li>El servei apareix actiu: <code>systemctl status stalwart</code> mostra
       <code>active (running)</code>.</li>
@@ -140,7 +145,7 @@
 
 <!-- ============ PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Si alguna cosa no va</h2>
+  <h2 id="si-alguna-cosa-no-va">Si alguna cosa no va</h2>
   <dl class="cq-issues">
     <dt>Has perdut la contrasenya de bootstrap</dt>
     <dd>
@@ -168,7 +173,7 @@
 
 <!-- ============ LLIURAMENT ============ -->
 <div class="cq-block" data-kind="lliurament">
-  <h2>Què has d'entregar</h2>
+  <h2 id="que-has-d-entregar">Què has d'entregar</h2>
   <p>
     Un <strong>document tècnic</strong> amb el domini i els noms de compte triats, la sortida de
     <code>ss -tlnp</code> i de <code>systemctl status stalwart</code>, i una captura del correu
@@ -184,7 +189,7 @@
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h2>Al currículum</h2>
+  <h2 id="al-curriculum">Al currículum</h2>
   <p><span class="lbl">CA 4.2</span> Instal·la un servidor de correu electrònic.</p>
   <p><span class="lbl">CA 4.3</span> Crea comptes d'usuari i en verifica l'accés.</p>
   <p><span class="lbl">CA 4.7</span> Utilitza clients de correu electrònic per enviar i rebre correu.</p>

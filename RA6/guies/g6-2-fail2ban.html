@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA6 · G6.2</div>
   <h1>Guia: Fail2ban</h1>
   <p class="lede">Presó per a sshd: bloqueig temporal dels intents fallits i desbloqueig.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</a></li><li><a href="#installar-fail2ban">Instal·lar Fail2ban</a></li><li><a href="#jail-conf-no-es-toca">jail.conf no es toca</a></li><li><a href="#crear-la-preso-per-a-sshd">Crear la presó per a sshd</a></li><li><a href="#comprovar-l-estat-i-provocar-un-bloqueig">Comprovar l&#x27;estat i provocar un bloqueig</a></li><li><a href="#comprovar-ho-de-conjunt">Comprovar-ho de conjunt</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#fitxa-rapida">Fitxa ràpida</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què hi ha en aquesta guia</h2>
+  <h2 id="que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</h2>
   <p>Documentació oficial: <a href="https://github.com/fail2ban/fail2ban">github.com/fail2ban/fail2ban</a>.</p>
   <ul>
     <li>Punt de partida: <a class="cq-ref" href="g6-1-openssh.html">G6.1</a> ja aplicada, amb SSH funcionant per clau.</li>
@@ -35,7 +39,7 @@
 
 <!-- ============ 2 · PAS A PAS · INSTAL·LACIÓ ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h2>Instal·lar Fail2ban</h2>
+  <h2 id="installar-fail2ban">Instal·lar Fail2ban</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Instal·la el paquet</strong> i comprova que el servei arrenca:</p>
@@ -53,7 +57,8 @@ systemctl is-active fail2ban</pre>
 
 <!-- ============ 3 · REFERÈNCIA · ESTRUCTURA ============ -->
 <div class="cq-block" data-kind="referència">
-  <h2>jail.conf no es toca</h2>
+  <h2 id="jail-conf-no-es-toca">jail.conf no es toca</h2>
+<p><strong>Detecció i bloqueig són fases diferents:</strong> el backend llegeix els registres, el filtre identifica errors i maxretry/findtime fixen el llindar. El paràmetre port serveix a l’acció de bloqueig; no selecciona els errors del log. Si el comptador queda a zero, revisa primer el registre i el filtre.</p>
   <p>
     <code>/etc/fail2ban/jail.conf</code> és del paquet: una actualització el pot
     sobreescriure. Els canvis propis van a <code>/etc/fail2ban/jail.local</code>, que
@@ -64,8 +69,7 @@ systemctl is-active fail2ban</pre>
       <thead><tr><th>Clau</th><th>Què fa</th></tr></thead>
       <tbody>
         <tr><td><code>enabled</code></td><td>Activa o no aquesta presó.</td></tr>
-        <tr><td><code>port</code></td><td>Port o ports que vigila; ha de coincidir amb el
-        real del servei.</td></tr>
+        <tr><td><code>port</code></td><td>Port o ports sobre els quals actua el bloqueig; la detecció depèn del filtre i del backend.</td></tr>
         <tr><td><code>maxretry</code></td><td>Intents fallits abans de bloquejar.</td></tr>
         <tr><td><code>findtime</code></td><td>Finestra de temps, en segons, on es compten
         els intents.</td></tr>
@@ -77,7 +81,7 @@ systemctl is-active fail2ban</pre>
 
 <!-- ============ 4 · PAS A PAS · LA PRESÓ DE SSHD ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h2>Crear la presó per a sshd</h2>
+  <h2 id="crear-la-preso-per-a-sshd">Crear la presó per a sshd</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Escriu <code>jail.local</code></strong> amb només la secció necessària. Si
@@ -100,7 +104,7 @@ EOF</pre>
 
 <!-- ============ 5 · PAS A PAS · ESTAT I BLOQUEIG ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h2>Comprovar l'estat i provocar un bloqueig</h2>
+  <h2 id="comprovar-l-estat-i-provocar-un-bloqueig">Comprovar l'estat i provocar un bloqueig</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Consulta l'estat de la presó</strong> des del servidor:</p>
@@ -122,7 +126,7 @@ EOF</pre>
 
 <!-- ============ 6 · COMPROVACIÓ ============ -->
 <div class="cq-block" data-kind="comprovació">
-  <h2>Comprovar-ho de conjunt</h2>
+  <h2 id="comprovar-ho-de-conjunt">Comprovar-ho de conjunt</h2>
   <ol class="cq-steps">
     <li><p>Des del client bloquejat, la connexió es refusa:
       <code>ssh -p 2222 usuari@IP-DEL-SERVIDOR</code> no arriba ni a demanar clau.</p></li>
@@ -135,7 +139,7 @@ EOF</pre>
 
 <!-- ============ 7 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2>Criteris professionals</h2>
+  <h2 id="criteris-professionals">Criteris professionals</h2>
   <ul>
     <li><strong>Mai et quedis sense una via d'entrada de reserva</strong>: la consola
     d'isardVDI no passa per SSH i no la bloqueja Fail2ban.</li>
@@ -150,7 +154,7 @@ EOF</pre>
 
 <!-- ============ 8 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Errors habituals</h2>
+  <h2 id="errors-habituals">Errors habituals</h2>
   <dl class="cq-issues">
     <dt>He canviat el port de SSH i Fail2ban no bloqueja ningú</dt>
     <dd>
@@ -185,7 +189,7 @@ EOF</pre>
 
 <!-- ============ 9 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h2>Fitxa ràpida</h2>
+  <h2 id="fitxa-rapida">Fitxa ràpida</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Què</th><th>On</th></tr></thead>

@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA3 · T3.1</div>
   <h1>Transferència de fitxers i FTP</h1>
   <p class="lede">Per què FTP fa servir dues connexions, i què canvia entre el mode actiu i el passiu.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-sabras-fer-en-acabar">Què sabràs fer en acabar</a></li><li><a href="#un-servei-per-moure-fitxers-no-per-compartir-los">Un servei per moure fitxers, no per compartir-los</a></li><li><a href="#dos-canals-control-i-dades">Dos canals: control i dades</a></li><li><a href="#mode-actiu-i-mode-passiu">Mode actiu i mode passiu</a></li><li><a href="#una-sessio-vista-per-dins">Una sessió vista per dins</a></li><li><a href="#els-codis-numerics-es-llegeixen-per-la-primera-xifra">Els codis numèrics es llegeixen per la primera xifra</a></li><li><a href="#mode-text-i-mode-binari">Mode text i mode binari</a></li><li><a href="#la-contrasenya-viatja-escrita">La contrasenya viatja escrita</a></li><li><a href="#observar-una-sessio-ftp">Observar una sessió FTP</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#resum">Resum</a></li><li><a href="#comprova-el-que-has-apres">Comprova el que has après</a></li><li><a href="#al-curriculum">Al currículum</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què sabràs fer en acabar</h2>
+  <h2 id="que-sabras-fer-en-acabar">Què sabràs fer en acabar</h2>
   <ul>
     <li>Explicar per a què serveix un servei de transferència de fitxers i quan se'n fa servir un altre.</li>
     <li>Distingir el <strong>canal de control</strong> del <strong>canal de dades</strong>.</li>
@@ -37,7 +41,7 @@
 
 <!-- ============ 2 · PER A QUÈ SERVEIX ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Un servei per moure fitxers, no per compartir-los</h2>
+  <h2 id="un-servei-per-moure-fitxers-no-per-compartir-los">Un servei per moure fitxers, no per compartir-los</h2>
   <p>
     Un servei de transferència de fitxers serveix perquè una màquina <strong>pugi</strong> o
     <strong>baixi</strong> fitxers d'un servidor, amb un compte i uns permisos. No és el mateix
@@ -53,7 +57,7 @@
 
 <!-- ============ 3 · DOS CANALS ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Dos canals: control i dades</h2>
+  <h2 id="dos-canals-control-i-dades">Dos canals: control i dades</h2>
   <p>
     <strong>FTP</strong> (<em>File Transfer Protocol</em>) és de 1971 i té una particularitat que
     cap protocol modern repeteix: fa servir <strong>dues connexions TCP</strong> alhora.
@@ -75,7 +79,7 @@
 
 <!-- ============ 4 · ACTIU I PASSIU ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Mode actiu i mode passiu</h2>
+  <h2 id="mode-actiu-i-mode-passiu">Mode actiu i mode passiu</h2>
   <p>
     La pregunta que resolen aquests dos modes és sempre la mateixa: <strong>qui obre la connexió
     de dades</strong>, el client o el servidor.
@@ -130,7 +134,7 @@
 
 <!-- ============ 5 · EXEMPLE ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h2>Una sessió vista per dins</h2>
+  <h2 id="una-sessio-vista-per-dins">Una sessió vista per dins</h2>
   <p>
     El client tradueix el que escrius a ordres del protocol. Aquestes són les que envia per baixar
     un fitxer, amb la resposta del servidor al davant:
@@ -159,7 +163,7 @@ RETR informe.pdf
 
 <!-- ============ 6 · CODIS ============ -->
 <div class="cq-block" data-kind="observació">
-  <h2>Els codis numèrics es llegeixen per la primera xifra</h2>
+  <h2 id="els-codis-numerics-es-llegeixen-per-la-primera-xifra">Els codis numèrics es llegeixen per la primera xifra</h2>
   <p>
     No cal memoritzar-los. La primera xifra ja diu de què va la resposta, i això et serveix per a
     qualsevol servidor FTP del món.
@@ -179,7 +183,7 @@ RETR informe.pdf
 
 <!-- ============ 7 · TEXT I BINARI ============ -->
 <div class="cq-block" data-kind="observació">
-  <h2>Mode text i mode binari</h2>
+  <h2 id="mode-text-i-mode-binari">Mode text i mode binari</h2>
   <p>
     FTP pot transferir de dues maneres. En <strong>mode text</strong> (<em>ASCII</em>) converteix
     el final de línia al del sistema de destinació; en <strong>mode binari</strong> copia byte a
@@ -198,7 +202,7 @@ RETR informe.pdf
 
 <!-- ============ 8 · CAS REAL ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h2>La contrasenya viatja escrita</h2>
+  <h2 id="la-contrasenya-viatja-escrita">La contrasenya viatja escrita</h2>
   <p>
     FTP és anterior al xifratge. L'ordre <code>PASS</code> envia la contrasenya tal com és, en
     text pla, i el mateix passa amb el contingut dels fitxers.
@@ -216,65 +220,12 @@ RETR informe.pdf
 </div>
 
 <!-- ============ 9 · OBSERVACIÓ ============ -->
-<div class="cq-block" data-kind="observació">
-  <h2>La teva primera sessió FTP</h2>
-  <p>Instal·la el servidor amb els valors de sèrie i mira el protocol funcionant.</p>
-
-  <ol class="cq-steps">
-    <li>
-      <p><strong>Instal·la el servidor i un client de text:</strong></p>
-<pre>sudo apt update
-sudo apt install -y vsftpd ftp</pre>
-    </li>
-
-    <li>
-      <p><strong>Comprova que escolta</strong> al port 21:</p>
-<pre>systemctl status vsftpd
-sudo ss -lntp | grep :21</pre>
-    </li>
-
-    <li>
-      <p><strong>Deixa un fitxer de prova</strong> a la teva carpeta:</p>
-<pre>echo "hola" &gt; ~/prova.txt</pre>
-    </li>
-
-    <li>
-      <p><strong>Connecta't</strong> i mira els codis que van sortint:</p>
-<pre>ftp localhost</pre>
-      <p>Dins: <code>ls</code>, <code>get prova.txt</code> i <code>bye</code>.</p>
-    </li>
-
-    <li>
-      <p><strong>Prova de pujar-ne un</strong>, que ha de fallar:</p>
-<pre>put prova.txt copia.txt
-<span class="o">550 Permission denied.</span></pre>
-      <p>
-        No és cap avaria: de sèrie no es pot escriure. Es canvia a la <a class="cq-ref" href="../guies/g3-1-vsftpd.html">G3.1</a>.
-      </p>
-    </li>
-
-    <li>
-      <p><strong>Mira en quin mode estàs:</strong> l'ordre <code>passive</code> canvia d'un
-      mode a l'altre.</p>
-<pre>passive
-<span class="o">Passive mode: off; fallback to active mode: off.</span></pre>
-      <p>
-        Repeteix el <code>ls</code> amb cada mode: surt <code>229 Entering Extended Passive
-        Mode</code> o <code>200 EPRT command successful.</code>
-      </p>
-    </li>
-  </ol>
-
-  <div class="cq-note">
-    <span class="lbl">Ubuntu 26.04</span>
-    El client de text es diu <code>tnftp</code>; <code>apt install ftp</code> continua
-    funcionant perquè és un paquet pont. Arrenca en mode passiu.
-  </div>
+<div class="cq-block" data-kind="observació"><h2 id="observar-una-sessio-ftp">Observar una sessió FTP</h2><p>Prepara el servei i el client amb <a class="cq-ref" href="../guies/g3-1-vsftpd.html">G3.1</a>. Observa les respostes de control, la connexió de dades i la diferència entre baixar i pujar un fitxer. La instal·lació i configuració es documenten a la guia.</p>
 </div>
 
 <!-- ============ 10 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2>Criteris professionals</h2>
+  <h2 id="criteris-professionals">Criteris professionals</h2>
   <ul>
     <li><strong>Passiu per defecte</strong>: és l'únic que funciona des de darrere d'un router.</li>
     <li><strong>Rang de ports de dades acotat</strong> amb <code>pasv_min_port</code> i <code>pasv_max_port</code>, perquè el tallafocs el pugui obrir.</li>
@@ -286,7 +237,7 @@ sudo ss -lntp | grep :21</pre>
 
 <!-- ============ 11 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Errors habituals</h2>
+  <h2 id="errors-habituals">Errors habituals</h2>
   <dl class="cq-issues">
     <dt>Connecta i autentica, però <code>ls</code> es queda penjat</dt>
     <dd>
@@ -316,7 +267,7 @@ sudo ss -lntp | grep :21</pre>
 
 <!-- ============ 12 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h2>Resum</h2>
+  <h2 id="resum">Resum</h2>
   <ul>
     <li>FTP fa servir <strong>dos canals</strong>: control al port 21 i dades a part.</li>
     <li>En <strong>actiu</strong> connecta el servidor; en <strong>passiu</strong>, el client. Avui, passiu.</li>
@@ -347,9 +298,9 @@ sudo ss -lntp | grep :21</pre>
 
 <!-- ============ 13 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h2>Comprova el que has après</h2>
+  <h2 id="comprova-el-que-has-apres">Comprova el que has après</h2>
 
-  <div class="cq-question" data-id="t3-1-canals" data-type="single">
+  <div class="cq-question" data-id="t3-1-canals" data-type="single" data-explanation="FTP separa el canal de control de les connexions que transporten les dades.">
     <div class="statement">Quantes connexions TCP fa servir una transferència per FTP?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Una de sola, pel port 21</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Dues: una de control i una de dades</button>
@@ -359,7 +310,7 @@ sudo ss -lntp | grep :21</pre>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t3-1-passiu" data-type="single">
+  <div class="cq-question" data-id="t3-1-passiu" data-type="single" data-explanation="En passiu el client inicia la connexió de dades cap al port anunciat pel servidor.">
     <div class="statement">Un client darrere d'un router amb NAT no aconsegueix llistar el directori. Què li dius?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que canviï a mode text</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Que faci servir el mode passiu</button>
@@ -369,7 +320,7 @@ sudo ss -lntp | grep :21</pre>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t3-1-codi" data-type="single">
+  <div class="cq-question" data-id="t3-1-codi" data-type="single" data-explanation="Els codis de resposta indiquen l’estat de la conversa, no el contingut del fitxer.">
     <div class="statement">El servidor respon <code>331</code>. Què vol dir?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que l'operació ha acabat bé</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Que falta un pas més: espera la contrasenya</button>
@@ -379,7 +330,7 @@ sudo ss -lntp | grep :21</pre>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t3-1-binari" data-type="single">
+  <div class="cq-question" data-id="t3-1-binari" data-type="single" data-explanation="El mode binari conserva els bytes del fitxer i evita transformacions de text.">
     <div class="statement">Per què una imatge transferida en mode text arriba malmesa?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè es comprimeix i es perd qualitat</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Perquè es canvien els bytes de final de línia dins del fitxer</button>
@@ -389,7 +340,7 @@ sudo ss -lntp | grep :21</pre>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t3-1-afirmacions" data-type="multi">
+  <div class="cq-question" data-id="t3-1-afirmacions" data-type="multi" data-explanation="FTP en clar exposa credencials; el canal de dades pot fallar encara que el login funcioni.">
     <div class="statement">Selecciona totes les afirmacions certes sobre FTP</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">La contrasenya viatja en text pla.</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">El canal de dades s'obre i es tanca a cada transferència.</button>
@@ -404,7 +355,7 @@ sudo ss -lntp | grep :21</pre>
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h2>Al currículum</h2>
+  <h2 id="al-curriculum">Al currículum</h2>
   <p><span class="lbl">Contingut 3.2</span> Ordres de control, autenticació, gestió i transferència de fitxers. Mode text i binari.</p>
   <p><span class="lbl">CA 3.1</span> Estableix la utilitat i mode d'operació del servei de transferència de fitxers.</p>
 </div>

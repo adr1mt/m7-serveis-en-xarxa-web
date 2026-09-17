@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · A1.2</div>
   <h1>Servidor DHCP mínim amb systemd-networkd</h1>
   <p class="lede">Muntar un DHCP de laboratori sense instal·lar absolutament res.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-has-de-saber-abans-de-comencar">Què has de saber abans de començar</a></li><li><a href="#amb-que-treballaras">Amb què treballaràs</a></li><li><a href="#que-has-de-fer">Què has de fer</a></li><li><a href="#d-on-has-de-treure-cada-cosa">D&#x27;on has de treure cada cosa</a></li><li><a href="#serveix-dhcp-nomes-per-personal1">Serveix DHCP només per personal1</a></li><li><a href="#dues-coses-que-et-faran-perdre-temps">Dues coses que et faran perdre temps</a></li><li><a href="#com-sabras-que-ho-has-fet-be">Com sabràs que ho has fet bé</a></li><li><a href="#si-alguna-cosa-no-va">Si alguna cosa no va</a></li><li><a href="#que-has-d-entregar">Què has d&#x27;entregar</a></li><li><a href="#al-curriculum">Al currículum</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què has de saber abans de començar</h2>
+  <h2 id="que-has-de-saber-abans-de-comencar">Què has de saber abans de començar</h2>
   <p>
     Teoria <a class="cq-ref" href="../teoria/t1-1-dhcp-fonaments.html">T1.1</a> (fonaments de DHCP) i guia <a class="cq-ref" href="../guies/g1-1-netplan.html">G1.1</a> (Netplan).
   </p>
@@ -42,7 +46,7 @@
 
 <!-- ============ ESCENARI ============ -->
 <div class="cq-block" data-kind="escenari">
-  <h2>Amb què treballaràs</h2>
+  <h2 id="amb-que-treballaras">Amb què treballaràs</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Màquina</th><th>Targeta</th><th>Paper</th></tr></thead>
@@ -61,7 +65,7 @@
 
 <!-- ============ ENUNCIAT ============ -->
 <div class="cq-block" data-kind="enunciat">
-  <h2>Què has de fer</h2>
+  <h2 id="que-has-de-fer">Què has de fer</h2>
   <ol>
     <li>Fer que <strong>Netplan deixi de gestionar</strong> la xarxa d'aquesta màquina.</li>
     <li>Configurar <code>personal1</code> amb la IP fixa <code>10.0.0.1/8</code> parlant directament amb <code>systemd-networkd</code>.</li>
@@ -73,7 +77,7 @@
 
 <!-- ============ ON BUSCAR ============ -->
 <div class="cq-block" data-kind="enunciat">
-  <h2>D'on has de treure cada cosa</h2>
+  <h2 id="d-on-has-de-treure-cada-cosa">D'on has de treure cada cosa</h2>
   <p>Les comandes no te les donem fetes; sí que et diem on trobar-les:</p>
   <div class="cq-tablewrap">
     <table class="cq-table">
@@ -91,7 +95,7 @@
 
 <!-- ============ RECORDATORI ============ -->
 <div class="cq-block" data-kind="recordatori">
-  <h2>Serveix DHCP només per personal1</h2>
+  <h2 id="serveix-dhcp-nomes-per-personal1">Serveix DHCP només per personal1</h2>
   <p>
     No posis mai el servidor DHCP a la targeta <code>puigcastellar1</code>. Estaries repartint
     adreces a la xarxa del centre i interferint amb el seu servidor: és el que s'anomena un
@@ -101,7 +105,7 @@
 
 <!-- ============ OBSERVACIÓ TÈCNICA ============ -->
 <div class="cq-block" data-kind="observació">
-  <h2>Dues coses que et faran perdre temps</h2>
+  <h2 id="dues-coses-que-et-faran-perdre-temps">Dues coses que et faran perdre temps</h2>
   <p>
     <strong>L'ordre importa.</strong> Un servidor DHCP no pot escoltar per una targeta que no té
     adreça. Deixa primer la IP fixa funcionant i comprova-la; només després activa el servei.
@@ -115,7 +119,8 @@
 
 <!-- ============ COMPROVACIÓ ============ -->
 <div class="cq-block" data-kind="comprovació">
-  <h2>Com sabràs que ho has fet bé</h2>
+  <h2 id="com-sabras-que-ho-has-fet-be">Com sabràs que ho has fet bé</h2>
+<p><strong>DORA i renovació:</strong> una línia de concessió al registre no demostra els quatre missatges. Conserva una captura DHCP del client inicialment sense concessió i identifica Discover, Offer, Request i ACK. Una renovació pot mostrar només Request/ACK. networkctl només gestiona interfícies de systemd-networkd; al Desktop comprova si s’utilitza NetworkManager abans de triar l’eina.</p>
   <p>
     Abans d'entregar, has de poder respondre <strong>sí</strong> a totes aquestes preguntes, amb
     la sortida d'una comanda al davant:
@@ -131,7 +136,7 @@
 
 <!-- ============ PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Si alguna cosa no va</h2>
+  <h2 id="si-alguna-cosa-no-va">Si alguna cosa no va</h2>
   <dl class="cq-issues">
     <dt>El client es queda amb una adreça 169.254.x.x</dt>
     <dd>
@@ -155,7 +160,7 @@
 
 <!-- ============ LLIURAMENT ============ -->
 <div class="cq-block" data-kind="lliurament">
-  <h2>Què has d'entregar</h2>
+  <h2 id="que-has-d-entregar">Què has d'entregar</h2>
   <p>
     Un <strong>document tècnic</strong> on expliquis tot el que has anat fent, amb les captures
     del resultat.
@@ -169,7 +174,7 @@
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h2>Al currículum</h2>
+  <h2 id="al-curriculum">Al currículum</h2>
   <p><span class="lbl">CA 1.3</span> Il·lustra els procediments i pautes d'una sol·licitud de configuració dels paràmetres de xarxa.</p>
   <p><span class="lbl">CA 1.4</span> Instal·la un servei de configuració dinàmica dels paràmetres de xarxa.</p>
   <p><span class="lbl">CA 1.5</span> Prepara el servei per assignar la configuració bàsica als sistemes d'una xarxa local.</p>

@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA8 · T8.1</div>
   <h1>De la xarxa local a Internet</h1>
   <p class="lede">Dues altures diferents per deixar sortir el trànsit d'una xarxa privada.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-sabras-fer-en-acabar">Què sabràs fer en acabar</a></li><li><a href="#el-que-ja-tens-muntat">El que ja tens muntat</a></li><li><a href="#dues-altures-per-a-una-passarella">Dues altures per a una passarel·la</a></li><li><a href="#per-que-un-centre-en-vol-una-d-aplicacio">Per què un centre en vol una d&#x27;aplicació</a></li><li><a href="#per-on-surt-el-transit">Per on surt el trànsit</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#resum">Resum</a></li><li><a href="#comprova-el-que-has-apres">Comprova el que has après</a></li><li><a href="#al-curriculum">Al currículum</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què sabràs fer en acabar</h2>
+  <h2 id="que-sabras-fer-en-acabar">Què sabràs fer en acabar</h2>
   <ul>
     <li>Explicar, en una frase, per què encaminament i NAT ja deixen sortir tota una xarxa.</li>
     <li>Distingir una passarel·la de xarxa d'una passarel·la d'aplicació.</li>
@@ -36,7 +40,8 @@
 
 <!-- ============ 2 · REPAS ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>El que ja tens muntat</h2>
+  <h2 id="el-que-ja-tens-muntat">El que ja tens muntat</h2>
+<p>Un <strong>proxy explícit</strong> crea dues connexions: client → proxy i proxy → destí. El client necessita arribar al proxy, i el proxy necessita sortida pròpia. No cal reenviar els paquets del client ni fer NAT per aquest flux. Un router reenvia paquets; un tallafoc controla el trànsit. El proxy només controla les peticions que hi passen.</p>
   <p>
     A <a class="cq-ref" href="../../RA1/index.html">RA1</a> vas donar Internet a una xarxa
     privada amb una màquina de dues targetes: encaminament actiu i NAT a la targeta que surt
@@ -51,7 +56,7 @@
 
 <!-- ============ 3 · DUES ALTURES ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Dues altures per a una passarel·la</h2>
+  <h2 id="dues-altures-per-a-una-passarella">Dues altures per a una passarel·la</h2>
   <p>
     Una passarel·la de xarxa reenvia paquets sense obrir-los: no sap si dins hi ha una pàgina
     web, un correu o un vídeo. Una passarel·la d'<strong>aplicació</strong> sí que entén el
@@ -73,7 +78,7 @@
 
 <!-- ============ 4 · PER QUÈ VOLER LA D'APLICACIÓ ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Per què un centre en vol una d'aplicació</h2>
+  <h2 id="per-que-un-centre-en-vol-una-d-aplicacio">Per què un centre en vol una d'aplicació</h2>
   <p>
     Amb la passarel·la de xarxa ja hi ha Internet. El que hi guanya una empresa o un centre amb
     una passarel·la d'aplicació és <strong>saber qui visita què</strong> —cada petició queda
@@ -81,16 +86,12 @@
     IP, sinó per domini o per paraula— i <strong>aprofitar una memòria cau</strong> que estalvia
     tornar a demanar el mateix objecte a Internet.
   </p>
-  <p>
-    Les dues passarel·les <strong>conviuen</strong>: la de xarxa segueix donant sortida a tot el
-    trànsit, i la d'aplicació s'hi afegeix per al trànsit web. A <a class="cq-ref" href="t8-2-el-proxy-cau.html">T8.2</a> es veu com funciona
-    exactament aquesta segona.
-  </p>
+  <p>Les dues passarel·les poden conviure, però no és obligatori oferir encaminament general al client. En un laboratori amb proxy explícit, el client pot arribar només al proxy i aquest tenir sortida pròpia. <a class="cq-ref" href="t8-2-el-proxy-cau.html">T8.2</a> explica aquest flux.</p>
 </div>
 
 <!-- ============ 5 · OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h2>Per on surt el trànsit</h2>
+  <h2 id="per-on-surt-el-transit">Per on surt el trànsit</h2>
   <p>
     Per comprovar que l'encaminament segueix actiu i per on surt un paquet, aquestes dues ordres
     ja les coneixes del <a class="cq-ref" href="../../RA1/index.html">RA1</a>:
@@ -107,17 +108,17 @@ ip route
 
 <!-- ============ 6 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2>Criteris professionals</h2>
+  <h2 id="criteris-professionals">Criteris professionals</h2>
   <ul>
     <li><strong>No confonguis les dues altures</strong>: una passarel·la de xarxa mai no veurà una URL.</li>
     <li><strong>Afegeix la d'aplicació quan calgui registre o filtratge</strong>, no per defecte.</li>
-    <li><strong>Manté totes dues actives</strong>: la d'aplicació no substitueix l'encaminament ni el NAT.</li>
+    <li><strong>Dissenya la sortida</strong>: un proxy explícit pot funcionar sense forwarding ni NAT dels clients; altres fluxos poden requerir encaminament.</li>
   </ul>
 </div>
 
 <!-- ============ 7 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Errors habituals</h2>
+  <h2 id="errors-habituals">Errors habituals</h2>
   <dl class="cq-issues">
     <dt>Pensar que un proxy HTTP substitueix el NAT</dt>
     <dd>
@@ -134,33 +135,33 @@ ip route
 
 <!-- ============ 8 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h2>Resum</h2>
+  <h2 id="resum">Resum</h2>
   <ul>
     <li>Encaminament i NAT, ja de <a class="cq-ref" href="../../RA1/index.html">RA1</a>, donen sortida a tota la xarxa: és la passarel·la de <strong>xarxa</strong>.</li>
     <li>Una passarel·la d'<strong>aplicació</strong> entén el protocol i decideix segons el contingut de la petició.</li>
     <li>La de xarxa filtra per IP i port; la d'aplicació, per domini, contingut i usuari, i guarda memòria cau.</li>
-    <li>Les dues conviuen: la segona s'afegeix, no substitueix la primera.</li>
+    <li>Les dues poden conviure; el proxy explícit no exigeix reenviar paquets dels clients.</li>
     <li>Següent: <a class="cq-ref" href="t8-2-el-proxy-cau.html">T8.2</a>, com funciona per dins aquesta passarel·la d'aplicació.</li>
   </ul>
 </div>
 
 <!-- ============ 9 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h2>Comprova el que has après</h2>
+  <h2 id="comprova-el-que-has-apres">Comprova el que has après</h2>
 
-  <div class="cq-question" data-id="t8-1-altures" data-type="single">
+  <div class="cq-question" data-id="t8-1-altures" data-type="single" data-explanation="L’encaminador reenvia paquets; el proxy entén el protocol d’aplicació que gestiona.">
     <div class="statement">Quina diferència hi ha entre una passarel·la de xarxa i una d'aplicació?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">La de xarxa és més ràpida però no fa NAT</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">La de xarxa reenvia paquets sense mirar-ne el contingut; la d'aplicació entén el protocol i decideix segons què es demana</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Només n'hi pot haver una de les dues activa alhora</button>
-    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">La d'aplicació no necessita encaminament</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Un proxy no necessita connexió pròpia amb el destí</button>
     <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t8-1-filtratge" data-type="single">
-    <div class="statement">Què pot filtrar una passarel·la de xarxa que no pugui una passarel·la d'aplicació?</div>
-    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Res: la d'aplicació pot filtrar tot el que fa la de xarxa i encara més</button>
+  <div class="cq-question" data-id="t8-1-filtratge" data-type="single" data-explanation="El proxy controla les peticions que hi passen; el tallafoc controla els fluxos de xarxa.">
+    <div class="statement">Quin control correspon a un tallafoc de xarxa i no al proxy HTTP explícit?</div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Permetre o denegar connexions directes que no passen pel proxy</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El domini de destí</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El contingut de la pàgina</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">L'usuari que fa la petició</button>
@@ -168,8 +169,8 @@ ip route
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t8-1-convivencia" data-type="single">
-    <div class="statement">Un centre afegeix un proxy HTTP a la seva xarxa. Què passa amb l'encaminament i el NAT que ja tenia?</div>
+  <div class="cq-question" data-id="t8-1-convivencia" data-type="single" data-explanation="Un proxy explícit obre dues connexions; no necessita reenviar els paquets originals del client.">
+    <div class="statement">Un centre conserva la sortida encaminada per a serveis no web i afegeix un proxy HTTP explícit. Què passa amb l’encaminament i NAT d’aquella sortida?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Deixen de fer falta</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Segueixen actius: el proxy s'hi afegeix per al trànsit web</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Es desactiven automàticament</button>
@@ -178,7 +179,7 @@ ip route
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t8-1-perque" data-type="multi">
+  <div class="cq-question" data-id="t8-1-perque" data-type="multi" data-explanation="Una política d’aplicació pot afegir registre, control d’accés i cau a la connectivitat de xarxa.">
     <div class="statement">Per què voldria una organització una passarel·la d'aplicació, si la de xarxa ja dona Internet?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Per registrar qui visita què</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Per filtrar per contingut o per domini</button>
@@ -192,7 +193,7 @@ ip route
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h2>Al currículum</h2>
+  <h2 id="al-curriculum">Al currículum</h2>
   <p><span class="lbl">Contingut 8.1</span> Passarel·les a nivell d'aplicació.</p>
   <p><span class="lbl">Contingut 8.3</span> Encaminament de trànsit entre interfícies de xarxa.</p>
   <p><span class="lbl">CA 8.3</span> Reconeix i diferencia les característiques i possibilitats de l'aplicació seleccionada.</p>

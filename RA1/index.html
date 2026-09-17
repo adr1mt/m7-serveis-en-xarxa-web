@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,15 +17,33 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">CFGM SMX · Mòdul 0227</div>
-  <h1>Serveis en Xarxa</h1>
+  <h1>RA1 · Instal·lació de serveis de configuració dinàmica (DHCP)</h1>
   <p class="lede">RA1 · Instal·lació de serveis de configuració dinàmica (DHCP)</p>
 </header>
 
+<div class="cq-block" data-kind="ordre recomanat">
+  <h2 id="en-quin-ordre-fer-ho">En quin ordre fer-ho</h2>
+  <p><strong>T</strong>: teoria del servei. <strong>G</strong>: guia del producte. <strong>A</strong>: activitat amb requisits i comprovacions.</p>
+  <p>
+    Primer entens el servei, després tens el manual a mà per fer les activitats.</p>
+  <div class="cq-tablewrap">
+    <table class="cq-table">
+      <thead><tr><th>Llegeix</th><th>Tingues a mà</th><th>Fes</th></tr></thead>
+      <tbody>
+        <tr><td><a class="cq-ref" href="teoria/t1-0-repas-adrecament.html">T1.0</a></td><td><a class="cq-ref" href="guies/g1-1-netplan.html">G1.1</a></td><td><a class="cq-ref" href="activitats/a1-1-posada-a-punt.html">A1.1</a> — posada a punt</td></tr>
+        <tr><td><a class="cq-ref" href="teoria/t1-1-dhcp-fonaments.html">T1.1</a></td><td><a class="cq-ref" href="guies/g1-1-netplan.html">G1.1</a></td><td><a class="cq-ref" href="activitats/a1-2-dhcp-systemd-networkd.html">A1.2</a> — DHCP mínim</td></tr>
+        <tr><td><a class="cq-ref" href="teoria/t1-2-encaminament-nat.html">T1.2</a></td><td><a class="cq-ref" href="guies/g1-2-kea.html">G1.2</a> · <a class="cq-ref" href="guies/g1-3-nftables.html">G1.3</a></td><td><a class="cq-ref" href="activitats/a1-3-dhcp-kea.html">A1.3</a> — DHCP amb Kea</td></tr>
+        <tr><td>—</td><td><a class="cq-ref" href="guies/g1-2-kea.html">G1.2</a></td><td><a class="cq-ref" href="activitats/a1-4-kea-escala-reserves.html">A1.4</a> — DHCP a escala</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
 <div class="cq-block" data-kind="teoria">
-  <h2>Teoria</h2>
+  <h2 id="teoria">Teoria</h2>
   <p>Expliquen com funciona el servei, sense lligar-lo a cap producte.</p>
   <ul class="cq-index">
     <li><a href="teoria/t1-0-repas-adrecament.html">
@@ -43,7 +62,7 @@
 </div>
 
 <div class="cq-block" data-kind="guies">
-  <h2>Guies</h2>
+  <h2 id="guies">Guies</h2>
   <ul class="cq-index">
     <li><a href="guies/g1-1-netplan.html">
       <span class="ref">G1.1</span>
@@ -61,7 +80,7 @@
 </div>
 
 <div class="cq-block" data-kind="activitats">
-  <h2>Activitats</h2>
+  <h2 id="activitats">Activitats</h2>
   <p>
     Cada activitat es fa sobre una <strong>màquina nova</strong> a isardVDI, amb les targetes
     <code>puigcastellar1</code> i <code>personal1</code>.
@@ -86,22 +105,7 @@
   </ul>
 </div>
 
-<div class="cq-block" data-kind="ordre recomanat">
-  <h2>En quin ordre fer-ho</h2>
-  <p>
-    Primer entens el servei, després tens el manual a mà per fer les activitats.</p>
-  <div class="cq-tablewrap">
-    <table class="cq-table">
-      <thead><tr><th>Llegeix</th><th>Tingues a mà</th><th>Fes</th></tr></thead>
-      <tbody>
-        <tr><td><a class="cq-ref" href="teoria/t1-0-repas-adrecament.html">T1.0</a></td><td><a class="cq-ref" href="guies/g1-1-netplan.html">G1.1</a></td><td><a class="cq-ref" href="activitats/a1-1-posada-a-punt.html">A1.1</a> — posada a punt</td></tr>
-        <tr><td><a class="cq-ref" href="teoria/t1-1-dhcp-fonaments.html">T1.1</a></td><td><a class="cq-ref" href="guies/g1-1-netplan.html">G1.1</a></td><td><a class="cq-ref" href="activitats/a1-2-dhcp-systemd-networkd.html">A1.2</a> — DHCP mínim</td></tr>
-        <tr><td><a class="cq-ref" href="teoria/t1-2-encaminament-nat.html">T1.2</a></td><td><a class="cq-ref" href="guies/g1-2-kea.html">G1.2</a> · <a class="cq-ref" href="guies/g1-3-nftables.html">G1.3</a></td><td><a class="cq-ref" href="activitats/a1-3-dhcp-kea.html">A1.3</a> — DHCP amb Kea</td></tr>
-        <tr><td>—</td><td><a class="cq-ref" href="guies/g1-2-kea.html">G1.2</a></td><td><a class="cq-ref" href="activitats/a1-4-kea-escala-reserves.html">A1.4</a> — DHCP a escala</td></tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+
 
 
 <!-- === PEU DE NAVEGACIÓ INICI === -->

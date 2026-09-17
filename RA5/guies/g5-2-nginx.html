@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA5 · G5.2</div>
   <h1>Guia: Nginx</h1>
   <p class="lede">Manual de configuració de Nginx, dels blocs de servidor a HTTPS.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</a></li><li><a href="#estructura-de-etc-nginx">Estructura de /etc/nginx</a></li><li><a href="#installar-nginx-i-preparar-el-contingut">Instal·lar Nginx i preparar el contingut</a></li><li><a href="#el-bloc-server-i-l-enllac-simbolic">El bloc server i l&#x27;enllaç simbòlic</a></li><li><a href="#pagina-d-error-404-personalitzada">Pàgina d&#x27;error 404 personalitzada</a></li><li><a href="#capcaleres-de-seguretat">Capçaleres de seguretat</a></li><li><a href="#https-amb-certificat-autofirmat">HTTPS amb certificat autofirmat</a></li><li><a href="#comprovacio-de-conjunt-des-del-client">Comprovació de conjunt, des del client</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#fitxa-rapida">Fitxa ràpida</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què hi ha en aquesta guia</h2>
+  <h2 id="que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</h2>
   <p>Documentació oficial: <a href="https://nginx.org/en/docs/">nginx.org/en/docs</a></p>
   <ul>
     <li>Punt de partida: Ubuntu Server 26.04 acabat d'instal·lar, amb la
@@ -45,7 +49,7 @@
 
 <!-- ============ 2 · REFERÈNCIA · ESTRUCTURA ============ -->
 <div class="cq-block" data-kind="referència">
-  <h2>Estructura de /etc/nginx</h2>
+  <h2 id="estructura-de-etc-nginx">Estructura de /etc/nginx</h2>
   <p>
     <code>nginx.conf</code> és el fitxer principal i inclou la resta.
     Els llocs es declaren a <code>sites-available</code> i s'activen amb
@@ -72,7 +76,7 @@
 
 <!-- ============ 3 · PAS A PAS · INSTAL·LACIÓ ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h2>Instal·lar Nginx i preparar el contingut</h2>
+  <h2 id="installar-nginx-i-preparar-el-contingut">Instal·lar Nginx i preparar el contingut</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Instal·la el paquet:</strong></p>
@@ -95,14 +99,15 @@ sudo apt install nginx</pre>
       <strong>Mai 777.</strong></p>
 <pre>sudo chown -R www-data:www-data \
   /var/www/web1.internal
-sudo chmod -R 755 /var/www/web1.internal</pre>
+sudo find /var/www/web1.internal -type d -exec chmod 755 {} \;
+sudo find /var/www/web1.internal -type f -exec chmod 644 {} \;</pre>
     </li>
   </ol>
 </div>
 
 <!-- ============ 4 · PAS A PAS · BLOC SERVER ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h2>El bloc server i l'enllaç simbòlic</h2>
+  <h2 id="el-bloc-server-i-l-enllac-simbolic">El bloc server i l'enllaç simbòlic</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Crea el fitxer del lloc:</strong></p>
@@ -145,7 +150,7 @@ sudo systemctl reload nginx</pre>
 
 <!-- ============ 5 · PAS A PAS · ERROR 404 ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h2>Pàgina d'error 404 personalitzada</h2>
+  <h2 id="pagina-d-error-404-personalitzada">Pàgina d'error 404 personalitzada</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Escriu la pàgina</strong> dins del mateix
@@ -166,7 +171,7 @@ sudo systemctl reload nginx</pre>
 
 <!-- ============ 6 · PAS A PAS · CAPÇALERES ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h2>Capçaleres de seguretat</h2>
+  <h2 id="capcaleres-de-seguretat">Capçaleres de seguretat</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Afegeix-les</strong> dins del bloc <code>server</code>:</p>
@@ -183,16 +188,18 @@ sudo systemctl reload nginx</pre>
 
 <!-- ============ 7 · PAS A PAS · HTTPS ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h2>HTTPS amb certificat autofirmat</h2>
+  <h2 id="https-amb-certificat-autofirmat">HTTPS amb certificat autofirmat</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Genera la clau i el certificat.</strong> El
-      <em>Common Name</em> ha de coincidir amb el nom del lloc:</p>
+      camp <em>subjectAltName</em> ha d'incloure el nom del lloc:</p>
 <pre>sudo mkdir /etc/nginx/ssl
 sudo openssl req -x509 -nodes -days 365 \
   -newkey rsa:2048 \
   -keyout /etc/nginx/ssl/web1.key \
-  -out /etc/nginx/ssl/web1.crt</pre>
+  -out /etc/nginx/ssl/web1.crt \
+  -subj "/CN=web1.internal" \
+  -addext "subjectAltName=DNS:web1.internal"</pre>
     </li>
     <li>
       <p><strong>Reescriu el fitxer del lloc</strong> amb un bloc per al
@@ -207,6 +214,12 @@ sudo openssl req -x509 -nodes -days 365 \
 
     ssl_certificate /etc/nginx/ssl/web1.crt;
     ssl_certificate_key /etc/nginx/ssl/web1.key;
+
+    error_page 404 /error404.html;
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    access_log /var/log/nginx/web1_access.log;
+    error_log /var/log/nginx/web1_error.log;
 
     location / {
         try_files $uri $uri/ =404;
@@ -237,7 +250,7 @@ sudo systemctl reload nginx</pre>
 
 <!-- ============ 8 · COMPROVACIÓ ============ -->
 <div class="cq-block" data-kind="comprovació">
-  <h2>Comprovació de conjunt, des del client</h2>
+  <h2 id="comprovacio-de-conjunt-des-del-client">Comprovació de conjunt, des del client</h2>
   <ol class="cq-steps">
     <li>
       <p><code>http://web1.internal</code> redirigeix a
@@ -259,7 +272,7 @@ sudo systemctl reload nginx</pre>
 
 <!-- ============ 9 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2>Criteris professionals</h2>
+  <h2 id="criteris-professionals">Criteris professionals</h2>
   <ul>
     <li><strong>Mai 777</strong>: directoris 755, fitxers 644.</li>
     <li>Desactiva sempre el lloc per defecte quan el servidor és d'un
@@ -274,7 +287,7 @@ sudo systemctl reload nginx</pre>
 
 <!-- ============ 10 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Errors habituals</h2>
+  <h2 id="errors-habituals">Errors habituals</h2>
   <dl class="cq-issues">
     <dt>Nginx no arrenca després d'instal·lar-lo</dt>
     <dd>
@@ -318,7 +331,7 @@ sudo systemctl reload nginx</pre>
 
 <!-- ============ 11 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h2>Fitxa ràpida</h2>
+  <h2 id="fitxa-rapida">Fitxa ràpida</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Què</th><th>On</th></tr></thead>

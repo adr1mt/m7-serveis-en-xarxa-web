@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · G1.3</div>
   <h1>Guia: nftables</h1>
   <p class="lede">Encaminament i NAT: convertir el servidor en porta d'enllaç.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</a></li><li><a href="#per-que-no-fem-servir-iptables">Per què no fem servir iptables</a></li><li><a href="#una-regla-mal-escrita-et-tanca-la-porta">Una regla mal escrita et tanca la porta</a></li><li><a href="#convertir-el-servidor-en-porta-d-enllac">Convertir el servidor en porta d&#x27;enllaç</a></li><li><a href="#dnat-canviar-la-destinacio-abans-d-encaminar">DNAT: canviar la destinació abans d&#x27;encaminar</a></li><li><a href="#publicar-cap-a-fora-un-servei-de-la-xarxa-interna">Publicar cap a fora un servei de la xarxa interna</a></li><li><a href="#comprovar-que-els-clients-surten-a-internet">Comprovar que els clients surten a Internet</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#resum">Resum</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què hi ha en aquesta guia</h2>
+  <h2 id="que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</h2>
   <p>Documentació oficial: <a href="https://wiki.nftables.org">wiki.nftables.org</a></p>
   <ul>
     <li>Punt de partida: el servidor ja reparteix adreces per la targeta interna.</li>
@@ -35,7 +39,7 @@
 
 <!-- ============ 8 · IPTABLES ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h2>Per què no fem servir iptables</h2>
+  <h2 id="per-que-no-fem-servir-iptables">Per què no fem servir iptables</h2>
   <p>
     Tota la documentació d'Internet parla d'<code>iptables</code>, amb comandes com
     <code>iptables -t nat -A POSTROUTING -o enp1s0 -j MASQUERADE</code>. Encara funcionen, però
@@ -55,7 +59,7 @@
 
 <!-- ============ 6 · RECORDATORI ============ -->
 <div class="cq-block" data-kind="recordatori">
-  <h2>Una regla mal escrita et tanca la porta</h2>
+  <h2 id="una-regla-mal-escrita-et-tanca-la-porta">Una regla mal escrita et tanca la porta</h2>
   <p>
     Estàs escrivint un tallafoc. Si poses <code>policy drop</code> a la cadena
     <code>input</code> sense permetre SSH, perdràs la connexió en carregar les regles. En aquesta
@@ -66,7 +70,7 @@
 
 <!-- ============ 7 · PAS A PAS ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h2>Convertir el servidor en porta d'enllaç</h2>
+  <h2 id="convertir-el-servidor-en-porta-d-enllac">Convertir el servidor en porta d'enllaç</h2>
 
   <ol class="cq-steps">
     <li>
@@ -160,7 +164,7 @@ ping -c3 www.upc.edu  <span class="c"># funciona el DNS?</span></pre>
 
 <!-- ============ 7b · REFERÈNCIA · DNAT ============ -->
 <div class="cq-block" data-kind="referència">
-  <h2>DNAT: canviar la destinació abans d'encaminar</h2>
+  <h2 id="dnat-canviar-la-destinacio-abans-d-encaminar">DNAT: canviar la destinació abans d'encaminar</h2>
   <p>
     <code>dnat to</code> reescriu l'adreça (i el port, si cal) de destinació d'un
     paquet abans que el nucli decideixi cap a on l'encamina. Per això viu al ganxo
@@ -178,7 +182,7 @@ ping -c3 www.upc.edu  <span class="c"># funciona el DNS?</span></pre>
 
 <!-- ============ 7c · PAS A PAS · PUBLICAR UN SERVEI INTERN ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h2>Publicar cap a fora un servei de la xarxa interna</h2>
+  <h2 id="publicar-cap-a-fora-un-servei-de-la-xarxa-interna">Publicar cap a fora un servei de la xarxa interna</h2>
 
   <ol class="cq-steps">
     <li>
@@ -229,7 +233,7 @@ curl http://IP-EXTERNA-DEL-SERVIDOR/</pre>
 
 <!-- ============ COMPROVACIÓ ============ -->
 <div class="cq-block" data-kind="comprovació">
-  <h2>Comprovar que els clients surten a Internet</h2>
+  <h2 id="comprovar-que-els-clients-surten-a-internet">Comprovar que els clients surten a Internet</h2>
   <p>Les dues primeres ordres van al servidor; les dues últimes, al client.</p>
   <ol class="cq-steps">
     <li>
@@ -245,7 +249,7 @@ sudo nft list ruleset</pre>
     </li>
     <li>
       <p><strong>El client arriba fora.</strong> Primer per IP, després per nom: si la primera
-      va i la segona no, el problema és de DNS, no de NAT.</p>
+      va i la segona no, comprova si el nom es resol abans de concloure que falla DNS.</p>
 <pre>ping -c3 9.9.9.9
 ping -c3 www.upc.edu</pre>
     </li>
@@ -254,7 +258,7 @@ ping -c3 www.upc.edu</pre>
 
 <!-- ============ 9 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2>Criteris professionals</h2>
+  <h2 id="criteris-professionals">Criteris professionals</h2>
   <ul>
     <li><strong><code>policy drop</code> a <code>forward</code></strong> i obre només el que cal. El que no s'ha permès, no passa.</li>
     <li><strong>Fes servir <code>ct state related,established</code></strong> per al trànsit de tornada, en lloc d'obrir el sentit contrari sencer.</li>
@@ -266,7 +270,7 @@ ping -c3 www.upc.edu</pre>
 
 <!-- ============ 10 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Errors habituals</h2>
+  <h2 id="errors-habituals">Errors habituals</h2>
   <dl class="cq-issues">
     <dt>Funcionava i després de reiniciar ja no</dt>
     <dd>
@@ -276,7 +280,7 @@ ping -c3 www.upc.edu</pre>
 
     <dt><code>nft list ruleset</code> surt buit</dt>
     <dd>
-      <p><span class="lbl">Causa</span> Error de sintaxi al fitxer: el <code>flush ruleset</code> s'executa i la resta falla.</p>
+      <p><span class="lbl">Causa</span> La càrrega amb <code>nft -f</code> és una transacció atòmica: si el fitxer és invàlid, no aplica tampoc el flush inicial. Un reinici del servei pot executar altres ordres, com ExecStop, abans de carregar-lo; consulta la unitat instal·lada i separa aquests dos efectes.</p>
       <p><span class="lbl">Solució</span> <code>sudo nft -c -f /etc/nftables.conf</code> comprova el fitxer sense aplicar-lo i et diu la línia.</p>
     </dd>
 
@@ -288,7 +292,7 @@ ping -c3 www.upc.edu</pre>
 
     <dt><code>ping 9.9.9.9</code> va, però <code>ping www.upc.edu</code> no</dt>
     <dd>
-      <p><span class="lbl">Causa</span> L'encaminament i el NAT funcionen. El problema és el DNS que reparteix el teu servidor DHCP.</p>
+      <p><span class="lbl">Causa</span> L'encaminament i el NAT funcionen. Pot fallar DNS o bé la resposta ICMP del destí; comprova primer la resolució amb les eines DNS.</p>
       <p><span class="lbl">Solució</span> Revisa <code>domain-name-servers</code> al fitxer de Kea i, al client, <code>resolvectl status</code>.</p>
     </dd>
   </dl>
@@ -296,7 +300,7 @@ ping -c3 www.upc.edu</pre>
 
 <!-- ============ 11 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h2>Resum</h2>
+  <h2 id="resum">Resum</h2>
   <ul>
     <li>Un client amb IP correcta encara necessita <strong>encaminament</strong> i <strong>NAT</strong> per sortir a Internet.</li>
     <li>L'encaminament s'activa amb <code>net.ipv4.ip_forward=1</code>, permanent a <code>/etc/sysctl.d/</code>.</li>

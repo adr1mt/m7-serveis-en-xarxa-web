@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA3 · T3.2</div>
   <h1>Comptes, accés anònim i límits</h1>
   <p class="lede">Qui entra al servidor, fins on arriba i quant se'n pot endur.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-sabras-fer-en-acabar">Què sabràs fer en acabar</a></li><li><a href="#enjaular-l-usuari-chroot">Enjaular l&#x27;usuari: chroot</a></li><li><a href="#el-compte-compartit-de-la-petita-empresa">El compte compartit de la petita empresa</a></li><li><a href="#qui-es-l-usuari-anonim">Qui és l&#x27;usuari anònim</a></li><li><a href="#posar-fre-connexions-velocitat-i-temps">Posar fre: connexions, velocitat i temps</a></li><li><a href="#les-quotes-no-son-cosa-del-servidor-ftp">Les quotes no són cosa del servidor FTP</a></li><li><a href="#el-directori-public-que-va-acabar-sent-un-magatzem">El directori públic que va acabar sent un magatzem</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#resum">Resum</a></li><li><a href="#comprova-el-que-has-apres">Comprova el que has après</a></li><li><a href="#al-curriculum">Al currículum</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què sabràs fer en acabar</h2>
+  <h2 id="que-sabras-fer-en-acabar">Què sabràs fer en acabar</h2>
   <ul>
     <li>Explicar què guanyes <strong>enjaulant</strong> un usuari al seu directori.</li>
     <li>Crear usuaris i grups pensats per a accés remot.</li>
@@ -37,7 +41,7 @@
 
 <!-- ============ 4 · CHROOT ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Enjaular l'usuari: chroot</h2>
+  <h2 id="enjaular-l-usuari-chroot">Enjaular l'usuari: chroot</h2>
   <p>
     Sense <code>chroot_local_user</code>, qui entra per FTP es pot moure per <strong>tot el
     sistema de fitxers</strong>: pot baixar-se <code>/etc/passwd</code> o llegir els directoris
@@ -56,7 +60,7 @@
 
 <!-- ============ 7 · CAS REAL ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h2>El compte compartit de la petita empresa</h2>
+  <h2 id="el-compte-compartit-de-la-petita-empresa">El compte compartit de la petita empresa</h2>
   <p>
     Un muntatge que es veu molt: un sol compte d'FTP, la contrasenya apuntada en un correu antic,
     i tothom hi entra. Proveïdors, clients i l'informàtic que va marxar fa dos anys.
@@ -74,7 +78,7 @@
 
 <!-- ============ 2 · QUÈ ÉS L'ANÒNIM ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Qui és l'usuari anònim</h2>
+  <h2 id="qui-es-l-usuari-anonim">Qui és l'usuari anònim</h2>
   <p>
     L'accés anònim vol dir entrar sense compte: l'usuari escriu <code>anonymous</code> o
     <code>ftp</code> i, com a contrasenya, el seu correu o el que li sembli. Ningú no el comprova.
@@ -92,23 +96,9 @@
 
 <!-- ============ 4 · LÍMITS ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Posar fre: connexions, velocitat i temps</h2>
-  <p>
-    Un servidor sense límits el tomba una sola persona amb un <em>script</em>. El servei els aplica
-    per separat als anònims i als usuaris amb compte.
-  </p>
-  <div class="cq-tablewrap">
-    <table class="cq-table">
-      <thead><tr><th>Directiva</th><th>Límit</th><th>De sèrie</th></tr></thead>
-      <tbody>
-        <tr><td><code>max_clients</code></td><td>Sessions simultànies al servidor</td><td>Sense límit</td></tr>
-        <tr><td><code>max_per_ip</code></td><td>Sessions des de la mateixa adreça</td><td>Sense límit</td></tr>
-        <tr><td><code>anon_max_rate</code></td><td>Bytes per segon per a un anònim</td><td>Sense límit</td></tr>
-        <tr><td><code>local_max_rate</code></td><td>Bytes per segon per a un usuari</td><td>Sense límit</td></tr>
-        <tr><td><code>idle_session_timeout</code></td><td>Segons sense escriure cap ordre</td><td>300</td></tr>
-      </tbody>
-    </table>
-  </div>
+  <h2 id="posar-fre-connexions-velocitat-i-temps">Posar fre: connexions, velocitat i temps</h2>
+  <p>Els límits controlen sessions, velocitat i temps d’inactivitat. Alguns són globals i altres depenen del perfil. El límit de connexions per IP d’una instància FTP pot ser comú a anònims i comptes autenticats; consulta les possibilitats del producte a <a class="cq-ref" href="../guies/g3-1-vsftpd.html">G3.1</a>.</p>
+  <p>La configuració concreta del producte es documenta a <a class="cq-ref" href="../guies/g3-1-vsftpd.html">G3.1</a>. Aquí importa identificar els permisos, límits i serveis que s’han de permetre o restringir.</p>
   <p>
     Les velocitats van en <strong>bytes</strong> per segon, no en bits: <code>512000</code> són
     500 KB/s.
@@ -117,7 +107,7 @@
 
 <!-- ============ 6 · QUOTES ============ -->
 <div class="cq-block" data-kind="observació">
-  <h2>Les quotes no són cosa del servidor FTP</h2>
+  <h2 id="les-quotes-no-son-cosa-del-servidor-ftp">Les quotes no són cosa del servidor FTP</h2>
   <p>
     Cap opció del servidor FTP limita <em>l'espai en disc</em> que ocupa un usuari. Els límits del
     servidor són de velocitat i de sessions; l'espai el controla el sistema de fitxers.
@@ -135,7 +125,7 @@
 
 <!-- ============ 7 · CAS REAL ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h2>El directori públic que va acabar sent un magatzem</h2>
+  <h2 id="el-directori-public-que-va-acabar-sent-un-magatzem">El directori públic que va acabar sent un magatzem</h2>
   <p>
     Als anys en què tothom tenia FTP anònim era habitual deixar una carpeta <em>incoming</em>
     perquè la gent hi deixés fitxers. La idea era rebre feina de fora sense donar comptes.
@@ -153,7 +143,7 @@
 
 <!-- ============ BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2>Criteris professionals</h2>
+  <h2 id="criteris-professionals">Criteris professionals</h2>
   <ul>
     <li><strong>Un compte per persona</strong>: amb un compte compartit no se sap mai qui ha esborrat què.</li>
     <li><strong>L'arrel de la gàbia, de només lectura</strong>; qui hi entra escriu en una carpeta de dins.</li>
@@ -165,7 +155,7 @@
 
 <!-- ============ PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Errors habituals</h2>
+  <h2 id="errors-habituals">Errors habituals</h2>
   <dl class="cq-issues">
     <dt>L'usuari veu tot el sistema de fitxers</dt>
     <dd>
@@ -194,7 +184,7 @@
 </div>
 
 <div class="cq-block" data-kind="resum">
-  <h2>Resum</h2>
+  <h2 id="resum">Resum</h2>
   <ul>
     <li>El <strong>chroot</strong> tanca l'usuari dins de la seva carpeta: no en pot sortir.</li>
     <li>L'arrel d'una jaula <strong>no pot ser escrivible</strong> per qui hi queda tancat.</li>
@@ -211,9 +201,9 @@
 </div>
 
 <div class="cq-block" data-kind="quiz">
-  <h2>Comprova el que has après</h2>
+  <h2 id="comprova-el-que-has-apres">Comprova el que has après</h2>
 
-  <div class="cq-question" data-id="t3-2-chroot" data-type="single">
+  <div class="cq-question" data-id="t3-2-chroot" data-type="single" data-explanation="El chroot limita l’arbre de directoris visible; no concedeix automàticament permisos d’escriptura.">
     <div class="statement">Què aconsegueixes amb <code>chroot_local_user=YES</code>?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que els usuaris puguin pujar fitxers</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Que cada usuari vegi el seu directori com si fos l'arrel i no en pugui sortir</button>
@@ -223,7 +213,7 @@
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t3-3-usuari" data-type="single">
+  <div class="cq-question" data-id="t3-2-usuari" data-type="single" data-explanation="Un compte individual permet atribuir accions i retirar permisos sense compartir credencials.">
     <div class="statement">Amb quin compte del sistema treballa una sessió anònima?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false"><code>root</code></button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false"><code>nobody</code></button>
@@ -233,7 +223,7 @@
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t3-3-arrel" data-type="single">
+  <div class="cq-question" data-id="t3-2-arrel" data-type="single" data-explanation="L’arrel de la jaula ha de complir els requisits del servei; l’escriptura es dona en una carpeta interior.">
     <div class="statement">Per què <code>/srv/ftp</code> no pot ser escrivible?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè si no, no es pot llegir</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Perquè el servei es nega a fer un chroot sobre una arrel escrivible</button>
@@ -243,7 +233,7 @@
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t3-3-quota" data-type="single">
+  <div class="cq-question" data-id="t3-2-quota" data-type="single" data-explanation="La quota limita l’espai ocupat; els límits de velocitat o sessions controlen altres recursos.">
     <div class="statement">Vols que cap usuari ocupi més d'1 GB al servidor. Què fas servir?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false"><code>local_max_rate</code></button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false"><code>max_per_ip</code></button>
@@ -257,7 +247,7 @@
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h2>Al currículum</h2>
+  <h2 id="al-curriculum">Al currículum</h2>
   <p><span class="lbl">Contingut 3.1</span> Usuaris i grups. Accés anònim. Permisos. Quotes. Límit d'amplada de banda.</p>
   <p><span class="lbl">CA 3.3</span> Crea usuaris i grups per a accés remot al servidor.</p>
   <p><span class="lbl">CA 3.4</span> Configura l'accés anònim.</p>

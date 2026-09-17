@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA5 · T5.3</div>
   <h1>HTTPS i certificats</h1>
   <p class="lede">Xifrar és fàcil; acreditar qui ets és l'altra meitat del problema.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-sabras-fer-en-acabar">Què sabràs fer en acabar</a></li><li><a href="#que-afegeix-https-sobre-http">Què afegeix HTTPS sobre HTTP</a></li><li><a href="#que-conte-un-certificat">Què conté un certificat</a></li><li><a href="#autoritat-de-certificacio-o-autofirmat">Autoritat de certificació o autofirmat</a></li><li><a href="#redirigir-del-80-al-443">Redirigir del 80 al 443</a></li><li><a href="#let-s-encrypt">Let&#x27;s Encrypt</a></li><li><a href="#veure-qui-signa-el-certificat">Veure qui signa el certificat</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#resum">Resum</a></li><li><a href="#comprova-el-que-has-apres">Comprova el que has après</a></li><li><a href="#al-curriculum">Al currículum</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què sabràs fer en acabar</h2>
+  <h2 id="que-sabras-fer-en-acabar">Què sabràs fer en acabar</h2>
   <ul>
     <li>Explicar què afegeix HTTPS sobre HTTP: confidencialitat, integritat i identitat.</li>
     <li>Dir què conté un certificat i per a quins noms és vàlid.</li>
@@ -37,7 +41,7 @@
 
 <!-- ============ 2 · QUÈ AFEGEIX HTTPS ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Què afegeix HTTPS sobre HTTP</h2>
+  <h2 id="que-afegeix-https-sobre-http">Què afegeix HTTPS sobre HTTP</h2>
   <p>
     HTTPS és HTTP transportat dins TLS, pel port <strong>443</strong>. Afegeix tres coses que HTTP
     en clar no dona:
@@ -56,7 +60,7 @@
 
 <!-- ============ 3 · EL CERTIFICAT ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Què conté un certificat</h2>
+  <h2 id="que-conte-un-certificat">Què conté un certificat</h2>
   <p>
     Un certificat lliga una clau pública a un o més noms de domini. Conté el nom del lloc, la
     clau pública, qui l'ha signat i fins quan és vàlid. El navegador comprova la llista de noms
@@ -67,7 +71,7 @@
 
 <!-- ============ 4 · AUTORITAT O AUTOFIRMAT ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Autoritat de certificació o autofirmat</h2>
+  <h2 id="autoritat-de-certificacio-o-autofirmat">Autoritat de certificació o autofirmat</h2>
   <p>
     Una <strong>autoritat de certificació</strong> és un tercer de confiança que signa el
     certificat i en respon: el navegador ja porta la seva clau i confia en ella. Un certificat
@@ -82,7 +86,7 @@
 
 <!-- ============ 5 · EXEMPLE ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h2>Redirigir del 80 al 443</h2>
+  <h2 id="redirigir-del-80-al-443">Redirigir del 80 al 443</h2>
   <p>
     És habitual que el port 80 no serveixi contingut, sinó que redirigeixi (301) cap a la mateixa
     URL amb <code>https://</code>. Així un usuari que escriu l'adreça sense protocol acaba igual
@@ -92,7 +96,7 @@
 
 <!-- ============ 6 · CAS REAL ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h2>Let's Encrypt</h2>
+  <h2 id="let-s-encrypt">Let's Encrypt</h2>
   <p>
     Amb un domini públic, l'opció real és una autoritat de certificació gratuïta com
     <strong>Let's Encrypt</strong>: emet certificats vàlids i renovables automàticament, reconeguts
@@ -103,7 +107,7 @@
 
 <!-- ============ 7 · OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h2>Veure qui signa el certificat</h2>
+  <h2 id="veure-qui-signa-el-certificat">Veure qui signa el certificat</h2>
   <p>
     <code>openssl s_client</code> obre la connexió TLS i mostra qui ha emès el certificat:
   </p>
@@ -117,7 +121,7 @@
 
 <!-- ============ 8 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2>Criteris professionals</h2>
+  <h2 id="criteris-professionals">Criteris professionals</h2>
   <ul>
     <li>Amb domini públic, certificat de <strong>Let's Encrypt</strong>, mai autofirmat.</li>
     <li>Redirigeix sempre el <strong>80 cap al 443</strong>.</li>
@@ -127,7 +131,7 @@
 
 <!-- ============ 9 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Errors habituals</h2>
+  <h2 id="errors-habituals">Errors habituals</h2>
   <dl class="cq-issues">
     <dt>Confondre «certificat autofirmat» amb «sense xifrar»</dt>
     <dd>
@@ -146,7 +150,7 @@
 
 <!-- ============ 10 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h2>Resum</h2>
+  <h2 id="resum">Resum</h2>
   <ul>
     <li>HTTPS afegeix <strong>confidencialitat, integritat i identitat</strong> sobre HTTP, pel port 443.</li>
     <li>Un certificat conté el nom, la clau pública, qui el signa i fins quan val.</li>
@@ -158,9 +162,9 @@
 
 <!-- ============ 11 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h2>Comprova el que has après</h2>
+  <h2 id="comprova-el-que-has-apres">Comprova el que has après</h2>
 
-  <div class="cq-question" data-id="t5-3-autofirmat" data-type="single">
+  <div class="cq-question" data-id="t5-3-autofirmat" data-type="single" data-explanation="L’avís d’un autofirmat pot indicar manca de confiança, encara que el canal estigui xifrat.">
     <div class="statement">Un client avisa que el certificat és autofirmat. Què és cert?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">La connexió viatja en clar</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">La connexió va xifrada, però ningú de confiança acredita la identitat del servidor</button>
@@ -170,7 +174,7 @@
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t5-3-conte" data-type="multi">
+  <div class="cq-question" data-id="t5-3-conte" data-type="multi" data-explanation="El certificat conté informació pública i una clau pública; la clau privada s’ha de conservar separada.">
     <div class="statement">Quines dades conté un certificat digital? (marca'n dues)</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">El nom o noms del lloc</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">La contrasenya de l'administrador</button>
@@ -180,7 +184,7 @@
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t5-3-nom" data-type="single">
+  <div class="cq-question" data-id="t5-3-nom" data-type="single" data-explanation="El nom provat ha d’estar al SAN; confiar en el certificat no corregeix un nom aliè.">
     <div class="statement">Què mira el navegador per decidir si un certificat val per a un lloc?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">La IP del servidor</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Els noms del certificat</button>
@@ -190,7 +194,7 @@
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t5-3-letsencrypt" data-type="single">
+  <div class="cq-question" data-id="t5-3-letsencrypt" data-type="single" data-explanation="Una autoritat certificadora valida el control del nom i emet certificats amb una cadena de confiança.">
     <div class="statement">Amb un domini públic, quina és la via habitual per obtenir un certificat sense avisos al navegador?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Generar-lo autofirmat amb openssl</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Demanar-lo a una autoritat com Let's Encrypt</button>
@@ -204,7 +208,7 @@
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h2>Al currículum</h2>
+  <h2 id="al-curriculum">Al currículum</h2>
   <p><span class="lbl">CA 5.1</span> Descriu els fonaments i protocols en què es basa el funcionament d'un servidor web.</p>
   <p><span class="lbl">CA 5.9</span> Estableix mecanismes per assegurar les comunicacions entre el client i el servidor.</p>
 </div>

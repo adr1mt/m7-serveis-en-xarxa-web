@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA2 · T2.1</div>
   <h1>Noms i resolució al client</h1>
   <p class="lede">Què passa dins del teu equip entre que escrius un nom i surt una adreça IP.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-sabras-fer-en-acabar">Què sabràs fer en acabar</a></li><li><a href="#el-problema-que-resol-el-dns">El problema que resol el DNS</a></li><li><a href="#dos-mecanismes-i-un-ordre">Dos mecanismes, i un ordre</a></li><li><a href="#qui-pregunta-de-veritat-systemd-resolved">Qui pregunta de veritat: systemd-resolved</a></li><li><a href="#el-fitxer-etc-resolv-conf-ja-no-es-el-que-era">El fitxer /etc/resolv.conf ja no és el que era</a></li><li><a href="#el-domini-local-no-es-teu">El domini .local no és teu</a></li><li><a href="#mirar-com-resol-la-teva-maquina">Mirar com resol la teva màquina</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#resum">Resum</a></li><li><a href="#comprova-el-que-has-apres">Comprova el que has après</a></li><li><a href="#al-curriculum">Al currículum</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què sabràs fer en acabar</h2>
+  <h2 id="que-sabras-fer-en-acabar">Què sabràs fer en acabar</h2>
   <ul>
     <li>Explicar per què les xarxes treballen amb noms i no amb adreces.</li>
     <li>Distingir els dos mecanismes de resolució: fitxer local i DNS.</li>
@@ -37,7 +41,7 @@
 
 <!-- ============ 2 · INTRODUCCIÓ ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>El problema que resol el DNS</h2>
+  <h2 id="el-problema-que-resol-el-dns">El problema que resol el DNS</h2>
   <p>
     Al <a class="cq-ref" href="../../RA1/index.html">RA1</a> vas repartir adreces amb DHCP. Però ningú escriu
     <code>142.250.185.3</code> al navegador: escrivim <strong>noms</strong>. Algú ha de
@@ -56,7 +60,7 @@
 
 <!-- ============ 3 · ELS DOS MECANISMES ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Dos mecanismes, i un ordre</h2>
+  <h2 id="dos-mecanismes-i-un-ordre">Dos mecanismes, i un ordre</h2>
   <p>
     El teu equip pot resoldre un nom de dues maneres: mirant un <strong>fitxer local</strong> o
     <strong>preguntant a un servidor</strong>. No en tria una a l'atzar: hi ha un ordre escrit.
@@ -80,7 +84,7 @@
 
 <!-- ============ 4 · SYSTEMD-RESOLVED ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Qui pregunta de veritat: systemd-resolved</h2>
+  <h2 id="qui-pregunta-de-veritat-systemd-resolved">Qui pregunta de veritat: systemd-resolved</h2>
   <p>
     A Ubuntu, les aplicacions no parlen amb el servidor DNS directament. Parlen amb un servei
     local, <strong>systemd-resolved</strong>, que escolta a l'adreça <code>127.0.0.53</code> i fa
@@ -99,7 +103,7 @@
 
 <!-- ============ 5 · EXEMPLE ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h2>El fitxer /etc/resolv.conf ja no és el que era</h2>
+  <h2 id="el-fitxer-etc-resolv-conf-ja-no-es-el-que-era">El fitxer /etc/resolv.conf ja no és el que era</h2>
   <p>
     Durant anys, el servidor DNS s'escrivia a mà a <code>/etc/resolv.conf</code>. Avui aquest
     fitxer el genera <code>systemd-resolved</code> i conté sempre el mateix:
@@ -119,7 +123,7 @@ search .</pre>
 
 <!-- ============ 6 · CAS REAL ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h2>El domini .local no és teu</h2>
+  <h2 id="el-domini-local-no-es-teu">El domini .local no és teu</h2>
   <p>
     És molt habitual batejar la xarxa de casa o de l'aula com <code>empresa.local</code>. És una
     mala idea: el sufix <strong><code>.local</code> està reservat</strong> per a mDNS, el
@@ -138,7 +142,7 @@ search .</pre>
 
 <!-- ============ 7 · OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h2>Mirar com resol la teva màquina</h2>
+  <h2 id="mirar-com-resol-la-teva-maquina">Mirar com resol la teva màquina</h2>
   <p>Amb qualsevol Ubuntu connectat a la xarxa del centre:</p>
 
   <ol class="cq-steps">
@@ -186,7 +190,7 @@ getent hosts provaordre.test</pre>
 
 <!-- ============ 8 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2>Criteris professionals</h2>
+  <h2 id="criteris-professionals">Criteris professionals</h2>
   <ul>
     <li><strong><code>/etc/hosts</code> és per a proves</strong>, no per a administrar una xarxa. No escala i ningú se'n recorda.</li>
     <li><strong>No editis <code>/etc/resolv.conf</code></strong>: el DNS es configura al Netplan o s'obté per DHCP.</li>
@@ -198,7 +202,7 @@ getent hosts provaordre.test</pre>
 
 <!-- ============ 9 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Errors habituals</h2>
+  <h2 id="errors-habituals">Errors habituals</h2>
   <dl class="cq-issues">
     <dt><code>ping 9.9.9.9</code> va, però <code>ping www.upc.edu</code> no</dt>
     <dd>
@@ -222,7 +226,7 @@ getent hosts provaordre.test</pre>
 
 <!-- ============ 10 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h2>Resum</h2>
+  <h2 id="resum">Resum</h2>
   <ul>
     <li>Resoldre un nom és convertir-lo en adreça IP abans d'enviar res.</li>
     <li>L'ordre el marca <code>/etc/nsswitch.conf</code>: <strong><code>/etc/hosts</code> guanya al DNS</strong>.</li>
@@ -254,10 +258,10 @@ getent hosts provaordre.test</pre>
 
 <!-- ============ 11 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h2>Comprova el que has après</h2>
+  <h2 id="comprova-el-que-has-apres">Comprova el que has après</h2>
 
-  <div class="cq-question" data-id="t2-1-ordre" data-type="single">
-    <div class="statement">Tens un nom escrit a <code>/etc/hosts</code> amb una IP, i al DNS amb una altra. Quina fa servir el sistema?</div>
+  <div class="cq-question" data-id="t2-1-ordre" data-type="single" data-explanation="L’ordre de NSS indicat al cas consulta files abans de dns; altres configuracions poden tenir un ordre diferent.">
+    <div class="statement">Amb hosts: files dns a /etc/nsswitch.conf, una aplicació usa la resolució del sistema. Un nom té una IP a /etc/hosts i una altra al DNS. Quina obté primer?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">La de <code>/etc/hosts</code>, perquè es consulta abans</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">La del DNS, perquè és l'autoritat</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">La més recent de les dues</button>
@@ -266,17 +270,17 @@ getent hosts provaordre.test</pre>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t2-1-stub" data-type="single">
+  <div class="cq-question" data-id="t2-1-stub" data-type="single" data-explanation="El stub és un punt local de consulta; pot reenviar la petició als servidors configurats.">
     <div class="statement">Què és l'adreça <code>127.0.0.53</code> que surt a <code>/etc/resolv.conf</code>?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El servidor DNS del teu proveïdor</button>
-    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">El servei local systemd-resolved, que fa de intermediari i memòria cau</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">El servei local systemd-resolved, que fa d'intermediari i memòria cau</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">L'adreça de difusió de la xarxa</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Un servidor DNS públic de reserva</button>
     <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t2-1-resolvconf" data-type="single">
+  <div class="cq-question" data-id="t2-1-resolvconf" data-type="single" data-explanation="La configuració efectiva depèn del gestor de xarxa i de l’enllaç de resolv.conf, no només del text visible.">
     <div class="statement">Vols canviar el servidor DNS d'un Ubuntu Server. Què fas?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Edito <code>/etc/resolv.conf</code> i hi poso la IP nova</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Ho configuro al Netplan, o deixo que ho reparteixi el DHCP</button>
@@ -286,7 +290,7 @@ getent hosts provaordre.test</pre>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t2-1-local" data-type="single">
+  <div class="cq-question" data-id="t2-1-local" data-type="single" data-explanation="El sufix .local està associat a mDNS; els dominis interns del laboratori fan servir .internal.">
     <div class="statement">Per què no convé batejar la xarxa interna com <code>empresa.local</code>?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè els noms curts no es poden resoldre</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Perquè <code>.local</code> està reservat per a mDNS i la consulta pot no arribar al teu DNS</button>
@@ -296,11 +300,11 @@ getent hosts provaordre.test</pre>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t2-1-eines" data-type="multi">
+  <div class="cq-question" data-id="t2-1-eines" data-type="multi" data-explanation="dig amb @ consulta aquell DNS directament; la resolució d’una aplicació pot seguir NSS i dades locals.">
     <div class="statement">Selecciona totes les afirmacions certes</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true"><code>dig @9.9.9.9 nom</code> pregunta directament a aquell servidor.</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">La memòria cau pot fer que vegis una adreça antiga.</button>
-    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">systemd-resolved pot resoldre sol, sense cap servidor DNS.</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">systemd-resolved pot obtenir qualsevol nom públic nou sense cap font DNS ni dades locals.</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">El servidor DNS del client sol arribar per DHCP.</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false"><code>/etc/hosts</code> és la manera recomanada de gestionar els noms d'una empresa.</button>
     <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
@@ -311,7 +315,7 @@ getent hosts provaordre.test</pre>
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h2>Al currículum</h2>
+  <h2 id="al-curriculum">Al currículum</h2>
   <p><span class="lbl">Contingut 2.1</span> Sistemes de noms plans i jeràrquics.</p>
   <p><span class="lbl">CA 2.1</span> Identifica i descriu escenaris en què sorgeix la necessitat d'un servei de resolució de noms.</p>
   <p><span class="lbl">CA 2.2</span> Classifica els principals mecanismes de resolució de noms.</p>

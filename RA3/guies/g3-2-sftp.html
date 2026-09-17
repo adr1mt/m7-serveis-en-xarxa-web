@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,15 +17,18 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA3 · G3.2</div>
   <h1>Guia: SFTP d'OpenSSH</h1>
   <p class="lede">Transferència xifrada sense instal·lar cap servei nou.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</a></li><li><a href="#el-bloc-match-del-sshd-config">El bloc Match del sshd_config</a></li><li><a href="#el-chroot-de-ssh-es-mes-exigent-que-el-de-vsftpd">El chroot de SSH és més exigent que el de vsftpd</a></li><li><a href="#enjaular-un-grup-dins-de-sftp">Enjaular un grup dins de SFTP</a></li><li><a href="#comprovar-la-gabia-des-del-client">Comprovar la gàbia des del client</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#fitxa-rapida">Fitxa ràpida</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <div class="cq-block" data-kind="objectius">
-  <h2>Què hi ha en aquesta guia</h2>
+  <h2 id="que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</h2>
   <p>Documentació oficial: <code>man sshd_config</code> i <a href="https://www.openssh.com/manual.html">openssh.com/manual.html</a></p>
   <ul>
     <li>No s'instal·la res: l'SFTP ja ve amb el servidor SSH.</li>
@@ -33,7 +37,7 @@
 </div>
 
 <div class="cq-block" data-kind="exemple">
-  <h2>El bloc Match del sshd_config</h2>
+  <h2 id="el-bloc-match-del-sshd-config">El bloc Match del sshd_config</h2>
   <p>SFTP enjaulat, <strong>al final</strong> de <code>/etc/ssh/sshd_config</code>:</p>
 <pre>Match Group sftpusers
     ChrootDirectory /home/%u
@@ -48,7 +52,7 @@
 
 <!-- ============ 6 · PERMISOS DEL CHROOT ============ -->
 <div class="cq-block" data-kind="observació">
-  <h2>El chroot de SSH és més exigent que el de vsftpd</h2>
+  <h2 id="el-chroot-de-ssh-es-mes-exigent-que-el-de-vsftpd">El chroot de SSH és més exigent que el de vsftpd</h2>
   <p>
     <code>ChrootDirectory</code> imposa una condició que sorprèn tothom la primera vegada: el
     directori <strong>i tots els que hi ha per sobre</strong> han de ser de <code>root</code> i no
@@ -66,7 +70,7 @@
 </div>
 
 <div class="cq-block" data-kind="pas a pas">
-  <h2>Enjaular un grup dins de SFTP</h2>
+  <h2 id="enjaular-un-grup-dins-de-sftp">Enjaular un grup dins de SFTP</h2>
   <ol class="cq-steps">
 <li>
       <p><strong>Prepara el grup d'SFTP</strong> i posa-hi l'usuari:</p>
@@ -97,7 +101,7 @@ ssh alumne1@192.168.1.8</pre>
 
 <!-- ============ COMPROVACIÓ ============ -->
 <div class="cq-block" data-kind="comprovació">
-  <h2>Comprovar la gàbia des del client</h2>
+  <h2 id="comprovar-la-gabia-des-del-client">Comprovar la gàbia des del client</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>El fitxer és vàlid</strong> abans de recarregar res:</p>
@@ -120,7 +124,7 @@ ssh alumne1@192.168.1.8</pre>
 
 <!-- ============ BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2>Criteris professionals</h2>
+  <h2 id="criteris-professionals">Criteris professionals</h2>
   <ul>
     <li><strong>Valida sempre amb <code>sshd -t</code></strong> abans de recarregar: un
     <code>sshd_config</code> trencat et deixa fora de la màquina.</li>
@@ -136,25 +140,8 @@ ssh alumne1@192.168.1.8</pre>
 </div>
 
 <div class="cq-block" data-kind="problemes">
-  <h2>Errors habituals</h2>
+  <h2 id="errors-habituals">Errors habituals</h2>
   <dl class="cq-issues">
-<dt>vsftpd no arrenca en activar el TLS, i no diu res</dt>
-    <dd>
-      <p><span class="lbl">Causa</span> Una directiva que no existeix: <code>ssl_tlsv1_2</code> en comptes de <code>ssl_tlsv12</code>, o <code>ssl_enable=YES</code> sense les dues línies <code>rsa_</code>. Al registre només hi surt <code>status=2/INVALIDARGUMENT</code>.</p>
-      <p><span class="lbl">Solució</span> Comenta el bloc de TLS sencer, arrenca, i torna a posar les línies d'una en una fins que el servei caigui: la culpable és l'última que has escrit.</p>
-    </dd>
-
-    <dt>El client <code>ftp</code> deixa de connectar en activar el TLS</dt>
-    <dd>
-      <p><span class="lbl">Causa</span> És l'efecte buscat: aquest client no sap fer TLS i el servidor ja no accepta clar. Respon <code>530 Non-anonymous sessions must use encryption</code>.</p>
-      <p><span class="lbl">Solució</span> Fes servir <code>lftp</code>, FileZilla o qualsevol client amb suport d'FTPS.</p>
-    </dd>
-
-    <dt>El client rebutja el certificat</dt>
-    <dd>
-      <p><span class="lbl">Causa</span> És autosignat i no el signa cap autoritat coneguda.</p>
-      <p><span class="lbl">Solució</span> A l'aula, accepta'l a mà o desactiva'n la verificació al client. En producció, certificat signat.</p>
-    </dd>
 
     <dt>L'SFTP es tanca just després d'autenticar</dt>
     <dd>
@@ -171,7 +158,7 @@ ssh alumne1@192.168.1.8</pre>
 </div>
 
 <div class="cq-block" data-kind="resum">
-  <h2>Fitxa ràpida</h2>
+  <h2 id="fitxa-rapida">Fitxa ràpida</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Comanda</th><th>Per a què serveix</th></tr></thead>

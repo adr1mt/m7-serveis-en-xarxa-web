@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA2 · G2.1</div>
   <h1>Guia: BIND 9</h1>
   <p class="lede">El resolutor, les zones pròpies i el servidor secundari.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</a></li><li><a href="#per-que-bind">Per què BIND</a></li><li><a href="#on-es-cada-cosa">On és cada cosa</a></li><li><a href="#les-cinc-directives-que-has-de-decidir">Les cinc directives que has de decidir</a></li><li><a href="#un-resolutor-per-a-la-xarxa-192-168-1-0-24">Un resolutor per a la xarxa 192.168.1.0/24</a></li><li><a href="#forwarders-quan-si-i-quan-no">Forwarders: quan sí i quan no</a></li><li><a href="#muntar-el-resolutor">Muntar el resolutor</a></li><li><a href="#declarar-les-zones">Declarar les zones</a></li><li><a href="#fitxer-de-zona-directa">Fitxer de zona directa</a></li><li><a href="#el-punt-final-no-es-decoracio">El punt final no és decoració</a></li><li><a href="#fitxer-de-zona-inversa">Fitxer de zona inversa</a></li><li><a href="#crear-i-comprovar-una-zona">Crear i comprovar una zona</a></li><li><a href="#les-dues-declaracions">Les dues declaracions</a></li><li><a href="#muntar-un-secundari">Muntar un secundari</a></li><li><a href="#comprovar-ho-des-d-un-client-no-des-del-servidor">Comprovar-ho des d&#x27;un client, no des del servidor</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#fitxa-rapida">Fitxa ràpida</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què hi ha en aquesta guia</h2>
+  <h2 id="que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</h2>
   <p>Documentació oficial: <a href="https://bind9.readthedocs.io">bind9.readthedocs.io</a></p>
   <ul>
     <li>Punt de partida: Ubuntu Server amb IP fixa a la targeta interna.</li>
@@ -36,7 +40,7 @@
 
 <!-- ============ 2 · QUÈ ÉS BIND ============ -->
 <div class="cq-block" data-kind="referència">
-  <h2>Per què BIND</h2>
+  <h2 id="per-que-bind">Per què BIND</h2>
   <p>
     <strong>BIND</strong> (<em>Berkeley Internet Name Domain</em>) és el servidor DNS més
     utilitzat de la història d'Internet, i el que fan servir bona part dels servidors arrel. El
@@ -56,7 +60,7 @@
 
 <!-- ============ 3 · ELS FITXERS ============ -->
 <div class="cq-block" data-kind="referència">
-  <h2>On és cada cosa</h2>
+  <h2 id="on-es-cada-cosa">On és cada cosa</h2>
   <p>
     Tot viu a <code>/etc/bind/</code>. El fitxer principal, <code>named.conf</code>, gairebé no
     té contingut: només inclou els altres tres. Tu no el tocaràs mai.
@@ -80,7 +84,7 @@
 
 <!-- ============ 4 · LES OPCIONS ============ -->
 <div class="cq-block" data-kind="referència">
-  <h2>Les cinc directives que has de decidir</h2>
+  <h2 id="les-cinc-directives-que-has-de-decidir">Les cinc directives que has de decidir</h2>
   <p>
     Tot això va dins del bloc <code>options</code> de <code>named.conf.options</code>. Són poques
     i totes tenen conseqüències de seguretat.
@@ -105,7 +109,7 @@
 
 <!-- ============ 5 · EXEMPLE ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h2>Un resolutor per a la xarxa 192.168.1.0/24</h2>
+  <h2 id="un-resolutor-per-a-la-xarxa-192-168-1-0-24">Un resolutor per a la xarxa 192.168.1.0/24</h2>
   <p>Aquest és el fitxer sencer d'un servidor que dona servei només a la seva xarxa interna:</p>
 <pre>acl interna { 192.168.1.0/24; localhost; };
 
@@ -131,7 +135,7 @@ options {
 
 <!-- ============ 6 · FORWARDERS O ARREL ============ -->
 <div class="cq-block" data-kind="observació">
-  <h2>Forwarders: quan sí i quan no</h2>
+  <h2 id="forwarders-quan-si-i-quan-no">Forwarders: quan sí i quan no</h2>
   <p>
     Sense <code>forwarders</code>, el teu BIND resol pel seu compte: comença pels servidors arrel
     i va baixant per l'arbre. Funciona i és el més independent.
@@ -149,7 +153,7 @@ options {
 
 <!-- ============ 8 · PAS A PAS ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h2>Muntar el resolutor</h2>
+  <h2 id="muntar-el-resolutor">Muntar el resolutor</h2>
   <p>
     Amb una màquina que ja tingui IP fixa a <code>personal1</code>: un servidor DNS no pot
     escoltar per una targeta sense adreça.
@@ -188,12 +192,9 @@ sudo ss -ulnp | grep :53</pre>
 
     <li>
       <p><strong>Pregunta-li a ell</strong>, primer des del mateix servidor i després des del client:</p>
-<pre>dig @127.0.0.1 www.upc.edu +short
-dig @192.168.1.8 www.upc.edu +short</pre>
-      <p>
-        Repeteix la consulta: la segona vegada el <code>Query time</code> ha de ser molt més
-        petit. Això és la memòria cau treballant.
-      </p>
+<pre>dig @127.0.0.1 www.upc.edu
+dig @192.168.1.8 www.upc.edu</pre>
+      <p>Repeteix la consulta i compara Query time a la sortida completa. La cau pot reduir el temps, però no ho garanteix; registra els valors observats, el servidor consultat i el moment de la prova.</p>
     </li>
   </ol>
 
@@ -207,7 +208,7 @@ dig @192.168.1.8 www.upc.edu +short</pre>
 
 <!-- ============ 3 · DECLARAR-LES ============ -->
 <div class="cq-block" data-kind="referència">
-  <h2>Declarar les zones</h2>
+  <h2 id="declarar-les-zones">Declarar les zones</h2>
   <p>
     Les zones es declaren a <code>named.conf.local</code>. Cada declaració diu tres coses: com es
     diu la zona, quin paper hi fa aquest servidor i on són les dades.
@@ -230,7 +231,7 @@ zone "1.168.192.in-addr.arpa" {
 
 <!-- ============ 5 · EXEMPLE DIRECTA ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h2>Fitxer de zona directa</h2>
+  <h2 id="fitxer-de-zona-directa">Fitxer de zona directa</h2>
   <p>Per a <code>adria.internal</code>, amb el servidor a la <code>192.168.1.8</code>:</p>
 <pre>$TTL 600
 @   IN  SOA ns1.adria.internal. admin.adria.internal. (
@@ -257,7 +258,7 @@ correu  IN  A       192.168.1.9
 
 <!-- ============ 6 · EL PUNT FINAL ============ -->
 <div class="cq-block" data-kind="recordatori">
-  <h2>El punt final no és decoració</h2>
+  <h2 id="el-punt-final-no-es-decoracio">El punt final no és decoració</h2>
   <p>
     Un nom acabat en punt és <strong>absolut</strong>: es fa servir tal com és. Un nom sense punt
     és <strong>relatiu</strong>: BIND hi enganxa el nom de la zona al darrere.
@@ -272,7 +273,7 @@ correu  IN  A       192.168.1.9
 
 <!-- ============ 8 · EXEMPLE INVERSA ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h2>Fitxer de zona inversa</h2>
+  <h2 id="fitxer-de-zona-inversa">Fitxer de zona inversa</h2>
   <p>Les mateixes màquines, al revés. Aquí el número de l'esquerra és l'últim octet:</p>
 <pre>$TTL 600
 @   IN  SOA ns1.adria.internal. admin.adria.internal. (
@@ -291,7 +292,7 @@ correu  IN  A       192.168.1.9
 
 <!-- ============ 9 · PAS A PAS ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h2>Crear i comprovar una zona</h2>
+  <h2 id="crear-i-comprovar-una-zona">Crear i comprovar una zona</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Crea la carpeta</strong> de les teves zones:</p>
@@ -327,7 +328,7 @@ dig @192.168.1.8 -x 192.168.1.8 +short</pre>
 
 <!-- ============ 5 · EXEMPLE ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h2>Les dues declaracions</h2>
+  <h2 id="les-dues-declaracions">Les dues declaracions</h2>
   <p>Al <strong>primari</strong>, s'autoritza qui es pot endur la zona i a qui s'avisa:</p>
 <pre>zone "adria.internal" {
     type primary;
@@ -349,7 +350,7 @@ dig @192.168.1.8 -x 192.168.1.8 +short</pre>
 
 <!-- ============ 7 · PAS A PAS ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h2>Muntar un secundari</h2>
+  <h2 id="muntar-un-secundari">Muntar un secundari</h2>
   <p>Amb dues màquines a la mateixa xarxa: la teva com a primari i una altra com a secundari.</p>
 
   <ol class="cq-steps">
@@ -403,7 +404,7 @@ dig @192.168.1.9 www.adria.internal +short</pre>
 
 <!-- ============ COMPROVACIÓ ============ -->
 <div class="cq-block" data-kind="comprovació">
-  <h2>Comprovar-ho des d'un client, no des del servidor</h2>
+  <h2 id="comprovar-ho-des-d-un-client-no-des-del-servidor">Comprovar-ho des d'un client, no des del servidor</h2>
   <p>
     Que el servidor es respongui a si mateix no vol dir que doni servei. Aquesta prova es fa
     des d'una altra màquina de la xarxa.
@@ -432,7 +433,7 @@ dig @192.168.1.9 adria.internal SOA +short</pre>
 
 <!-- ============ BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2>Criteris professionals</h2>
+  <h2 id="criteris-professionals">Criteris professionals</h2>
   <ul>
     <li><strong>Còpia de l'original</strong> abans de la primera edició, sempre.</li>
     <li><strong><code>named-checkconf</code> i <code>named-checkzone</code></strong> abans de recarregar.</li>
@@ -444,7 +445,7 @@ dig @192.168.1.9 adria.internal SOA +short</pre>
 
 <!-- ============ PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Errors habituals</h2>
+  <h2 id="errors-habituals">Errors habituals</h2>
   <dl class="cq-issues">
 <dt>El servei no arrenca</dt>
     <dd>
@@ -504,7 +505,7 @@ dig @192.168.1.9 adria.internal SOA +short</pre>
 
 <!-- ============ RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h2>Fitxa ràpida</h2>
+  <h2 id="fitxa-rapida">Fitxa ràpida</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Comanda</th><th>Per a què serveix</th></tr></thead>

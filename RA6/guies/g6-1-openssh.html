@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA6 · G6.1</div>
   <h1>Guia: OpenSSH</h1>
   <p class="lede">Manual de configuració del servidor SSH, del servei a l'accés per clau.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</a></li><li><a href="#installar-i-comprovar-el-servei">Instal·lar i comprovar el servei</a></li><li><a href="#primera-connexio-des-del-client">Primera connexió des del client</a></li><li><a href="#entrar-sense-contrasenya">Entrar sense contrasenya</a></li><li><a href="#directives-de-sshd-config">Directives de sshd_config</a></li><li><a href="#aplicar-canvis-sense-quedar-se-fora">Aplicar canvis sense quedar-se fora</a></li><li><a href="#missatge-d-avis-i-de-benvinguda">Missatge d&#x27;avís i de benvinguda</a></li><li><a href="#tunel-local-a-un-port-intern">Túnel local a un port intern</a></li><li><a href="#comprovar-ho-de-conjunt-des-del-client">Comprovar-ho de conjunt des del client</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#fitxa-rapida">Fitxa ràpida</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què hi ha en aquesta guia</h2>
+  <h2 id="que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</h2>
   <p>Documentació oficial: <a href="https://www.openssh.com/manual.html">openssh.com/manual.html</a>,
   i la <a href="https://documentation.ubuntu.com/server/how-to/security/openssh-server/">guia
   d'OpenSSH Server d'Ubuntu</a>.</p>
@@ -37,7 +41,7 @@
 
 <!-- ============ 2 · PAS A PAS · EL SERVEI ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h2>Instal·lar i comprovar el servei</h2>
+  <h2 id="installar-i-comprovar-el-servei">Instal·lar i comprovar el servei</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Instal·la el paquet del servidor:</strong></p>
@@ -67,7 +71,7 @@ systemctl is-active ssh.socket
 
 <!-- ============ 3 · PAS A PAS · PRIMERA CONNEXIÓ ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h2>Primera connexió des del client</h2>
+  <h2 id="primera-connexio-des-del-client">Primera connexió des del client</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Connecta't</strong> amb l'usuari i la IP del servidor (<code>ip -brief a</code>
@@ -88,7 +92,7 @@ systemctl is-active ssh.socket
 
 <!-- ============ 4 · PAS A PAS · AUTENTICACIÓ PER CLAU ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h2>Entrar sense contrasenya</h2>
+  <h2 id="entrar-sense-contrasenya">Entrar sense contrasenya</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Genera un parell de claus al client</strong>, sense contrasenya de pas per
@@ -118,7 +122,7 @@ chmod 600 ~/.ssh/authorized_keys</pre>
 
 <!-- ============ 5 · REFERÈNCIA · SSHD_CONFIG ============ -->
 <div class="cq-block" data-kind="referència">
-  <h2>Directives de sshd_config</h2>
+  <h2 id="directives-de-sshd-config">Directives de sshd_config</h2>
   <p>
     Totes viuen a <code>/etc/ssh/sshd_config</code>, però abans de tocar-lo cal mirar
     <code>/etc/ssh/sshd_config.d/</code>: una línia <code>Include</code>, gairebé al principi
@@ -168,7 +172,7 @@ chmod 600 ~/.ssh/authorized_keys</pre>
 
 <!-- ============ 6 · PAS A PAS · APLICAR CANVIS ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h2>Aplicar canvis sense quedar-se fora</h2>
+  <h2 id="aplicar-canvis-sense-quedar-se-fora">Aplicar canvis sense quedar-se fora</h2>
   <p>
     És el pas més important de la guia: un canvi mal fet en una sessió remota et pot deixar
     sense manera d'entrar.
@@ -181,9 +185,7 @@ chmod 600 ~/.ssh/authorized_keys</pre>
       que no detecta el problema del pas següent.</p>
     </li>
     <li>
-      <p><strong>Per canviar el port</strong>, editar <code>Port</code> a
-      <code>sshd_config</code> no fa <strong>res</strong>: qui escolta és
-      <code>ssh.socket</code>. Cal un fitxer de socket propi:</p>
+      <p><strong>Per canviar el port:</strong> Ubuntu incorpora un generador de systemd que llegeix Port i ListenAddress de la configuració SSH. No és correcte dir que Port sempre s’ignora. En aquesta guia fem servir un override explícit de ssh.socket; inspecciona la unitat efectiva i evita mantenir valors contradictoris a sshd_config.</p>
 <pre>sudo mkdir -p /etc/systemd/system/ssh.socket.d
 sudo tee /etc/systemd/system/ssh.socket.d/port.conf &lt;&lt;'EOF'
 [Socket]
@@ -222,7 +224,7 @@ sudo ss -lntp | grep -E ":(22|2222) "</pre>
 
 <!-- ============ 7 · PAS A PAS · BANNER I MOTD ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h2>Missatge d'avís i de benvinguda</h2>
+  <h2 id="missatge-d-avis-i-de-benvinguda">Missatge d'avís i de benvinguda</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Banner, abans d'autenticar-se.</strong> Escriu el missatge a
@@ -245,7 +247,7 @@ sudo systemctl reload ssh</pre>
 
 <!-- ============ 8 · PAS A PAS · TÚNEL LOCAL ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h2>Túnel local a un port intern</h2>
+  <h2 id="tunel-local-a-un-port-intern">Túnel local a un port intern</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Un servei que només escolta a <code>127.0.0.1</code> del servidor</strong> (una
@@ -260,7 +262,8 @@ sudo systemctl reload ssh</pre>
 
 <!-- ============ 9 · COMPROVACIÓ ============ -->
 <div class="cq-block" data-kind="comprovació">
-  <h2>Comprovar-ho de conjunt des del client</h2>
+  <h2 id="comprovar-ho-de-conjunt-des-del-client">Comprovar-ho de conjunt des del client</h2>
+<p>Repeteix l’accés amb el port nou després de reiniciar la VM. Comprova també la unitat efectiva amb <code>systemctl cat ssh.socket</code> i registra la versió del paquet. <a href="https://discourse.ubuntu.com/t/sshd-now-uses-socket-based-activation-ubuntu-22-10-and-later/30189">Ubuntu: socket i generador</a>. Aquesta revisió documental no substitueix la prova en la imatge objectiu.</p>
   <ol class="cq-steps">
     <li><p>Entra amb clau, sense contrasenya:
       <code>ssh -p PORT usuari@IP-DEL-SERVIDOR</code>.</p></li>
@@ -272,7 +275,7 @@ sudo systemctl reload ssh</pre>
 
 <!-- ============ 10 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2>Criteris professionals</h2>
+  <h2 id="criteris-professionals">Criteris professionals</h2>
   <ul>
     <li><strong>Mai tanquis l'única sessió oberta</strong> fins a confirmar-ne una de nova amb la
     configuració aplicada.</li>
@@ -286,13 +289,11 @@ sudo systemctl reload ssh</pre>
 
 <!-- ============ 11 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Errors habituals</h2>
+  <h2 id="errors-habituals">Errors habituals</h2>
   <dl class="cq-issues">
     <dt>He canviat el Port a sshd_config i segueix escoltant al 22</dt>
     <dd>
-      <p><span class="lbl">Causa</span> SSH arrenca per activació de socket:
-      <code>ssh.socket</code> ja té el port fixat abans que <code>sshd</code> arribi a llegir
-      <code>Port</code>. <code>sudo sshd -t</code> no ho detecta perquè no coneix el socket.</p>
+      <p><span class="lbl">Causa</span> Pot faltar regenerar i reiniciar el socket, o hi pot haver un override que fixi un altre port. El generador d’Ubuntu llegeix la configuració SSH; sshd -t valida la sintaxi però no prova el port que està escoltant. Revisa la configuració efectiva de servei i socket.</p>
       <p><span class="lbl">Solució</span> Sobreescriu <code>ListenStream</code> a
       <code>port.conf</code> del directori <code>ssh.socket.d</code> i reinicia
       <code>ssh.socket</code>, com al pas 6.</p>
@@ -331,7 +332,7 @@ sudo systemctl reload ssh</pre>
 
 <!-- ============ 12 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h2>Fitxa ràpida</h2>
+  <h2 id="fitxa-rapida">Fitxa ràpida</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Què</th><th>On</th></tr></thead>

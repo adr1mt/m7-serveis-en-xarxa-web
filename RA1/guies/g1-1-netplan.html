@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · G1.1</div>
   <h1>Guia: Netplan</h1>
   <p class="lede">Configurar les targetes de xarxa d'un Ubuntu Server.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</a></li><li><a href="#netplan-on-s-escriu-la-configuracio">Netplan: on s&#x27;escriu la configuració</a></li><li><a href="#un-fitxer-amb-les-dues-targetes">Un fitxer amb les dues targetes</a></li><li><a href="#si-a-etc-netplan-ja-hi-ha-un-fitxer-que-passa-amb-el-teu">Si a /etc/netplan/ ja hi ha un fitxer, què passa amb el teu?</a></li><li><a href="#la-porta-d-enllac-va-en-un-sol-lloc">La porta d&#x27;enllaç va en un sol lloc</a></li><li><a href="#canviar-la-xarxa-en-remot-es-arriscat">Canviar la xarxa en remot és arriscat</a></li><li><a href="#que-hi-ha-sota-netplan">Què hi ha sota Netplan</a></li><li><a href="#configurar-les-dues-targetes">Configurar les dues targetes</a></li><li><a href="#comprovar-que-la-xarxa-ha-quedat-com-volies">Comprovar que la xarxa ha quedat com volies</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#resum">Resum</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què hi ha en aquesta guia</h2>
+  <h2 id="que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</h2>
   <p>Documentació oficial: <a href="https://netplan.readthedocs.io">netplan.readthedocs.io</a></p>
   <ul>
     <li>Punt de partida: Ubuntu Server amb dues targetes, <code>enp1s0</code> i <code>enp2s0</code>.</li>
@@ -35,7 +39,7 @@
 
 <!-- ============ 3 · NETPLAN ============ -->
 <div class="cq-block" data-kind="referència">
-  <h2>Netplan: on s'escriu la configuració</h2>
+  <h2 id="netplan-on-s-escriu-la-configuracio">Netplan: on s'escriu la configuració</h2>
   <p>
     A Ubuntu Server la xarxa es configura amb <strong>Netplan</strong>. Tu escrius un fitxer
     <strong>YAML</strong> a <code>/etc/netplan/</code> i Netplan tradueix aquestes instruccions
@@ -56,7 +60,7 @@
 
 <!-- ============ 4 · EXEMPLE ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h2>Un fitxer amb les dues targetes</h2>
+  <h2 id="un-fitxer-amb-les-dues-targetes">Un fitxer amb les dues targetes</h2>
   <p>
     <code>enp1s0</code> per DHCP i <code>enp2s0</code> amb IP fixa. És exactament l'escenari
     que faràs servir a totes les activitats:
@@ -83,7 +87,7 @@
 
 <!-- ============ 4b · MÉS D'UN FITXER ============ -->
 <div class="cq-block" data-kind="observació">
-  <h2>Si a /etc/netplan/ ja hi ha un fitxer, què passa amb el teu?</h2>
+  <h2 id="si-a-etc-netplan-ja-hi-ha-un-fitxer-que-passa-amb-el-teu">Si a /etc/netplan/ ja hi ha un fitxer, què passa amb el teu?</h2>
   <p>
     El nom del que hi trobis depèn de la instal·lació:
     <code>00-installer-config.yaml</code> el deixa l'instal·lador d'Ubuntu Server,
@@ -105,12 +109,8 @@
 
 <!-- ============ 5 · LA PORTA D'ENLLAÇ ============ -->
 <div class="cq-block" data-kind="referència">
-  <h2>La porta d'enllaç va en un sol lloc</h2>
-  <p>
-    T'hauràs fixat que a <code>enp2s0</code> no hi ha cap porta d'enllaç. No és cap oblit:
-    <strong>un equip només té una ruta per defecte</strong>, i aquí ja la dona el DHCP per
-    <code>enp1s0</code>, que és per on hi ha Internet.
-  </p>
+  <h2 id="la-porta-d-enllac-va-en-un-sol-lloc">La porta d'enllaç va en un sol lloc</h2>
+  <p>En aquesta topologia volem <strong>una sortida preferent</strong>: el DHCP de la targeta externa aporta la ruta per defecte. No en posem cap a personal1. Un equip pot tenir diverses rutes per defecte amb mètriques o taules diferents; això requereix un disseny explícit.</p>
   <p>Si en algun cas l'has d'escriure a mà, la sintaxi actual és aquesta:</p>
 <pre>      routes:
         - to: default
@@ -123,7 +123,7 @@
 
 <!-- ============ 6 · RECORDATORI ============ -->
 <div class="cq-block" data-kind="recordatori">
-  <h2>Canviar la xarxa en remot és arriscat</h2>
+  <h2 id="canviar-la-xarxa-en-remot-es-arriscat">Canviar la xarxa en remot és arriscat</h2>
   <p>
     Si configures la xarxa per SSH, un error et pot tallar la connexió i deixar-te fora sense
     manera de tornar a entrar. Fes servir sempre <code>sudo netplan try</code>: aplica els
@@ -134,7 +134,7 @@
 
 <!-- ============ 8 · SOTA NETPLAN ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h2>Què hi ha sota Netplan</h2>
+  <h2 id="que-hi-ha-sota-netplan">Què hi ha sota Netplan</h2>
   <p>
     Netplan no fa la feina: la reparteix. Quan executes <code>netplan apply</code>, genera
     fitxers <code>.network</code> dins de <code>/run/systemd/network/</code> i qui els llegeix
@@ -152,7 +152,7 @@ cat /run/systemd/network/*enp2s0*</pre>
 
 <!-- ============ 7 · PAS A PAS ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h2>Configurar les dues targetes</h2>
+  <h2 id="configurar-les-dues-targetes">Configurar les dues targetes</h2>
 
   <ol class="cq-steps">
     <li>
@@ -200,7 +200,7 @@ resolvectl status</pre>
 
 <!-- ============ COMPROVACIÓ ============ -->
 <div class="cq-block" data-kind="comprovació">
-  <h2>Comprovar que la xarxa ha quedat com volies</h2>
+  <h2 id="comprovar-que-la-xarxa-ha-quedat-com-volies">Comprovar que la xarxa ha quedat com volies</h2>
   <p>Tres ordres, i cadascuna respon una pregunta diferent.</p>
   <ol class="cq-steps">
     <li>
@@ -223,7 +223,7 @@ resolvectl status</pre>
 
 <!-- ============ 9 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2>Criteris professionals</h2>
+  <h2 id="criteris-professionals">Criteris professionals</h2>
   <ul>
     <li><strong>Un sol fitxer</strong> de Netplan per màquina, amb totes les targetes. Diversos fitxers es trepitgen entre ells.</li>
     <li><strong><code>netplan try</code>, mai <code>netplan apply</code></strong>, quan treballis per SSH.</li>
@@ -235,7 +235,7 @@ resolvectl status</pre>
 
 <!-- ============ 10 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Errors habituals</h2>
+  <h2 id="errors-habituals">Errors habituals</h2>
   <dl class="cq-issues">
     <dt>Error de sintaxi en aplicar</dt>
     <dd>
@@ -245,7 +245,7 @@ resolvectl status</pre>
 
     <dt>La targeta no agafa la IP fixa</dt>
     <dd>
-      <p><span class="lbl">Causa</span> Falta <code>dhcp4: false</code>, i el DHCP li està sobreescrivint la teva adreça.</p>
+      <p><span class="lbl">Causa</span> La interfície pot tenir DHCP activat i una adreça estàtica alhora, o acumular adreces de diversos fitxers. DHCP no substitueix necessàriament l’adreça fixa. Revisa la configuració fusionada i el gestor de la interfície.</p>
       <p><span class="lbl">Solució</span> Afegeix-lo i torna a aplicar. Comprova-ho amb <code>networkctl status enp2s0</code>.</p>
     </dd>
 
@@ -265,12 +265,12 @@ resolvectl status</pre>
 
 <!-- ============ 11 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h2>Resum</h2>
+  <h2 id="resum">Resum</h2>
   <ul>
     <li>Configuració <strong>fixa</strong> per a servidors i impressores; <strong>automàtica</strong> per a la resta.</li>
     <li>Netplan escriu a <code>/etc/netplan/*.yaml</code>; qui gestiona la xarxa és <strong>systemd-networkd</strong>.</li>
     <li>Indentació amb <strong>espais</strong>, mai tabuladors.</li>
-    <li>La ruta <strong>per defecte és única</strong> per màquina.</li>
+    <li>En aquesta topologia hi ha <strong>una sortida preferent</strong> per la interfície externa.</li>
     <li>Per SSH, sempre <code>netplan try</code>.</li>
   </ul>
 

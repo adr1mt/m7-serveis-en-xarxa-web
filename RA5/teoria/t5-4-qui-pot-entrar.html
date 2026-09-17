@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA5 · T5.4</div>
   <h1>Qui pot entrar al web</h1>
   <p class="lede">Qui ets i què pots veure són dues preguntes diferents.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-sabras-fer-en-acabar">Què sabràs fer en acabar</a></li><li><a href="#autenticacio-i-autoritzacio">Autenticació i autorització</a></li><li><a href="#autenticacio-basica-http">Autenticació bàsica HTTP</a></li><li><a href="#restriccio-per-adreca-d-origen">Restricció per adreça d&#x27;origen</a></li><li><a href="#grups-d-usuaris">Grups d&#x27;usuaris</a></li><li><a href="#protegir-una-carpeta-no-protegeix-la-resta">Protegir una carpeta no protegeix la resta</a></li><li><a href="#zona-d-administracio-combinada">Zona d&#x27;administració combinada</a></li><li><a href="#veure-el-401-i-la-capcalera-d-autenticacio">Veure el 401 i la capçalera d&#x27;autenticació</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#resum">Resum</a></li><li><a href="#comprova-el-que-has-apres">Comprova el que has après</a></li><li><a href="#al-curriculum">Al currículum</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què sabràs fer en acabar</h2>
+  <h2 id="que-sabras-fer-en-acabar">Què sabràs fer en acabar</h2>
   <ul>
     <li>Distingir autenticació d'autorització.</li>
     <li>Explicar com funciona l'autenticació bàsica HTTP i per què necessita HTTPS.</li>
@@ -36,7 +40,7 @@
 
 <!-- ============ 2 · AUTENTICACIÓ I AUTORITZACIÓ ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Autenticació i autorització</h2>
+  <h2 id="autenticacio-i-autoritzacio">Autenticació i autorització</h2>
   <p>
     <strong>Autenticació</strong> respon «qui ets»: el servidor demana una credencial i la
     comprova. <strong>Autorització</strong> respon «què pots veure», un cop ja se sap qui ets. Un
@@ -56,7 +60,7 @@
 
 <!-- ============ 3 · AUTENTICACIÓ BÀSICA HTTP ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Autenticació bàsica HTTP</h2>
+  <h2 id="autenticacio-basica-http">Autenticació bàsica HTTP</h2>
   <p>
     Quan un client demana un recurs protegit, el servidor respon <strong>401</strong> i el
     navegador mostra un diàleg d'usuari i contrasenya. Les credencials viatgen codificades en
@@ -67,7 +71,7 @@
 
 <!-- ============ 4 · RESTRICCIÓ PER ADREÇA ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Restricció per adreça d'origen</h2>
+  <h2 id="restriccio-per-adreca-d-origen">Restricció per adreça d'origen</h2>
   <p>
     Un servidor pot permetre o denegar l'accés segons la IP d'origen de la petició. És útil per
     limitar un recurs a una xarxa interna, però és una protecció <strong>feble</strong>: una IP
@@ -78,7 +82,7 @@
 
 <!-- ============ 5 · GRUPS ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Grups d'usuaris</h2>
+  <h2 id="grups-d-usuaris">Grups d'usuaris</h2>
   <p>
     Quan diverses zones protegides han d'admetre el mateix conjunt de persones, es defineixen
     <strong>grups</strong>: es dóna accés al grup, no a cada usuari repetit a cada zona. Afegir o
@@ -88,7 +92,7 @@
 
 <!-- ============ 6 · EXEMPLE ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h2>Protegir una carpeta no protegeix la resta</h2>
+  <h2 id="protegir-una-carpeta-no-protegeix-la-resta">Protegir una carpeta no protegeix la resta</h2>
   <p>
     Restringir l'accés a una carpeta concreta del lloc no fa que la resta del web quedi protegit:
     cada zona necessita la seva pròpia regla d'autenticació o autorització. Un directori sense
@@ -98,7 +102,7 @@
 
 <!-- ============ 7 · CAS REAL ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h2>Zona d'administració combinada</h2>
+  <h2 id="zona-d-administracio-combinada">Zona d'administració combinada</h2>
   <p>
     Un panell d'administració intern sol combinar les dues coses: autenticació bàsica per saber
     qui hi entra i restricció per adreça perquè, encara que algú robi una contrasenya, només la
@@ -108,7 +112,7 @@
 
 <!-- ============ 8 · OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h2>Veure el 401 i la capçalera d'autenticació</h2>
+  <h2 id="veure-el-401-i-la-capcalera-d-autenticacio">Veure el 401 i la capçalera d'autenticació</h2>
   <p>
     <code>curl -I</code> contra una zona protegida mostra el codi 401 i la capçalera que indica
     quin tipus d'autenticació espera el servidor:
@@ -120,7 +124,7 @@
 
 <!-- ============ 9 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2>Criteris professionals</h2>
+  <h2 id="criteris-professionals">Criteris professionals</h2>
   <ul>
     <li>Autenticació bàsica, sempre amb <strong>HTTPS</strong> per davant.</li>
     <li>Restricció per IP com a capa extra, mai com a única protecció.</li>
@@ -130,7 +134,7 @@
 
 <!-- ============ 10 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Errors habituals</h2>
+  <h2 id="errors-habituals">Errors habituals</h2>
   <dl class="cq-issues">
     <dt>Confiar només en la restricció per IP</dt>
     <dd>
@@ -154,7 +158,7 @@
 
 <!-- ============ 11 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h2>Resum</h2>
+  <h2 id="resum">Resum</h2>
   <ul>
     <li><strong>Autenticació</strong>: qui ets. <strong>Autorització</strong>: què pots veure.</li>
     <li>Autenticació bàsica: 401 i credencials codificades, no xifrades. Cal HTTPS.</li>
@@ -167,9 +171,9 @@
 
 <!-- ============ 12 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h2>Comprova el que has après</h2>
+  <h2 id="comprova-el-que-has-apres">Comprova el que has après</h2>
 
-  <div class="cq-question" data-id="t5-4-autent-autor" data-type="single">
+  <div class="cq-question" data-id="t5-4-autent-autor" data-type="single" data-explanation="Autenticar identifica qui entra; autoritzar decideix què pot fer aquella identitat.">
     <div class="statement">Quina és la diferència entre autenticació i autorització?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">L'autenticació diu qui ets; l'autorització, què pots veure</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Són dos noms per a la mateixa cosa</button>
@@ -179,7 +183,7 @@
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t5-4-basica" data-type="single">
+  <div class="cq-question" data-id="t5-4-basica" data-type="single" data-explanation="L’autenticació bàsica no xifra la credencial; necessita HTTPS per protegir el transport.">
     <div class="statement">Per què l'autenticació bàsica HTTP necessita anar sempre amb HTTPS?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè el 401 només funciona sobre TLS</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Perquè les credencials viatgen codificades, no xifrades</button>
@@ -189,7 +193,7 @@
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t5-4-ip" data-type="single">
+  <div class="cq-question" data-id="t5-4-ip" data-type="single" data-explanation="Una IP identifica l’origen de la connexió, no necessàriament una persona.">
     <div class="statement">Per què la restricció per adreça d'origen és una protecció feble?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè no funciona amb HTTPS</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Perquè una IP identifica una màquina o xarxa, no una persona</button>
@@ -199,7 +203,7 @@
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t5-4-grups" data-type="single">
+  <div class="cq-question" data-id="t5-4-grups" data-type="single" data-explanation="Els grups permeten assignar permisos a diversos comptes sense repetir regles individuals.">
     <div class="statement">Per a què serveixen els grups d'usuaris en el control d'accés?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Per xifrar les credencials</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Per no repetir la llista d'usuaris a cada zona protegida</button>
@@ -213,7 +217,7 @@
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h2>Al currículum</h2>
+  <h2 id="al-curriculum">Al currículum</h2>
   <p><span class="lbl">Contingut 5.2</span> Accés anònim i autenticat. Mètodes d'autenticació.</p>
   <p><span class="lbl">CA 5.5</span> Configura la seguretat del servidor.</p>
 </div>

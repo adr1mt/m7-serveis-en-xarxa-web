@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA2 · A2.3</div>
   <h1>DHCP i DNS treballant junts</h1>
   <p class="lede">El client s'endolla, rep adreça i DNS, resol els teus noms i surt a Internet.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-has-de-saber-abans-de-comencar">Què has de saber abans de començar</a></li><li><a href="#amb-que-treballaras">Amb què treballaràs</a></li><li><a href="#que-has-de-fer">Què has de fer</a></li><li><a href="#d-on-has-de-treure-cada-cosa">D&#x27;on has de treure cada cosa</a></li><li><a href="#dos-serveis-la-mateixa-regla">Dos serveis, la mateixa regla</a></li><li><a href="#els-dos-serveis-s-han-de-posar-d-acord">Els dos serveis s&#x27;han de posar d&#x27;acord</a></li><li><a href="#com-sabras-que-ho-has-fet-be">Com sabràs que ho has fet bé</a></li><li><a href="#si-alguna-cosa-no-va">Si alguna cosa no va</a></li><li><a href="#que-has-d-entregar">Què has d&#x27;entregar</a></li><li><a href="#al-curriculum">Al currículum</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què has de saber abans de començar</h2>
+  <h2 id="que-has-de-saber-abans-de-comencar">Què has de saber abans de començar</h2>
   <p>
     Del <a class="cq-ref" href="../../RA1/index.html">RA1</a>: <a class="cq-ref" href="../../RA1/teoria/t1-2-encaminament-nat.html">T1.2</a> (encaminament i NAT) i les guies
     <a class="cq-ref" href="../../RA1/guies/g1-2-kea.html">G1.2</a> i <a class="cq-ref" href="../../RA1/guies/g1-3-nftables.html">G1.3</a>. D'aquest RA: <a class="cq-ref" href="../teoria/t2-3-zones-i-registres.html">T2.3</a>, la guia <a class="cq-ref" href="../guies/g2-1-bind9.html">G2.1</a> i tenir feta l'activitat <a class="cq-ref" href="a2-2-servidor-bind.html">A2.2</a>.
@@ -39,7 +43,7 @@
 
 <!-- ============ ESCENARI ============ -->
 <div class="cq-block" data-kind="escenari">
-  <h2>Amb què treballaràs</h2>
+  <h2 id="amb-que-treballaras">Amb què treballaràs</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Màquina</th><th>Targetes</th><th>Paper</th></tr></thead>
@@ -58,7 +62,7 @@
 
 <!-- ============ ENUNCIAT ============ -->
 <div class="cq-block" data-kind="enunciat">
-  <h2>Què has de fer</h2>
+  <h2 id="que-has-de-fer">Què has de fer</h2>
   <ol>
     <li>Deixar el servidor com al final de l'activitat <a class="cq-ref" href="a2-2-servidor-bind.html">A2.2</a>: <code>192.168.1.8/24</code> a <code>personal1</code> i la teva zona funcionant.</li>
     <li>Instal·lar <strong>Kea</strong> i repartir adreces per a la xarxa <code>192.168.1.0/24</code>, amb el rang que decideixis.</li>
@@ -81,7 +85,7 @@
 
 <!-- ============ ON BUSCAR ============ -->
 <div class="cq-block" data-kind="enunciat">
-  <h2>D'on has de treure cada cosa</h2>
+  <h2 id="d-on-has-de-treure-cada-cosa">D'on has de treure cada cosa</h2>
   <p>Tot això ja ho has fet abans, en activitats diferents. Aquí ho ajuntes:</p>
   <div class="cq-tablewrap">
     <table class="cq-table">
@@ -99,7 +103,7 @@
 
 <!-- ============ RECORDATORI ============ -->
 <div class="cq-block" data-kind="recordatori">
-  <h2>Dos serveis, la mateixa regla</h2>
+  <h2 id="dos-serveis-la-mateixa-regla">Dos serveis, la mateixa regla</h2>
   <p>
     Ni Kea ni BIND han d'escoltar per <code>puigcastellar1</code>. Un DHCP furtiu deixa companys
     sense adreça i un resolutor obert és un problema de seguretat. Tots dos serveis, només per
@@ -109,7 +113,7 @@
 
 <!-- ============ OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h2>Els dos serveis s'han de posar d'acord</h2>
+  <h2 id="els-dos-serveis-s-han-de-posar-d-acord">Els dos serveis s'han de posar d'acord</h2>
   <p>
     <strong>El rang i els registres no s'han de trepitjar.</strong> Si Kea pot donar la
     <code>192.168.1.20</code> a qualsevol portàtil, el nom <code>maquina1</code> apuntarà a una
@@ -124,7 +128,7 @@
 
 <!-- ============ COMPROVACIÓ ============ -->
 <div class="cq-block" data-kind="comprovació">
-  <h2>Com sabràs que ho has fet bé</h2>
+  <h2 id="com-sabras-que-ho-has-fet-be">Com sabràs que ho has fet bé</h2>
   <p>
     Abans d'entregar, has de poder respondre <strong>sí</strong> a totes aquestes preguntes, amb
     la sortida d'una comanda al davant:
@@ -140,7 +144,7 @@
 
 <!-- ============ PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Si alguna cosa no va</h2>
+  <h2 id="si-alguna-cosa-no-va">Si alguna cosa no va</h2>
   <dl class="cq-issues">
     <dt>El client rep IP i DNS correctes, però no resol els teus noms</dt>
     <dd>
@@ -170,7 +174,7 @@
 
 <!-- ============ LLIURAMENT ============ -->
 <div class="cq-block" data-kind="lliurament">
-  <h2>Què has d'entregar</h2>
+  <h2 id="que-has-d-entregar">Què has d'entregar</h2>
   <p>
     Un <strong>document tècnic</strong> on expliquis tot el que has anat fent, amb els teus
     fitxers de configuració i les captures del resultat.
@@ -184,7 +188,7 @@
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h2>Al currículum</h2>
+  <h2 id="al-curriculum">Al currículum</h2>
   <p><span class="lbl">CA 1.7</span> Integra en el servei opcions addicionals de configuració.</p>
   <p><span class="lbl">CA 2.4</span> Instal·la un servei jeràrquic de resolució de noms.</p>
   <p><span class="lbl">CA 2.8</span> Comprova el funcionament correcte del servidor.</p>

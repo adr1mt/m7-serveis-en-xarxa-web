@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA6 · T6.2</div>
   <h1>SSH per dins</h1>
   <p class="lede">Xifrat, identitat del servidor i claus: què garanteix realment SSH.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-sabras-fer-en-acabar">Què sabràs fer en acabar</a></li><li><a href="#xifrat-i-identitat-no-nomes-xifrat">Xifrat i identitat, no només xifrat</a></li><li><a href="#quan-la-clau-del-servidor-canvia">Quan la clau del servidor canvia</a></li><li><a href="#contrasenya-o-parell-de-claus">Contrasenya o parell de claus</a></li><li><a href="#ssh-transporta-mes-coses-que-una-consola">SSH transporta més coses que una consola</a></li><li><a href="#veure-la-negociacio">Veure la negociació</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#resum">Resum</a></li><li><a href="#comprova-el-que-has-apres">Comprova el que has après</a></li><li><a href="#al-curriculum">Al currículum</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què sabràs fer en acabar</h2>
+  <h2 id="que-sabras-fer-en-acabar">Què sabràs fer en acabar</h2>
   <ul>
     <li>Explicar què garanteix SSH: xifrat i comprovació de la identitat del servidor.</li>
     <li>Descriure què és <code>known_hosts</code> i per què la primera connexió pregunta.</li>
@@ -37,9 +41,9 @@
 
 <!-- ============ 2 · QUÈ GARANTEIX SSH ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Xifrat i identitat, no només xifrat</h2>
+  <h2 id="xifrat-i-identitat-no-nomes-xifrat">Xifrat i identitat, no només xifrat</h2>
   <p>
-    SSH xifra tota la sessió des del primer byte: ningú que intercepti el trànsit en pot
+    SSH xifra tota la sessió després de la identificació inicial i l'intercanvi de claus: ningú que intercepti el trànsit en pot
     llegir el contingut. Però xifrar no basta; cal saber també que et connectes al servidor
     que penses, i no a un altre que se li fa passar. SSH ho resol amb una parella de claus
     pròpia del servidor: la <strong>clau d'amfitrió</strong>.
@@ -53,7 +57,7 @@
 
 <!-- ============ 3 · QUAN LA CLAU CANVIA ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Quan la clau del servidor canvia</h2>
+  <h2 id="quan-la-clau-del-servidor-canvia">Quan la clau del servidor canvia</h2>
   <p>
     Si un dia la clau que arriba no coincideix amb la de <code>known_hosts</code>, SSH ho
     avisa amb un missatge fort i talla la connexió. Normalment vol dir que el servidor s'ha
@@ -65,7 +69,7 @@
 
 <!-- ============ 4 · CONTRASENYA O PARELL DE CLAUS ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h2>Contrasenya o parell de claus</h2>
+  <h2 id="contrasenya-o-parell-de-claus">Contrasenya o parell de claus</h2>
   <p>
     SSH admet dues maneres d'autenticar l'usuari. Amb <strong>contrasenya</strong>, la
     introdueixes a cada connexió i qualsevol que l'endevini o la robi pot entrar. Amb un
@@ -81,7 +85,7 @@
 
 <!-- ============ 5 · MÉS ENLLÀ DE LA CONSOLA ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h2>SSH transporta més coses que una consola</h2>
+  <h2 id="ssh-transporta-mes-coses-que-una-consola">SSH transporta més coses que una consola</h2>
   <p>
     La consola no és l'única cosa que viatja per SSH: el mateix canal xifrat serveix per
     copiar fitxers -com ja vas veure amb SFTP a <a class="cq-ref" href="../../RA3/teoria/t3-3-ftps-i-sftp.html">T3.3</a>- i per obrir túnels, que reenvien el
@@ -92,7 +96,7 @@
 
 <!-- ============ 6 · OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h2>Veure la negociació</h2>
+  <h2 id="veure-la-negociacio">Veure la negociació</h2>
   <p>El mode detallat del client mostra la connexió pas a pas:</p>
 <pre>ssh -v usuari@servidor
 <span class="o">debug1: Local version string SSH-2.0-OpenSSH_9.6
@@ -106,7 +110,7 @@ debug1: Authentications that can continue: publickey,password</span></pre>
 
 <!-- ============ 7 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2>Criteris professionals</h2>
+  <h2 id="criteris-professionals">Criteris professionals</h2>
   <ul>
     <li>Comprova sempre l'empremta abans d'acceptar-la la primera vegada.</li>
     <li>Prefereix clau per damunt de contrasenya sempre que es pugui.</li>
@@ -116,7 +120,7 @@ debug1: Authentications that can continue: publickey,password</span></pre>
 
 <!-- ============ 8 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Errors habituals</h2>
+  <h2 id="errors-habituals">Errors habituals</h2>
   <dl class="cq-issues">
     <dt>Acceptar sense comprovar un avís de canvi de clau d'amfitrió</dt>
     <dd>
@@ -140,7 +144,7 @@ debug1: Authentications that can continue: publickey,password</span></pre>
 
 <!-- ============ 9 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h2>Resum</h2>
+  <h2 id="resum">Resum</h2>
   <ul>
     <li>SSH garanteix <strong>xifrat</strong> i <strong>identitat del servidor</strong>.</li>
     <li><code>known_hosts</code> guarda l'empremta; un canvi inesperat és motiu d'alerta.</li>
@@ -152,9 +156,9 @@ debug1: Authentications that can continue: publickey,password</span></pre>
 
 <!-- ============ 10 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h2>Comprova el que has après</h2>
+  <h2 id="comprova-el-que-has-apres">Comprova el que has après</h2>
 
-  <div class="cq-question" data-id="t6-2-garanteix" data-type="multi">
+  <div class="cq-question" data-id="t6-2-garanteix" data-type="multi" data-explanation="SSH estableix un canal xifrat després de la identificació i l’intercanvi de claus, amb integritat i autenticació.">
     <div class="statement">Què garanteix SSH? (marca totes les correctes)</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Que la sessió va xifrada</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Que el client pot comprovar la identitat del servidor</button>
@@ -164,7 +168,7 @@ debug1: Authentications that can continue: publickey,password</span></pre>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t6-2-known-hosts" data-type="single">
+  <div class="cq-question" data-id="t6-2-known-hosts" data-type="single" data-explanation="known_hosts conserva claus de servidors per detectar canvis d’identitat en connexions posteriors.">
     <div class="statement">Per a què serveix <code>known_hosts</code>?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Guarda la clau privada de l'usuari</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Guarda l'empremta dels servidors en què ja confies</button>
@@ -174,7 +178,7 @@ debug1: Authentications that can continue: publickey,password</span></pre>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t6-2-avis-clau" data-type="single">
+  <div class="cq-question" data-id="t6-2-avis-clau" data-type="single" data-explanation="Un canvi de clau pot ser legítim o un atac; cal verificar-lo per un canal independent.">
     <div class="statement">SSH avisa que la clau del servidor ha canviat des de l'última connexió. Què cal fer?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Acceptar-la sense més: és normal que canviï de tant en tant</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Comprovar per un altre canal que el canvi és legítim abans d'acceptar-la</button>
@@ -184,7 +188,7 @@ debug1: Authentications that can continue: publickey,password</span></pre>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t6-2-claus" data-type="single">
+  <div class="cq-question" data-id="t6-2-claus" data-type="single" data-explanation="La clau pública s’instal·la al servidor; la privada roman al client i no s’entrega.">
     <div class="statement">En l'autenticació per parell de claus, on viu la clau privada?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Al servidor, dins del compte on es vol entrar</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Sempre a la màquina del client, no viatja mai</button>
@@ -194,12 +198,12 @@ debug1: Authentications that can continue: publickey,password</span></pre>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t6-2-mes-usos" data-type="multi">
+  <div class="cq-question" data-id="t6-2-mes-usos" data-type="multi" data-explanation="SSH transporta consola, fitxers i túnels; un túnel també pot transportar DNS, però SSH no assigna concessions DHCP.">
     <div class="statement">A més de la consola, què més pot transportar una connexió SSH? (marca totes les correctes)</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Còpia de fitxers</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Túnels cap a un altre servei</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Correu electrònic sense cap altre servidor</button>
-    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Resolució DNS</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Assignació automàtica de concessions DHCP als clients de la LAN</button>
     <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
@@ -208,7 +212,7 @@ debug1: Authentications that can continue: publickey,password</span></pre>
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h2>Al currículum</h2>
+  <h2 id="al-curriculum">Al currículum</h2>
   <p><span class="lbl">Contingut 6.1</span> Terminals en mode text.</p>
   <p><span class="lbl">CA 6.1</span> Descriu mètodes d'accés i administració remota de sistemes.</p>
 </div>

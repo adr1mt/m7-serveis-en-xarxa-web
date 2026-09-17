@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA5 · A5.2</div>
   <h1>Dos llocs i un cadenat</h1>
   <p class="lede">Dos webs, una IP, un sol certificat i cap petició en clar.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-has-de-saber-abans-de-comencar">Què has de saber abans de començar</a></li><li><a href="#amb-que-treballaras">Amb què treballaràs</a></li><li><a href="#que-has-de-fer">Què has de fer</a></li><li><a href="#d-on-has-de-treure-cada-cosa">D&#x27;on has de treure cada cosa</a></li><li><a href="#el-navegador-comprova-el-san-no-el-nom-del-fitxer">El navegador comprova el SAN, no el nom del fitxer</a></li><li><a href="#veure-quins-noms-porta-el-certificat">Veure quins noms porta el certificat</a></li><li><a href="#com-sabras-que-ho-has-fet-be">Com sabràs que ho has fet bé</a></li><li><a href="#si-alguna-cosa-no-va">Si alguna cosa no va</a></li><li><a href="#que-has-d-entregar">Què has d&#x27;entregar</a></li><li><a href="#al-curriculum">Al currículum</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què has de saber abans de començar</h2>
+  <h2 id="que-has-de-saber-abans-de-comencar">Què has de saber abans de començar</h2>
   <p>
     Teories <a class="cq-ref" href="../teoria/t5-2-un-servidor-molts-llocs.html">T5.2</a> (hosts virtuals i lloc per defecte) i <a class="cq-ref" href="../teoria/t5-3-https-i-certificats.html">T5.3</a> (HTTPS i
     certificats). Guia <a class="cq-ref" href="../guies/g5-1-apache.html">G5.1</a> és el manual que consultaràs mentre treballes.
@@ -39,7 +43,7 @@
 
 <!-- ============ ESCENARI ============ -->
 <div class="cq-block" data-kind="escenari">
-  <h2>Amb què treballaràs</h2>
+  <h2 id="amb-que-treballaras">Amb què treballaràs</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Màquina</th><th>Targeta</th><th>Adreça</th></tr></thead>
@@ -54,7 +58,7 @@
 
 <!-- ============ ENUNCIAT ============ -->
 <div class="cq-block" data-kind="enunciat">
-  <h2>Què has de fer</h2>
+  <h2 id="que-has-de-fer">Què has de fer</h2>
   <ol>
     <li>Crear <code>web1.internal</code> i <code>web2.internal</code>, cada
       un amb un color de fons i un missatge diferents, distingibles a simple
@@ -67,7 +71,7 @@
 
 <!-- ============ ON BUSCAR ============ -->
 <div class="cq-block" data-kind="enunciat">
-  <h2>D'on has de treure cada cosa</h2>
+  <h2 id="d-on-has-de-treure-cada-cosa">D'on has de treure cada cosa</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Què has de fer</th><th>On ho tens</th></tr></thead>
@@ -89,7 +93,7 @@
 
 <!-- ============ RECORDATORI ============ -->
 <div class="cq-block" data-kind="recordatori">
-  <h2>El navegador comprova el SAN, no el nom del fitxer</h2>
+  <h2 id="el-navegador-comprova-el-san-no-el-nom-del-fitxer">El navegador comprova el SAN, no el nom del fitxer</h2>
   <p>
     Un certificat val per als noms que porta a la seva llista de noms
     alternatius. Si generes el certificat pensant només en un dels dos llocs,
@@ -99,7 +103,7 @@
 
 <!-- ============ OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h2>Veure quins noms porta el certificat</h2>
+  <h2 id="veure-quins-noms-porta-el-certificat">Veure quins noms porta el certificat</h2>
   <p>
     <code>openssl s_client</code> obre la connexió i mostra el nom que
     identifica el certificat presentat; és la manera de comprovar, des de
@@ -110,7 +114,8 @@
 
 <!-- ============ COMPROVACIÓ ============ -->
 <div class="cq-block" data-kind="comprovació">
-  <h2>Com sabràs que ho has fet bé</h2>
+  <h2 id="com-sabras-que-ho-has-fet-be">Com sabràs que ho has fet bé</h2>
+<p><strong>Capçaleres i contingut:</strong> curl -I fa HEAD i només mostra capçaleres. Per acreditar la pàgina correcta fes també GET amb curl sense -I, o obre-la al navegador, i identifica un text únic de cada lloc. Amb un certificat autofirmat, -k és una excepció de diagnòstic; per validar confiança utilitza el certificat públic amb --cacert i comprova el nom del SAN.</p>
   <ul>
     <li><code>curl -Ik https://web1.internal</code> i
       <code>curl -Ik https://web2.internal</code> responen <code>200</code>
@@ -124,7 +129,7 @@
 
 <!-- ============ PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Si alguna cosa no va</h2>
+  <h2 id="si-alguna-cosa-no-va">Si alguna cosa no va</h2>
   <dl class="cq-issues">
     <dt>El navegador avisa que el nom no és al certificat</dt>
     <dd>
@@ -145,7 +150,7 @@
 
 <!-- ============ LLIURAMENT ============ -->
 <div class="cq-block" data-kind="lliurament">
-  <h2>Què has d'entregar</h2>
+  <h2 id="que-has-d-entregar">Què has d'entregar</h2>
   <p>
     Un <strong>document tècnic</strong> amb captures dels dos llocs per
     HTTPS, i la sortida de les comprovacions anteriors.
@@ -160,7 +165,7 @@
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h2>Al currículum</h2>
+  <h2 id="al-curriculum">Al currículum</h2>
   <p><span class="lbl">CA 5.3</span> Crea llocs virtuals.</p>
   <p><span class="lbl">CA 5.4</span> Verifica les possibilitats per discriminar el lloc de destinació del trànsit entrant.</p>
   <p><span class="lbl">CA 5.9</span> Estableix mecanismes per assegurar les comunicacions entre el client i el servidor.</p>

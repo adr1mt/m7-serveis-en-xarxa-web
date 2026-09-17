@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,40 +17,36 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA6 · A6.2</div>
   <h1>Endurir el servei SSH</h1>
   <p class="lede">Aplica les mesures d'enduriment sobre les màquines de A6.1 i demostra cadascuna.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-has-de-saber-abans-de-comencar">Què has de saber abans de començar</a></li><li><a href="#amb-que-treballaras">Amb què treballaràs</a></li><li><a href="#que-has-de-fer">Què has de fer</a></li><li><a href="#d-on-has-de-treure-cada-cosa">D&#x27;on has de treure cada cosa</a></li><li><a href="#una-mesura-una-comprovacio-i-llavors-la-seguent">Una mesura, una comprovació, i llavors la següent</a></li><li><a href="#el-registre-diu-qui-truca-i-quantes-vegades">El registre diu qui truca i quantes vegades</a></li><li><a href="#com-sabras-que-ho-has-fet-be">Com sabràs que ho has fet bé</a></li><li><a href="#si-alguna-cosa-no-va">Si alguna cosa no va</a></li><li><a href="#que-has-d-entregar">Què has d&#x27;entregar</a></li><li><a href="#al-curriculum">Al currículum</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què has de saber abans de començar</h2>
+  <h2 id="que-has-de-saber-abans-de-comencar">Què has de saber abans de començar</h2>
   <p>
     Teoria <a class="cq-ref" href="../teoria/t6-3-endurir-l-acces-remot.html">T6.3</a> (superfície d'atac, mínim privilegi, famílies de
     mesures). Guies <a class="cq-ref" href="../guies/g6-1-openssh.html">G6.1</a> i <a class="cq-ref" href="../guies/g6-2-fail2ban.html">G6.2</a>: són el manual que
     consultaràs mentre treballes.
   </p>
-  <p>
-    Continues sobre les dues màquines de <a class="cq-ref" href="a6-1-entrar-sense-contrasenya.html">A6.1</a>, amb l'accés per clau ja
-    muntat. Ara hi apliques un conjunt de mesures d'enduriment i demostres cadascuna amb
-    una prova real, no amb una captura del fitxer de configuració.
-  </p>
+  <p>Amb dues màquines noves prepara un servidor SSH i un client amb accés per clau segons <a class="cq-ref" href="../guies/g6-1-openssh.html">G6.1</a>. Comprova una connexió nova i conserva la consola d’isardVDI disponible abans de començar l’enduriment.</p>
 </div>
 
 <!-- ============ ESCENARI ============ -->
 <div class="cq-block" data-kind="escenari">
-  <h2>Amb què treballaràs</h2>
-  <p>
-    Les mateixes dues màquines de <a class="cq-ref" href="a6-1-entrar-sense-contrasenya.html">A6.1</a>: el servidor SSH amb l'accés
-    per clau ja funcionant, i el client des d'on ho comprovaràs tot.
-  </p>
+  <h2 id="amb-que-treballaras">Amb què treballaràs</h2>
+  <p>Servidor nou amb puigcastellar1 i personal1; client nou només a personal1. Configura adreces internes de la mateixa subxarxa. Consulta la IP externa amb <code>ip -brief a</code>. Verifica l’accés per clau des del client abans d’aplicar restriccions.</p>
 </div>
 
 <!-- ============ ENUNCIAT ============ -->
 <div class="cq-block" data-kind="enunciat">
-  <h2>Què has de fer</h2>
+  <h2 id="que-has-de-fer">Què has de fer</h2>
   <p>Com a mínim, el servidor ha de quedar amb:</p>
   <ul>
     <li>Un port d'escolta diferent del 22.</li>
@@ -64,7 +61,7 @@
 
 <!-- ============ ON BUSCAR ============ -->
 <div class="cq-block" data-kind="enunciat">
-  <h2>D'on has de treure cada cosa</h2>
+  <h2 id="d-on-has-de-treure-cada-cosa">D'on has de treure cada cosa</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Què has de fer</th><th>On ho tens</th></tr></thead>
@@ -88,7 +85,7 @@
 
 <!-- ============ RECORDATORI ============ -->
 <div class="cq-block" data-kind="recordatori">
-  <h2>Una mesura, una comprovació, i llavors la següent</h2>
+  <h2 id="una-mesura-una-comprovacio-i-llavors-la-seguent">Una mesura, una comprovació, i llavors la següent</h2>
   <p>
     Aplica-les d'una en una. Després de cada canvi, comprova en una <strong>segona
     finestra</strong> que encara hi pots entrar abans de tocar res més. No tanquis mai
@@ -99,7 +96,7 @@
 
 <!-- ============ OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h2>El registre diu qui truca i quantes vegades</h2>
+  <h2 id="el-registre-diu-qui-truca-i-quantes-vegades">El registre diu qui truca i quantes vegades</h2>
   <p>
     Abans de provocar cap bloqueig, mira quants intents rep ja el servei amb
     <code>journalctl -u ssh</code> (o <code>-u fail2ban</code>, un cop instal·lat).
@@ -110,7 +107,7 @@
 
 <!-- ============ COMPROVACIÓ ============ -->
 <div class="cq-block" data-kind="comprovació">
-  <h2>Com sabràs que ho has fet bé</h2>
+  <h2 id="com-sabras-que-ho-has-fet-be">Com sabràs que ho has fet bé</h2>
   <ul>
     <li>El port nou escolta i el 22 ja no: <code>ss -lntp</code> des del servidor.</li>
     <li>Entrar amb <code>root</code> es rebutja: <code>ssh -p PORT
@@ -125,7 +122,7 @@
 
 <!-- ============ PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Si alguna cosa no va</h2>
+  <h2 id="si-alguna-cosa-no-va">Si alguna cosa no va</h2>
   <dl class="cq-issues">
     <dt>Has canviat el port i segueix escoltant al 22</dt>
     <dd>
@@ -152,7 +149,7 @@
 
 <!-- ============ LLIURAMENT ============ -->
 <div class="cq-block" data-kind="lliurament">
-  <h2>Què has d'entregar</h2>
+  <h2 id="que-has-d-entregar">Què has d'entregar</h2>
   <p>
     Un document tècnic amb la sortida de cada comprovació de la llista anterior: el
     port nou, el rebuig de <code>root</code> i de l'usuari no permès, els dos
@@ -167,7 +164,7 @@
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h2>Al currículum</h2>
+  <h2 id="al-curriculum">Al currículum</h2>
   <p><span class="lbl">CA 6.2</span> Instal·la un servei d'accés remot en línia d'ordres.</p>
   <p><span class="lbl">CA 6.5</span> Identifica els principals avantatges i deficiències de cadascun.</p>
 </div>

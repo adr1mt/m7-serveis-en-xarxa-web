@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA6 · G6.3</div>
   <h1>Guia: xrdp</h1>
   <p class="lede">Escriptori remot per RDP: instal·lació, connexió i comprovació.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</a></li><li><a href="#installar-i-comprovar">Instal·lar i comprovar</a></li><li><a href="#opcions-de-etc-xrdp-xrdp-ini">Opcions de /etc/xrdp/xrdp.ini</a></li><li><a href="#connectar-se-des-del-client">Connectar-se des del client</a></li><li><a href="#una-sessio-grafica-per-connexio">Una sessió gràfica per connexió</a></li><li><a href="#comprovar-ho-de-conjunt">Comprovar-ho de conjunt</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#fitxa-rapida">Fitxa ràpida</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què hi ha en aquesta guia</h2>
+  <h2 id="que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</h2>
   <p>Documentació oficial: <a href="https://github.com/neutrinolabs/xrdp">github.com/neutrinolabs/xrdp</a>.</p>
   <ul>
     <li>Punt de partida: una màquina Ubuntu <strong>Desktop</strong> d'isardVDI. Una
@@ -35,7 +39,7 @@
 
 <!-- ============ 2 · PAS A PAS · INSTAL·LACIÓ ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h2>Instal·lar i comprovar</h2>
+  <h2 id="installar-i-comprovar">Instal·lar i comprovar</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Instal·la el paquet</strong> a la màquina amb escriptori:</p>
@@ -52,7 +56,7 @@ sudo ss -lntp | grep :3389</pre>
 
 <!-- ============ 3 · REFERÈNCIA · XRDP.INI ============ -->
 <div class="cq-block" data-kind="referència">
-  <h2>Opcions de /etc/xrdp/xrdp.ini</h2>
+  <h2 id="opcions-de-etc-xrdp-xrdp-ini">Opcions de /etc/xrdp/xrdp.ini</h2>
   <p>Dins la secció <code>[Globals]</code>.</p>
   <div class="cq-tablewrap">
     <table class="cq-table">
@@ -72,7 +76,7 @@ sudo ss -lntp | grep :3389</pre>
 
 <!-- ============ 4 · PAS A PAS · CONNEXIÓ ============ -->
 <div class="cq-block" data-kind="pas a pas">
-  <h2>Connectar-se des del client</h2>
+  <h2 id="connectar-se-des-del-client">Connectar-se des del client</h2>
   <ol class="cq-steps">
     <li>
       <p><strong>Des de Linux</strong>, amb Remmina: protocol RDP, la IP del servidor
@@ -87,7 +91,7 @@ sudo ss -lntp | grep :3389</pre>
 
 <!-- ============ 5 · RECORDATORI ============ -->
 <div class="cq-block" data-kind="recordatori">
-  <h2>Una sessió gràfica per connexió</h2>
+  <h2 id="una-sessio-grafica-per-connexio">Una sessió gràfica per connexió</h2>
   <p>
     xrdp obre una sessió gràfica pròpia; no comparteix la que ja hi hagi oberta a la consola
     local de la màquina. Si l'usuari ja ha iniciat sessió a la consola, la connexió per RDP
@@ -97,7 +101,7 @@ sudo ss -lntp | grep :3389</pre>
 
 <!-- ============ 6 · COMPROVACIÓ ============ -->
 <div class="cq-block" data-kind="comprovació">
-  <h2>Comprovar-ho de conjunt</h2>
+  <h2 id="comprovar-ho-de-conjunt">Comprovar-ho de conjunt</h2>
   <ol class="cq-steps">
     <li><p>El client de RDP mostra l'escriptori d'Ubuntu, amb la mateixa resolució o
       similar a la finestra del client.</p></li>
@@ -108,7 +112,7 @@ sudo ss -lntp | grep :3389</pre>
 
 <!-- ============ 7 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2>Criteris professionals</h2>
+  <h2 id="criteris-professionals">Criteris professionals</h2>
   <ul>
     <li><strong>RDP mai directe a Internet</strong>: sempre darrere d'una VPN o d'un túnel
     SSH (<a class="cq-ref" href="g6-1-openssh.html">G6.1</a>).</li>
@@ -120,7 +124,7 @@ sudo ss -lntp | grep :3389</pre>
 
 <!-- ============ 8 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Errors habituals</h2>
+  <h2 id="errors-habituals">Errors habituals</h2>
   <dl class="cq-issues">
     <dt>Pantalla en negre en entrar</dt>
     <dd>
@@ -146,7 +150,7 @@ sudo ss -lntp | grep :3389</pre>
 
 <!-- ============ 9 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h2>Fitxa ràpida</h2>
+  <h2 id="fitxa-rapida">Fitxa ràpida</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Què</th><th>On</th></tr></thead>

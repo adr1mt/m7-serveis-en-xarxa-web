@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 </head>
 <body>
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
@@ -16,16 +17,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<main>
+<main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA5 · T5.5</div>
   <h1>Mòduls i codi</h1>
   <p class="lede">El servidor serveix fitxers; tota la resta la fan els mòduls i el codi.</p>
 </header>
+<!-- TOC INICI -->
+<nav class="cq-block cq-toc" aria-label="Apartats"><strong>Apartats d’aquesta pàgina</strong><ul><li><a href="#que-sabras-fer-en-acabar">Què sabràs fer en acabar</a></li><li><a href="#la-idea-de-modul">La idea de mòdul</a></li><li><a href="#codi-al-client-o-al-servidor">Codi al client o al servidor</a></li><li><a href="#contingut-estatic-o-generat">Contingut estàtic o generat</a></li><li><a href="#un-formulari-amb-validacio-doble">Un formulari amb validació doble</a></li><li><a href="#el-proxy-invers-un-altre-us-d-un-modul">El proxy invers, un altre ús d&#x27;un mòdul</a></li><li><a href="#del-codi-de-servidor-no-arriba-res">Del codi de servidor no arriba res</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#resum">Resum</a></li><li><a href="#comprova-el-que-has-apres">Comprova el que has après</a></li><li><a href="#al-curriculum">Al currículum</a></li></ul><a href="#contingut">Torna al començament</a></nav>
+<!-- TOC FI -->
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
-  <h2>Què sabràs fer en acabar</h2>
+  <h2 id="que-sabras-fer-en-acabar">Què sabràs fer en acabar</h2>
   <ul>
     <li>Explicar la idea de mòdul: es pot activar i desactivar, i només s'activa el que cal.</li>
     <li>Distingir codi que s'executa al client del que s'executa al servidor.</li>
@@ -36,7 +40,7 @@
 
 <!-- ============ 2 · LA IDEA DE MÒDUL ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>La idea de mòdul</h2>
+  <h2 id="la-idea-de-modul">La idea de mòdul</h2>
   <p>
     Un servidor web, de sèrie, sap poc més que servir fitxers del disc. El xifrat, l'autenticació,
     generar pàgines a l'instant o oferir l'estat del propi servidor són funcions que aporten
@@ -51,7 +55,7 @@
 
 <!-- ============ 3 · CODI AL CLIENT O AL SERVIDOR ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Codi al client o al servidor</h2>
+  <h2 id="codi-al-client-o-al-servidor">Codi al client o al servidor</h2>
   <p>
     Una pàgina pot dur codi que s'executa a cada banda, i la diferència importa:
   </p>
@@ -73,7 +77,7 @@
 
 <!-- ============ 4 · CONTINGUT ESTÀTIC O GENERAT ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2>Contingut estàtic o generat</h2>
+  <h2 id="contingut-estatic-o-generat">Contingut estàtic o generat</h2>
   <p>
     El contingut <strong>estàtic</strong> és un fitxer del disc que es retorna tal qual. El
     <strong>generat</strong> l'escriu un programa al servidor en cada petició, sovint consultant
@@ -83,7 +87,7 @@
 
 <!-- ============ 5 · EXEMPLE ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h2>Un formulari amb validació doble</h2>
+  <h2 id="un-formulari-amb-validacio-doble">Un formulari amb validació doble</h2>
   <p>
     JavaScript pot avisar a l'instant si un camp és buit, però el servidor ha de tornar a
     comprovar-ho quan rep les dades: la validació del client és comoditat per a l'usuari, no
@@ -93,7 +97,7 @@
 
 <!-- ============ 6 · CAS REAL ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h2>El proxy invers, un altre ús d'un mòdul</h2>
+  <h2 id="el-proxy-invers-un-altre-us-d-un-modul">El proxy invers, un altre ús d'un mòdul</h2>
   <p>
     Un mòdul de proxy invers fa que el servidor web reculli les peticions i les passi a un altre
     servei intern, com si les respongués ell mateix. És una manera més d'ampliar què fa el
@@ -103,7 +107,7 @@
 
 <!-- ============ 7 · OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
-  <h2>Del codi de servidor no arriba res</h2>
+  <h2 id="del-codi-de-servidor-no-arriba-res">Del codi de servidor no arriba res</h2>
   <p>
     Demanant dues vegades la mateixa pàgina generada al servidor, el client mai rep el codi que
     l'ha construït, només l'HTML resultant:
@@ -118,7 +122,7 @@
 
 <!-- ============ 8 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2>Criteris professionals</h2>
+  <h2 id="criteris-professionals">Criteris professionals</h2>
   <ul>
     <li>Activa només els <strong>mòduls</strong> que el lloc necessita de veritat.</li>
     <li>Tota validació important es repeteix al <strong>servidor</strong>, mai només al client.</li>
@@ -128,7 +132,7 @@
 
 <!-- ============ 9 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2>Errors habituals</h2>
+  <h2 id="errors-habituals">Errors habituals</h2>
   <dl class="cq-issues">
     <dt>Confiar en una validació feta només en JavaScript</dt>
     <dd>
@@ -147,7 +151,7 @@
 
 <!-- ============ 10 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h2>Resum</h2>
+  <h2 id="resum">Resum</h2>
   <ul>
     <li>El servidor serveix fitxers; xifrat, autenticació i contingut generat els aporten <strong>mòduls</strong>.</li>
     <li>JavaScript s'executa al <strong>client</strong> i es pot llegir; el codi de servidor no arriba mai al client.</li>
@@ -159,9 +163,9 @@
 
 <!-- ============ 11 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
-  <h2>Comprova el que has après</h2>
+  <h2 id="comprova-el-que-has-apres">Comprova el que has après</h2>
 
-  <div class="cq-question" data-id="t5-5-modul" data-type="single">
+  <div class="cq-question" data-id="t5-5-modul" data-type="single" data-explanation="Un mòdul amplia el servidor amb una funció concreta; instal·lar-lo i activar-lo són passos diferents.">
     <div class="statement">Què és un mòdul en un servidor web?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Una peça que amplia el servidor i es pot activar o desactivar</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Un fitxer HTML estàtic</button>
@@ -171,7 +175,7 @@
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t5-5-client-servidor" data-type="single">
+  <div class="cq-question" data-id="t5-5-client-servidor" data-type="single" data-explanation="El codi del servidor s’executa abans de retornar la resposta; JavaScript del navegador s’executa al client.">
     <div class="statement">Quina diferència hi ha entre JavaScript i PHP pel que fa al client?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Cap, tots dos arriben sencers al client</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">JavaScript arriba sencer i es pot llegir; del PHP el client només rep el resultat</button>
@@ -181,7 +185,7 @@
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t5-5-validacio" data-type="single">
+  <div class="cq-question" data-id="t5-5-validacio" data-type="single" data-explanation="El client pot modificar o saltar la validació JavaScript; el servidor ha de validar també les dades.">
     <div class="statement">Per què no n'hi ha prou amb validar un formulari només en JavaScript?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Perquè JavaScript no pot llegir formularis</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Perquè qualsevol pot desactivar-lo o modificar-lo des del navegador</button>
@@ -191,7 +195,7 @@
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t5-5-estatic-generat" data-type="single">
+  <div class="cq-question" data-id="t5-5-estatic-generat" data-type="single" data-explanation="Contingut estàtic es llegeix d’un recurs; contingut generat es produeix executant codi al servidor.">
     <div class="statement">Quina diferència hi ha entre contingut estàtic i contingut generat?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El generat sempre és més ràpid de servir</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">L'estàtic és un fitxer del disc; el generat l'escriu un programa a cada petició</button>
@@ -205,7 +209,7 @@
 
 <!-- ============ CURRÍCULUM ============ -->
 <div class="cq-block" data-kind="currículum">
-  <h2>Al currículum</h2>
+  <h2 id="al-curriculum">Al currículum</h2>
   <p><span class="lbl">CA 5.7</span> Diferencia i prova l'execució de codi al servidor i al client.</p>
   <p><span class="lbl">CA 5.8</span> Instal·la mòduls sobre el servidor.</p>
 </div>
