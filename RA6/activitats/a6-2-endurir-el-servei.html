@@ -32,13 +32,13 @@
     mesures). Guies <a class="cq-ref" href="../guies/g6-1-openssh.html">G6.1</a> i <a class="cq-ref" href="../guies/g6-2-fail2ban.html">G6.2</a>: són el manual que
     consultaràs mentre treballes.
   </p>
-  <p>Amb dues màquines noves prepara un servidor SSH i un client amb accés per clau segons <a class="cq-ref" href="../guies/g6-1-openssh.html">G6.1</a>. Comprova una connexió nova i conserva la consola d’isardVDI disponible abans de començar l’enduriment.</p>
+  <p>Reaprofita el servidor i el client d’<a class="cq-ref" href="a6-1-entrar-sense-contrasenya.html">A6.1</a> si l’accés per clau funciona i encara no has aplicat restriccions ni Fail2ban. Si no tens aquest estat, prepara dues màquines amb la base neta i l’accés per clau segons <a class="cq-ref" href="../guies/g6-1-openssh.html">G6.1</a>. Comprova una connexió nova i conserva la consola d’isardVDI disponible abans de començar l’enduriment.</p>
 </div>
 
 <!-- ============ ESCENARI ============ -->
 <div class="cq-block" data-kind="escenari">
   <h2 id="amb-que-treballaras">Amb què treballaràs</h2>
-  <p>Servidor nou amb puigcastellar1 i personal1; client nou només a personal1. Configura adreces internes de la mateixa subxarxa. Consulta la IP externa amb <code>ip -brief a</code>. Verifica l’accés per clau des del client abans d’aplicar restriccions.</p>
+  <p>Servidor d’<a class="cq-ref" href="a6-1-entrar-sense-contrasenya.html">A6.1</a> amb puigcastellar1 i personal1; client d’<a class="cq-ref" href="a6-1-entrar-sense-contrasenya.html">A6.1</a> només a personal1. Adapta les targetes abans de continuar. Configura adreces internes de la mateixa subxarxa. Consulta la IP externa amb <code>ip -brief a</code>. Verifica l’accés per clau des del client abans d’aplicar restriccions.</p>
 </div>
 
 <!-- ============ ENUNCIAT ============ -->

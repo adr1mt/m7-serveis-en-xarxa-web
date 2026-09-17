@@ -52,8 +52,7 @@
     </table>
   </div>
   <p>
-    Comença amb una <strong>màquina nova</strong> a isardVDI, acabada de crear. No reaprofitis la
-    de l'activitat <a class="cq-ref" href="a1-2-dhcp-systemd-networkd.html">A1.2</a>: allà vas apartar Netplan i les dues configuracions es trepitjarien.
+    Parteix d’una <strong>còpia de la base preparada a <a class="cq-ref" href="a1-1-posada-a-punt.html">A1.1</a></strong> o d’una màquina nova. No continuïs directament amb el servidor d’<a class="cq-ref" href="a1-2-dhcp-systemd-networkd.html">A1.2</a>: allà vas apartar Netplan i activar un altre DHCP. Abans de començar, comprova que Netplan gestiona la xarxa i que no hi ha cap servidor DHCP ni regles de NAT de pràctiques anteriors.
   </p>
 </div>
 
@@ -61,7 +60,7 @@
 <div class="cq-block" data-kind="enunciat">
   <h2 id="que-has-de-fer">Què has de fer</h2>
   <ol>
-    <li>Posar a punt la màquina nova: <em>hostname</em> amb el teu nom i <code>personal1</code> amb la IP fixa <code>10.0.0.1/8</code>.</li>
+    <li>Comprovar la posada a punt i adaptar la xarxa: <em>hostname</em> amb el teu nom i <code>personal1</code> amb la IP fixa <code>10.0.0.1/8</code>.</li>
     <li>Instal·lar Kea i configurar-lo perquè reparteixi adreces <strong>per a 200 dispositius</strong>.</li>
     <li>Repartir el DNS de <strong>Quad9</strong> (<code>9.9.9.9</code>), el domini <code>elteunom.internal</code> i, com a porta d'enllaç, la <strong>IP del propi servidor</strong>.</li>
     <li>Fer una <strong>reserva d'IP</strong> per al client, fora del rang automàtic.</li>
