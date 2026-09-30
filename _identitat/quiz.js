@@ -79,3 +79,28 @@
       retry.hidden = false;
     });
   });
+
+  // Els fragments i les taules amb desplaçament també es poden llegir amb teclat.
+  (function () {
+    var regions = document.querySelectorAll('.cq-block pre, .cq-tablewrap');
+    function update() {
+      regions.forEach(function (region) {
+        var scrollable = region.scrollWidth > region.clientWidth + 1 ||
+          region.scrollHeight > region.clientHeight + 1;
+        if (scrollable && !region.hasAttribute('tabindex')) {
+          region.setAttribute('tabindex', '0');
+          region.dataset.cqScrollFocus = 'true';
+        } else if (!scrollable && region.dataset.cqScrollFocus === 'true') {
+          region.removeAttribute('tabindex');
+          delete region.dataset.cqScrollFocus;
+        }
+      });
+    }
+    update();
+    window.addEventListener('resize', update);
+    if (document.fonts) document.fonts.ready.then(update);
+    if (typeof ResizeObserver !== 'undefined') {
+      var observer = new ResizeObserver(update);
+      regions.forEach(function (region) { observer.observe(region); });
+    }
+  }());

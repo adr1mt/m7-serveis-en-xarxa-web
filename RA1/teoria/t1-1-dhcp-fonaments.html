@@ -5,59 +5,54 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>T1.1 · Fonaments de DHCP — Serveis en Xarxa (0227)</title>
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
+<script src="../../_identitat/lectura.js"></script>
 </head>
 <body>
-<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
     <a href="../index.html">‹ RA1 · Instal·lació de serveis de configuració dinàmica (DHCP)</a>
-    <span class="pos">T1.1 · 2/10</span>
+    <span class="pos">T1.1 · 2/11</span>
   </div>
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
+<!-- EINES LECTURA INICI -->
+<div class="cq-tools" hidden><label for="cq-tema">Tema</label> <select id="cq-tema" class="cq-theme"><option value="auto">Automàtic</option><option value="light">Clar</option><option value="dark">Fosc</option></select></div>
+<!-- EINES LECTURA FI -->
 <main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · T1.1</div>
   <h1>Fonaments de DHCP</h1>
   <p class="lede">Per què les xarxes no es configuren a mà, i què passa quan un equip demana adreça.</p>
 </header>
+<!-- TOC INICI -->
+<details class="cq-toc"><summary>En aquesta pàgina</summary><ol><li><a href="#que-sabras-fer-en-acabar">Què sabràs fer en acabar</a></li><li><a href="#ip-fixa-o-ip-automatica">IP manual o configuració per DHCP?</a></li><li><a href="#el-problema-que-resol-dhcp">El problema que resol DHCP</a></li><li><a href="#funcionament-el-proces-dora">Funcionament: el procés DORA</a></li><li><a href="#tres-maneres-d-assignar-adreces">Tres maneres d’assignar adreces</a></li><li><a href="#el-router-que-algu-va-endollar-a-l-aula">Un DHCP que no toca</a></li><li><a href="#resum">Resum</a></li><li><a href="#comprova-el-que-has-apres">Comprova el que has après</a></li></ol></details>
+<!-- TOC FI -->
 
-<div class="cq-block" data-kind="recordatori"><h2 id="quina-captura-demostra-dora">Quina captura demostra DORA?</h2><p>Comprova el gestor de la interfície: networkctl correspon a systemd-networkd. Una captura DHCP permet distingir la descoberta inicial DORA d’una renovació Request/ACK; no dedueixis els quatre missatges d’una única línia del registre de concessió.</p>
-</div>
 
-<!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
   <h2 id="que-sabras-fer-en-acabar">Què sabràs fer en acabar</h2>
   <ul>
     <li>Explicar per què les xarxes no es configuren a mà.</li>
     <li>Descriure els quatre passos del procés <strong>DORA</strong>.</li>
     <li>Entendre què és una concessió i per què caduca.</li>
-    <li>Capturar un intercanvi DHCP real amb <code>tcpdump</code>.</li>
-    <li>Diagnosticar per què un client no rep adreça.</li>
+    <li>Distingir una IP manual d’una IP rebuda per DHCP, amb reserva o sense.</li>
   </ul>
 </div>
 
-<!-- ============ 2 · ESTÀTICA O DINÀMICA ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2 id="ip-fixa-o-ip-automatica">IP fixa o IP automàtica?</h2>
-  <p>
-    Un equip pot rebre la configuració de dues maneres: <strong>automàtica</strong>, demanant-la
-    a un servidor DHCP, o <strong>fixa</strong> (estàtica), escrivint-la tu en un fitxer.
-  </p>
-  <p>La regla pràctica és senzilla:</p>
-  <ul>
-    <li><strong>Automàtica</strong> per a tot allò que es connecta i es desconnecta: portàtils, mòbils, ordinadors d'aula.</li>
-    <li><strong>Fixa</strong> per a tot allò que ha d'estar sempre a la mateixa adreça perquè els altres el trobin: servidors, routers, impressores.</li>
-  </ul>
-  <p>
-    Un <strong>servidor DHCP té sempre IP fixa</strong> a la targeta per on dona servei. Té tot
-    el sentit: no es pot demanar l'adreça a si mateix, i els clients l'han de poder localitzar.
-  </p>
+  <h2 id="ip-fixa-o-ip-automatica">IP manual o configuració per DHCP?</h2>
+  <p>Hi ha dues maneres de configurar un equip: escriure les dades
+    <strong>manualment</strong> o demanar-les a un <strong>servidor DHCP</strong>.</p>
+  <p>Rebre la configuració per DHCP no vol dir que la IP canviï sempre.
+    Amb una <strong>reserva</strong>, el servidor dona la mateixa IP a aquell equip.
+    El client continua fent servir DHCP.</p>
+  <p>En el nostre laboratori, el servidor DHCP té una IP manual a la targeta interna;
+    els clients li demanen la configuració.</p>
 </div>
 
-<!-- ============ 2 · INTRODUCCIÓ ============ -->
 <div class="cq-block" data-kind="teoria">
   <h2 id="el-problema-que-resol-dhcp">El problema que resol DHCP</h2>
   <p>
@@ -79,7 +74,6 @@
   </p>
 </div>
 
-<!-- ============ 3 · FUNCIONAMENT INTERN ============ -->
 <div class="cq-block" data-kind="teoria">
   <h2 id="funcionament-el-proces-dora">Funcionament: el procés DORA</h2>
   <p>
@@ -115,268 +109,56 @@
     </div>
   </div>
 
-  <p>
-    Són quatre passos i no dos perquè <strong>pot haver-hi més d'un servidor</strong>. Si dos
-    responen, el client tria un i ho diu al REQUEST; l'altre s'assabenta que l'han descartat i
-    allibera l'adreça que havia guardat. El servidor reconeix cada equip per la seva
-    <strong>adreça MAC</strong>.
-  </p>
+  <p>Si responen diversos servidors, el client tria una oferta i la demana amb
+    REQUEST. L’ACK confirma la <strong>concessió</strong> (<em>lease</em>): el dret
+    a fer servir aquella IP durant un temps limitat.</p>
+  <p id="l-adreca-es-presta-no-es-regala">L’adreça es presta, no es regala.
+    Habitualment, a la meitat del temps el client demana renovar-la amb
+    <strong>REQUEST</strong> i el servidor respon <strong>ACK</strong>.
+    Si no la pot renovar i caduca, ha de deixar de fer servir la IP.</p>
 </div>
 
-<!-- ============ 4 · EXEMPLE SENZILL ============ -->
-<div class="cq-block" data-kind="exemple">
-  <h2 id="un-dora-missatge-a-missatge">Un DORA, missatge a missatge</h2>
-  <p>
-    Servidor <code>10.0.0.1</code>, que reparteix a partir de la <code>10.0.0.100</code>.
-    Un portàtil s'acaba de connectar:
-  </p>
-<pre><span class="c"># 1 · DISCOVER — el client encara no té IP</span>
-0.0.0.0:68  →  255.255.255.255:67
-   MAC: 08:00:27:1f:a3:0c
-
-<span class="c"># 2 · OFFER — el servidor proposa</span>
-10.0.0.1:67  →  255.255.255.255:68
-   IP: 10.0.0.100/8   Gateway: 10.0.0.1
-   DNS: 9.9.9.9       Lease: 600 s
-
-<span class="c"># 3 · REQUEST — el client accepta</span>
-0.0.0.0:68  →  255.255.255.255:67
-   Vull la 10.0.0.100, del servidor 10.0.0.1
-
-<span class="c"># 4 · ACK — confirmat</span>
-10.0.0.1:67  →  255.255.255.255:68
-   IP concedida: 10.0.0.100/8</pre>
-  <p>Tot això passa en menys d'una dècima de segon.</p>
-</div>
-
-<!-- ============ 5 · LA CONCESSIÓ ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2 id="l-adreca-es-presta-no-es-regala">L'adreça es presta, no es regala</h2>
-  <p>
-    El servidor concedeix l'adreça durant un temps limitat: és la <strong>concessió</strong>
-    (<em>lease</em>). Quan caduca, l'adreça torna al fons comú i pot anar a un altre equip.
-  </p>
-  <p>
-    Té sentit: els portàtils que hi ha al matí a l'institut no hi són a la tarda. Si les
-    adreces no caduquessin, el rang s'esgotaria en pocs dies amb màquines que ja no hi són.
-  </p>
-  <p>
-    El client no espera l'últim moment. <strong>Quan ha passat la meitat del temps, demana la
-    renovació</strong> directament al seu servidor, i el rellotge torna a començar sense que
-    l'usuari noti res. Només si ningú respon abans que caduqui, el client es queda sense
-    configuració i ha de tornar a fer tot el DORA.
-  </p>
-</div>
-
-<!-- ============ 6 · TIPUS D'ASSIGNACIÓ ============ -->
-<div class="cq-block" data-kind="teoria">
-  <h2 id="tres-maneres-d-assignar-adreces">Tres maneres d'assignar adreces</h2>
+  <h2 id="tres-maneres-d-assignar-adreces">Tres maneres d’assignar adreces</h2>
+  <p>La diferència principal és <strong>qui configura l’equip</strong>.
+    Si fa servir DHCP, el servidor pot triar una IP lliure o donar-li la que té reservada.</p>
   <div class="cq-tablewrap">
     <table class="cq-table">
-      <thead>
-        <tr><th>Tipus</th><th>Com funciona</th><th>Per a què</th></tr>
-      </thead>
+      <thead><tr><th>Configuració</th><th>Com rep la IP?</th><th>Exemple</th></tr></thead>
       <tbody>
-        <tr>
-          <td><strong>Dinàmica</strong></td>
-          <td>El servidor tria qualsevol adreça lliure del rang (<em>pool</em>).</td>
-          <td>Equips d'usuari</td>
-        </tr>
-        <tr>
-          <td><strong>Reserva</strong></td>
-          <td>El servidor té apuntat MAC ↔ IP i sempre dona la mateixa adreça.</td>
-          <td>Impressores, servidors</td>
-        </tr>
-        <tr>
-          <td><strong>Estàtica</strong></td>
-          <td>La IP està escrita a l'equip. DHCP no hi intervé.</td>
-          <td>El propi servidor, routers</td>
-        </tr>
+        <tr><td><strong>Manual (estàtica)</strong></td><td>L’escrius a l’equip. No demana la IP per DHCP.</td><td>Targeta interna del servidor DHCP</td></tr>
+        <tr><td><strong>DHCP sense reserva</strong></td><td>El servidor tria una IP lliure del rang dinàmic (<em>pool</em>).</td><td>Portàtil d’un alumne</td></tr>
+        <tr><td><strong>DHCP amb reserva</strong></td><td>El servidor associa un identificador de l’equip, com la MAC, a una IP concreta.</td><td>Impressora amb una IP estable</td></tr>
       </tbody>
     </table>
   </div>
-  <p>
-    A més de la IP, el servidor envia <strong>opcions</strong>: la porta d'enllaç
-    (<code>routers</code>), el DNS (<code>domain-name-servers</code>) i el nom de domini
-    (<code>domain-name</code>). Aquests noms són els mateixos a tots els servidors DHCP.
-  </p>
-  <p>
-    <strong>Compte:</strong> una IP estàtica ha de quedar sempre <em>fora</em> del rang
-    dinàmic, o dos equips acabaran amb la mateixa adreça.
-  </p>
+  <p><strong>Una reserva no és una IP escrita manualment al client.</strong>
+    La IP és estable, però la configuració arriba per DHCP, amb la seva concessió.
+    A més de la IP, el servidor pot enviar màscara, porta d’enllaç i DNS.</p>
 </div>
 
-<!-- ============ 7 · CAS REAL ============ -->
 <div class="cq-block" data-kind="cas real">
-  <h2 id="el-router-que-algu-va-endollar-a-l-aula">El router que algú va endollar a l'aula</h2>
-  <p>
-    Un alumne connecta un router domèstic a una roseta. Aquell router porta el DHCP activat de
-    fàbrica i comença a respondre OFFERs amb la seva pròpia IP com a porta d'enllaç. És el que
-    s'anomena un <strong>servidor DHCP furtiu</strong> (<em>rogue DHCP</em>).
-  </p>
-  <p>
-    Com que cada client es queda amb el primer OFFER que li arriba, l'efecte és aleatori: uns
-    equips van i altres no. El símptoma clàssic és «a mi em funciona i al del costat no», i és
-    dels errors més difícils de trobar si no saps que això existeix.
-  </p>
-  <p>
-    Per això, a les activitats, muntaràs el teu servidor DHCP sempre a la targeta
-    <code>personal1</code> i mai a <code>puigcastellar1</code>: si el poses a la xarxa del
-    centre, el servidor furtiu ets tu.
-  </p>
+  <h2 id="el-router-que-algu-va-endollar-a-l-aula">Un DHCP que no toca</h2>
+  <p>Un router domèstic connectat a l’aula pot respondre peticions DHCP i donar
+    una porta d’enllaç incorrecta. És un <strong>DHCP furtiu</strong>: un servidor
+    no autoritzat que interfereix amb la configuració de la xarxa.</p>
+  <p>Al laboratori, el nostre DHCP només ha de donar servei a
+    <code>personal1</code>, mai a la xarxa del centre <code>puigcastellar1</code>.</p>
+  <p>Si un equip s’assigna una IP <code>169.254.x.x</code>, és una adreça d’enllaç
+    local: no és una concessió del nostre DHCP ni li dona sortida a Internet.</p>
 </div>
 
-<!-- ============ 9 · OBSERVACIÓ ============ -->
-<div class="cq-block" data-kind="observació">
-  <h2 id="veure-el-dora-amb-els-teus-ulls">Veure el DORA amb els teus ulls</h2>
-
-  <p>
-    Amb systemd-networkd, DORA exigeix un client sense concessió; amb concessió pots observar només Request/ACK.
-  </p>
-
-  <ol class="cq-steps">
-    <li>
-      <p><strong>Mira quina concessió tens ara:</strong></p>
-<pre>networkctl status enp1s0</pre>
-
-    </li>
-
-    <li>
-      <p><strong>Deixa <code>tcpdump</code> escoltant</strong> els ports de DHCP:</p>
-<pre>sudo apt install -y tcpdump
-sudo tcpdump -i enp1s0 -n -vv port 67 or port 68</pre>
-    </li>
-
-    <li>
-      <p><strong>Des d’una altra consola</strong>, reconfigura la interfície i observa què passa:</p>
-<pre>sudo networkctl reconfigure enp1s0</pre>
-      <p>
-        reconfigure no garanteix DORA; renew renova. Comprova la captura.
-      </p>
-    </li>
-
-    <li>
-      <p><strong>Llegeix la captura:</strong></p>
-<pre><span class="o">IP 0.0.0.0.68 &gt; 255.255.255.255.67: BOOTP/DHCP, Request from 08:00:27:1f:a3:0c
-IP 10.0.0.1.67 &gt; 255.255.255.255.68: BOOTP/DHCP, Reply
-IP 0.0.0.0.68 &gt; 255.255.255.255.67: BOOTP/DHCP, Request from 08:00:27:1f:a3:0c
-IP 10.0.0.1.67 &gt; 255.255.255.255.68: BOOTP/DHCP, Reply</span></pre>
-      <p>
-        Aquest resum BOOTP no identifica els tipus DHCP. Amb <code>-vv</code>, llegeix l’opció de tipus de missatge per distingir Discover, Offer, Request i ACK.
-      </p>
-    </li>
-
-    <li>
-      <p><strong>Compara-ho amb una renovació</strong>, amb la captura oberta:</p>
-<pre>sudo networkctl renew enp1s0</pre>
-      <p>
-        En una renovació habitual apareixen Request/ACK, directament al servidor.
-      </p>
-<pre><span class="o">IP 10.0.0.55.68 &gt; 10.0.0.1.67: BOOTP/DHCP, Request from 08:00:27:1f:a3:0c
-IP 10.0.0.1.67 &gt; 10.0.0.55.68: BOOTP/DHCP, Reply</span></pre>
-    </li>
-
-    <li>
-      <p>Atura amb <kbd>Ctrl</kbd>+<kbd>C</kbd> i mira què t'ha quedat:</p>
-<pre>ip -c addr show enp1s0
-ip -c route
-resolvectl status enp1s0</pre>
-      <p>Tot ho ha decidit el servidor.</p>
-    </li>
-  </ol>
-
-  <div class="cq-note">
-    <span class="lbl">Ubuntu 26.04</span>
-    A <code>networkctl status</code> la concessió surt entre parèntesis:
-    <code>Address: 10.0.0.55 (DHCPv4 via 10.0.0.1)</code>.
-  </div>
-</div>
-
-<!-- ============ 10 · BONES PRÀCTIQUES ============ -->
-<div class="cq-block" data-kind="bones pràctiques">
-  <h2 id="criteris-professionals">Criteris professionals</h2>
-  <ul>
-    <li>
-      <strong>Infraestructura fora del rang dinàmic.</strong> Servidor, routers i punts d'accés
-      a la part baixa de la xarxa (<code>.1</code>–<code>.20</code>); el <em>pool</em> comença
-      per sobre.
-    </li>
-    <li>
-      <strong>Millor reserva que IP estàtica.</strong> Dona la mateixa previsibilitat, però es
-      gestiona des d'un únic lloc.
-    </li>
-    <li>
-      <strong>Dimensiona el <em>pool</em> amb marge:</strong> els dispositius reals més un
-      20–30 %.
-    </li>
-    <li>
-      <strong>Concessió curta</strong> en xarxes de pas (visitants) i <strong>llarga</strong>
-      en llocs de treball fixos.
-    </li>
-    <li><strong>Un sol servidor DHCP</strong> per xarxa.</li>
-  </ul>
-</div>
-
-<!-- ============ 11 · PROBLEMES HABITUALS ============ -->
-<div class="cq-block" data-kind="problemes">
-  <h2 id="quan-el-client-no-rep-adreca">Quan el client no rep adreça</h2>
-  <dl class="cq-issues">
-    <dt>El client té una adreça 169.254.x.x</dt>
-    <dd>
-      <p><span class="lbl">Causa</span> No ha arribat cap OFFER. Aquesta adreça se l'ha posat ell sol en rendir-se.</p>
-      <p><span class="lbl">Solució</span> Al servidor, comprova que escolta: <code>sudo ss -ulnp | grep :67</code>. Si no surt res, el servei està aturat o no escolta per aquella targeta.</p>
-    </dd>
-
-    <dt>El servei no arrenca després d'editar la configuració</dt>
-    <dd>
-      <p><span class="lbl">Causa</span> Gairebé sempre, una coma de més al JSON. També pot ser que la targeta encara no tingui IP fixa: un servidor DHCP no pot escoltar per una interfície sense adreça.</p>
-      <p><span class="lbl">Solució</span> Mira l'estat del servei amb <code>systemctl status</code> i llegeix l'última línia de l'error.</p>
-    </dd>
-
-    <dt>El client rep IP però no navega</dt>
-    <dd>
-      <p><span class="lbl">Causa</span> DHCP ha funcionat; falla el que ha repartit (porta d'enllaç o DNS).</p>
-      <p><span class="lbl">Solució</span> <code>ping 9.9.9.9</code> prova l'encaminament i <code>ping www.upc.edu</code> prova el DNS. Si el primer va i el segon no, el problema és el DNS.</p>
-    </dd>
-  </dl>
-</div>
-
-<!-- ============ 12 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
   <h2 id="resum">Resum</h2>
   <ul>
-    <li>DHCP reparteix IP, màscara, porta d'enllaç i DNS de manera automàtica.</li>
-    <li>Va sobre UDP: servidor al port <strong>67</strong>, client al <strong>68</strong>.</li>
-    <li>La negociació és <strong>DORA</strong>: Discover, Offer, Request, Ack.</li>
-    <li>L'adreça es presta amb una <strong>concessió</strong>, que el client renova a mitja vida.</li>
-    <li>Assignació <strong>dinàmica</strong>, <strong>reserva</strong> (MAC↔IP) o <strong>estàtica</strong>.</li>
+    <li>DHCP envia IP, màscara, porta d’enllaç i DNS al client.</li>
+    <li>Fa servir UDP: port <strong>67</strong> al servidor i <strong>68</strong> al client.</li>
+    <li><strong>DORA</strong>: Discover → Offer → Request → ACK.</li>
+    <li>La <strong>concessió</strong> limita el temps d’ús de la IP; es pot renovar.</li>
+    <li>IP <strong>manual</strong>, o configuració per <strong>DHCP amb reserva o sense</strong>.</li>
   </ul>
-
-  <div class="cq-tablewrap">
-    <table class="cq-table">
-      <thead>
-        <tr><th>Comanda</th><th>Per a què serveix</th></tr>
-      </thead>
-      <tbody>
-        <tr><td><code>ip -c addr show</code><br><code>ip -c a</code></td><td>Veure l'adreça rebuda</td></tr>
-        <tr><td><code>ip -c route</code><br><code>ip -c r</code></td><td>Veure la porta d'enllaç</td></tr>
-        <tr><td><code>resolvectl status</code></td><td>Veure el DNS actiu</td></tr>
-        <tr><td><code>networkctl status &lt;if&gt;</code></td><td>Estat i concessió de la targeta</td></tr>
-        <tr><td><code>networkctl renew &lt;if&gt;</code></td><td>Renovar: dos missatges, al mateix servidor</td></tr>
-        <tr><td><code>networkctl reconfigure &lt;if&gt;</code></td><td>Reconfigurar la interfície; comprovar la seqüència a la captura</td></tr>
-        <tr><td><code>tcpdump -n port 67 or port 68</code></td><td>Capturar l'intercanvi DHCP</td></tr>
-        <tr><td><code>ss -ulnp | grep :67</code></td><td>Veure si el servidor escolta</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <p style="margin-top:16px">
-    <strong>Següent:</strong> a <em><a class="cq-ref" href="t1-2-encaminament-nat.html">T1.2</a> · Encaminament i NAT</em> veuràs per què un client
-    amb adreça correcta encara no arriba a Internet.
-  </p>
 </div>
 
-<!-- ============ 13 · QUIZ ============ -->
 <div class="cq-block" data-kind="quiz">
   <h2 id="comprova-el-que-has-apres">Comprova el que has après</h2>
 
@@ -400,12 +182,12 @@ resolvectl status enp1s0</pre>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
 
-  <div class="cq-question" data-id="t1-1-discover-origen" data-type="single" data-explanation="El client inicial encara no té adreça assignada i usa 0.0.0.0 com a origen.">
-    <div class="statement">Quina IP d'origen porta el missatge DISCOVER?</div>
-    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">La seva IP anterior, si en tenia</button>
-    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">0.0.0.0, perquè encara no en té cap</button>
-    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">255.255.255.255</button>
-    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">169.254.0.1</button>
+  <div class="cq-question" data-id="t1-1-reserva" data-type="single" data-explanation="Amb reserva, el client continua demanant la configuració per DHCP; és el servidor qui li assigna una IP concreta.">
+    <div class="statement">Un client rep sempre la mateixa IP gràcies a una reserva. Com està configurat?</div>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Amb una IP escrita manualment al client</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Per DHCP: el servidor li té reservada aquella IP</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Sense DHCP, perquè una IP estable no necessita servidor</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Amb una IP d’enllaç local triada pel client</button>
     <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
     <div class="cq-feedback" role="status" aria-live="polite"></div>
   </div>
@@ -413,7 +195,7 @@ resolvectl status enp1s0</pre>
   <div class="cq-question" data-id="t1-1-apipa" data-type="single" data-explanation="Una IPv4 169.254.x.x és una adreça d’enllaç local; no acredita una concessió DHCP.">
     <div class="statement">Un client acaba amb l'adreça 169.254.12.7. Què vol dir?</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que el servidor DHCP li ha donat una adreça privada</button>
-    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Que no ha rebut cap resposta DHCP i se l'ha posat ell sol</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Que s’ha assignat una IP d’enllaç local, no una concessió del nostre DHCP</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que la concessió ha caducat però encara funciona</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Que hi ha un conflicte amb un altre equip</button>
     <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>
@@ -424,7 +206,7 @@ resolvectl status enp1s0</pre>
     <div class="statement">Selecciona totes les afirmacions certes sobre DHCP</div>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Cada concessió té una durada limitada.</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">El client tria lliurement la IP que vol.</button>
-    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">El client renova la concessió quan n'ha passat la meitat del temps.</button>
+    <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Habitualment, el client comença a renovar a la meitat del temps de concessió.</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="true">Una reserva associa una MAC concreta a una IP concreta.</button>
     <button type="button" aria-pressed="false" class="cq-option" data-correct="false">Una IP estàtica ha d'estar dins del rang dinàmic.</button>
     <div><button type="button" class="cq-check-btn">Comprova la resposta</button></div>

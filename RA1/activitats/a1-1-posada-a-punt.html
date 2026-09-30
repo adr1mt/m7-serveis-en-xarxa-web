@@ -5,18 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>A1.1 · Posada a punt del servidor — Serveis en Xarxa (0227)</title>
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
+<script src="../../_identitat/lectura.js"></script>
 </head>
 <body>
-<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
     <a href="../index.html">‹ RA1 · Instal·lació de serveis de configuració dinàmica (DHCP)</a>
-    <span class="pos">A1.1 · 7/10</span>
+    <span class="pos">A1.1 · 8/11</span>
   </div>
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
+<!-- EINES LECTURA INICI -->
+<div class="cq-tools" hidden><label for="cq-tema">Tema</label> <select id="cq-tema" class="cq-theme"><option value="auto">Automàtic</option><option value="light">Clar</option><option value="dark">Fosc</option></select></div>
+<!-- EINES LECTURA FI -->
 <main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · A1.1</div>
@@ -24,19 +28,6 @@
   <p class="lede">Deixar la màquina llesta: nom, hora, actualitzacions i les dues targetes de xarxa.</p>
 </header>
 
-<!-- ============ OBJECTIUS ============ -->
-<div class="cq-block" data-kind="objectius">
-  <h2 id="que-has-de-saber-abans-de-comencar">Què has de saber abans de començar</h2>
-  <p>
-    Teoria <a class="cq-ref" href="../teoria/t1-0-repas-adrecament.html">T1.0</a> (adreçament) i guia <a class="cq-ref" href="../guies/g1-1-netplan.html">G1.1</a> (Netplan).
-  </p>
-  <p>
-    Amb aquesta activitat aprendràs a posar a punt un servidor acabat d'instal·lar: nom, hora,
-    actualitzacions i configuració de les dues targetes de xarxa.
-  </p>
-</div>
-
-<!-- ============ ESCENARI ============ -->
 <div class="cq-block" data-kind="escenari">
   <h2 id="amb-que-treballaras">Amb què treballaràs</h2>
   <p>
@@ -59,118 +50,34 @@
   <p>Conserva aquest servidor per a <a class="cq-ref" href="a1-2-dhcp-systemd-networkd.html">A1.2</a>. En acabar A1.1, guarda també una còpia o instantània de la base preparada, abans d’instal·lar serveis o canviar la gestió de xarxa. Et servirà per començar altres pràctiques sense repetir la posada a punt.</p>
 </div>
 
-<!-- ============ ENUNCIAT ============ -->
 <div class="cq-block" data-kind="enunciat">
   <h2 id="que-has-de-fer">Què has de fer</h2>
-  <p>
-    Acabes de rebre un servidor recent instal·lat i l'has de deixar en condicions per posar-hi
-    serveis a sobre. Ha de quedar així:
-  </p>
+  <p>Consulta la <a class="cq-ref" href="../guies/g1-1-netplan.html">G1.1</a> per a la xarxa.</p>
   <ol>
-    <li>Tots els paquets del sistema <strong>actualitzats</strong>.</li>
-    <li>El nom de l'equip (<em>hostname</em>) canviat pel <strong>teu nom propi</strong>, en minúscules i sense accents.</li>
-    <li>La <strong>zona horària</strong> correcta per a on som.</li>
-    <li>Les <strong>actualitzacions automàtiques desactivades</strong>, només durant aquesta pràctica per mantenir un estat reproduïble. En explotació cal planificar les actualitzacions de seguretat, amb responsable i calendari.</li>
-    <li>Netplan configurat: <code>puigcastellar1</code> automàtica i <code>personal1</code> fixa amb <code>192.168.1.1/24</code> i el DNS de <strong>Quad9</strong>.</li>
+    <li>Actualitza tots els paquets del sistema.</li>
+    <li>Canvia el <em>hostname</em> pel teu nom, en minúscules i sense accents.</li>
+    <li>Configura la zona horària d’aquí.</li>
+    <li>Desactiva les actualitzacions automàtiques només durant la pràctica,
+      per mantenir un estat reproduïble.</li>
+    <li>Configura l’externa <code>puigcastellar1</code> per DHCP i la interna
+      <code>personal1</code> amb <code>192.168.1.1/24</code> i DNS <code>9.9.9.9</code>.
+      Comprova els noms reals de les targetes. Aplica els canvis amb reversió des de SSH.</li>
+    <li>Comprova les adreces, la ruta per defecte per l’externa i la resolució DNS.
+      No posis cap porta d’enllaç a la interna.</li>
+    <li>Guarda una còpia o instantània de la base abans d’instal·lar serveis.</li>
   </ol>
 </div>
 
-<!-- ============ ON BUSCAR ============ -->
-<div class="cq-block" data-kind="enunciat">
-  <h2 id="d-on-has-de-treure-cada-cosa">D'on has de treure cada cosa</h2>
-  <p>Les comandes no te les donem fetes; sí que et diem on trobar-les:</p>
-  <div class="cq-tablewrap">
-    <table class="cq-table">
-      <thead><tr><th>Què has de fer</th><th>On ho tens</th></tr></thead>
-      <tbody>
-        <tr><td>Actualitzar el sistema</td><td><code>apt</code>, del mòdul de sistemes operatius</td></tr>
-        <tr><td>Nom de l'equip</td><td><code>hostnamectl --help</code></td></tr>
-        <tr><td>Zona horària</td><td><code>timedatectl --help</code></td></tr>
-        <tr><td>Actualitzacions automàtiques</td><td>El fitxer <code>/etc/apt/apt.conf.d/20auto-upgrades</code></td></tr>
-        <tr><td>Configuració de xarxa</td><td>Guia <a class="cq-ref" href="../guies/g1-1-netplan.html">G1.1</a> i els <a href="https://netplan.readthedocs.io/en/stable/examples/">exemples oficials de Netplan</a></td></tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-
-<!-- ============ RECORDATORI ============ -->
-<div class="cq-block" data-kind="recordatori">
-  <h2 id="estas-treballant-per-ssh">Estàs treballant per SSH</h2>
-  <p>
-    Un error a la configuració de xarxa et pot deixar fora de la màquina. Aplica els canvis
-    <strong>de la manera segura que has vist a la <a class="cq-ref" href="../guies/g1-1-netplan.html">G1.1</a></strong>, no de la ràpida: si perds la
-    connexió, la configuració es desfà sola al cap de dos minuts. Si tot i així et quedes fora,
-    entra per la consola de la VM a isardVDI.
-  </p>
-</div>
-
-<!-- ============ OBSERVACIÓ TÈCNICA ============ -->
-<div class="cq-block" data-kind="observació">
-  <h2 id="un-detall-on-gairebe-tothom-ensopega">Un detall on gairebé tothom ensopega</h2>
-  <p>
-    A <code>personal1</code> <strong>no hi has de posar cap porta d'enllaç</strong>, encara que
-    aquesta màquina n'hagi de fer de porta d'enllaç per als seus clients. Són dues coses
-    diferents i val la pena que ho tinguis clar abans d'escriure el fitxer.
-  </p>
-  <p>En aquest laboratori volem una sortida preferent, aportada pel DHCP de puigcastellar1. No afegeixis una ruta per defecte cap a la mateixa IP del servidor a personal1. En altres dissenys poden coexistir diverses rutes per defecte amb mètriques o taules diferents.</p>
-  <p>
-    Que els <strong>clients</strong> facin servir la <code>192.168.1.1</code> com a porta
-    d'enllaç no s'escriu aquí, sinó a l'opció <code>routers</code> del servidor DHCP. Això és de
-    les activitats 3 i 4.
-  </p>
-</div>
-
-<!-- ============ COMPROVACIÓ ============ -->
-<div class="cq-block" data-kind="comprovació">
-  <h2 id="com-sabras-que-ho-has-fet-be">Com sabràs que ho has fet bé</h2>
-  <p>
-    Abans d'entregar, has de poder respondre <strong>sí</strong> a totes aquestes preguntes, amb
-    la sortida d'una comanda al davant. Si alguna falla, encara no has acabat.
-  </p>
-  <ul>
-    <li>El <em>prompt</em> mostra el teu <em>hostname</em> nou en tornar a entrar per SSH.</li>
-    <li>El rellotge del sistema dona l'hora d'aquí, amb la zona horària correcta.</li>
-    <li><code>enp2s0</code> té la <code>192.168.1.1/24</code> i <code>enp1s0</code> una adreça del centre.</li>
-    <li>Hi ha <strong>una sola</strong> ruta <code>default</code>, i és la de <code>puigcastellar1</code>.</li>
-    <li>Una consulta de nom de domini es resol correctament.</li>
-  </ul>
-</div>
-
-<!-- ============ PROBLEMES ============ -->
-<div class="cq-block" data-kind="problemes">
-  <h2 id="si-alguna-cosa-no-va">Si alguna cosa no va</h2>
-  <dl class="cq-issues">
-    <dt>Error de sintaxi en aplicar el Netplan</dt>
-    <dd>
-      <p><span class="lbl">Causa</span> Indentació. Un tabulador que se t'ha colat en copiar i enganxar.</p>
-      <p><span class="lbl">Solució</span> Al <code>nano</code>, esborra els espais del davant de la línia i torna'ls a escriure a mà.</p>
-    </dd>
-
-    <dt><code>enp2s0</code> no té la IP que li has posat</dt>
-    <dd>
-      <p><span class="lbl">Causa</span> Falta desactivar-hi el DHCP, o el nom de la targeta no és el que has escrit.</p>
-      <p><span class="lbl">Solució</span> Compara el nom amb la sortida de <code>ip -c link show</code> i repassa la <a class="cq-ref" href="../guies/g1-1-netplan.html">G1.1</a>.</p>
-    </dd>
-
-    <dt>Has perdut la connexió SSH</dt>
-    <dd>
-      <p><span class="lbl">Causa</span> Has tocat la targeta per on estaves connectat.</p>
-      <p><span class="lbl">Solució</span> Si has aplicat els canvis de la manera segura, espera 120 segons. Si no, entra per la consola de la VM a isardVDI.</p>
-    </dd>
-  </dl>
-</div>
-
-<!-- ============ LLIURAMENT ============ -->
 <div class="cq-block" data-kind="lliurament">
-  <h2 id="que-has-d-entregar">Què has d'entregar</h2>
-  <p>
-    Un <strong>document tècnic</strong> on expliquis tot el que has anat fent, amb les captures
-    del resultat.
-  </p>
-  <p>
-    Respon-hi també, amb les teves paraules: <strong>per què a <code>personal1</code> no hi has
-    posat porta d'enllaç?</strong>
-  </p>
+  <h2 id="que-has-d-entregar">Què has d’entregar</h2>
+  <p>Entrega un document breu amb les dades del servidor i captures de:</p>
+  <ul>
+    <li>Actualització completada, <em>hostname</em>, zona horària i estat de les actualitzacions automàtiques.</li>
+    <li>Configuració de Netplan, IP de les targetes, ruta per defecte i resolució d’un nom.</li>
+    <li>Reentrada per SSH i còpia o instantània de la base preparada.</li>
+  </ul>
+  <p>Justifica per què <code>personal1</code> no té porta d’enllaç.
+    En explotació, les actualitzacions de seguretat necessiten un responsable i un calendari.</p>
 </div>
 
 
@@ -182,9 +89,9 @@
 
 <!-- === PEU DE NAVEGACIÓ INICI === -->
 <nav class="cq-pager">
-  <a class="prev" href="../guies/g1-3-nftables.html">
-    <span class="dir">Anterior · G1.3</span>
-    <span class="ttl">Guia: nftables</span></a>
+  <a class="prev" href="../guies/g1-4-systemd-networkd.html">
+    <span class="dir">Anterior · G1.4</span>
+    <span class="ttl">Guia: systemd-networkd</span></a>
   <a class="next" href="a1-2-dhcp-systemd-networkd.html">
     <span class="dir">Següent · A1.2</span>
     <span class="ttl">DHCP mínim amb systemd-networkd</span></a>

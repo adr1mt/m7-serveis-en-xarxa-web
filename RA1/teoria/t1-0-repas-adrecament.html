@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>T1.0 · Repàs d'adreçament — Serveis en Xarxa (0227)</title>
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
+<script src="../../_identitat/lectura.js"></script>
 </head>
 <body>
 <a class="cq-skip" href="#contingut">Salta al contingut</a>
@@ -12,17 +13,24 @@
 <nav class="cq-nav">
   <div class="inner">
     <a href="../index.html">‹ RA1 · Instal·lació de serveis de configuració dinàmica (DHCP)</a>
-    <span class="pos">T1.0 · 1/10</span>
+    <span class="pos">T1.0 · 1/11</span>
   </div>
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
+<!-- EINES LECTURA INICI -->
+<div class="cq-tools" hidden><label for="cq-tema">Tema</label> <select id="cq-tema" class="cq-theme"><option value="auto">Automàtic</option><option value="light">Clar</option><option value="dark">Fosc</option></select></div>
+<!-- EINES LECTURA FI -->
 <main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · T1.0</div>
   <h1>Repàs d'adreçament</h1>
   <p class="lede">El mínim de xarxes que necessites tenir clar abans de començar el mòdul.</p>
 </header>
+<!-- TOC INICI -->
+<details class="cq-toc"><summary>En aquesta pàgina</summary><ol><li><a href="#que-sabras-fer-en-acabar">Què sabràs fer en acabar</a></li><li><a href="#dues-adreces-per-a-cada-targeta">Dues adreces per a cada targeta</a></li><li><a href="#la-mascara-parteix-l-adreca-en-dos">La màscara parteix l&#x27;adreça en dos</a></li><li><a href="#les-mascares-que-faras-servir">Les màscares que faràs servir</a></li><li><a href="#les-mascares-no-acaben-sempre-en-un-punt">Les màscares no acaben sempre en un punt</a></li><li><a href="#desglossar-la-xarxa-192-168-1-0-24">Desglossar la xarxa 192.168.1.0/24</a></li><li><a href="#adreces-privades-i-publiques">Adreces privades i públiques</a></li><li><a href="#quantes-adreces-necessites">Quantes adreces necessites</a></li><li><a href="#llegir-la-teva-propia-xarxa">Llegir la teva pròpia xarxa</a></li><li><a href="#confusions-habituals">Confusions habituals</a></li><li><a href="#resum">Resum</a></li><li><a href="#comprova-el-que-has-apres">Comprova el que has après</a></li></ol></details>
+<!-- TOC FI -->
+
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
@@ -43,8 +51,9 @@
   </p>
   <ul>
     <li>
-      <strong>MAC</strong> (<code>08:00:27:1f:a3:0c</code>) — ve de fàbrica i no canvia. Serveix
-      dins de la xarxa local i és la que fa servir DHCP per reconèixer cada equip.
+      <strong>MAC</strong> (<code>08:00:27:1f:a3:0c</code>) — identifica la targeta dins de la xarxa local.
+      Normalment ve de fàbrica, però es pot canviar. En les nostres reserves DHCP
+      la farem servir per identificar l’equip.
     </li>
     <li>
       <strong>IP</strong> (<code>192.168.1.50</code>) — la poses tu o te la dona un servidor.
@@ -53,7 +62,7 @@
   </ul>
   <p>
     La comparació habitual: la MAC és el número de sèrie del teu mòbil; la IP és el número de
-    telèfon. El primer no canvia mai; el segon depèn d'on estiguis donat d'alta.
+    telèfon. El primer identifica la targeta; el segon depèn de la xarxa on et connectes.
   </p>
 </div>
 
@@ -72,8 +81,9 @@
   </p>
   <p>
     <strong>Dos equips es poden parlar directament si comparteixen la part de xarxa.</strong> Si
-    no, el trànsit ha de passar per la porta d'enllaç. Aquesta única frase explica la meitat dels
-    problemes de xarxa que et trobaràs.
+    no, el trànsit ha de passar per la porta d'enllaç. La <strong>porta d’enllaç</strong> és l’adreça de l’encaminador
+    que envia els paquets cap a altres xarxes, com Internet. Per exemple, un PC
+    <code>192.168.1.50/24</code> pot fer servir <code>192.168.1.1</code> com a sortida.
   </p>
 </div>
 
@@ -134,10 +144,11 @@
       </tbody>
     </table>
   </div>
-  <p>
-    La de <strong>difusió</strong> és la que fa servir un client DHCP per preguntar si hi ha
-    algun servidor: un missatge que arriba a tothom de la xarxa alhora.
-  </p>
+  <p>La <strong>adreça de xarxa</strong> identifica tota la subxarxa, no un equip:
+    <code>192.168.1.0/24</code> és el nom d’aquest grup d’adreces.</p>
+  <p>La <strong>adreça de difusió</strong> (<em>broadcast</em>) permet enviar un
+    missatge a tots els equips de la subxarxa. Aquí és <code>192.168.1.255</code>.
+    Cap de les dues s’assigna a un equip.</p>
 </div>
 
 <!-- ============ 6 · RANGS PRIVATS ============ -->
@@ -201,44 +212,13 @@
 <!-- ============ 7 · OBSERVACIÓ ============ -->
 <div class="cq-block" data-kind="observació">
   <h2 id="llegir-la-teva-propia-xarxa">Llegir la teva pròpia xarxa</h2>
-
-  <ol class="cq-steps">
-    <li>
-      <p><strong>Mira les teves adreces</strong>, la MAC i la IP alhora:</p>
+  <p>Consulta la IP, la màscara i la MAC de les targetes:</p>
 <pre>ip -c addr show</pre>
-      <p>La MAC surt a <code>link/ether</code> i la IP a <code>inet</code>. Apunta-les.</p>
-      <div class="cq-note">
-        <span class="lbl">Escriu menys</span>
-        <code>ip -c a</code>, <code>ip -c r</code>, <code>ip -c l</code> i <code>ip -c n</code>
-        són les formes curtes de les quatre ordres d'aquest bloc.
-      </div>
-    </li>
-
-    <li>
-      <p><strong>Mira per on surts</strong> de la teva xarxa:</p>
+  <p>La MAC surt a <code>link/ether</code> i la IP amb el prefix a <code>inet</code>.
+    Per veure la sortida cap a altres xarxes:</p>
 <pre>ip -c route</pre>
-      <p>
-        La línia <code>default via</code> és la porta d'enllaç, que ha de ser de la teva xarxa.
-      </p>
-    </li>
-
-    <li>
-      <p><strong>Fes els càlculs sense fer-los</strong>, amb el Python que ja ve instal·lat:</p>
-<pre>python3 -c "import ipaddress as i; n=i.ip_network('192.168.1.0/24'); \
-print('Xarxa:', n.network_address); \
-print('Difusió:', n.broadcast_address); \
-print('Equips:', n.num_addresses - 2)"</pre>
-      <p>Canvia la xarxa per la teva.</p>
-    </li>
-
-    <li>
-      <p><strong>Comprova qui tens a la vora</strong> amb la taula de veïns, que lliga IP i MAC:</p>
-<pre>ip -c neigh</pre>
-      <p>
-        Per parlar amb un veí de la teva xarxa, el teu equip necessita saber-ne la MAC.
-      </p>
-    </li>
-  </ol>
+  <p>A la línia <code>default via</code>, l’adreça després de <code>via</code>
+    és la porta d’enllaç.</p>
 </div>
 
 <!-- ============ 8 · PROBLEMES ============ -->
@@ -273,7 +253,7 @@ print('Equips:', n.num_addresses - 2)"</pre>
     <li>La <strong>màscara</strong> parteix l'adreça en part de xarxa i part d'equip.</li>
     <li>De cada xarxa, la <strong>primera</strong> i l'<strong>última</strong> adreça no s'assignen.</li>
     <li>Rangs privats: <code>10.0.0.0/8</code>, <code>172.16.0.0/12</code> i <code>192.168.0.0/16</code>.</li>
-    <li>La <strong>porta d'enllaç</strong> ha d'estar dins de la teva pròpia xarxa.</li>
+    <li>La <strong>porta d’enllaç</strong> és l’encaminador que dona accés a altres xarxes.</li>
   </ul>
 
   <div class="cq-tablewrap">
@@ -282,8 +262,6 @@ print('Equips:', n.num_addresses - 2)"</pre>
       <tbody>
         <tr><td><code>ip -c addr show</code><br><code>ip -c a</code></td><td>Veure la MAC i la IP amb la màscara</td></tr>
         <tr><td><code>ip -c route</code><br><code>ip -c r</code></td><td>Veure la porta d'enllaç</td></tr>
-        <tr><td><code>ip -c neigh</code><br><code>ip -c n</code></td><td>Veure els veïns i la seva MAC</td></tr>
-        <tr><td><code>ip -c link show</code><br><code>ip -c l</code></td><td>Veure les targetes i els seus noms</td></tr>
       </tbody>
     </table>
   </div>

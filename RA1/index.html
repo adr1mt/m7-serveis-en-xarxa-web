@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Serveis en Xarxa (0227) · RA1 — DHCP</title>
 <link rel="stylesheet" href="../_identitat/sinapsi.css">
+<script src="../_identitat/lectura.js"></script>
 </head>
 <body>
 <a class="cq-skip" href="#contingut">Salta al contingut</a>
@@ -17,12 +18,25 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
+<!-- EINES LECTURA INICI -->
+<div class="cq-tools" hidden><label for="cq-tema">Tema</label> <select id="cq-tema" class="cq-theme"><option value="auto">Automàtic</option><option value="light">Clar</option><option value="dark">Fosc</option></select></div>
+<!-- EINES LECTURA FI -->
 <main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">CFGM SMX · Mòdul 0227</div>
   <h1>RA1 · Instal·lació de serveis de configuració dinàmica (DHCP)</h1>
   <p class="lede">RA1 · Instal·lació de serveis de configuració dinàmica (DHCP)</p>
 </header>
+
+<div class="cq-block" data-kind="itinerari">
+<h2 id="per-on-comencar">Per on començar</h2>
+<ol>
+<li><strong><a class="cq-ref" href="activitats/a1-1-posada-a-punt.html">A1.1</a>:</strong> prepara el servidor amb <a class="cq-ref" href="teoria/t1-0-repas-adrecament.html">T1.0</a> i <a class="cq-ref" href="guies/g1-1-netplan.html">G1.1</a>.</li>
+<li><strong><a class="cq-ref" href="activitats/a1-2-dhcp-systemd-networkd.html">A1.2</a>:</strong> entén DHCP amb <a class="cq-ref" href="teoria/t1-1-dhcp-fonaments.html">T1.1</a> i prova el servidor mínim amb <a class="cq-ref" href="guies/g1-4-systemd-networkd.html">G1.4</a>.</li>
+<li><strong><a class="cq-ref" href="activitats/a1-3-dhcp-kea.html">A1.3</a>:</strong> configura Kea amb <a class="cq-ref" href="guies/g1-2-kea.html">G1.2</a> i la sortida a Internet amb <a class="cq-ref" href="teoria/t1-2-encaminament-nat.html">T1.2</a> i <a class="cq-ref" href="guies/g1-3-nftables.html">G1.3</a>.</li>
+<li><strong><a class="cq-ref" href="activitats/a1-4-kea-escala-reserves.html">A1.4</a>:</strong> adapta el rang i les reserves a un escenari més gran.</li>
+</ol>
+</div>
 
 <div class="cq-block" data-kind="teoria">
   <h2 id="teoria">Teoria</h2>
@@ -58,14 +72,20 @@
       <span class="ref">G1.3</span>
       <span class="ttl">Guia: nftables
         <span class="sub">Encaminament i NAT cap a Internet</span></span></a></li>
+    <li><a href="guies/g1-4-systemd-networkd.html">
+      <span class="ref">G1.4</span>
+      <span class="ttl">Guia: systemd-networkd
+        <span class="sub">El DHCP integrat per a A1.2</span></span></a></li>
   </ul>
 </div>
 
 <div class="cq-block" data-kind="activitats">
   <h2 id="activitats">Activitats</h2>
   <p>
-    Cada activitat es fa sobre una <strong>màquina nova</strong> a isardVDI, amb les targetes
-    <code>puigcastellar1</code> i <code>personal1</code>.
+    <a class="cq-ref" href="activitats/a1-1-posada-a-punt.html">A1.1</a> prepara la base; <a class="cq-ref" href="activitats/a1-2-dhcp-systemd-networkd.html">A1.2</a> reaprofita el servidor. Per a <a class="cq-ref" href="activitats/a1-3-dhcp-kea.html">A1.3</a> i <a class="cq-ref" href="activitats/a1-4-kea-escala-reserves.html">A1.4</a>,
+    parteix d’una còpia neta d’<a class="cq-ref" href="activitats/a1-1-posada-a-punt.html">A1.1</a> o d’una màquina nova. L’externa
+    <code>puigcastellar1</code> va per DHCP i la interna <code>personal1</code>, amb IP fixa.
+    Treballem al servidor per SSH des de l’amfitrió.
   </p>
   <ul class="cq-index">
     <li><a href="activitats/a1-1-posada-a-punt.html">

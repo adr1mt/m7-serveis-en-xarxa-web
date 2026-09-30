@@ -56,6 +56,14 @@
    a un full compartit (_identitat/sinapsi.css).
    ============================================================ */
   :root {
+    color-scheme: light;
+    --nav-bg: rgba(251,252,253,.96);
+    --button-ink: #FFFFFF;
+    --disabled-bg: #DCE7F3;
+    --disabled-ink: #455568;
+    --code-comment: #A9B9CB;
+    --code-output: #8FD0A5;
+    --hover-border: #B3C2D2;
     --paper:        #FBFCFD;
     --card:         #FFFFFF;
     --ink:          #131A22;
@@ -81,6 +89,63 @@
     --font-mono:    "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
   }
 
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --paper: #0F1722;
+    --card: #172231;
+    --ink: #E6EDF5;
+    --muted: #AFBDCD;
+    --rule: #344459;
+    --accent: #9EC7FF;
+    --accent-hover: #B9D7FF;
+    --accent-soft: #1D3048;
+    --accent-line: #45638A;
+    --warn: #FFBA8A;
+    --warn-soft: #30231B;
+    --warn-line: #805339;
+    --ok: #90DAB2;
+    --ok-soft: #182E25;
+    --ok-line: #416B53;
+    --ko: #FFADB3;
+    --ko-soft: #321F27;
+    --ko-line: #804552;
+    --code-bg: #0B1420;
+    --nav-bg: rgba(15,23,34,.96);
+    --button-ink: #10213B;
+    --disabled-bg: #344459;
+    --disabled-ink: #AFBDCD;
+    --hover-border: #6E86A2;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --paper: #0F1722;
+    --card: #172231;
+    --ink: #E6EDF5;
+    --muted: #AFBDCD;
+    --rule: #344459;
+    --accent: #9EC7FF;
+    --accent-hover: #B9D7FF;
+    --accent-soft: #1D3048;
+    --accent-line: #45638A;
+    --warn: #FFBA8A;
+    --warn-soft: #30231B;
+    --warn-line: #805339;
+    --ok: #90DAB2;
+    --ok-soft: #182E25;
+    --ok-line: #416B53;
+    --ko: #FFADB3;
+    --ko-soft: #321F27;
+    --ko-line: #804552;
+    --code-bg: #0B1420;
+    --nav-bg: rgba(15,23,34,.96);
+    --button-ink: #10213B;
+    --disabled-bg: #344459;
+    --disabled-ink: #AFBDCD;
+    --hover-border: #6E86A2;
+    }
+  }
+
   body {
     margin: 0;
     padding: 40px 16px 72px;
@@ -99,7 +164,7 @@
     z-index: 5;
     margin: -40px -16px 26px;
     padding: 9px 16px;
-    background: rgba(251, 252, 253, .93);
+    background: var(--nav-bg);
     -webkit-backdrop-filter: blur(6px);
     backdrop-filter: blur(6px);
     border-bottom: 1px solid var(--rule);
@@ -251,6 +316,7 @@
   .cq-block a { color: var(--accent); overflow-wrap: anywhere; }
 
   .cq-block code {
+    overflow-wrap: anywhere;
     font-family: var(--font-mono);
     font-size: .84em;
     background: var(--accent-soft);
@@ -271,8 +337,8 @@
     line-height: 1.6;
   }
   .cq-block pre code { all: unset; font: inherit; }
-  .cq-block pre .c { color: #7E93AB; }   /* comentari dins del codi */
-  .cq-block pre .o { color: #8FD0A5; }   /* sortida esperada */
+  .cq-block pre .c { color: var(--code-comment); }   /* comentari dins del codi */
+  .cq-block pre .o { color: var(--code-output); }   /* sortida esperada */
 
   /* ---- Variants de color per tipus de bloc ---- */
   .cq-block[data-kind="objectius"],
@@ -288,7 +354,7 @@
   .cq-block[data-kind="lliurament"] h2,
   .cq-block[data-kind="resum"] h2 { color: var(--accent); }
 
-  .cq-block[data-kind="recordatori"] { background: var(--warn-soft); border-color: #F5DCC8; }
+  .cq-block[data-kind="recordatori"] { background: var(--warn-soft); border-color: var(--warn-line); }
   .cq-block[data-kind="recordatori"]::before { background: var(--warn-soft); border-color: var(--warn-line); color: var(--warn); }
   .cq-block[data-kind="recordatori"] h2 { color: var(--warn); }
 
@@ -349,7 +415,7 @@
     margin: 2px 0 5px;
   }
   .dora-step .d { font-size: .8rem; line-height: 1.45; color: var(--muted); }
-  .dora-arrow { align-self: center; color: #B3C2D2; font-size: 1rem; }
+  .dora-arrow { align-self: center; color: var(--muted); font-size: 1rem; }
   @media (max-width: 620px) {
     .dora-arrow { display: none; }
     .dora-step { flex-basis: 100%; }
@@ -477,7 +543,7 @@
     color: var(--ink);
     transition: border-color .12s ease, background .12s ease;
   }
-  .cq-option:hover:not(:disabled) { border-color: #B3C2D2; }
+  .cq-option:hover:not(:disabled) { border-color: var(--hover-border); }
   .cq-option:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .cq-option.cq-selected { border-color: var(--accent); background: var(--accent-soft); }
   .cq-option.cq-correct { border-color: var(--ok); background: var(--ok-soft); color: var(--ok); }
@@ -488,19 +554,39 @@
     border: none;
     border-radius: 7px;
     background: var(--accent);
-    color: #FFFFFF;
+    color: var(--button-ink);
     font-family: var(--font-display);
     font-weight: 500;
     font-size: .88rem;
     cursor: pointer;
   }
   .cq-check-btn:hover:not(:disabled) { background: var(--accent-hover); }
-  .cq-check-btn:disabled { background: #B3C2D2; cursor: default; }
+  .cq-check-btn:disabled { background: var(--disabled-bg); color: var(--disabled-ink); cursor: default; }
   .cq-feedback { margin-top: 10px; font-size: .88rem; font-weight: 600; }
   .cq-feedback.ok { color: var(--ok); }
   .cq-feedback.ko { color: var(--ko); }
 
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+
+  [hidden] { display: none !important; }
+  .cq-tools { max-width: 660px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: flex-end; gap: 10px; color: var(--muted); }
+  .cq-theme, .cq-copy-btn { min-height: 44px; padding: 8px 12px; border: 1px solid var(--rule); border-radius: 7px; font: inherit; background: var(--card); color: var(--ink); cursor: pointer; }
+  .cq-theme:hover, .cq-copy-btn:hover { border-color: var(--accent); }
+  .cq-toc, .cq-search { max-width: 660px; box-sizing: border-box; margin: 0 auto 26px; padding: 16px; border: 1px solid var(--rule); border-radius: 8px; background: var(--card); }
+  .cq-toc summary { cursor: pointer; color: var(--accent); font-weight: 600; }
+  .cq-toc a, .cq-search a { color: var(--accent); }
+  .cq-toc ol { padding-left: 24px; margin-bottom: 0; }
+  .cq-toc li { padding: 3px 0; }
+  .cq-code-tools { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 10px; margin-top: 16px; font-size: .85rem; }
+  .cq-code-tools + pre { margin-top: 6px; }
+  .cq-copy-buffer { position: fixed; left: -10000px; top: 0; width: 1px; height: 1px; }
+  .cq-search label { display: block; margin-bottom: 8px; font-weight: 600; }
+  .cq-search-input { background: var(--paper); color: var(--ink); border: 1px solid var(--muted); border-radius: 7px; }
+  .cq-search-input::placeholder { color: var(--muted); opacity: 1; }
+  .cq-search-results { padding-left: 20px; }
+  .cq-search-results li { margin: 12px 0; }
+  .cq-search-results .muted { display: block; color: var(--muted); font-size: .9rem; }
 
   /* ==== Mòbil: la pantalla de 375 px és la mida de treball real ==== */
   @media (max-width: 620px) {
@@ -517,6 +603,39 @@
 
   /* ==== Impressió: els alumnes imprimeixen la teoria ==== */
   @media print {
+    :root, :root[data-theme] {
+    color-scheme: light;
+    --nav-bg: rgba(251,252,253,.96);
+    --button-ink: #FFFFFF;
+    --disabled-bg: #DCE7F3;
+    --disabled-ink: #455568;
+    --code-comment: #A9B9CB;
+    --code-output: #8FD0A5;
+    --hover-border: #B3C2D2;
+    --paper:        #FBFCFD;
+    --card:         #FFFFFF;
+    --ink:          #131A22;
+    --muted:        #5C6875;
+    --rule:         #E3E7EC;
+    --accent:       #1D4E89;
+    --accent-hover: #26639F;
+    --accent-soft:  #EFF5FB;
+    --accent-line:  #DCE7F3;
+    --warn:         #C2410C;
+    --warn-soft:    #FEF6EF;
+    --warn-line:    #F0CBAE;
+    --code-bg:      #16202E;
+    --code-ink:     #E2E9F1;
+    --ok:           #0E7A4B;
+    --ok-soft:      #F0FAF4;
+    --ok-line:      #C6E7D6;
+    --ko:           #B4232B;
+    --ko-soft:      #FEF4F4;
+    --ko-line:      #F2CFCF;
+    --font-display: "Ubuntu", -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-body:    "Source Sans 3", -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-mono:    "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+    }
     body { background: #FFF; padding: 0; font-size: 11pt; }
     .cq-block { border-color: #CCC; page-break-inside: avoid; margin-bottom: 12px; }
     .cq-block pre { background: #F4F4F4; color: #000; border: 1px solid #DDD; }
@@ -525,7 +644,7 @@
     .cq-nav, .cq-pager { display: none; }
     a.cq-ref { border-bottom: none; color: inherit; }
   }
-  .cq-skip { position: absolute; left: 16px; top: -100px; z-index: 20; background: white; padding: 12px; }
+  .cq-skip { position: absolute; left: 16px; top: -100px; z-index: 20; background: var(--card); color: var(--accent); padding: 12px; }
   .cq-skip:focus { top: 8px; }
   :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
   [id] { scroll-margin-top: 90px; }
@@ -533,13 +652,16 @@
   @page { margin: 14mm; }
   @media print {
     .cq-block { break-inside: auto; }
-    .cq-block::before { position: static; display: inline-block; margin-bottom: 6pt; }
+    .cq-block::before { position: static; display: block; width: fit-content; margin-bottom: 6pt; break-after: avoid; }
     h2 { break-after: avoid; }
-    .dora-flow, .cq-steps > li { break-inside: avoid; }
+    .dora-flow, .cq-question, tr { break-inside: avoid; }
+    .cq-steps > li { break-inside: auto; }
+    .cq-steps > li > p:first-child { break-after: avoid; }
+    p { orphans: 3; widows: 3; }
     .cq-block pre { white-space: pre-wrap; overflow-wrap: anywhere; overflow: visible; }
     .cq-table td:first-child > code:only-child { white-space: normal; }
     thead { display: table-header-group; }
-    .cq-skip, .cq-toc, .cq-search { display: none; }
+    .cq-skip, .cq-toc, .cq-search, .cq-tools, .cq-code-tools { display: none; }
   }
 
 /* === SINAPSI-CSS FI ======================================== */

@@ -5,18 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>A1.2 · DHCP amb systemd-networkd — Serveis en Xarxa (0227)</title>
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
+<script src="../../_identitat/lectura.js"></script>
 </head>
 <body>
-<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
     <a href="../index.html">‹ RA1 · Instal·lació de serveis de configuració dinàmica (DHCP)</a>
-    <span class="pos">A1.2 · 8/10</span>
+    <span class="pos">A1.2 · 9/11</span>
   </div>
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
+<!-- EINES LECTURA INICI -->
+<div class="cq-tools" hidden><label for="cq-tema">Tema</label> <select id="cq-tema" class="cq-theme"><option value="auto">Automàtic</option><option value="light">Clar</option><option value="dark">Fosc</option></select></div>
+<!-- EINES LECTURA FI -->
 <main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · A1.2</div>
@@ -24,148 +28,51 @@
   <p class="lede">Muntar un DHCP de laboratori sense instal·lar absolutament res.</p>
 </header>
 
-<!-- ============ OBJECTIUS ============ -->
-<div class="cq-block" data-kind="objectius">
-  <h2 id="que-has-de-saber-abans-de-comencar">Què has de saber abans de començar</h2>
-  <p>
-    Teoria <a class="cq-ref" href="../teoria/t1-1-dhcp-fonaments.html">T1.1</a> (fonaments de DHCP) i guia <a class="cq-ref" href="../guies/g1-1-netplan.html">G1.1</a> (Netplan).
-  </p>
-  <p>
-    Amb aquesta activitat aprendràs a muntar un servidor DHCP de laboratori amb el que ja porta
-    Ubuntu Server de sèrie: <code>systemd-networkd</code>, que a més de configurar targetes sap
-    fer de servidor DHCP bàsic. Aquí <strong>no faràs servir Kea</strong>.
-  </p>
-  <p>
-    Serveix per a un laboratori, no per a producció. Però et farà veure <strong>què hi ha sota
-    Netplan</strong>, que és el que de veritat gestiona la xarxa.
-  </p>
-</div>
-
-<!-- ============ ESCENARI ============ -->
 <div class="cq-block" data-kind="escenari">
   <h2 id="amb-que-treballaras">Amb què treballaràs</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Màquina</th><th>Targeta</th><th>Paper</th></tr></thead>
       <tbody>
-        <tr><td>Ubuntu <strong>Server</strong></td><td>personal1</td><td>Servidor DHCP, IP fixa <code>10.0.0.1/8</code></td></tr>
+        <tr><td>Ubuntu <strong>Server</strong></td><td>puigcastellar1 + personal1</td><td>Servidor DHCP, IP fixa <code>10.0.0.1/8</code></td></tr>
         <tr><td>Ubuntu <strong>Desktop</strong></td><td>personal1</td><td>Client, ha de rebre la configuració</td></tr>
       </tbody>
     </table>
   </div>
   <p>
-    Reaprofita el <strong>servidor preparat a <a class="cq-ref" href="a1-1-posada-a-punt.html">A1.1</a></strong>. Abans de començar, comprova les dues targetes, la configuració de Netplan i que encara no hi hagi cap servidor DHCP actiu. En aquesta activitat canviaràs la gestió de xarxa i la IP interna a <code>10.0.0.1/8</code>. Al client
-    <strong>no hauràs de tocar res</strong>: els escriptoris Ubuntu ja venen configurats per
-    demanar la configuració per DHCP.
+    Reaprofita el <strong>servidor preparat a <a class="cq-ref" href="a1-1-posada-a-punt.html">A1.1</a></strong>. Abans de començar, comprova les dues targetes, la configuració de Netplan i que encara no hi hagi cap servidor DHCP actiu. En aquesta activitat canviaràs la gestió de xarxa i la IP interna a <code>10.0.0.1/8</code>. El client ha de demanar la configuració per DHCP. Treballa al servidor per SSH des de l’amfitrió.
   </p>
 </div>
 
-<!-- ============ ENUNCIAT ============ -->
 <div class="cq-block" data-kind="enunciat">
   <h2 id="que-has-de-fer">Què has de fer</h2>
+  <p>Consulta la <a class="cq-ref" href="../guies/g1-1-netplan.html">G1.1</a> per entendre la relació entre Netplan i networkd;
+    per al servidor integrat, la guia <a class="cq-ref" href="../guies/g1-4-systemd-networkd.html">G1.4</a>.</p>
   <ol>
-    <li>Fer que <strong>Netplan deixi de gestionar</strong> la xarxa d'aquesta màquina.</li>
-    <li>Configurar <code>personal1</code> amb la IP fixa <code>10.0.0.1/8</code> parlant directament amb <code>systemd-networkd</code>.</li>
-    <li>Activar-hi el <strong>servidor DHCP integrat</strong>, que ha de repartir <strong>20 adreces a partir de la <code>10.0.0.100</code></strong>.</li>
-    <li>Fer que reparteixi també el <strong>DNS de Quad9</strong> (<code>9.9.9.9</code>).</li>
-    <li>Comprovar des de l'Ubuntu Desktop que rep la configuració que has definit.</li>
+    <li>Aparta la configuració de Netplan perquè no competeixi amb els fitxers de networkd.</li>
+    <li>Configura les targetes amb <code>systemd-networkd</code>: externa per DHCP
+      i interna <code>personal1</code> amb <code>10.0.0.1/8</code>.
+      Comprova els noms reals abans d’escriure els fitxers.</li>
+    <li>Activa el DHCP integrat <strong>només a personal1</strong>:
+      20 adreces a partir de <code>10.0.0.100</code> i DNS <code>9.9.9.9</code>.
+      El rang es defineix amb un desplaçament i una mida.</li>
+    <li>Comprova que el client rep una IP del rang i el DNS, i arriba al servidor.
+      Encara no ha de tenir Internet: no has configurat encaminament ni NAT.</li>
+    <li>Captura una negociació inicial i identifica els quatre missatges DORA.
+      Una renovació amb només Request/ACK no demostra la seqüència completa.</li>
   </ol>
 </div>
 
-<!-- ============ ON BUSCAR ============ -->
-<div class="cq-block" data-kind="enunciat">
-  <h2 id="d-on-has-de-treure-cada-cosa">D'on has de treure cada cosa</h2>
-  <p>Les comandes no te les donem fetes; sí que et diem on trobar-les:</p>
-  <div class="cq-tablewrap">
-    <table class="cq-table">
-      <thead><tr><th>Què has de fer</th><th>On ho tens</th></tr></thead>
-      <tbody>
-        <tr><td>Apartar Netplan</td><td>Canvia l'extensió dels seus fitxers <code>.yaml</code> i torna a aplicar</td></tr>
-        <tr><td>Per què cal apartar-lo</td><td>Guia <a class="cq-ref" href="../guies/g1-1-netplan.html">G1.1</a>, bloc «Què hi ha sota Netplan»</td></tr>
-        <tr><td>Fitxers <code>.network</code> i seccions <code>[Match]</code> i <code>[Network]</code></td><td><code>man systemd.network</code></td></tr>
-        <tr><td>Servidor DHCP integrat</td><td>Secció <code>[DHCPServer]</code> del mateix manual</td></tr>
-        <tr><td>Recarregar i veure l'estat</td><td><code>networkctl --help</code></td></tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-
-<!-- ============ RECORDATORI ============ -->
-<div class="cq-block" data-kind="recordatori">
-  <h2 id="serveix-dhcp-nomes-per-personal1">Serveix DHCP només per personal1</h2>
-  <p>
-    No posis mai el servidor DHCP a la targeta <code>puigcastellar1</code>. Estaries repartint
-    adreces a la xarxa del centre i interferint amb el seu servidor: és el que s'anomena un
-    <em>servidor DHCP furtiu</em> i deixa sense connexió els companys de classe.
-  </p>
-</div>
-
-<!-- ============ OBSERVACIÓ TÈCNICA ============ -->
-<div class="cq-block" data-kind="observació">
-  <h2 id="dues-coses-que-et-faran-perdre-temps">Dues coses que et faran perdre temps</h2>
-  <p>
-    <strong>L'ordre importa.</strong> Un servidor DHCP no pot escoltar per una targeta que no té
-    adreça. Deixa primer la IP fixa funcionant i comprova-la; només després activa el servei.
-  </p>
-  <p>
-    <strong>El rang no s'escriu com a Kea.</strong> Aquí no es dona l'adreça inicial i la final,
-    sinó un <em>desplaçament</em> respecte del començament de la xarxa i una <em>mida</em>. Fes
-    el càlcul abans d'escriure els valors, i comprova després quines adreces reparteix de veritat.
-  </p>
-</div>
-
-<!-- ============ COMPROVACIÓ ============ -->
-<div class="cq-block" data-kind="comprovació">
-  <h2 id="com-sabras-que-ho-has-fet-be">Com sabràs que ho has fet bé</h2>
-<p><strong>DORA i renovació:</strong> una línia de concessió al registre no demostra els quatre missatges. Conserva una captura DHCP del client inicialment sense concessió i identifica Discover, Offer, Request i ACK. Una renovació pot mostrar només Request/ACK. networkctl només gestiona interfícies de systemd-networkd; al Desktop comprova si s’utilitza NetworkManager abans de triar l’eina.</p>
-  <p>
-    Abans d'entregar, has de poder respondre <strong>sí</strong> a totes aquestes preguntes, amb
-    la sortida d'una comanda al davant:
-  </p>
-  <ul>
-    <li>Netplan ja no gestiona les targetes d'aquesta màquina.</li>
-    <li><code>personal1</code> té la <code>10.0.0.1/8</code> i surt com a <em>routable</em>.</li>
-    <li>Al servidor hi ha alguna cosa escoltant al port <strong>UDP 67</strong>.</li>
-    <li>El client rep una adreça <strong>del rang que has definit</strong> i el DNS <code>9.9.9.9</code>.</li>
-    <li>El client arriba al servidor amb <code>ping</code>. Internet encara no en tindrà: falta l'encaminament i el NAT, que són de l'activitat <a class="cq-ref" href="a1-3-dhcp-kea.html">A1.3</a>.</li>
-  </ul>
-</div>
-
-<!-- ============ PROBLEMES ============ -->
-<div class="cq-block" data-kind="problemes">
-  <h2 id="si-alguna-cosa-no-va">Si alguna cosa no va</h2>
-  <dl class="cq-issues">
-    <dt>El client es queda amb una adreça 169.254.x.x</dt>
-    <dd>
-      <p><span class="lbl">Causa</span> No li arriba cap resposta: el servidor no escolta, o les dues màquines no comparteixen la xarxa <code>personal1</code>.</p>
-      <p><span class="lbl">Solució</span> Comprova primer si el servidor escolta al port 67. Si no, repassa a quina secció del fitxer has posat cada línia.</p>
-    </dd>
-
-    <dt>La targeta no agafa la <code>10.0.0.1</code></dt>
-    <dd>
-      <p><span class="lbl">Causa</span> El nom de la targeta que has escrit al fitxer no coincideix amb el real.</p>
-      <p><span class="lbl">Solució</span> Compara'l amb la sortida de <code>ip -c link show</code>.</p>
-    </dd>
-
-    <dt>El client rep adreça però no és del teu rang</dt>
-    <dd>
-      <p><span class="lbl">Causa</span> Està agafant l'adreça d'un altre servidor DHCP: probablement el del centre, perquè la targeta no és <code>personal1</code>.</p>
-      <p><span class="lbl">Solució</span> Revisa a isardVDI a quina xarxa està connectada la targeta del client.</p>
-    </dd>
-  </dl>
-</div>
-
-<!-- ============ LLIURAMENT ============ -->
 <div class="cq-block" data-kind="lliurament">
-  <h2 id="que-has-d-entregar">Què has d'entregar</h2>
-  <p>
-    Un <strong>document tècnic</strong> on expliquis tot el que has anat fent, amb les captures
-    del resultat.
-  </p>
-  <p>
-    Respon-hi també, amb les teves paraules: <strong>per què has hagut d'apartar Netplan per fer
-    aquesta activitat?</strong>
-  </p>
+  <h2 id="que-has-d-entregar">Què has d’entregar</h2>
+  <p>Entrega un document breu amb la configuració i aquestes evidències:</p>
+  <ul>
+    <li>Netplan apartat, fitxers de networkd, IP interna i servei escoltant a UDP 67.</li>
+    <li>IP i DNS rebuts pel client, i connectivitat amb el servidor.</li>
+    <li>Captura amb Discover, Offer, Request i ACK identificats.</li>
+  </ul>
+  <p>Explica per què has apartat Netplan. Al Desktop, comprova quin gestor de xarxa
+    utilitza el client abans de triar l’eina de renovació.</p>
 </div>
 
 

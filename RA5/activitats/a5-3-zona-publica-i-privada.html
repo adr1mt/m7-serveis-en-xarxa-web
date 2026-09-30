@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>A5.3 · Zona pública i zona privada — Serveis en Xarxa (0227)</title>
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
+<script src="../../_identitat/lectura.js"></script>
 </head>
 <body>
 <a class="cq-skip" href="#contingut">Salta al contingut</a>
@@ -17,12 +18,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
+<!-- EINES LECTURA INICI -->
+<div class="cq-tools" hidden><label for="cq-tema">Tema</label> <select id="cq-tema" class="cq-theme"><option value="auto">Automàtic</option><option value="light">Clar</option><option value="dark">Fosc</option></select></div>
+<!-- EINES LECTURA FI -->
 <main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA5 · A5.3</div>
   <h1>Zona pública i zona privada</h1>
   <p class="lede">No tothom que arriba a un lloc HTTPS hi ha d'entrar igual.</p>
 </header>
+<!-- TOC INICI -->
+<details class="cq-toc"><summary>En aquesta pàgina</summary><ol><li><a href="#que-has-de-saber-abans-de-comencar">Què has de saber abans de començar</a></li><li><a href="#amb-que-treballaras">Amb què treballaràs</a></li><li><a href="#que-has-de-fer">Què has de fer</a></li><li><a href="#d-on-has-de-treure-cada-cosa">D&#x27;on has de treure cada cosa</a></li><li><a href="#les-regles-van-dins-del-bloc-https-no-del-que-redirigeix">Les regles van dins del bloc HTTPS, no del que redirigeix</a></li><li><a href="#una-zona-protegida-no-protegeix-les-altres">Una zona protegida no protegeix les altres</a></li><li><a href="#com-sabras-que-ho-has-fet-be">Com sabràs que ho has fet bé</a></li><li><a href="#si-alguna-cosa-no-va">Si alguna cosa no va</a></li><li><a href="#que-has-d-entregar">Què has d&#x27;entregar</a></li></ol></details>
+<!-- TOC FI -->
+
 
 <!-- ============ OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
@@ -41,7 +49,7 @@
 <!-- ============ ESCENARI ============ -->
 <div class="cq-block" data-kind="escenari">
   <h2 id="amb-que-treballaras">Amb què treballaràs</h2>
-  <p>Crea un servidor i un client <strong>nous</strong> a isardVDI. Amb <a class="cq-ref" href="../guies/g5-1-apache.html">G5.1</a> prepara el lloc web1.internal amb HTTPS, resolució del nom al client i una pàgina pública accessible. Comprova aquest estat inicial abans de configurar la zona privada.</p>
+  <p>Reutilitza el servidor d’<a class="cq-ref" href="a5-2-dos-llocs-i-cadenat.html">A5.2</a> i el client. Comprova que <code>web1.internal</code> resol al client, que el lloc públic respon per HTTPS i que el port 80 redirigeix al 443 abans de configurar les zones privades.</p>
 </div>
 
 <!-- ============ ENUNCIAT ============ -->
@@ -108,13 +116,14 @@
 <!-- ============ COMPROVACIÓ ============ -->
 <div class="cq-block" data-kind="comprovació">
   <h2 id="com-sabras-que-ho-has-fet-be">Com sabràs que ho has fet bé</h2>
+  <p>Fes les proves contra <code>https://web1.internal</code>, amb el certificat públic i <code>--cacert</code>. Amb <code>-u usuari</code>, curl demana la contrasenya sense escriure-la a l’ordre. Comprova també el contingut amb GET.</p>
   <ul>
     <li>Sense credencials, <code>curl -I</code> contra la zona de
       contrasenya respon <code>401</code>.</li>
-    <li>Amb <code>curl -I -u usuari:contrasenya</code>, l'usuari del grup
+    <li>Amb <code>curl -I -u usuari</code>, l'usuari del grup
       entra a la zona de grup amb <code>200</code>.</li>
     <li>El mateix contra l'usuari que <strong>no</strong> pertany al grup
-      respon <code>403</code>, encara que la contrasenya sigui correcta.</li>
+      respon <code>401</code>, encara que la contrasenya sigui correcta. El registre d’errors ha d’identificar l’usuari i indicar una fallada d’autorització, no de contrasenya.</li>
     <li>Des de l'adreça denegada, la zona de bloqueig respon
       <code>403</code>; des de qualsevol altra, <code>200</code>.</li>
   </ul>

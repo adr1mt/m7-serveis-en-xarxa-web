@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>A4.1 · El correu intern del centre — Serveis en Xarxa (0227)</title>
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
+<script src="../../_identitat/lectura.js"></script>
 </head>
 <body>
 <a class="cq-skip" href="#contingut">Salta al contingut</a>
@@ -17,12 +18,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
+<!-- EINES LECTURA INICI -->
+<div class="cq-tools" hidden><label for="cq-tema">Tema</label> <select id="cq-tema" class="cq-theme"><option value="auto">Automàtic</option><option value="light">Clar</option><option value="dark">Fosc</option></select></div>
+<!-- EINES LECTURA FI -->
 <main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA4 · A4.1</div>
   <h1>El correu intern del centre</h1>
   <p class="lede">Munta un servidor de correu propi i demostra que dos comptes es poden escriure.</p>
 </header>
+<!-- TOC INICI -->
+<details class="cq-toc"><summary>En aquesta pàgina</summary><ol><li><a href="#que-has-de-saber-abans-de-comencar">Què has de saber abans de començar</a></li><li><a href="#amb-que-treballaras">Amb què treballaràs</a></li><li><a href="#que-has-de-fer">Què has de fer</a></li><li><a href="#d-on-has-de-treure-cada-cosa">D&#x27;on has de treure cada cosa</a></li><li><a href="#la-contrasenya-de-bootstrap-nomes-surt-un-cop">La contrasenya de bootstrap només surt un cop</a></li><li><a href="#aqui-no-hi-ha-fitxers-de-configuracio-per-editar">Aquí no hi ha fitxers de configuració per editar</a></li><li><a href="#com-sabras-que-ho-has-fet-be">Com sabràs que ho has fet bé</a></li><li><a href="#si-alguna-cosa-no-va">Si alguna cosa no va</a></li><li><a href="#que-has-d-entregar">Què has d&#x27;entregar</a></li></ol></details>
+<!-- TOC FI -->
+
 
 <!-- ============ OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
@@ -97,12 +105,10 @@
   <h2 id="la-contrasenya-de-bootstrap-nomes-surt-un-cop">La contrasenya de bootstrap només surt un cop</h2>
   <p>
     En arrencar per primera vegada, Stalwart genera una contrasenya d'administrador temporal i
-    la mostra <strong>només un cop</strong>, als registres del servei. Si no la copies llavors,
-    l'has perduda.
+    la mostra <strong>només un cop</strong>, als registres del servei. Desa-la de manera segura abans de completar l’assistent.
   </p>
   <p>
-    Si això et passa, no és cap error: la guia <a class="cq-ref" href="../guies/g4-1-stalwart.html">G4.1</a> explica com tornar a començar l'assistent
-    des de zero.
+    Si això et passa, no és cap error: la guia <a class="cq-ref" href="../guies/g4-1-stalwart.html">G4.1</a> indica com conservar l’estat i consultar la recuperació amb el professor.
   </p>
 </div>
 
@@ -147,7 +153,7 @@
     <dt>Has perdut la contrasenya de bootstrap</dt>
     <dd>
       <p><span class="lbl">Causa</span> Només es mostra un cop als registres i no l'has copiada.</p>
-      <p><span class="lbl">Solució</span> Torna a l'assistent des de zero, tal com explica la guia <a class="cq-ref" href="../guies/g4-1-stalwart.html">G4.1</a>.</p>
+      <p><span class="lbl">Solució</span> No esborris la configuració ni les bústies. Conserva una còpia de la VM i consulta la recuperació amb el professor, tal com indica la guia <a class="cq-ref" href="../guies/g4-1-stalwart.html">G4.1</a>.</p>
     </dd>
 
     <dt>El client no troba <code>mail.puigcastellar.internal</code></dt>

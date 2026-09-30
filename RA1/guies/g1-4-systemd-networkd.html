@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>G1.4 · systemd-networkd</title>
+<link rel="stylesheet" href="../../_identitat/sinapsi.css">
+<script src="../../_identitat/lectura.js"></script>
+</head>
+<body>
+<!-- === NAVEGACIÓ INICI === -->
+<nav class="cq-nav">
+  <div class="inner">
+    <a href="../index.html">‹ RA1 · Instal·lació de serveis de configuració dinàmica (DHCP)</a>
+    <span class="pos">G1.4 · 7/11</span>
+  </div>
+</nav>
+<!-- === NAVEGACIÓ FI === -->
+
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
+
+<!-- EINES LECTURA INICI -->
+<div class="cq-tools" hidden><label for="cq-tema">Tema</label> <select id="cq-tema" class="cq-theme"><option value="auto">Automàtic</option><option value="light">Clar</option><option value="dark">Fosc</option></select></div>
+<!-- EINES LECTURA FI -->
+<main id="contingut" tabindex="-1">
+<header class="cq-header">
+<div class="eyebrow">0227 · Serveis en Xarxa · RA1 · G1.4</div>
+<h1>Guia: DHCP amb systemd-networkd</h1>
+<p class="lede">Un servidor mínim per al laboratori d’A1.2.</p>
+</header>
+
+<div class="cq-block" data-kind="referència">
+<h2 id="abans-de-canviar-la-xarxa">Abans de canviar la xarxa</h2>
+<p>Parteix del Server preparat a <a class="cq-ref" href="../activitats/a1-1-posada-a-punt.html">A1.1</a>. Treballa per SSH des de l’amfitrió i conserva accés a la consola d’Isard si es talla la connexió. Aquest exemple gestiona les targetes directament amb networkd, en lloc de Netplan. No hi ha d’haver cap altre servidor DHCP actiu.</p>
+<p>Comprova els noms de les targetes i el YAML existent. A Isard solen ser <code>enp1s0</code> (externa) i <code>enp2s0</code> (interna); adapta’ls si són diferents.</p>
+<pre>ip -brief a
+sudo cat /etc/netplan/*.yaml</pre>
+<p>Consulta <code>man systemd.network</code> i la <a href="https://www.freedesktop.org/software/systemd/man/latest/systemd.network.html">documentació oficial de networkd</a>.</p>
+</div>
+<div class="cq-block" data-kind="pas a pas">
+<h2 id="prepara-els-dos-fitxers">Prepara els dos fitxers</h2>
+<p>Crea <code>/etc/systemd/network</code> si cal:</p>
+<pre>sudo mkdir -p /etc/systemd/network
+sudo nano /etc/systemd/network/10-externa.network</pre>
+<p>Copia la configuració externa. Continua rebent la IP del centre per DHCP:</p>
+<pre>[Match]
+Name=enp1s0
+
+[Network]
+DHCP=ipv4</pre>
+<p>Edita el fitxer de la interna:</p>
+<pre>sudo nano /etc/systemd/network/20-personal.network</pre>
+<p>Copia el bloc complet. Només aquesta targeta oferirà DHCP:</p>
+<pre>[Match]
+Name=enp2s0
+
+[Network]
+Address=10.0.0.1/8
+DHCPServer=yes
+
+[DHCPServer]
+PoolOffset=100
+PoolSize=20
+DNS=9.9.9.9
+EmitRouter=no</pre>
+<ul>
+<li><code>Name</code>: nom real de la targeta a la qual s’aplica el fitxer.</li>
+<li><code>Address</code>: IP fixa i prefix del servidor a <code>personal1</code>.</li>
+<li><code>DHCPServer=yes</code>: activa el servidor DHCP en aquesta interfície.</li>
+<li><code>PoolOffset=100</code>: el rang comença 100 adreces després de <code>10.0.0.0</code>, a <code>10.0.0.100</code>.</li>
+<li><code>PoolSize=20</code>: reparteix de <code>10.0.0.100</code> a <code>10.0.0.119</code>.</li>
+<li><code>DNS</code>: servidor DNS que s’ofereix als clients.</li>
+<li><code>EmitRouter=no</code>: no anuncia porta d’enllaç; aquesta pràctica encara no dona sortida a Internet.</li>
+</ul>
+</div>
+<div class="cq-block" data-kind="pas a pas">
+<h2 id="aparta-netplan-i-aplica-el-canvi">Aparta Netplan i aplica el canvi</h2>
+<p>Amb els dos fitxers preparats, desa els YAML en una subcarpeta. Netplan deixarà de generar la configuració anterior:</p>
+<pre>sudo mkdir -p /etc/netplan/apartat-ra1
+sudo mv /etc/netplan/*.yaml /etc/netplan/apartat-ra1/
+sudo netplan apply
+sudo networkctl reload
+sudo networkctl reconfigure enp1s0 enp2s0</pre>
+<p>Si es talla SSH, continua des de la consola. <code>reload</code> rellegeix els fitxers i <code>reconfigure</code> aplica la configuració a les targetes indicades.</p>
+<p>Per recuperar Netplan, retira els dos fitxers <code>.network</code> de l’exemple, torna els YAML a <code>/etc/netplan/</code> i aplica’ls des de la consola.</p>
+</div>
+<div class="cq-block" data-kind="comprovació">
+<h2 id="comprova-servidor-i-client">Comprova servidor i client</h2>
+<pre>networkctl status enp2s0
+sudo ss -ulnp
+sudo journalctl -u systemd-networkd -n 30 --no-pager</pre>
+<p>Comprova la IP <code>10.0.0.1/8</code>, el fitxer <code>20-personal.network</code> i el port UDP 67. El client connectat a <code>personal1</code> ha de rebre una IP del rang, el DNS i arribar al servidor.</p>
+<p>Per capturar DORA, inicia la captura DHCP abans de connectar un client sense concessió. Una renovació pot mostrar només Request/ACK. Alguns clients negocien <em>Rapid Commit</em> (dos missatges); per observar els quatre, desactiva aquesta opció al client. Al Desktop comprova si el gestor és NetworkManager; <code>networkctl</code> correspon a networkd.</p>
+</div>
+<!-- === PEU DE NAVEGACIÓ INICI === -->
+<nav class="cq-pager">
+  <a class="prev" href="g1-3-nftables.html">
+    <span class="dir">Anterior · G1.3</span>
+    <span class="ttl">Guia: nftables</span></a>
+  <a class="next" href="../activitats/a1-1-posada-a-punt.html">
+    <span class="dir">Següent · A1.1</span>
+    <span class="ttl">Posada a punt del servidor</span></a>
+</nav>
+<!-- === PEU DE NAVEGACIÓ FI === -->
+
+</main>
+<script src="../../_identitat/quiz.js"></script>
+</body></html>

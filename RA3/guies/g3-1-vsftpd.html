@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>G3.1 · Guia: vsftpd — Serveis en Xarxa (0227)</title>
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
+<script src="../../_identitat/lectura.js"></script>
 </head>
 <body>
 <a class="cq-skip" href="#contingut">Salta al contingut</a>
@@ -17,12 +18,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
+<!-- EINES LECTURA INICI -->
+<div class="cq-tools" hidden><label for="cq-tema">Tema</label> <select id="cq-tema" class="cq-theme"><option value="auto">Automàtic</option><option value="light">Clar</option><option value="dark">Fosc</option></select></div>
+<!-- EINES LECTURA FI -->
 <main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA3 · G3.1</div>
   <h1>Guia: vsftpd</h1>
   <p class="lede">Usuaris locals enjaulats, accés anònim, límits i FTPS.</p>
 </header>
+<!-- TOC INICI -->
+<details class="cq-toc"><summary>En aquesta pàgina</summary><ol><li><a href="#que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</a></li><li><a href="#un-paquet-un-servei-un-fitxer">Un paquet, un servei, un fitxer</a></li><li><a href="#les-directives-que-has-de-decidir">Les directives que has de decidir</a></li><li><a href="#configuracio-per-a-usuaris-locals-enjaulats">Configuració per a usuaris locals enjaulats</a></li><li><a href="#l-arrel-del-chroot-no-pot-ser-escrivible">L&#x27;arrel del chroot no pot ser escrivible</a></li><li><a href="#muntar-el-servidor-amb-usuaris-enjaulats">Muntar el servidor amb usuaris enjaulats</a></li><li><a href="#les-directives-de-l-acces-anonim">Les directives de l&#x27;accés anònim</a></li><li><a href="#repositori-public-de-nomes-lectura-amb-limits">Repositori públic de només lectura, amb límits</a></li><li><a href="#publicar-un-repositori-anonim">Publicar un repositori anònim</a></li><li><a href="#les-directives-de-ftps">Les directives de FTPS</a></li><li><a href="#xifrar-les-sessions-amb-ftps">Xifrar les sessions amb FTPS</a></li><li><a href="#comprovar-ho-des-del-client">Comprovar-ho des del client</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#fitxa-rapida">Fitxa ràpida</a></li></ol></details>
+<!-- TOC FI -->
+
 
 <div class="cq-block" data-kind="objectius">
   <h2 id="que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</h2>
@@ -269,7 +277,10 @@ sudo chmod -R a+r /srv/ftp/public</pre>
     <li>
       <p><strong>Activa l'anònim i els límits</strong> a <code>/etc/vsftpd.conf</code>, amb
       l'exemple d'aquesta pàgina com a model:</p>
-<pre>sudo nano /etc/vsftpd.conf
+<pre>sudo nano /etc/vsftpd.conf</pre>
+      <p>Si mantens la llista blanca del pas anterior, autoritza també els dos noms
+      d'accés anònim. Sense això, <code>userlist_deny=NO</code> els rebutja abans de demanar la contrasenya:</p>
+<pre>printf '%s\n' anonymous ftp | sudo tee -a /etc/vsftpd.userlist
 sudo systemctl restart vsftpd</pre>
     </li>
 
@@ -299,9 +310,9 @@ sudo systemctl restart vsftpd</pre>
 <pre>sudo dd if=/dev/zero of=/srv/ftp/public/gran.bin bs=1M count=100
 sudo chmod a+r /srv/ftp/public/gran.bin</pre>
       <p>
-        Baixa'l i mira la velocitat que reporta el client: amb
-        <code>anon_max_rate=512000</code> ha de rondar els 500 KiB/s, ni que el servidor i el
-        client siguin la mateixa màquina.
+        Baixa'l i mira la velocitat que reporta el client: el valor
+        <code>anon_max_rate=512000</code> limita a 512000 bytes/s (500 KiB/s).
+        La mesura pot quedar per sota del límit, encara que servidor i client siguin la mateixa màquina.
       </p>
     </li>
   </ol>
@@ -353,8 +364,9 @@ lftp -u alumne1 -e "set ssl:verify-certificate no" \
      localhost</pre>
       <p>
         El client <code>ftp</code> ha de rebre <code>530 Non-anonymous sessions must use
-        encryption</code>. Repeteix la captura del pas 1 amb <code>lftp</code>: l'única cosa
-        llegible que hi queda és l'<code>AUTH TLS</code> del principi.
+        encryption</code>. Repeteix la captura de <a class="cq-ref" href="../teoria/t3-3-ftps-i-sftp.html">T3.3</a> amb <code>lftp</code>: la salutació del servidor i
+        <code>AUTH TLS</code> encara són llegibles abans del xifratge, però
+        <code>USER</code> i <code>PASS</code> ja no ho són.
       </p>
     </li>
   </ol>
@@ -378,10 +390,12 @@ lftp -u alumne1 -e "set ssl:verify-certificate no" \
       <p>Ha de dir <code>active (running)</code>.</p>
     </li>
     <li>
-      <p><strong>L'usuari entra i es queda a casa seva.</strong> Des d'una altra màquina:</p>
+      <p><strong>L'usuari entra i es queda a casa seva.</strong> Abans d'activar TLS, des d'una altra màquina:</p>
 <pre>ftp 192.168.1.8</pre>
       <p>Ha de respondre <code>230 Login successful</code>, i <code>pwd</code> ha de dir
-      <code>/</code>: és la gàbia, no l'arrel del servidor.</p>
+      <code>/</code>: és la gàbia, no l'arrel del servidor. Amb TLS obligatori,
+      fes aquesta comprovació amb <code>lftp</code>, com al bloc anterior,
+      substituint <code>localhost</code> per l'adreça del servidor.</p>
     </li>
     <li>
       <p><strong>Mira qui es connecta</strong> mentre proves, des del servidor:</p>

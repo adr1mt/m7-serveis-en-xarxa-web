@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>G5.2 · Guia: Nginx — Serveis en Xarxa (0227)</title>
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
+<script src="../../_identitat/lectura.js"></script>
 </head>
 <body>
 <a class="cq-skip" href="#contingut">Salta al contingut</a>
@@ -17,12 +18,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
+<!-- EINES LECTURA INICI -->
+<div class="cq-tools" hidden><label for="cq-tema">Tema</label> <select id="cq-tema" class="cq-theme"><option value="auto">Automàtic</option><option value="light">Clar</option><option value="dark">Fosc</option></select></div>
+<!-- EINES LECTURA FI -->
 <main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA5 · G5.2</div>
   <h1>Guia: Nginx</h1>
   <p class="lede">Manual de configuració de Nginx, dels blocs de servidor a HTTPS.</p>
 </header>
+<!-- TOC INICI -->
+<details class="cq-toc"><summary>En aquesta pàgina</summary><ol><li><a href="#que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</a></li><li><a href="#estructura-de-etc-nginx">Estructura de /etc/nginx</a></li><li><a href="#installar-nginx-i-preparar-el-contingut">Instal·lar Nginx i preparar el contingut</a></li><li><a href="#el-bloc-server-i-l-enllac-simbolic">El bloc server i l&#x27;enllaç simbòlic</a></li><li><a href="#pagina-d-error-404-personalitzada">Pàgina d&#x27;error 404 personalitzada</a></li><li><a href="#capcaleres-de-seguretat">Capçaleres de seguretat</a></li><li><a href="#https-amb-certificat-autofirmat">HTTPS amb certificat autofirmat</a></li><li><a href="#comprovacio-de-conjunt-des-del-client">Comprovació de conjunt, des del client</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#fitxa-rapida">Fitxa ràpida</a></li></ol></details>
+<!-- TOC FI -->
+
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
@@ -38,8 +46,8 @@
   <div class="cq-note">
     <span class="lbl">Ubuntu 26.04</span>
     Apache i Nginx no poden escoltar tots dos al port 80 de la mateixa
-    màquina. Si véns de <a class="cq-ref" href="g5-1-apache.html">G5.1</a>, para Apache
-    (<code>sudo systemctl stop apache2</code>) o fes servir una màquina
+    màquina. Si véns de <a class="cq-ref" href="g5-1-apache.html">G5.1</a>, desactiva Apache
+    (<code>sudo systemctl disable --now apache2</code>) o fes servir una màquina
     nova.
   </div>
 </div>
@@ -291,7 +299,7 @@ sudo systemctl reload nginx</pre>
       <p><span class="lbl">Causa</span> Ja hi ha un altre servei —sovint
       Apache— escoltant al port 80 de la mateixa màquina.</p>
       <p><span class="lbl">Solució</span> Para l'altre servei
-      (<code>sudo systemctl stop apache2</code>) o usa una màquina
+      (<code>sudo systemctl disable --now apache2</code>) o usa una màquina
       nova.</p>
     </dd>
     <dt>He enllaçat el lloc i segueix sortint el per defecte</dt>

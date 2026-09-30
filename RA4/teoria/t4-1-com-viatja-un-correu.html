@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>T4.1 · Com viatja un correu electrònic — Serveis en Xarxa (0227)</title>
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
+<script src="../../_identitat/lectura.js"></script>
 </head>
 <body>
 <a class="cq-skip" href="#contingut">Salta al contingut</a>
@@ -17,12 +18,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
+<!-- EINES LECTURA INICI -->
+<div class="cq-tools" hidden><label for="cq-tema">Tema</label> <select id="cq-tema" class="cq-theme"><option value="auto">Automàtic</option><option value="light">Clar</option><option value="dark">Fosc</option></select></div>
+<!-- EINES LECTURA FI -->
 <main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA4 · T4.1</div>
   <h1>Com viatja un correu electrònic</h1>
   <p class="lede">Els actors, els protocols i el camí exacte que segueix un missatge del remitent al destinatari.</p>
 </header>
+<!-- TOC INICI -->
+<details class="cq-toc"><summary>En aquesta pàgina</summary><ol><li><a href="#ports-del-laboratori">Ports del laboratori</a></li><li><a href="#que-sabras-fer-en-acabar">Què sabràs fer en acabar</a></li><li><a href="#tres-papers-tres-programes-diferents">Tres papers, tres programes diferents</a></li><li><a href="#un-protocol-per-a-cada-tram-del-viatge">Un protocol per a cada tram del viatge</a></li><li><a href="#imap-i-pop3-es-queda-o-es-baixa">IMAP i POP3: es queda o es baixa</a></li><li><a href="#una-conversa-smtp-vista-per-dins">Una conversa SMTP vista per dins</a></li><li><a href="#d-anna-a-bruno-pas-a-pas">D&#x27;anna a bruno, pas a pas</a></li><li><a href="#observa-el-viatge-sense-muntar-res">Observa el viatge sense muntar res</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#resum">Resum</a></li><li><a href="#comprova-el-que-has-apres">Comprova el que has après</a></li></ol></details>
+<!-- TOC FI -->
+
 
 <div class="cq-block" data-kind="recordatori"><h2 id="ports-del-laboratori">Ports del laboratori</h2><p>Els ports 465 per enviar autenticat i 993 per IMAP xifrat són la <strong>configuració del laboratori</strong>. Els ports d’altres modalitats s’expliquen per comprendre el servei; no afegeixis listeners 587 ni 143 a Stalwart en aquestes pràctiques.</p>
 </div>

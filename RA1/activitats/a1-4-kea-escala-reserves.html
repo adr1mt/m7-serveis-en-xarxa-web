@@ -5,18 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>A1.4 · DHCP per a 2000 equips — Serveis en Xarxa (0227)</title>
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
+<script src="../../_identitat/lectura.js"></script>
 </head>
 <body>
-<a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
     <a href="../index.html">‹ RA1 · Instal·lació de serveis de configuració dinàmica (DHCP)</a>
-    <span class="pos">A1.4 · 10/10</span>
+    <span class="pos">A1.4 · 11/11</span>
   </div>
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
+<a class="cq-skip" href="#contingut">Salta al contingut</a>
+<!-- EINES LECTURA INICI -->
+<div class="cq-tools" hidden><label for="cq-tema">Tema</label> <select id="cq-tema" class="cq-theme"><option value="auto">Automàtic</option><option value="light">Clar</option><option value="dark">Fosc</option></select></div>
+<!-- EINES LECTURA FI -->
 <main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · A1.4</div>
@@ -24,21 +28,6 @@
   <p class="lede">Dimensionar una xarxa gran i reservar les adreces dels servidors i les impressores.</p>
 </header>
 
-<!-- ============ OBJECTIUS ============ -->
-<div class="cq-block" data-kind="objectius">
-  <h2 id="que-has-de-saber-abans-de-comencar">Què has de saber abans de començar</h2>
-  <p>
-    Guies <a class="cq-ref" href="../guies/g1-2-kea.html">G1.2</a> (Kea) i <a class="cq-ref" href="../guies/g1-3-nftables.html">G1.3</a> (nftables), i tenir feta
-    l'activitat <a class="cq-ref" href="a1-3-dhcp-kea.html">A1.3</a>.
-  </p>
-  <p>
-    Amb aquesta activitat aprendràs a <strong>dissenyar</strong> l'adreçament d'una xarxa gran:
-    on col·loques el rang automàtic, on les reserves d'infraestructura i com dimensiones. La
-    tècnica és la mateixa que a l'activitat <a class="cq-ref" href="a1-3-dhcp-kea.html">A1.3</a>; el que canvia és la decisió.
-  </p>
-</div>
-
-<!-- ============ ESCENARI ============ -->
 <div class="cq-block" data-kind="escenari">
   <h2 id="amb-que-treballaras">Amb què treballaràs</h2>
   <div class="cq-tablewrap">
@@ -56,22 +45,21 @@
   </p>
 </div>
 
-<!-- ============ ENUNCIAT ============ -->
 <div class="cq-block" data-kind="enunciat">
-  <h2 id="l-encarrec">L'encàrrec</h2>
-  <p>
-    Una empresa amb un parc informàtic de <strong>2000 PC</strong> treballa a la xarxa
-    <strong><code>172.16.0.0/16</code></strong>. Has de muntar-hi el servidor DHCP amb Kea, amb
-    una màquina nova a isardVDI i el mateix escenari de sempre: <code>puigcastellar1</code> per
-    sortir a Internet i <code>personal1</code> per donar servei.
-  </p>
-  <p>Requisits:</p>
+  <h2 id="l-encarrec">Què has de fer</h2>
+  <p>Una empresa té <strong>2000 PC</strong> a <code>172.16.0.0/16</code>.
+    Consulta <a class="cq-ref" href="../guies/g1-2-kea.html">G1.2</a> i <a class="cq-ref" href="../guies/g1-3-nftables.html">G1.3</a> per configurar el servei.</p>
   <ol>
-    <li>Rang automàtic prou gran per a tots els dispositius, amb marge.</li>
-    <li>DNS de Quad9 (<code>9.9.9.9</code>) i porta d'enllaç la del propi servidor.</li>
-    <li>Reserves per als quatre equips de la taula.</li>
-    <li>El client ha de tenir Internet a través del servidor.</li>
-    <li>Demostrar que una reserva funciona de veritat. No tens els equips de la taula: hauràs de trobar la manera de provar-ho amb el client que sí que tens.</li>
+    <li>Dissenya abans de configurar: IP del servidor, rang per als 2000 PC amb marge
+      i reserves. Justifica la mida i per què una <code>/24</code> no seria suficient.</li>
+    <li>Mantén <code>puigcastellar1</code> per DHCP i configura la interna amb la IP
+      del servidor i prefix <code>/16</code>.</li>
+    <li>Configura Kea només a <code>personal1</code>, amb el rang dissenyat,
+      DNS <code>9.9.9.9</code> i el propi servidor com a porta d’enllaç.</li>
+    <li>Inclou les quatre reserves de la taula, fora del rang automàtic.</li>
+    <li>Configura encaminament i NAT, i comprova Internet i resolució de noms des del client.</li>
+    <li>Demostra una reserva amb el client disponible: no disposes dels quatre equips.
+      Explica com has fet la prova i mostra la concessió al registre.</li>
   </ol>
   <div class="cq-tablewrap">
     <table class="cq-table">
@@ -84,104 +72,20 @@
       </tbody>
     </table>
   </div>
+  <p>Amb <code>/16</code>, la xarxa és <code>172.16.0.0</code> i la difusió,
+    <code>172.16.255.255</code>. Adreces com <code>172.16.100.0</code> són vàlides per a equips.</p>
 </div>
 
-<!-- ============ DISSENY ============ -->
-<div class="cq-block" data-kind="enunciat">
-  <h2 id="primer-el-disseny-despres-el-teclat">Primer el disseny, després el teclat</h2>
-  <p>
-    Abans d'obrir cap fitxer, decideix com repartiràs la xarxa i escriu-ho al document. Una
-    <code>/16</code> té 65.534 adreces útils: t'hi cap tot, però l'has d'ordenar.
-  </p>
-  <ol>
-    <li>Quina adreça té el servidor, i per què aquesta.</li>
-    <li>Quantes adreces necessita el rang automàtic i entre quines dues adreces el col·loques.</li>
-    <li>On queda el rang respecte de les quatre reserves i de la IP del servidor.</li>
-    <li>Per què amb una <code>/24</code>, com a les activitats anteriors, aquest encàrrec no es podria fer.</li>
-  </ol>
-</div>
-
-<!-- ============ RECORDATORI ============ -->
-<div class="cq-block" data-kind="recordatori">
-  <h2 id="el-disseny-va-abans-que-el-teclat">El disseny va abans que el teclat</h2>
-<p>Situar reserves fora del pool és la convenció d’aquesta pràctica; Kea permet també reserves dins del pool. Una IP estàtica no gestionada ha d’estar exclosa del rang automàtic.</p>
-  <p>
-    Aquesta activitat no es resol escrivint més línies de configuració, sinó
-    <strong>decidint bé els rangs</strong>. Si comences pel fitxer, acabaràs amb reserves
-    dins del rang automàtic i adreces repetides.
-  </p>
-  <p>
-    Escriu primer el repartiment al document d'entrega, i després munta'l.
-  </p>
-</div>
-
-<!-- ============ OBSERVACIÓ TÈCNICA ============ -->
-<div class="cq-block" data-kind="observació">
-  <h2 id="el-que-marca-els-limits-es-la-mascara-no-el-punt">El que marca els límits és la màscara, no el punt</h2>
-  <p>
-    En una xarxa <code>/16</code>, adreces com la <code>172.16.100.0</code> o la
-    <code>172.16.107.255</code> <strong>són perfectament vàlides per a equips</strong>. Les
-    úniques que no es poden assignar són la primera de tota la xarxa
-    (<code>172.16.0.0</code>) i l'última (<code>172.16.255.255</code>).
-  </p>
-  <p>
-    Costa de veure perquè estem acostumats a les <code>/24</code>, on cada bloc acabat en
-    <code>.0</code> i <code>.255</code> sí que està reservat. Compta els bits abans de descartar
-    una adreça.
-  </p>
-</div>
-
-<!-- ============ COMPROVACIÓ ============ -->
-<div class="cq-block" data-kind="comprovació">
-  <h2 id="com-sabras-que-ho-has-fet-be">Com sabràs que ho has fet bé</h2>
-  <p>
-    Abans d'entregar, has de poder respondre <strong>sí</strong> a totes aquestes preguntes, amb
-    la sortida d'una comanda al davant:
-  </p>
-  <ul>
-    <li>El servei de Kea està actiu, amb les quatre reserves carregades sense errors.</li>
-    <li>El client rep una adreça <strong>del rang que has dissenyat</strong>.</li>
-    <li>El client té Internet i resolució de noms.</li>
-    <li>Has aconseguit que el client rebi una <strong>IP reservada</strong>, i ho veus als registres del servidor.</li>
-    <li>El teu document justifica el disseny, no només el descriu.</li>
-  </ul>
-</div>
-
-<!-- ============ PROBLEMES ============ -->
-<div class="cq-block" data-kind="problemes">
-  <h2 id="si-alguna-cosa-no-va">Si alguna cosa no va</h2>
-  <dl class="cq-issues">
-    <dt>Kea es queixa que el <em>pool</em> no és dins de la subxarxa</dt>
-    <dd>
-      <p><span class="lbl">Causa</span> Has posat <code>/24</code> en lloc de <code>/16</code>, i part del rang queda fora de la xarxa.</p>
-      <p><span class="lbl">Solució</span> Revisa la màscara a la configuració de Kea i també a la targeta.</p>
-    </dd>
-
-    <dt>El client agafa adreça d'una altra xarxa</dt>
-    <dd>
-      <p><span class="lbl">Causa</span> Conserva una concessió antiga d'una activitat anterior, o està connectat a la xarxa equivocada.</p>
-      <p><span class="lbl">Solució</span> Força la renovació al client i comprova la targeta a isardVDI.</p>
-    </dd>
-
-    <dt>El servei no arrenca després d'afegir les reserves</dt>
-    <dd>
-      <p><span class="lbl">Causa</span> Una coma després de l'última reserva, o una coma que falta entre dues.</p>
-      <p><span class="lbl">Solució</span> Valida el fitxer abans d'arrencar el servei: et dona la línia.</p>
-    </dd>
-  </dl>
-</div>
-
-<!-- ============ LLIURAMENT ============ -->
 <div class="cq-block" data-kind="lliurament">
-  <h2 id="que-has-d-entregar">Què has d'entregar</h2>
-  <p>
-    Un <strong>document tècnic</strong> on expliquis tot el que has anat fent, amb les captures
-    del resultat.
-  </p>
-  <p>
-    Respon-hi també, amb les teves paraules: <strong>per què has triat aquest rang i per què en aquest disseny situem les
-    reserves fora del pool, tot i que Kea també les admet dins?</strong>
-  </p>
+  <h2 id="que-has-d-entregar">Què has d’entregar</h2>
+  <p>Entrega un document breu amb el disseny justificat i evidències de:</p>
+  <ul>
+    <li>Configuració de la xarxa i de Kea, rang amb marge i quatre reserves validades.</li>
+    <li>IP dinàmica rebuda pel client, accés a Internet i resolució de noms.</li>
+    <li>Reserva provada amb el client, MAC utilitzada i concessió al registre.</li>
+  </ul>
+  <p>Explica per què has triat aquest rang i per què separes les reserves del
+    <em>pool</em>, tot i que Kea també les admet dins.</p>
 </div>
 
 

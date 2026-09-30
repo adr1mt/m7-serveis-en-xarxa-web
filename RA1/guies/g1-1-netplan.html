@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>G1.1 · Guia: Netplan — Serveis en Xarxa (0227)</title>
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
+<script src="../../_identitat/lectura.js"></script>
 </head>
 <body>
 <a class="cq-skip" href="#contingut">Salta al contingut</a>
@@ -12,17 +13,24 @@
 <nav class="cq-nav">
   <div class="inner">
     <a href="../index.html">‹ RA1 · Instal·lació de serveis de configuració dinàmica (DHCP)</a>
-    <span class="pos">G1.1 · 4/10</span>
+    <span class="pos">G1.1 · 4/11</span>
   </div>
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
+<!-- EINES LECTURA INICI -->
+<div class="cq-tools" hidden><label for="cq-tema">Tema</label> <select id="cq-tema" class="cq-theme"><option value="auto">Automàtic</option><option value="light">Clar</option><option value="dark">Fosc</option></select></div>
+<!-- EINES LECTURA FI -->
 <main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · G1.1</div>
   <h1>Guia: Netplan</h1>
   <p class="lede">Configurar les targetes de xarxa d'un Ubuntu Server.</p>
 </header>
+<!-- TOC INICI -->
+<details class="cq-toc"><summary>En aquesta pàgina</summary><ol><li><a href="#que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</a></li><li><a href="#netplan-on-s-escriu-la-configuracio">Netplan: on s&#x27;escriu la configuració</a></li><li><a href="#un-fitxer-amb-les-dues-targetes">Configuració completa per copiar i adaptar</a></li><li><a href="#si-a-etc-netplan-ja-hi-ha-un-fitxer-que-passa-amb-el-teu">Si a /etc/netplan/ ja hi ha un fitxer, què passa amb el teu?</a></li><li><a href="#la-porta-d-enllac-va-en-un-sol-lloc">La porta d&#x27;enllaç va en un sol lloc</a></li><li><a href="#canviar-la-xarxa-en-remot-es-arriscat">Canviar la xarxa en remot és arriscat</a></li><li><a href="#que-hi-ha-sota-netplan">Què hi ha sota Netplan</a></li><li><a href="#configurar-les-dues-targetes">Configurar les dues targetes</a></li><li><a href="#comprovar-que-la-xarxa-ha-quedat-com-volies">Comprovar que la xarxa ha quedat com volies</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#resum">Resum</a></li></ol></details>
+<!-- TOC FI -->
+
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
@@ -30,7 +38,9 @@
   <p>Documentació oficial: <a href="https://netplan.readthedocs.io">netplan.readthedocs.io</a></p>
   <ul>
     <li>Punt de partida: Ubuntu Server amb dues targetes, <code>enp1s0</code> i <code>enp2s0</code>.</li>
-    <li>A Ubuntu Server el <em>renderer</em> és sempre <code>networkd</code>.</li>
+    <li>En aquest laboratori fem servir <code>networkd</code> a Ubuntu Server.</li>
+    <li>Treballem per <strong>SSH des de la màquina amfitriona fins a la VM</strong>,
+      per poder copiar i enganxar les ordres i la configuració.</li>
   </ul>
 </div>
 
@@ -57,10 +67,13 @@
 
 <!-- ============ 4 · EXEMPLE ============ -->
 <div class="cq-block" data-kind="exemple">
-  <h2 id="un-fitxer-amb-les-dues-targetes">Un fitxer amb les dues targetes</h2>
+  <h2 id="un-fitxer-amb-les-dues-targetes">Configuració completa per copiar i adaptar</h2>
   <p>
     <code>enp1s0</code> per DHCP i <code>enp2s0</code> amb IP fixa. És exactament l'escenari
-    que faràs servir a totes les activitats:
+    de partida d’<a class="cq-ref" href="../activitats/a1-1-posada-a-punt.html">A1.1</a>. Copia el fitxer complet i adapta els noms si cal.
+    <strong>Comprova les interfícies reals i el Netplan existent de la teva VM</strong>:
+    <code>enp1s0</code> i <code>enp2s0</code> són els noms habituals a IsardVDI,
+    però poden canviar:
   </p>
 <pre>network:
   version: 2
@@ -139,7 +152,7 @@
   </p>
   <p>Pots veure'ls tu mateix, i entendràs molt millor què fa cada línia del teu YAML:</p>
 <pre>ls /run/systemd/network/
-cat /run/systemd/network/*enp2s0*</pre>
+sudo cat /run/systemd/network/*enp2s0*</pre>
   <p>
     Això importa perquè <strong>Netplan no ho sap fer tot</strong>. Muntar un servidor DHCP,
     per exemple, no està entre les seves opcions. En aquests casos s'aparta Netplan i
@@ -164,7 +177,9 @@ cat /run/systemd/network/*enp2s0*</pre>
     <li>
       <p><strong>Edita el fitxer</strong> de Netplan:</p>
 <pre>sudo nano /etc/netplan/90-xarxa.yaml</pre>
-      <p>Escriu-hi la configuració de l'exemple, canviant els noms de les targetes pels teus.</p>
+      <p>Enganxa la configuració completa de l’exemple. L’externa es manté per DHCP;
+        només assignes manualment la IP interna. A <a class="cq-ref" href="../activitats/a1-2-dhcp-systemd-networkd.html">A1.2</a> i <a class="cq-ref" href="../activitats/a1-3-dhcp-kea.html">A1.3</a> la interna serà
+        <code>10.0.0.1/8</code>; a <a class="cq-ref" href="../activitats/a1-4-kea-escala-reserves.html">A1.4</a>, una IP de <code>172.16.0.0/16</code>.</p>
     </li>
 
     <li>
@@ -202,7 +217,7 @@ resolvectl status</pre>
   <ol class="cq-steps">
     <li>
       <p><strong>El fitxer diu el que et penses.</strong></p>
-<pre>netplan get</pre>
+<pre>sudo netplan get</pre>
       <p>Torna la configuració ja interpretada: si t'has equivocat d'indentació,
       aquí veuràs una cosa diferent del que has escrit.</p>
     </li>
@@ -243,7 +258,7 @@ resolvectl status</pre>
     <dt>La targeta no agafa la IP fixa</dt>
     <dd>
       <p><span class="lbl">Causa</span> La interfície pot tenir DHCP activat i una adreça estàtica alhora, o acumular adreces de diversos fitxers. DHCP no substitueix necessàriament l’adreça fixa. Revisa la configuració fusionada i el gestor de la interfície.</p>
-      <p><span class="lbl">Solució</span> Afegeix-lo i torna a aplicar. Comprova-ho amb <code>networkctl status enp2s0</code>.</p>
+      <p><span class="lbl">Solució</span> Revisa els noms i les adreces a <code>sudo netplan get</code> i corregeix el fitxer abans de tornar a aplicar. Comprova-ho amb <code>networkctl status enp2s0</code>.</p>
     </dd>
 
     <dt><code>netplan apply</code> diu <code>'netplan try' is restoring configuration</code></dt>
@@ -278,7 +293,7 @@ resolvectl status</pre>
         <tr><td><code>ip -c link show</code><br><code>ip -c l</code></td><td>Veure les targetes i els seus noms</td></tr>
         <tr><td><code>netplan try</code></td><td>Aplicar amb reversió automàtica</td></tr>
         <tr><td><code>netplan apply</code></td><td>Aplicar directament (només a consola)</td></tr>
-        <tr><td><code>netplan get</code></td><td>Veure com s'ha interpretat el fitxer</td></tr>
+        <tr><td><code>sudo netplan get</code></td><td>Veure com s'ha interpretat el fitxer</td></tr>
         <tr><td><code>netplan status</code></td><td>Estat general de la xarxa</td></tr>
         <tr><td><code>networkctl status &lt;if&gt;</code></td><td>Detall d'una targeta</td></tr>
       </tbody>

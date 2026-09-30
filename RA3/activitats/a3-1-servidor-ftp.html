@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>A3.1 · Servidor FTP per a l'equip — Serveis en Xarxa (0227)</title>
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
+<script src="../../_identitat/lectura.js"></script>
 </head>
 <body>
 <a class="cq-skip" href="#contingut">Salta al contingut</a>
@@ -17,12 +18,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
+<!-- EINES LECTURA INICI -->
+<div class="cq-tools" hidden><label for="cq-tema">Tema</label> <select id="cq-tema" class="cq-theme"><option value="auto">Automàtic</option><option value="light">Clar</option><option value="dark">Fosc</option></select></div>
+<!-- EINES LECTURA FI -->
 <main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA3 · A3.1</div>
   <h1>Servidor FTP per a l'equip</h1>
   <p class="lede">Comptes propis, permís d'escriptura i cadascú tancat al seu directori.</p>
 </header>
+<!-- TOC INICI -->
+<details class="cq-toc"><summary>En aquesta pàgina</summary><ol><li><a href="#que-has-de-saber-abans-de-comencar">Què has de saber abans de començar</a></li><li><a href="#amb-que-treballaras">Amb què treballaràs</a></li><li><a href="#que-has-de-fer">Què has de fer</a></li><li><a href="#d-on-has-de-treure-cada-cosa">D&#x27;on has de treure cada cosa</a></li><li><a href="#el-directori-on-aterra-l-usuari-no-pot-ser-seu">El directori on aterra l&#x27;usuari no pot ser seu</a></li><li><a href="#dues-decisions-que-has-de-prendre-tu">Dues decisions que has de prendre tu</a></li><li><a href="#com-sabras-que-ho-has-fet-be">Com sabràs que ho has fet bé</a></li><li><a href="#si-alguna-cosa-no-va">Si alguna cosa no va</a></li><li><a href="#que-has-d-entregar">Què has d&#x27;entregar</a></li></ol></details>
+<!-- TOC FI -->
+
 
 <!-- ============ OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
@@ -63,7 +71,7 @@
   <ol>
     <li>Preparar el servidor: <em>hostname</em> amb el teu nom i <code>192.168.1.8/24</code> a <code>personal1</code>.</li>
     <li>Instal·lar <strong>vsftpd</strong> i deixar-lo servint només els usuaris del sistema, sense accés anònim.</li>
-    <li>Crear el grup i els <strong>tres comptes</strong> de la taula, amb el seu directori de treball.</li>
+    <li>Crear el grup i els <strong>quatre comptes</strong> de la taula, amb el seu directori de treball.</li>
     <li>Fer que cada usuari quedi <strong>tancat</strong> al seu directori i que hi pugui pujar fitxers.</li>
     <li>Deixar entrar només els comptes autoritzats, amb una <strong>llista blanca</strong>.</li>
   </ol>
@@ -83,13 +91,13 @@
 <!-- ============ ON BUSCAR ============ -->
 <div class="cq-block" data-kind="enunciat">
   <h2 id="d-on-has-de-treure-cada-cosa">D'on has de treure cada cosa</h2>
-  <p>Tot el procediment ja l'has vist a la teoria. Aquí tens on és cada part:</p>
+  <p>La guia documenta la configuració i la teoria explica el servei. Aquí tens on és cada part:</p>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Què has de fer</th><th>On ho tens</th></tr></thead>
       <tbody>
         <tr><td>Posada a punt i Netplan</td><td>Guia <a class="cq-ref" href="../../RA1/guies/g1-1-netplan.html">G1.1</a> i activitat <a class="cq-ref" href="../../RA1/activitats/a1-1-posada-a-punt.html">A1.1</a></td></tr>
-        <tr><td>Instal·lació i primera prova</td><td>Teoria <a class="cq-ref" href="../teoria/t3-1-ftp-fonaments.html">T3.1</a></td></tr>
+        <tr><td>Instal·lació i primera prova</td><td>Guia <a class="cq-ref" href="../guies/g3-1-vsftpd.html">G3.1</a></td></tr>
         <tr><td>Escriptura, chroot i llista blanca</td><td>Guia <a class="cq-ref" href="../guies/g3-1-vsftpd.html">G3.1</a></td></tr>
         <tr><td>Permisos del directori de cada usuari</td><td>Guia <a class="cq-ref" href="../guies/g3-1-vsftpd.html">G3.1</a>, «L'arrel del chroot»</td></tr>
         <tr><td>Ordres dins de la sessió FTP</td><td>Teoria <a class="cq-ref" href="../teoria/t3-1-ftp-fonaments.html">T3.1</a>, taula del resum</td></tr>

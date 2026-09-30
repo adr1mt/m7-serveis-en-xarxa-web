@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>G6.4 · Guia: Ansible — Serveis en Xarxa (0227)</title>
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
+<script src="../../_identitat/lectura.js"></script>
 </head>
 <body>
 <a class="cq-skip" href="#contingut">Salta al contingut</a>
@@ -17,12 +18,19 @@
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
+<!-- EINES LECTURA INICI -->
+<div class="cq-tools" hidden><label for="cq-tema">Tema</label> <select id="cq-tema" class="cq-theme"><option value="auto">Automàtic</option><option value="light">Clar</option><option value="dark">Fosc</option></select></div>
+<!-- EINES LECTURA FI -->
 <main id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA6 · G6.4</div>
   <h1>Guia: Ansible</h1>
   <p class="lede">Manual d'Ansible: inventari, playbooks, variables, plantilles i handlers.</p>
 </header>
+<!-- TOC INICI -->
+<details class="cq-toc"><summary>En aquesta pàgina</summary><ol><li><a href="#que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</a></li><li><a href="#installar-ansible-a-la-maquina-de-control">Instal·lar Ansible a la màquina de control</a></li><li><a href="#l-inventari-i-la-primera-prova">L&#x27;inventari i la primera prova</a></li><li><a href="#anatomia-d-un-playbook">Anatomia d&#x27;un playbook</a></li><li><a href="#moduls-habituals">Mòduls habituals</a></li><li><a href="#variables-per-grup">Variables per grup</a></li><li><a href="#plantilles-jinja2">Plantilles Jinja2</a></li><li><a href="#crear-el-playbook-i-el-handler">Crear el playbook i el handler</a></li><li><a href="#executar-el-playbook">Executar el playbook</a></li><li><a href="#comprovar-ho-de-conjunt">Comprovar-ho de conjunt</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#fitxa-rapida">Fitxa ràpida</a></li></ol></details>
+<!-- TOC FI -->
+
 
 <!-- ============ 1 · OBJECTIUS ============ -->
 <div class="cq-block" data-kind="objectius">
@@ -62,6 +70,8 @@ ansible --version</pre>
 
 [servidors:vars]
 ansible_user=usuari</pre>
+      <p>Substitueix <code>192.168.1.10</code> per la IP del node i
+      <code>usuari</code> pel compte que hi té accés per clau.</p>
     </li>
     <li>
       <p><strong>Comprova que hi arriba</strong> amb el mòdul <code>ping</code>, que no fa
@@ -124,13 +134,83 @@ ansible_user=usuari</pre>
   </div>
 </div>
 
-<!-- ============ 6 · PAS A PAS · EXECUTAR ============ -->
+<!-- ============ 6 · VARIABLES ============ -->
+<div class="cq-block" data-kind="pas a pas">
+  <h2 id="variables-per-grup">Variables per grup</h2>
+  <p>
+    Un fitxer <code>group_vars/&lt;grup&gt;.yml</code> es carrega sol quan el seu nom
+    coincideix amb el d'un grup de l'inventari: <code>group_vars/servidors.yml</code> per al
+    grup <code>[servidors]</code>. No cal importar-lo enlloc del playbook.
+  </p>
+  <p>Crea la carpeta i el fitxer de variables:</p>
+<pre>mkdir -p group_vars
+nano group_vars/servidors.yml</pre>
+<pre>paquet_web: apache2</pre>
+  <p>Dins d'una tasca la variable es fa servir entre claus dobles:</p>
+<pre>- name: instal·la el servidor web
+  apt:
+    name: "{{ paquet_web }}"
+    state: present</pre>
+</div>
+
+<!-- ============ 7 · PLANTILLES ============ -->
+<div class="cq-block" data-kind="pas a pas">
+  <h2 id="plantilles-jinja2">Plantilles Jinja2</h2>
+  <p>
+    Un fitxer a <code>templates/*.j2</code> és com qualsevol fitxer de configuració, però
+    amb variables entre <code>{{ }}</code>. El mòdul <code>template</code> el processa i
+    en desa el resultat a la màquina administrada. A més de les variables pròpies,
+    Ansible ja coneix dades de cada màquina dins de <code>ansible_facts</code>, com
+    <code>ansible_facts['default_ipv4']['address']</code> (la seva IP) o
+    <code>ansible_facts['hostname']</code> (el seu nom).
+  </p>
+  <p>Crea la plantilla que es convertirà en la pàgina inicial del node:</p>
+<pre>mkdir -p templates
+nano templates/index.html.j2</pre>
+<pre>&lt;h1&gt;Servidor: {{ ansible_facts['hostname'] }}&lt;/h1&gt;
+&lt;p&gt;Adreça: {{ ansible_facts['default_ipv4']['address'] }}&lt;/p&gt;</pre>
+</div>
+
+<!-- ============ 8 · PAS A PAS · PLAYBOOK I HANDLER ============ -->
+<div class="cq-block" data-kind="pas a pas">
+  <h2 id="crear-el-playbook-i-el-handler">Crear el playbook i el handler</h2>
+  <ol class="cq-steps">
+    <li>
+      <p><strong>Crea <code>site.yml</code></strong> amb el play complet:</p>
+<pre>- hosts: servidors
+  become: true
+  tasks:
+    - name: instal·la el servidor web
+      apt:
+        name: "{{ paquet_web }}"
+        state: present
+
+    - name: genera la pàgina d'inici
+      template:
+        src: templates/index.html.j2
+        dest: /var/www/html/index.html
+      notify: reinicia apache
+
+  handlers:
+    - name: reinicia apache
+      service:
+        name: apache2
+        state: restarted</pre>
+      <p>El handler només s'executa si la tasca que el notifica acaba en
+      <code>changed</code>, i sempre al final del play, encara que l'hagin notificat
+      diverses tasques.</p>
+    </li>
+  </ol>
+</div>
+
+<!-- ============ 9 · PAS A PAS · EXECUTAR ============ -->
 <div class="cq-block" data-kind="pas a pas">
   <h2 id="executar-el-playbook">Executar el playbook</h2>
   <ol class="cq-steps">
     <li>
-      <p><strong>Executa'l</strong>:</p>
-<pre>ansible-playbook -i hosts site.yml</pre>
+      <p><strong>Comprova la sintaxi i executa'l</strong>:</p>
+<pre>ansible-playbook -i hosts site.yml --syntax-check
+ansible-playbook -i hosts site.yml</pre>
       <p>Si l'usuari no té <code>sudo</code> sense contrasenya, cal afegir
       <code>--ask-become-pass</code> perquè la demani.</p>
     </li>
@@ -145,65 +225,6 @@ ansible_user=usuari</pre>
       <p><strong>Simula sense aplicar</strong> amb <code>--check</code>: diu què canviaria
       sense tocar res.</p>
 <pre>ansible-playbook -i hosts site.yml --check</pre>
-    </li>
-  </ol>
-</div>
-
-<!-- ============ 7 · VARIABLES ============ -->
-<div class="cq-block" data-kind="referència">
-  <h2 id="variables-per-grup">Variables per grup</h2>
-  <p>
-    Un fitxer <code>group_vars/&lt;grup&gt;.yml</code> es carrega sol quan el seu nom
-    coincideix amb el d'un grup de l'inventari: <code>group_vars/servidors.yml</code> per al
-    grup <code>[servidors]</code>. No cal importar-lo enlloc del playbook.
-  </p>
-<pre>paquet_web: apache2</pre>
-  <p>Dins d'una tasca es fa servir entre claus dobles:</p>
-<pre>- name: instal·la el servidor web
-  apt:
-    name: "{{ paquet_web }}"
-    state: present</pre>
-</div>
-
-<!-- ============ 8 · PLANTILLES ============ -->
-<div class="cq-block" data-kind="referència">
-  <h2 id="plantilles-jinja2">Plantilles Jinja2</h2>
-  <p>
-    Un fitxer a <code>templates/*.j2</code> és com qualsevol fitxer de configuració, però
-    amb variables entre <code>{{ }}</code>. El mòdul <code>template</code> el processa i
-    en desa el resultat a la màquina administrada. A més de les variables pròpies,
-    Ansible ja coneix dades de cada màquina, com <code>ansible_default_ipv4.address</code>
-    (la seva IP) o <code>ansible_hostname</code> (el seu nom).
-  </p>
-<pre>Servidor: {{ ansible_hostname }} ({{ ansible_default_ipv4.address }})</pre>
-<pre>- name: genera la pàgina d'inici
-  template:
-    src: templates/index.html.j2
-    dest: /var/www/html/index.html</pre>
-</div>
-
-<!-- ============ 9 · PAS A PAS · HANDLERS ============ -->
-<div class="cq-block" data-kind="pas a pas">
-  <h2 id="reiniciar-un-servei-nomes-si-cal">Reiniciar un servei només si cal</h2>
-  <ol class="cq-steps">
-    <li>
-      <p><strong>Declara el handler</strong> al final del playbook:</p>
-<pre>handlers:
-  - name: reinicia apache
-    service:
-      name: apache2
-      state: restarted</pre>
-    </li>
-    <li>
-      <p><strong>Notifica'l</strong> des de la tasca que pot canviar la configuració:</p>
-<pre>- name: genera la pàgina d'inici
-  template:
-    src: templates/index.html.j2
-    dest: /var/www/html/index.html
-  notify: reinicia apache</pre>
-      <p>El handler només s'executa si la tasca que el notifica acaba en
-      <code>changed</code>, i sempre al final del play, encara que l'hagin notificat
-      diverses tasques.</p>
     </li>
   </ol>
 </div>
