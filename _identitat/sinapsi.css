@@ -624,7 +624,9 @@
   .cq-table td:first-child { font-weight: 600; }
   .cq-issues dt:not(:first-child) { border-top: 1px solid var(--ko-line); padding-top: 16px; }
   .cq-option.cq-selected { border-width: 2px; padding: 9px 13px; }
-  .cq-option.cq-selected::before { content: "✓ "; font-weight: 700; }
+  .cq-option.cq-selected::before { content: "● "; font-weight: 700; }
+  .cq-option.cq-correct::before { content: "✓ "; font-weight: 700; }
+  .cq-option.cq-incorrect::before { content: "× "; font-weight: 700; }
   .cq-option, .cq-check-btn { min-height: 44px; }
 
   /* ==== Aparença, TOC i cerca ==== */

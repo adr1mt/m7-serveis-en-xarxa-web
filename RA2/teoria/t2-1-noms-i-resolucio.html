@@ -29,7 +29,7 @@
   <p class="lede">Què passa dins del teu equip entre que escrius un nom i surt una adreça IP.</p>
 </header>
 <!-- TOC INICI -->
-<details class="cq-toc"><summary>En aquesta pàgina · 11 apartats</summary><ol><li><a href="#que-sabras-fer-en-acabar">Què sabràs fer en acabar</a></li><li><a href="#el-problema-que-resol-el-dns">El problema que resol el DNS</a></li><li><a href="#dos-mecanismes-i-un-ordre">Dos mecanismes, i un ordre</a></li><li><a href="#qui-pregunta-de-veritat-systemd-resolved">Qui pregunta de veritat: systemd-resolved</a></li><li><a href="#el-fitxer-etc-resolv-conf-ja-no-es-el-que-era">El fitxer /etc/resolv.conf ja no és el que era</a></li><li><a href="#el-domini-local-no-es-teu">El domini .local no és teu</a></li><li><a href="#mirar-com-resol-la-teva-maquina">Mirar com resol la teva màquina</a></li><li><a href="#criteris-professionals">Bones pràctiques</a></li><li><a href="#errors-habituals">Problemes</a></li><li><a href="#resum">Resum</a></li><li><a href="#comprova-el-que-has-apres">Comprova el que has après</a></li></ol></details>
+<details class="cq-toc"><summary>En aquesta pàgina · 11 apartats</summary><ol><li><a href="#que-sabras-fer-en-acabar">Què sabràs fer en acabar</a></li><li><a href="#el-problema-que-resol-el-dns">El problema que resol el DNS</a></li><li><a href="#dos-mecanismes-i-un-ordre">Tres mecanismes, i un ordre</a></li><li><a href="#qui-pregunta-de-veritat-systemd-resolved">Qui pregunta de veritat: systemd-resolved</a></li><li><a href="#el-fitxer-etc-resolv-conf-ja-no-es-el-que-era">El fitxer /etc/resolv.conf ja no és el que era</a></li><li><a href="#el-domini-local-no-es-teu">El domini .local no és teu</a></li><li><a href="#mirar-com-resol-la-teva-maquina">Mirar com resol la teva màquina</a></li><li><a href="#criteris-professionals">Bones pràctiques</a></li><li><a href="#errors-habituals">Problemes</a></li><li><a href="#resum">Resum</a></li><li><a href="#comprova-el-que-has-apres">Comprova el que has après</a></li></ol></details>
 <!-- TOC FI -->
 
 
@@ -38,7 +38,7 @@
   <h2 id="que-sabras-fer-en-acabar">Què sabràs fer en acabar</h2>
   <ul>
     <li>Explicar per què les xarxes treballen amb noms i no amb adreces.</li>
-    <li>Distingir els dos mecanismes de resolució: fitxer local i DNS.</li>
+    <li>Distingir els tres mecanismes de resolució: fitxer local, mDNS i DNS.</li>
     <li>Saber en quin ordre consulta el teu equip cada mecanisme.</li>
     <li>Fer servir <code>resolvectl</code>, <code>host</code> i <code>dig</code>.</li>
     <li>Entendre què és la memòria cau i per què de vegades enganya.</li>
@@ -64,12 +64,12 @@
   </p>
 </div>
 
-<!-- ============ 3 · ELS DOS MECANISMES ============ -->
+<!-- ============ 3 · ELS TRES MECANISMES ============ -->
 <div class="cq-block" data-kind="teoria">
-  <h2 id="dos-mecanismes-i-un-ordre">Dos mecanismes, i un ordre</h2>
+  <h2 id="dos-mecanismes-i-un-ordre">Tres mecanismes, i un ordre</h2>
   <p>
-    El teu equip pot resoldre un nom de dues maneres: mirant un <strong>fitxer local</strong> o
-    <strong>preguntant a un servidor</strong>. No en tria una a l'atzar: hi ha un ordre escrit.
+    El teu equip pot consultar un <strong>fitxer local</strong>, preguntar amb <strong>mDNS</strong>
+    a la xarxa local o consultar un servidor <strong>DNS</strong>. La configuració determina què consulta.
   </p>
   <div class="cq-tablewrap">
     <table class="cq-table">
@@ -82,9 +82,10 @@
     </table>
   </div>
   <p>
-    L'ordre el marca el fitxer <code>/etc/nsswitch.conf</code>, a la línia <code>hosts:</code>.
-    Primer el fitxer local, després la resta. Per això una línia a <code>/etc/hosts</code>
-    <strong>guanya sempre</strong> al DNS.
+    Les aplicacions que fan servir la resolució del sistema segueixen la línia <code>hosts:</code>
+    de <code>/etc/nsswitch.conf</code>. Amb <code>hosts: files dns</code>, es consulta primer
+    <code>/etc/hosts</code>; si hi ha una entrada coincident, es retorna la seva adreça sense
+    consultar el DNS. <strong>La prioritat depèn de l'ordre configurat</strong>: comprova el de la teva màquina.
   </p>
 </div>
 
@@ -235,7 +236,7 @@ getent hosts provaordre.test</pre></div>
   <h2 id="resum">Resum</h2>
   <ul>
     <li>Resoldre un nom és convertir-lo en adreça IP abans d'enviar res.</li>
-    <li>L'ordre el marca <code>/etc/nsswitch.conf</code>: <strong><code>/etc/hosts</code> guanya al DNS</strong>.</li>
+    <li>L'ordre el marca <code>/etc/nsswitch.conf</code>: amb <code>hosts: files dns</code>, <strong><code>/etc/hosts</code> té prioritat sobre el DNS</strong>.</li>
     <li>A Ubuntu qui pregunta és <strong>systemd-resolved</strong>, al <code>127.0.0.53</code>, amb memòria cau.</li>
     <li><code>/etc/resolv.conf</code> és generat: no s'edita.</li>
     <li><code>.local</code> està reservat per a mDNS; per a xarxes internes, <code>.internal</code>.</li>

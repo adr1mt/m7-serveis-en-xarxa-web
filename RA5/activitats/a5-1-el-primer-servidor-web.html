@@ -139,9 +139,9 @@
   <ul>
     <li>El servei apareix actiu: <code>systemctl status</code> del servidor
       mostra <code>active (running)</code>.</li>
-    <li>Des del client, <code>curl -I http://IP-DEL-SERVIDOR</code> respon
-      <code>200</code> amb el contingut propi, no el de la pàgina per
-      defecte.</li>
+    <li>Des del client, <code>curl -I http://IP-DEL-SERVIDOR</code> retorna
+      <code>200</code> i les capçaleres esperades; <code>curl http://IP-DEL-SERVIDOR</code>
+      mostra el contingut propi, no el de la pàgina per defecte.</li>
     <li>Al servidor, <code>ss -tlnp</code> mostra el port 80 en
       <code>LISTEN</code>.</li>
     <li>El registre d'accessos creix amb una línia nova cada vegada que el

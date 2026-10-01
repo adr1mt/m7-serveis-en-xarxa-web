@@ -69,7 +69,7 @@
     <li>Instal·lar <strong>vsftpd</strong> i deixar-lo servint només els usuaris del sistema, sense accés anònim.</li>
     <li>Crear el grup i els <strong>quatre comptes</strong> de la taula, amb el seu directori de treball.</li>
     <li>Fer que cada usuari quedi <strong>tancat</strong> al seu directori i que hi pugui pujar fitxers.</li>
-    <li>Deixar entrar només els comptes autoritzats, amb una <strong>llista blanca</strong>.</li>
+    <li>Deixar entrar només els comptes autoritzats de la taula i justificar el mecanisme de control d'accés triat.</li>
   </ol>
   <div class="cq-tablewrap">
     <table class="cq-table">
@@ -90,7 +90,7 @@
       <tbody>
         <tr><td>Posada a punt i Netplan</td><td>Guia <a class="cq-ref" href="../../RA1/guies/g1-1-netplan.html">G1.1</a> i activitat <a class="cq-ref" href="../../RA1/activitats/a1-1-posada-a-punt.html">A1.1</a></td></tr>
         <tr><td>Instal·lació i primera prova</td><td>Guia <a class="cq-ref" href="../guies/g3-1-vsftpd.html">G3.1</a></td></tr>
-        <tr><td>Escriptura, chroot i llista blanca</td><td>Guia <a class="cq-ref" href="../guies/g3-1-vsftpd.html">G3.1</a></td></tr>
+        <tr><td>Escriptura, chroot i control d'accés</td><td>Guia <a class="cq-ref" href="../guies/g3-1-vsftpd.html">G3.1</a></td></tr>
         <tr><td>Permisos del directori de cada usuari</td><td>Guia <a class="cq-ref" href="../guies/g3-1-vsftpd.html">G3.1</a>, «L'arrel del chroot»</td></tr>
         <tr><td>Ordres dins de la sessió FTP</td><td>Teoria <a class="cq-ref" href="../teoria/t3-1-ftp-fonaments.html">T3.1</a>, taula del resum</td></tr>
       </tbody>
@@ -116,9 +116,9 @@
 <div class="cq-block" data-kind="observació">
   <h2 id="dues-decisions-que-has-de-prendre-tu">Dues decisions que has de prendre tu</h2>
   <p>
-    <strong>Com bloqueges el <code>convidat</code>.</strong> Hi ha més d'una manera de deixar-lo
-    fora: la llista blanca, la llista de prohibits o no posar-lo al grup. Tria'n una, aplica-la i
-    explica per què és la que has triat.
+    <strong>Com controles qui pot entrar.</strong> Tria un mecanisme que respecti la taula i
+    impedeixi l'accés dels altres comptes del sistema. Aplica'l i explica per què l'has triat.
+    El <code>convidat</code> ha de continuar al grup <code>ftpusers</code>, però sense poder entrar.
   </p>
   <p>
     <strong>Amb quins permisos arriben els fitxers pujats.</strong> Els valors de sèrie deixen els
@@ -139,7 +139,7 @@
     <li>Des del client, <code>alumne1</code> entra, puja un fitxer i el torna a baixar.</li>
     <li>Dins de la sessió, <code>pwd</code> retorna <code>/</code> i <code>cd ..</code> no el treu del seu directori.</li>
     <li><code>alumne1</code> no veu els fitxers d'<code>alumne2</code> ni pot arribar a <code>/etc</code>.</li>
-    <li>El compte <code>convidat</code> rep un error d'autenticació.</li>
+    <li>Els comptes <code>alumne2</code> i <code>prof1</code> també poden entrar; <code>convidat</code> i un altre compte del sistema no autoritzat reben un error d'autenticació.</li>
     <li>La mateixa connexió funciona amb un <strong>client gràfic</strong> del sistema d'escriptori.</li>
   </ul>
 </div>
@@ -180,7 +180,8 @@
   <p>
     Un <strong>document tècnic</strong> on expliquis tot el que has anat fent, amb el teu
     <code>/etc/vsftpd.conf</code>, els permisos dels directoris i les captures del resultat, tant
-    del client de text com del gràfic.
+    del client de text com del gràfic. Inclou el mecanisme de control d'accés triat,
+    la justificació i les proves amb comptes autoritzats i no autoritzats.
   </p>
   <p>
     Respon-hi també, amb les teves paraules: <strong>què podria fer <code>alumne1</code> si
