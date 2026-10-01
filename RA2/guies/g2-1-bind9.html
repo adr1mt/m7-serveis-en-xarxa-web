@@ -6,29 +6,30 @@
 <title>G2.1 · Guia: BIND 9 — Serveis en Xarxa (0227)</title>
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 <script src="../../_identitat/lectura.js"></script>
+<link rel="icon" href="../../_identitat/favicon.svg">
 </head>
 <body>
 <a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
-    <a href="../index.html">‹ RA2 · Instal·lació de serveis de resolució de noms (DNS)</a>
-    <span class="pos">G2.1 · 5/9</span>
+    <a href="../index.html">‹ RA2 · DNS</a>
+    <span class="pos">G2.1 · 1/1</span>
+    <!-- EINES LECTURA INICI -->
+<div class="cq-tools" role="group" aria-label="Aparença"><button type="button" class="cq-theme" data-preference="light" aria-label="Clar" title="Clar" aria-pressed="false" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg></button><button type="button" class="cq-theme" data-preference="auto" aria-label="Automàtic" title="Automàtic" aria-pressed="true" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8m-4-4v4"/></svg></button><button type="button" class="cq-theme" data-preference="dark" aria-label="Fosc" title="Fosc" aria-pressed="false" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M20.5 13A9 9 0 0 1 11 3.5 9 9 0 1 0 20.5 13Z"/></svg></button></div>
+<!-- EINES LECTURA FI -->
   </div>
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<!-- EINES LECTURA INICI -->
-<div class="cq-tools" hidden><label for="cq-tema">Tema</label> <select id="cq-tema" class="cq-theme"><option value="auto">Automàtic</option><option value="light">Clar</option><option value="dark">Fosc</option></select></div>
-<!-- EINES LECTURA FI -->
-<main id="contingut" tabindex="-1">
+<main data-layout="content" data-type="guies" id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA2 · G2.1</div>
   <h1>Guia: BIND 9</h1>
   <p class="lede">El resolutor, les zones pròpies i el servidor secundari.</p>
 </header>
 <!-- TOC INICI -->
-<details class="cq-toc"><summary>En aquesta pàgina</summary><ol><li><a href="#que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</a></li><li><a href="#per-que-bind">Per què BIND</a></li><li><a href="#on-es-cada-cosa">On és cada cosa</a></li><li><a href="#les-cinc-directives-que-has-de-decidir">Les cinc directives que has de decidir</a></li><li><a href="#un-resolutor-per-a-la-xarxa-192-168-1-0-24">Un resolutor per a la xarxa 192.168.1.0/24</a></li><li><a href="#forwarders-quan-si-i-quan-no">Forwarders: quan sí i quan no</a></li><li><a href="#muntar-el-resolutor">Muntar el resolutor</a></li><li><a href="#declarar-les-zones">Declarar les zones</a></li><li><a href="#fitxer-de-zona-directa">Fitxer de zona directa</a></li><li><a href="#el-punt-final-no-es-decoracio">El punt final no és decoració</a></li><li><a href="#fitxer-de-zona-inversa">Fitxer de zona inversa</a></li><li><a href="#crear-i-comprovar-una-zona">Crear i comprovar una zona</a></li><li><a href="#les-dues-declaracions">Les dues declaracions</a></li><li><a href="#muntar-un-secundari">Muntar un secundari</a></li><li><a href="#comprovar-ho-des-d-un-client-no-des-del-servidor">Comprovar-ho des d&#x27;un client, no des del servidor</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#fitxa-rapida">Fitxa ràpida</a></li></ol></details>
+<details class="cq-toc"><summary>En aquesta pàgina · 18 apartats</summary><ol><li><a href="#que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</a></li><li><a href="#per-que-bind">Per què BIND</a></li><li><a href="#on-es-cada-cosa">On és cada cosa</a></li><li><a href="#les-cinc-directives-que-has-de-decidir">Les cinc directives que has de decidir</a></li><li><a href="#un-resolutor-per-a-la-xarxa-192-168-1-0-24">Un resolutor per a la xarxa 192.168.1.0/24</a></li><li><a href="#forwarders-quan-si-i-quan-no">Forwarders: quan sí i quan no</a></li><li><a href="#muntar-el-resolutor">Muntar el resolutor</a></li><li><a href="#declarar-les-zones">Declarar les zones</a></li><li><a href="#fitxer-de-zona-directa">Fitxer de zona directa</a></li><li><a href="#el-punt-final-no-es-decoracio">El punt final no és decoració</a></li><li><a href="#fitxer-de-zona-inversa">Fitxer de zona inversa</a></li><li><a href="#crear-i-comprovar-una-zona">Crear i comprovar una zona</a></li><li><a href="#les-dues-declaracions">Les dues declaracions</a></li><li><a href="#muntar-un-secundari">Muntar un secundari</a></li><li><a href="#comprovar-ho-des-d-un-client-no-des-del-servidor">Comprovar-ho des d&#x27;un client, no des del servidor</a></li><li><a href="#criteris-professionals">Bones pràctiques</a></li><li><a href="#errors-habituals">Problemes</a></li><li><a href="#fitxa-rapida">Resum</a></li></ol></details>
 <!-- TOC FI -->
 
 
@@ -116,7 +117,7 @@
 <div class="cq-block" data-kind="exemple">
   <h2 id="un-resolutor-per-a-la-xarxa-192-168-1-0-24">Un resolutor per a la xarxa 192.168.1.0/24</h2>
   <p>Aquest és el fitxer sencer d'un servidor que dona servei només a la seva xarxa interna:</p>
-<pre>acl interna { 192.168.1.0/24; localhost; };
+<div class="cq-code"><div class="cq-code-head"><span>Configuració · BIND 9</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Configuració · BIND 9">acl interna { 192.168.1.0/24; localhost; };
 
 options {
     directory "/var/cache/bind";
@@ -130,7 +131,7 @@ options {
 
     dnssec-validation auto;
     listen-on-v6 { none; };
-};</pre>
+};</pre></div>
   <p>
     Llegit en veu alta: escolta per la seva IP interna, només accepta consultes de la xarxa
     <code>192.168.1.0/24</code>, busca el que no sap i, per fer-ho, ho pregunta a Quad9 i a
@@ -167,38 +168,38 @@ options {
   <ol class="cq-steps">
     <li>
       <p><strong>Instal·la el servidor i les eines:</strong></p>
-<pre>sudo apt update
-sudo apt install -y bind9 bind9-utils dnsutils</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo apt update
+sudo apt install -y bind9 bind9-utils dnsutils</pre></div>
     </li>
 
     <li>
       <p><strong>Desa una còpia</strong> abans de tocar res:</p>
-<pre>sudo cp /etc/bind/named.conf.options \
-        /etc/bind/named.conf.options.original</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo cp /etc/bind/named.conf.options \
+        /etc/bind/named.conf.options.original</pre></div>
     </li>
 
     <li>
       <p><strong>Escriu les opcions</strong> amb la teva xarxa i la teva IP:</p>
-<pre>sudo nano /etc/bind/named.conf.options</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo nano /etc/bind/named.conf.options</pre></div>
       <p>Fes servir l'exemple d'aquesta pàgina com a model.</p>
     </li>
 
     <li>
       <p><strong>Valida la sintaxi.</strong> Si no diu res, és que està bé:</p>
-<pre>sudo named-checkconf</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo named-checkconf</pre></div>
     </li>
 
     <li>
       <p><strong>Reinicia i comprova</strong> que el servei escolta al port 53:</p>
-<pre>sudo systemctl restart named
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo systemctl restart named
 systemctl status named
-sudo ss -ulnp | grep :53</pre>
+sudo ss -ulnp | grep :53</pre></div>
     </li>
 
     <li>
       <p><strong>Pregunta-li a ell</strong>, primer des del mateix servidor i després des del client:</p>
-<pre>dig @127.0.0.1 www.upc.edu
-dig @192.168.1.8 www.upc.edu</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">dig @127.0.0.1 www.upc.edu
+dig @192.168.1.8 www.upc.edu</pre></div>
       <p>Repeteix la consulta i compara Query time a la sortida completa. La cau pot reduir el temps, però no ho garanteix; registra els valors observats, el servidor consultat i el moment de la prova.</p>
     </li>
   </ol>
@@ -218,7 +219,7 @@ dig @192.168.1.8 www.upc.edu</pre>
     Les zones es declaren a <code>named.conf.local</code>. Cada declaració diu tres coses: com es
     diu la zona, quin paper hi fa aquest servidor i on són les dades.
   </p>
-<pre>zone "adria.internal" {
+<div class="cq-code"><div class="cq-code-head"><span>Configuració · BIND 9</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Configuració · BIND 9">zone "adria.internal" {
     type primary;
     file "/etc/bind/zones/db.adria.internal";
 };
@@ -226,7 +227,7 @@ dig @192.168.1.8 www.upc.edu</pre>
 zone "1.168.192.in-addr.arpa" {
     type primary;
     file "/etc/bind/zones/db.192.168.1";
-};</pre>
+};</pre></div>
   <p>
     <code>type primary</code> vol dir que aquest servidor té l'original, escrit per tu. La
     documentació antiga en diu <code>master</code>: és el mateix, però el nom vigent és
@@ -238,7 +239,7 @@ zone "1.168.192.in-addr.arpa" {
 <div class="cq-block" data-kind="exemple">
   <h2 id="fitxer-de-zona-directa">Fitxer de zona directa</h2>
   <p>Per a <code>adria.internal</code>, amb el servidor a la <code>192.168.1.8</code>:</p>
-<pre>$TTL 600
+<div class="cq-code"><div class="cq-code-head"><span>Configuració · BIND 9</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Configuració · BIND 9">$TTL 600
 @   IN  SOA ns1.adria.internal. admin.adria.internal. (
             2026080101  <span class="c">; Serial</span>
             3600        <span class="c">; Refresh</span>
@@ -253,7 +254,7 @@ portatil IN A       192.168.1.50
 intranet IN CNAME   www.adria.internal.
 @       IN  MX  10  correu.adria.internal.
 correu  IN  A       192.168.1.9
-@       IN  TXT     "Xarxa interna de proves"</pre>
+@       IN  TXT     "Xarxa interna de proves"</pre></div>
   <p>
     La <code>@</code> vol dir «la zona sencera», aquí <code>adria.internal.</code>. I el correu
     de l'administrador s'escriu amb un punt on aniria l'arrova:
@@ -280,14 +281,14 @@ correu  IN  A       192.168.1.9
 <div class="cq-block" data-kind="exemple">
   <h2 id="fitxer-de-zona-inversa">Fitxer de zona inversa</h2>
   <p>Les mateixes màquines, al revés. Aquí el número de l'esquerra és l'últim octet:</p>
-<pre>$TTL 600
+<div class="cq-code"><div class="cq-code-head"><span>Configuració · BIND 9</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Configuració · BIND 9">$TTL 600
 @   IN  SOA ns1.adria.internal. admin.adria.internal. (
             2026080101 3600 1800 604800 600 )
 
 @       IN  NS      ns1.adria.internal.
 8       IN  PTR     ns1.adria.internal.
 9       IN  PTR     correu.adria.internal.
-50      IN  PTR     portatil.adria.internal.</pre>
+50      IN  PTR     portatil.adria.internal.</pre></div>
   <p>
     Els noms de la dreta van <strong>tots amb punt final</strong>: són d'una altra zona. I fixa't
     que <code>www</code> no hi surt: la inversa dona <em>un</em> nom per adreça, i el bo és el de
@@ -301,7 +302,7 @@ correu  IN  A       192.168.1.9
   <ol class="cq-steps">
     <li>
       <p><strong>Crea la carpeta</strong> de les teves zones:</p>
-<pre>sudo mkdir -p /etc/bind/zones</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo mkdir -p /etc/bind/zones</pre></div>
     </li>
 
     <li>
@@ -310,22 +311,22 @@ correu  IN  A       192.168.1.9
 
     <li>
       <p><strong>Valida cada zona per separat.</strong> El primer argument és el nom de la zona i el segon el fitxer:</p>
-<pre>sudo named-checkzone adria.internal \
-     /etc/bind/zones/db.adria.internal</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo named-checkzone adria.internal \
+     /etc/bind/zones/db.adria.internal</pre></div>
       <p>Ha de dir <code>OK</code> i el número de serial. Fes el mateix amb la inversa.</p>
     </li>
 
     <li>
       <p><strong>Valida la configuració i recarrega</strong> sense aturar el servei:</p>
-<pre>sudo named-checkconf
-sudo rndc reload</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo named-checkconf
+sudo rndc reload</pre></div>
     </li>
 
     <li>
       <p><strong>Comprova-ho amb <code>dig</code></strong>, preguntant al teu servidor:</p>
-<pre>dig @192.168.1.8 www.adria.internal +short
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">dig @192.168.1.8 www.adria.internal +short
 dig @192.168.1.8 adria.internal MX +short
-dig @192.168.1.8 -x 192.168.1.8 +short</pre>
+dig @192.168.1.8 -x 192.168.1.8 +short</pre></div>
       <p>La resposta ha de portar la marca <code>aa</code>: ets tu qui té l'autoritat.</p>
     </li>
   </ol>
@@ -335,18 +336,18 @@ dig @192.168.1.8 -x 192.168.1.8 +short</pre>
 <div class="cq-block" data-kind="exemple">
   <h2 id="les-dues-declaracions">Les dues declaracions</h2>
   <p>Al <strong>primari</strong>, s'autoritza qui es pot endur la zona i a qui s'avisa:</p>
-<pre>zone "adria.internal" {
+<div class="cq-code"><div class="cq-code-head"><span>Configuració · BIND 9</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Configuració · BIND 9">zone "adria.internal" {
     type primary;
     file "/etc/bind/zones/db.adria.internal";
     allow-transfer { 192.168.1.9; };
     also-notify { 192.168.1.9; };
-};</pre>
+};</pre></div>
   <p>Al <strong>secundari</strong>, d'on ve la zona i on la desa:</p>
-<pre>zone "adria.internal" {
+<div class="cq-code"><div class="cq-code-head"><span>Configuració · BIND 9</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Configuració · BIND 9">zone "adria.internal" {
     type secondary;
     file "/var/cache/bind/db.adria.internal";
     primaries { 192.168.1.8; };
-};</pre>
+};</pre></div>
   <p>
     A la zona hi ha d'haver un registre <strong>NS per a cada servidor</strong>, primari i
     secundari: si no, per a la resta del món el secundari no existeix.
@@ -363,20 +364,20 @@ dig @192.168.1.8 -x 192.168.1.8 +short</pre>
       <p><strong>Al fitxer de zona del primari</strong>, dona d'alta el segon servidor: un
       <code>NS</code> més per a la zona i el seu <code>A</code>. Sense això la zona es transfereix
       igualment, però ningú de fora sabrà que el secundari existeix:</p>
-<pre>@       IN  NS      ns2.adria.internal.
-ns2     IN  A       192.168.1.9</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Configuració · BIND 9</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Configuració · BIND 9">@       IN  NS      ns2.adria.internal.
+ns2     IN  A       192.168.1.9</pre></div>
     </li>
 
     <li>
       <p><strong>A la declaració de la zona</strong>, afegeix <code>allow-transfer</code> i
       <code>also-notify</code>, apuja el <strong>serial</strong> i recarrega:</p>
-<pre>sudo named-checkconf
-sudo rndc reload</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo named-checkconf
+sudo rndc reload</pre></div>
     </li>
 
     <li>
       <p><strong>Comprova des del secundari</strong> que el primari el deixa passar:</p>
-<pre>dig @192.168.1.8 adria.internal AXFR</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">dig @192.168.1.8 adria.internal AXFR</pre></div>
       <p>
         Si surt la zona sencera, endavant. Si surt <code>Transfer failed</code>, revisa
         l'<code>allow-transfer</code> abans de continuar.
@@ -389,14 +390,14 @@ sudo rndc reload</pre>
 
     <li>
       <p><strong>Recarrega i mira els registres</strong>: hi has de veure la transferència:</p>
-<pre>sudo rndc reload
-sudo journalctl -u named -n 20 | grep -i transfer</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo rndc reload
+sudo journalctl -u named -n 20 | grep -i transfer</pre></div>
     </li>
 
     <li>
       <p><strong>Comprova que el fitxer ha aparegut sol</strong> i que el secundari respon:</p>
-<pre>ls -l /var/cache/bind/
-dig @192.168.1.9 www.adria.internal +short</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">ls -l /var/cache/bind/
+dig @192.168.1.9 www.adria.internal +short</pre></div>
       <p>
         Ara fes una prova de veritat: canvia un registre al primari, apuja el serial i recarrega.
         No has de tocar res al secundari: en pocs segons el seu registre ha de dir
@@ -417,20 +418,20 @@ dig @192.168.1.9 www.adria.internal +short</pre>
   <ol class="cq-steps">
     <li>
       <p><strong>Respon a qui li pregunta:</strong></p>
-<pre>dig @192.168.1.8 www.adria.internal +short</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">dig @192.168.1.8 www.adria.internal +short</pre></div>
       <p>Si no torna res, mira l'<code>allow-query</code> i el
       <code>listen-on</code> abans de tocar la zona.</p>
     </li>
     <li>
       <p><strong>És ell qui mana a la zona.</strong> Sense <code>+short</code>, la
       resposta ha de portar la marca <code>aa</code> i <code>status: NOERROR</code>:</p>
-<pre>dig @192.168.1.8 adria.internal SOA</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">dig @192.168.1.8 adria.internal SOA</pre></div>
     </li>
     <li>
       <p><strong>Els dos servidors diuen el mateix.</strong> Si has muntat el secundari,
       compara'n els serials:</p>
-<pre>dig @192.168.1.8 adria.internal SOA +short
-dig @192.168.1.9 adria.internal SOA +short</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">dig @192.168.1.8 adria.internal SOA +short
+dig @192.168.1.9 adria.internal SOA +short</pre></div>
       <p>Han de coincidir. Si el del secundari va endarrerit, la transferència no s'ha fet.</p>
     </li>
   </ol>
@@ -438,7 +439,7 @@ dig @192.168.1.9 adria.internal SOA +short</pre>
 
 <!-- ============ BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2 id="criteris-professionals">Criteris professionals</h2>
+  <h2 id="criteris-professionals">Bones pràctiques</h2>
   <ul>
     <li><strong>Còpia de l'original</strong> abans de la primera edició, sempre.</li>
     <li><strong><code>named-checkconf</code> i <code>named-checkzone</code></strong> abans de recarregar.</li>
@@ -450,7 +451,7 @@ dig @192.168.1.9 adria.internal SOA +short</pre>
 
 <!-- ============ PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2 id="errors-habituals">Errors habituals</h2>
+  <h2 id="errors-habituals">Problemes</h2>
   <dl class="cq-issues">
 <dt>El servei no arrenca</dt>
     <dd>
@@ -510,7 +511,7 @@ dig @192.168.1.9 adria.internal SOA +short</pre>
 
 <!-- ============ RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h2 id="fitxa-rapida">Fitxa ràpida</h2>
+  <h2 id="fitxa-rapida">Resum</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Comanda</th><th>Per a què serveix</th></tr></thead>
@@ -538,12 +539,12 @@ dig @192.168.1.9 adria.internal SOA +short</pre>
 
 <!-- === PEU DE NAVEGACIÓ INICI === -->
 <nav class="cq-pager">
-  <a class="prev" href="../teoria/t2-4-primari-secundari.html">
-    <span class="dir">Anterior · T2.4</span>
-    <span class="ttl">Primari i secundari</span></a>
-  <a class="next" href="../activitats/a2-1-client-dns.html">
-    <span class="dir">Següent · A2.1</span>
-    <span class="ttl">El client davant dels noms</span></a>
+  <a class="prev" href="../index.html">
+    <span class="dir">Torna a · RA2</span>
+    <span class="ttl">RA2 · Instal·lació de serveis de resolució de noms (DNS)</span></a>
+  <a class="next" href="../index.html">
+    <span class="dir">Torna a · RA2</span>
+    <span class="ttl">RA2 · Instal·lació de serveis de resolució de noms (DNS)</span></a>
 </nav>
 <!-- === PEU DE NAVEGACIÓ FI === -->
 

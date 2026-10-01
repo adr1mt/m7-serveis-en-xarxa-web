@@ -1,0 +1,602 @@
+[
+  {
+    "code": "T1.0",
+    "title": "Repàs d'adreçament",
+    "description": "IP, màscara, CIDR i rangs privats",
+    "url": "RA1/teoria/t1-0-repas-adrecament.html",
+    "ra": "RA1",
+    "type": "teoria"
+  },
+  {
+    "code": "T1.1",
+    "title": "Fonaments de DHCP",
+    "description": "El procés DORA i les concessions",
+    "url": "RA1/teoria/t1-1-dhcp-fonaments.html",
+    "ra": "RA1",
+    "type": "teoria"
+  },
+  {
+    "code": "T1.2",
+    "title": "Encaminament i NAT",
+    "description": "Per què un client amb IP encara no té Internet",
+    "url": "RA1/teoria/t1-2-encaminament-nat.html",
+    "ra": "RA1",
+    "type": "teoria"
+  },
+  {
+    "code": "G1.1",
+    "title": "Guia: Netplan",
+    "description": "Les targetes de xarxa d'un Ubuntu Server",
+    "url": "RA1/guies/g1-1-netplan.html",
+    "ra": "RA1",
+    "type": "guia"
+  },
+  {
+    "code": "G1.2",
+    "title": "Guia: Kea",
+    "description": "Rang, opcions i reserves del servidor DHCP",
+    "url": "RA1/guies/g1-2-kea.html",
+    "ra": "RA1",
+    "type": "guia"
+  },
+  {
+    "code": "G1.3",
+    "title": "Guia: nftables",
+    "description": "Encaminament i NAT cap a Internet",
+    "url": "RA1/guies/g1-3-nftables.html",
+    "ra": "RA1",
+    "type": "guia"
+  },
+  {
+    "code": "G1.4",
+    "title": "Guia: systemd-networkd",
+    "description": "El DHCP integrat per a A1.2",
+    "url": "RA1/guies/g1-4-systemd-networkd.html",
+    "ra": "RA1",
+    "type": "guia"
+  },
+  {
+    "code": "A1.1",
+    "title": "Posada a punt del servidor",
+    "description": "Nom, hora, actualitzacions i les dues targetes",
+    "url": "RA1/activitats/a1-1-posada-a-punt.html",
+    "ra": "RA1",
+    "type": "activitat"
+  },
+  {
+    "code": "A1.2",
+    "title": "DHCP mínim amb systemd-networkd",
+    "description": "Un servidor de laboratori sense instal·lar res",
+    "url": "RA1/activitats/a1-2-dhcp-systemd-networkd.html",
+    "ra": "RA1",
+    "type": "activitat"
+  },
+  {
+    "code": "A1.3",
+    "title": "Servidor DHCP amb Kea",
+    "description": "Reserves, IP forwarding i sortida a Internet",
+    "url": "RA1/activitats/a1-3-dhcp-kea.html",
+    "ra": "RA1",
+    "type": "activitat"
+  },
+  {
+    "code": "A1.4",
+    "title": "DHCP per a 2000 equips",
+    "description": "Dimensionar una xarxa /16 amb reserves",
+    "url": "RA1/activitats/a1-4-kea-escala-reserves.html",
+    "ra": "RA1",
+    "type": "activitat"
+  },
+  {
+    "code": "T2.1",
+    "title": "Noms i resolució al client",
+    "description": "De /etc/hosts a systemd-resolved",
+    "url": "RA2/teoria/t2-1-noms-i-resolucio.html",
+    "ra": "RA2",
+    "type": "teoria"
+  },
+  {
+    "code": "T2.2",
+    "title": "L'arbre del DNS",
+    "description": "Jerarquia, zones, delegació i TTL",
+    "url": "RA2/teoria/t2-2-arbre-dns.html",
+    "ra": "RA2",
+    "type": "teoria"
+  },
+  {
+    "code": "T2.3",
+    "title": "Zones i registres",
+    "description": "Zona directa, inversa i tipus de registre",
+    "url": "RA2/teoria/t2-3-zones-i-registres.html",
+    "ra": "RA2",
+    "type": "teoria"
+  },
+  {
+    "code": "T2.4",
+    "title": "Primari i secundari",
+    "description": "Transferències de zona i redundància",
+    "url": "RA2/teoria/t2-4-primari-secundari.html",
+    "ra": "RA2",
+    "type": "teoria"
+  },
+  {
+    "code": "G2.1",
+    "title": "Guia: BIND 9",
+    "description": "Resolutor, zones pròpies i servidor secundari",
+    "url": "RA2/guies/g2-1-bind9.html",
+    "ra": "RA2",
+    "type": "guia"
+  },
+  {
+    "code": "A2.1",
+    "title": "El client davant dels noms",
+    "description": "Investigar com resol la teva màquina",
+    "url": "RA2/activitats/a2-1-client-dns.html",
+    "ra": "RA2",
+    "type": "activitat"
+  },
+  {
+    "code": "A2.2",
+    "title": "Servidor DNS amb BIND 9",
+    "description": "Resolutor i zona pròpia, directa i inversa",
+    "url": "RA2/activitats/a2-2-servidor-bind.html",
+    "ra": "RA2",
+    "type": "activitat"
+  },
+  {
+    "code": "A2.3",
+    "title": "DHCP i DNS treballant junts",
+    "description": "Kea reparteix el teu DNS i el client navega",
+    "url": "RA2/activitats/a2-3-kea-i-bind.html",
+    "ra": "RA2",
+    "type": "activitat"
+  },
+  {
+    "code": "A2.4",
+    "title": "Zona secundària per parelles",
+    "description": "Transferència de zona entre dos servidors",
+    "url": "RA2/activitats/a2-4-zona-secundaria.html",
+    "ra": "RA2",
+    "type": "activitat"
+  },
+  {
+    "code": "T3.1",
+    "title": "Transferència de fitxers i FTP",
+    "description": "Canal de control, canal de dades i modes",
+    "url": "RA3/teoria/t3-1-ftp-fonaments.html",
+    "ra": "RA3",
+    "type": "teoria"
+  },
+  {
+    "code": "T3.2",
+    "title": "Comptes, accés anònim i límits",
+    "description": "Jaules, usuari anònim, velocitat i quotes",
+    "url": "RA3/teoria/t3-2-comptes-i-limits.html",
+    "ra": "RA3",
+    "type": "teoria"
+  },
+  {
+    "code": "T3.3",
+    "title": "FTPS i SFTP",
+    "description": "Dues maneres de xifrar, i per què no són iguals",
+    "url": "RA3/teoria/t3-3-ftps-i-sftp.html",
+    "ra": "RA3",
+    "type": "teoria"
+  },
+  {
+    "code": "G3.1",
+    "title": "Guia: vsftpd",
+    "description": "Usuaris enjaulats, anònim, límits i FTPS",
+    "url": "RA3/guies/g3-1-vsftpd.html",
+    "ra": "RA3",
+    "type": "guia"
+  },
+  {
+    "code": "G3.2",
+    "title": "Guia: SFTP d'OpenSSH",
+    "description": "Transferència xifrada sense instal·lar res",
+    "url": "RA3/guies/g3-2-sftp.html",
+    "ra": "RA3",
+    "type": "guia"
+  },
+  {
+    "code": "A3.1",
+    "title": "Servidor FTP per a l'equip",
+    "description": "Comptes propis i cadascú al seu directori",
+    "url": "RA3/activitats/a3-1-servidor-ftp.html",
+    "ra": "RA3",
+    "type": "activitat"
+  },
+  {
+    "code": "A3.2",
+    "title": "Repositori públic i límits",
+    "description": "Accés anònim, velocitat i modes de connexió",
+    "url": "RA3/activitats/a3-2-ftp-public-i-limits.html",
+    "ra": "RA3",
+    "type": "activitat"
+  },
+  {
+    "code": "A3.3",
+    "title": "Tancar l'FTP en clar",
+    "description": "Capturar la contrasenya i migrar a FTPS i SFTP",
+    "url": "RA3/activitats/a3-3-sftp-i-xifrat.html",
+    "ra": "RA3",
+    "type": "activitat"
+  },
+  {
+    "code": "T4.1",
+    "title": "Com viatja un correu electrònic",
+    "description": "MUA, MTA, MDA, SMTP, IMAP i el registre MX",
+    "url": "RA4/teoria/t4-1-com-viatja-un-correu.html",
+    "ra": "RA4",
+    "type": "teoria"
+  },
+  {
+    "code": "T4.2",
+    "title": "Com és per dins un servidor de correu",
+    "description": "Peces separades o servei únic, ports i certificats",
+    "url": "RA4/teoria/t4-2-servidor-de-correu.html",
+    "ra": "RA4",
+    "type": "teoria"
+  },
+  {
+    "code": "T4.3",
+    "title": "Àlies, IMAP i usos indeguts",
+    "description": "Recollida remota i tancar el relay obert",
+    "url": "RA4/teoria/t4-3-alies-imap-i-abus.html",
+    "ra": "RA4",
+    "type": "teoria"
+  },
+  {
+    "code": "G4.1",
+    "title": "Guia: Stalwart",
+    "description": "Instal·lació, assistent, comptes i àlies",
+    "url": "RA4/guies/g4-1-stalwart.html",
+    "ra": "RA4",
+    "type": "guia"
+  },
+  {
+    "code": "G4.2",
+    "title": "Guia: Thunderbird",
+    "description": "Compte manual amb 465, 993 i certificat autofirmat",
+    "url": "RA4/guies/g4-2-thunderbird.html",
+    "ra": "RA4",
+    "type": "guia"
+  },
+  {
+    "code": "A4.1",
+    "title": "El correu intern del centre",
+    "description": "Servidor propi i dos comptes que es parlen",
+    "url": "RA4/activitats/a4-1-servidor-de-correu.html",
+    "ra": "RA4",
+    "type": "activitat"
+  },
+  {
+    "code": "A4.2",
+    "title": "Bústia compartida i porta tancada",
+    "description": "Àlies, client gràfic i prova de relay obert",
+    "url": "RA4/activitats/a4-2-alies-i-abus.html",
+    "ra": "RA4",
+    "type": "activitat"
+  },
+  {
+    "code": "T5.1",
+    "title": "Com funciona un servei web",
+    "description": "Petició, resposta, codis d'estat i qui serveix els fitxers",
+    "url": "RA5/teoria/t5-1-com-funciona-un-servei-web.html",
+    "ra": "RA5",
+    "type": "teoria"
+  },
+  {
+    "code": "T5.2",
+    "title": "Un servidor, molts llocs",
+    "description": "Hosts virtuals, la capçalera Host i el lloc per defecte",
+    "url": "RA5/teoria/t5-2-un-servidor-molts-llocs.html",
+    "ra": "RA5",
+    "type": "teoria"
+  },
+  {
+    "code": "T5.3",
+    "title": "HTTPS i certificats",
+    "description": "Què xifra, què acredita i què és un certificat autofirmat",
+    "url": "RA5/teoria/t5-3-https-i-certificats.html",
+    "ra": "RA5",
+    "type": "teoria"
+  },
+  {
+    "code": "T5.4",
+    "title": "Qui pot entrar al web",
+    "description": "Autenticació bàsica, permisos per adreça i per grup",
+    "url": "RA5/teoria/t5-4-qui-pot-entrar.html",
+    "ra": "RA5",
+    "type": "teoria"
+  },
+  {
+    "code": "T5.5",
+    "title": "Mòduls i codi",
+    "description": "Què amplia el servidor i què s'executa a cada banda",
+    "url": "RA5/teoria/t5-5-moduls-i-codi.html",
+    "ra": "RA5",
+    "type": "teoria"
+  },
+  {
+    "code": "G5.1",
+    "title": "Guia: Apache HTTP Server",
+    "description": "Estructura, hosts virtuals, HTTPS, control d'accés i mòduls",
+    "url": "RA5/guies/g5-1-apache.html",
+    "ra": "RA5",
+    "type": "guia"
+  },
+  {
+    "code": "G5.2",
+    "title": "Guia: Nginx",
+    "description": "Blocs de servidor, pàgines d'error, registres i HTTPS",
+    "url": "RA5/guies/g5-2-nginx.html",
+    "ra": "RA5",
+    "type": "guia"
+  },
+  {
+    "code": "A5.1",
+    "title": "El primer servidor web",
+    "description": "Publicar una pàgina i llegir què queda registrat",
+    "url": "RA5/activitats/a5-1-el-primer-servidor-web.html",
+    "ra": "RA5",
+    "type": "activitat"
+  },
+  {
+    "code": "A5.2",
+    "title": "Dos llocs i un cadenat",
+    "description": "Hosts virtuals amb HTTPS i redirecció des del port 80",
+    "url": "RA5/activitats/a5-2-dos-llocs-i-cadenat.html",
+    "ra": "RA5",
+    "type": "activitat"
+  },
+  {
+    "code": "A5.3",
+    "title": "Zona pública i zona privada",
+    "description": "Contrasenya, restricció per adreça i accés per grup",
+    "url": "RA5/activitats/a5-3-zona-publica-i-privada.html",
+    "ra": "RA5",
+    "type": "activitat"
+  },
+  {
+    "code": "A5.4",
+    "title": "El mateix lloc amb Nginx",
+    "description": "Muntar-lo amb l'altre servidor i comparar-ne la feina",
+    "url": "RA5/activitats/a5-4-el-mateix-lloc-amb-nginx.html",
+    "ra": "RA5",
+    "type": "activitat"
+  },
+  {
+    "code": "T6.1",
+    "title": "Administrar una màquina de lluny",
+    "description": "Consola o escriptori, protocols, ports i quan cal cadascun",
+    "url": "RA6/teoria/t6-1-administrar-de-lluny.html",
+    "ra": "RA6",
+    "type": "teoria"
+  },
+  {
+    "code": "T6.2",
+    "title": "SSH per dins",
+    "description": "Claus, empremta del servidor i sessió xifrada",
+    "url": "RA6/teoria/t6-2-ssh-per-dins.html",
+    "ra": "RA6",
+    "type": "teoria"
+  },
+  {
+    "code": "T6.3",
+    "title": "Endurir l'accés remot",
+    "description": "Superfície d'atac, mínim privilegi i força bruta",
+    "url": "RA6/teoria/t6-3-endurir-l-acces-remot.html",
+    "ra": "RA6",
+    "type": "teoria"
+  },
+  {
+    "code": "T6.4",
+    "title": "Automatitzar l'administració",
+    "description": "Estat desitjat, idempotència i administració de moltes màquines",
+    "url": "RA6/teoria/t6-4-automatitzar-l-administracio.html",
+    "ra": "RA6",
+    "type": "teoria"
+  },
+  {
+    "code": "G6.1",
+    "title": "Guia: OpenSSH",
+    "description": "Servei, claus, sshd_config i comprovació de la configuració",
+    "url": "RA6/guies/g6-1-openssh.html",
+    "ra": "RA6",
+    "type": "guia"
+  },
+  {
+    "code": "G6.2",
+    "title": "Guia: Fail2ban",
+    "description": "Presó per a sshd, bloqueig temporal i desbloqueig",
+    "url": "RA6/guies/g6-2-fail2ban.html",
+    "ra": "RA6",
+    "type": "guia"
+  },
+  {
+    "code": "G6.3",
+    "title": "Guia: xrdp",
+    "description": "Escriptori remot per RDP i client de connexió",
+    "url": "RA6/guies/g6-3-xrdp.html",
+    "ra": "RA6",
+    "type": "guia"
+  },
+  {
+    "code": "G6.4",
+    "title": "Guia: Ansible",
+    "description": "Inventari, playbook, variables, plantilles i handlers",
+    "url": "RA6/guies/g6-4-ansible.html",
+    "ra": "RA6",
+    "type": "guia"
+  },
+  {
+    "code": "A6.1",
+    "title": "Entrar sense contrasenya",
+    "description": "Accés per clau i tancar la porta de la contrasenya",
+    "url": "RA6/activitats/a6-1-entrar-sense-contrasenya.html",
+    "ra": "RA6",
+    "type": "activitat"
+  },
+  {
+    "code": "A6.2",
+    "title": "Endurir el servei SSH",
+    "description": "Port, usuaris permesos, intents i bloqueig automàtic",
+    "url": "RA6/activitats/a6-2-endurir-el-servei.html",
+    "ra": "RA6",
+    "type": "activitat"
+  },
+  {
+    "code": "A6.3",
+    "title": "L'escriptori de lluny",
+    "description": "Muntar RDP i comparar-lo amb la consola",
+    "url": "RA6/activitats/a6-3-l-escriptori-de-lluny.html",
+    "ra": "RA6",
+    "type": "activitat"
+  },
+  {
+    "code": "A6.4",
+    "title": "Ansible I · El servidor DHCP",
+    "description": "Un playbook que munta el servei del RA1",
+    "url": "RA6/activitats/a6-4-ansible-dhcp.html",
+    "ra": "RA6",
+    "type": "activitat"
+  },
+  {
+    "code": "A6.5",
+    "title": "Ansible II · Preparar màquines",
+    "description": "Variables, plantilles, handlers i execució idempotent",
+    "url": "RA6/activitats/a6-5-ansible-maquines.html",
+    "ra": "RA6",
+    "type": "activitat"
+  },
+  {
+    "code": "A6.6",
+    "title": "Ansible III · El servidor web",
+    "description": "Desplegar el servei del RA5 sense tocar la màquina",
+    "url": "RA6/activitats/a6-6-ansible-web.html",
+    "ra": "RA6",
+    "type": "activitat"
+  },
+  {
+    "code": "T7.1",
+    "title": "Fonaments de les xarxes sense fils",
+    "description": "Medi compartit, bandes, canals i fases de la connexió",
+    "url": "RA7/teoria/t7-1-fonaments-sense-fils.html",
+    "ra": "RA7",
+    "type": "teoria"
+  },
+  {
+    "code": "T7.2",
+    "title": "El punt d'accés i l'encaminador sense fil",
+    "description": "Pont entre medis, la caixa que ho fa tot i els seus paràmetres",
+    "url": "RA7/teoria/t7-2-punt-d-acces-i-encaminador.html",
+    "ra": "RA7",
+    "type": "teoria"
+  },
+  {
+    "code": "T7.3",
+    "title": "Seguretat de les xarxes sense fils",
+    "description": "WEP, WPA2 i WPA3, PSK contra Enterprise i xarxa de convidats",
+    "url": "RA7/teoria/t7-3-seguretat-sense-fils.html",
+    "ra": "RA7",
+    "type": "teoria"
+  },
+  {
+    "code": "G7.1",
+    "title": "Guia: Packet Tracer sense fils",
+    "description": "Encaminador, punt d'accés, SSID, seguretat i clients",
+    "url": "RA7/guies/g7-1-packet-tracer.html",
+    "ra": "RA7",
+    "type": "guia"
+  },
+  {
+    "code": "A7.1",
+    "title": "La xarxa sense fils de l'aula",
+    "description": "Muntar l'encaminador, el DHCP, el SSID i tres clients",
+    "url": "RA7/activitats/a7-1-la-xarxa-sense-fils-de-l-aula.html",
+    "ra": "RA7",
+    "type": "activitat"
+  },
+  {
+    "code": "A7.2",
+    "title": "Escenaris i seguretat",
+    "description": "Canal, rang esgotat, xarxa de convidats i WEP contra WPA2",
+    "url": "RA7/activitats/a7-2-escenaris-i-seguretat.html",
+    "ra": "RA7",
+    "type": "activitat"
+  },
+  {
+    "code": "A7.3",
+    "title": "Cobertura real",
+    "description": "Mesurar l'aire de l'aula amb dos aparells i triar canal",
+    "url": "RA7/activitats/a7-3-cobertura-real.html",
+    "ra": "RA7",
+    "type": "activitat"
+  },
+  {
+    "code": "T8.1",
+    "title": "De la xarxa local a Internet",
+    "description": "Encaminar entre interfícies, NAT i tipus de passarel·la",
+    "url": "RA8/teoria/t8-1-de-la-xarxa-local-a-internet.html",
+    "ra": "RA8",
+    "type": "teoria"
+  },
+  {
+    "code": "T8.2",
+    "title": "El proxy-cau",
+    "description": "Intermediari, memòria cau i modes explícit i transparent",
+    "url": "RA8/teoria/t8-2-el-proxy-cau.html",
+    "ra": "RA8",
+    "type": "teoria"
+  },
+  {
+    "code": "T8.3",
+    "title": "Filtrar la navegació",
+    "description": "ACL, ordre de les regles i denegació per defecte",
+    "url": "RA8/teoria/t8-3-filtrar-la-navegacio.html",
+    "ra": "RA8",
+    "type": "teoria"
+  },
+  {
+    "code": "T8.4",
+    "title": "Publicar un servei intern",
+    "description": "Redirecció de ports i proxy invers",
+    "url": "RA8/teoria/t8-4-publicar-un-servei-intern.html",
+    "ra": "RA8",
+    "type": "teoria"
+  },
+  {
+    "code": "G8.1",
+    "title": "Guia: Squid",
+    "description": "Instal·lació, port, memòria cau, ACL i registres",
+    "url": "RA8/guies/g8-1-squid.html",
+    "ra": "RA8",
+    "type": "guia"
+  },
+  {
+    "code": "A8.1",
+    "title": "El proxy de l'aula",
+    "description": "Sortir a Internet a través de Squid i mirar el registre",
+    "url": "RA8/activitats/a8-1-el-proxy-de-l-aula.html",
+    "ra": "RA8",
+    "type": "activitat"
+  },
+  {
+    "code": "A8.2",
+    "title": "Què es pot visitar",
+    "description": "Bloqueig per domini, per paraula, per horari i per port",
+    "url": "RA8/activitats/a8-2-que-es-pot-visitar.html",
+    "ra": "RA8",
+    "type": "activitat"
+  },
+  {
+    "code": "A8.3",
+    "title": "Web corporativa segura",
+    "description": "DNS propi, proxy invers i un backend que ningú no toca",
+    "url": "RA8/activitats/a8-3-web-corporativa-segura.html",
+    "ra": "RA8",
+    "type": "activitat"
+  }
+]

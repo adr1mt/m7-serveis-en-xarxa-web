@@ -6,29 +6,30 @@
 <title>G8.1 · Guia: Squid — Serveis en Xarxa (0227)</title>
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 <script src="../../_identitat/lectura.js"></script>
+<link rel="icon" href="../../_identitat/favicon.svg">
 </head>
 <body>
 <a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
-    <a href="../index.html">‹ RA8 · Accés des de xarxes locals a xarxes públiques</a>
-    <span class="pos">G8.1 · 5/8</span>
+    <a href="../index.html">‹ RA8 · Passarel·les</a>
+    <span class="pos">G8.1 · 1/1</span>
+    <!-- EINES LECTURA INICI -->
+<div class="cq-tools" role="group" aria-label="Aparença"><button type="button" class="cq-theme" data-preference="light" aria-label="Clar" title="Clar" aria-pressed="false" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg></button><button type="button" class="cq-theme" data-preference="auto" aria-label="Automàtic" title="Automàtic" aria-pressed="true" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8m-4-4v4"/></svg></button><button type="button" class="cq-theme" data-preference="dark" aria-label="Fosc" title="Fosc" aria-pressed="false" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M20.5 13A9 9 0 0 1 11 3.5 9 9 0 1 0 20.5 13Z"/></svg></button></div>
+<!-- EINES LECTURA FI -->
   </div>
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<!-- EINES LECTURA INICI -->
-<div class="cq-tools" hidden><label for="cq-tema">Tema</label> <select id="cq-tema" class="cq-theme"><option value="auto">Automàtic</option><option value="light">Clar</option><option value="dark">Fosc</option></select></div>
-<!-- EINES LECTURA FI -->
-<main id="contingut" tabindex="-1">
+<main data-layout="content" data-type="guies" id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA8 · G8.1</div>
   <h1>Guia: Squid</h1>
   <p class="lede">Manual de configuració del proxy-cau, de la instal·lació al control d'accés.</p>
 </header>
 <!-- TOC INICI -->
-<details class="cq-toc"><summary>En aquesta pàgina</summary><ol><li><a href="#que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</a></li><li><a href="#installar-squid-i-comprovar-que-arrenca">Instal·lar Squid i comprovar que arrenca</a></li><li><a href="#el-fitxer-squid-conf">El fitxer squid.conf</a></li><li><a href="#control-d-acces-acl-i-http-access">Control d&#x27;accés: ACL i http_access</a></li><li><a href="#canviar-el-port-a-8080">Canviar el port a 8080</a></li><li><a href="#activar-la-cau-en-disc">Activar una cau en disc de 100 MiB</a></li><li><a href="#permetre-la-xarxa-local">Permetre la xarxa local</a></li><li><a href="#configurar-el-client">Configurar el client</a></li><li><a href="#bloquejar-per-domini-paraula-horari-i-port">Bloquejar per domini, paraula, horari i port</a></li><li><a href="#llegir-el-registre-d-accessos">Llegir el registre d&#x27;accessos</a></li><li><a href="#gestor-http-local-i-mode-transparent">Gestor HTTP local i mode transparent</a></li><li><a href="#comprovar-ho-de-conjunt-des-del-client">Comprovar-ho de conjunt des del client</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#fitxa-rapida">Fitxa ràpida</a></li></ol></details>
+<details class="cq-toc"><summary>En aquesta pàgina · 15 apartats</summary><ol><li><a href="#que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</a></li><li><a href="#installar-squid-i-comprovar-que-arrenca">Instal·lar Squid i comprovar que arrenca</a></li><li><a href="#el-fitxer-squid-conf">El fitxer squid.conf</a></li><li><a href="#control-d-acces-acl-i-http-access">Control d&#x27;accés: ACL i http_access</a></li><li><a href="#canviar-el-port-a-8080">Canviar el port a 8080</a></li><li><a href="#activar-la-cau-en-disc">Activar una cau en disc de 100 MiB</a></li><li><a href="#permetre-la-xarxa-local">Permetre la xarxa local</a></li><li><a href="#configurar-el-client">Configurar el client</a></li><li><a href="#bloquejar-per-domini-paraula-horari-i-port">Bloquejar per domini, paraula, horari i port</a></li><li><a href="#llegir-el-registre-d-accessos">Llegir el registre d&#x27;accessos</a></li><li><a href="#gestor-http-local-i-mode-transparent">Gestor HTTP local i mode transparent</a></li><li><a href="#comprovar-ho-de-conjunt-des-del-client">Comprovar-ho de conjunt des del client</a></li><li><a href="#criteris-professionals">Bones pràctiques</a></li><li><a href="#errors-habituals">Problemes</a></li><li><a href="#fitxa-rapida">Resum</a></li></ol></details>
 <!-- TOC FI -->
 
 
@@ -51,19 +52,19 @@
   <ol class="cq-steps">
     <li>
       <p><strong>Instal·la el paquet:</strong></p>
-<pre>sudo apt update
-sudo apt install squid</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo apt update
+sudo apt install squid</pre></div>
       <p>La instal·lació ja deixa un fitxer de configuració funcional a
       <code>/etc/squid/squid.conf</code>, amb el servei arrencat.</p>
     </li>
     <li>
       <p><strong>Comprova que el servei corre:</strong></p>
-<pre>systemctl status squid</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">systemctl status squid</pre></div>
       <p>Ha de sortir <span class="o">active (running)</span>.</p>
     </li>
     <li>
       <p><strong>Mira en quin port escolta</strong>, sense tocar encara res:</p>
-<pre>sudo ss -tlnp | grep squid</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo ss -tlnp | grep squid</pre></div>
       <p>Ha de sortir el port <code>3128</code>, el que ve per defecte.</p>
     </li>
   </ol>
@@ -72,8 +73,8 @@ sudo apt install squid</pre>
 <!-- ============ 3 · REFERÈNCIA · SQUID.CONF ============ -->
 <div class="cq-block" data-kind="referència">
   <h2 id="el-fitxer-squid-conf">El fitxer squid.conf</h2>
-<p>Squid 7.2, el paquet d'Ubuntu 26.04, consulta el gestor per HTTP. Conserva aquestes regles <strong>abans de qualsevol allow de clients</strong>; les ACL <code>localhost</code> i <code>manager</code> ja vénen definides:</p><pre>http_access allow localhost manager
-http_access deny manager</pre><p>Consulta local: <code>curl --noproxy '*' http://127.0.0.1:8080/squid-internal-mgr/info</code>. Des d'un client aquesta mateixa ruta ha de quedar denegada. <a href="https://wiki.squid-cache.org/Features/CacheManager/Index">Documentació oficial del gestor</a>. Verificat en Ubuntu 26.04.1 amb Squid 7.2.</p>
+<p>Squid 7.2, el paquet d'Ubuntu 26.04, consulta el gestor per HTTP. Conserva aquestes regles <strong>abans de qualsevol allow de clients</strong>; les ACL <code>localhost</code> i <code>manager</code> ja vénen definides:</p><div class="cq-code"><div class="cq-code-head"><span>Fitxer · squid.conf</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Fitxer · squid.conf">http_access allow localhost manager
+http_access deny manager</pre></div><p>Consulta local: <code>curl --noproxy '*' http://127.0.0.1:8080/squid-internal-mgr/info</code>. Des d'un client aquesta mateixa ruta ha de quedar denegada. <a href="https://wiki.squid-cache.org/Features/CacheManager/Index">Documentació oficial del gestor</a>. Verificat en Ubuntu 26.04.1 amb Squid 7.2.</p>
   <p>
     Tota la configuració viu en un únic fitxer de text,
     <code>/etc/squid/squid.conf</code>. Les directives per començar:
@@ -136,22 +137,22 @@ http_access deny manager</pre><p>Consulta local: <code>curl --noproxy '*' http:/
   <ol class="cq-steps">
     <li>
       <p><strong>Edita la directiva <code>http_port</code>:</strong></p>
-<pre>sudo nano /etc/squid/squid.conf</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo nano /etc/squid/squid.conf</pre></div>
       <p>Canvia <code>http_port 3128</code> per <code>http_port 8080</code>.</p>
     </li>
     <li>
       <p><strong>Valida la sintaxi</strong> sense aplicar-la:</p>
-<pre>sudo squid -k parse</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo squid -k parse</pre></div>
       <p>Si hi ha un error, l'assenyala amb el número de línia; si no diu res,
       el fitxer és correcte.</p>
     </li>
     <li>
       <p><strong>Aplica el canvi:</strong></p>
-<pre>sudo systemctl restart squid</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo systemctl restart squid</pre></div>
     </li>
     <li>
       <p><strong>Comprova el port nou:</strong></p>
-<pre>sudo ss -tlnp | grep squid</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo ss -tlnp | grep squid</pre></div>
     </li>
   </ol>
   <div class="cq-note">
@@ -169,17 +170,17 @@ http_access deny manager</pre><p>Consulta local: <code>curl --noproxy '*' http:/
   <h2 id="activar-la-cau-en-disc">Activar una cau en disc de 100 MiB</h2>
   <ol class="cq-steps">
     <li><p><strong>Comprova l'espai disponible:</strong></p>
-<pre>df -h /var/spool/squid</pre></li>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">df -h /var/spool/squid</pre></div></li>
     <li><p><strong>Afegeix al final de <code>squid.conf</code>:</strong></p>
-<pre>cache_dir ufs /var/spool/squid 100 16 256
-shutdown_lifetime 1 second</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Fitxer · squid.conf</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Fitxer · squid.conf">cache_dir ufs /var/spool/squid 100 16 256
+shutdown_lifetime 1 second</pre></div>
       <p>El <code>100</code> limita aquesta cau a 100 MiB; <code>16</code> i
       <code>256</code> són els directoris dels dos nivells.</p></li>
     <li><p><strong>Valida, atura, crea els directoris i torna a arrencar:</strong></p>
-<pre>sudo squid -k parse
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo squid -k parse
 sudo systemctl stop squid
 sudo squid -z -N
-sudo systemctl start squid</pre>
+sudo systemctl start squid</pre></div>
       <p><code>squid -z</code> no s'ha d'executar mentre el servei està funcionant.
       L'opció <code>-N</code> espera que acabi la inicialització abans de continuar.</p></li>
   </ol>
@@ -192,20 +193,20 @@ sudo systemctl start squid</pre>
     <li>
       <p><strong>Busca el lloc on van les teves regles.</strong> El fitxer ja porta
       una marca que assenyala exactament on:</p>
-<pre>grep -n "INSERT YOUR OWN RULE" /etc/squid/squid.conf</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">grep -n "INSERT YOUR OWN RULE" /etc/squid/squid.conf</pre></div>
     </li>
     <li>
       <p><strong>Escriu-hi la teva xarxa i el permís</strong>, just a sota
       d'aquesta marca:</p>
-<pre>acl clients src 192.168.1.0/24
-http_access allow clients</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Fitxer · squid.conf</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Fitxer · squid.conf">acl clients src 192.168.1.0/24
+http_access allow clients</pre></div>
       <p>La línia <code>http_access deny all</code> ja hi és més avall: no
       l'has de tornar a escriure.</p>
     </li>
     <li>
       <p><strong>Valida i recarrega:</strong></p>
-<pre>sudo squid -k parse
-sudo squid -k reconfigure</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo squid -k parse
+sudo squid -k reconfigure</pre></div>
     </li>
   </ol>
   <div class="cq-note">
@@ -229,7 +230,7 @@ sudo squid -k reconfigure</pre>
     <li>
       <p><strong>Des de la línia d'ordres</strong>, sense necessitat de captures
       de pantalla:</p>
-<pre>curl -x http://IP-DEL-SERVIDOR:8080 http://example.com</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">curl -x http://IP-DEL-SERVIDOR:8080 http://example.com</pre></div>
       <p>Si torna el codi HTML de la pàgina, el proxy funciona.</p>
     </li>
   </ol>
@@ -242,36 +243,36 @@ sudo squid -k reconfigure</pre>
     <li>
       <p><strong>Per domini</strong>, amb el punt inicial perquè agafi també els
       subdominis:</p>
-<pre>acl bloquejats dstdomain .youtube.com</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Fitxer · squid.conf</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Fitxer · squid.conf">acl bloquejats dstdomain .youtube.com</pre></div>
       <p>Sense el punt, <code>youtube.com</code> només coincideix amb aquest nom
       exacte, no amb <code>www.youtube.com</code>.</p>
     </li>
     <li>
       <p><strong>Per paraula</strong> a la URL, ignorant majúscules i
       minúscules:</p>
-<pre>acl paraules url_regex -i facebook instagram tiktok</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Fitxer · squid.conf</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Fitxer · squid.conf">acl paraules url_regex -i facebook instagram tiktok</pre></div>
     </li>
     <li>
       <p><strong>Per horari</strong>, de dilluns a divendres de 8 a 14 h:</p>
-<pre>acl horari_lectiu time MTWHF 08:00-14:00</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Fitxer · squid.conf</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Fitxer · squid.conf">acl horari_lectiu time MTWHF 08:00-14:00</pre></div>
       <p>Per denegar fora d'aquesta franja, es nega el criteri amb
       <code>!</code>.</p>
     </li>
     <li>
       <p><strong>Per port</strong>, permetent només el web:</p>
-<pre>acl ports_permesos port 80 443
-http_access deny !ports_permesos</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Fitxer · squid.conf</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Fitxer · squid.conf">acl ports_permesos port 80 443
+http_access deny !ports_permesos</pre></div>
     </li>
     <li>
       <p><strong>Munta-ho tot amb l'ordre correcte:</strong> els
       <code>deny</code> sempre abans de l'<code>allow</code> que els
       anul·laria:</p>
-<pre>http_access deny bloquejats
+<div class="cq-code"><div class="cq-code-head"><span>Fitxer · squid.conf</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Fitxer · squid.conf">http_access deny bloquejats
 http_access deny paraules
 http_access deny clients !horari_lectiu
 http_access deny !ports_permesos
 http_access allow clients
-http_access deny all</pre>
+http_access deny all</pre></div>
     </li>
   </ol>
 </div>
@@ -282,7 +283,7 @@ http_access deny all</pre>
   <ol class="cq-steps">
     <li>
       <p><strong>Segueix el registre en directe</strong> mentre navegues:</p>
-<pre>tail -f /var/log/squid/access.log</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">tail -f /var/log/squid/access.log</pre></div>
     </li>
     <li>
       <p>Cada línia acaba amb una etiqueta <code>TCP_.../codi</code>:</p>
@@ -319,22 +320,22 @@ http_access deny all</pre>
 <!-- ============ 12 · COMPROVACIÓ ============ -->
 <div class="cq-block" data-kind="comprovació">
   <h2 id="comprovar-ho-de-conjunt-des-del-client">Comprovar-ho de conjunt des del client</h2>
-<p>El professor proporciona un origen HTTP de prova a <code>personal1</code> amb <code>/prova.txt</code>, un text únic i <code>Cache-Control: public, max-age=300</code>. Consulta'n l'adreça amb <code>ip -brief a</code> a l'origen i substitueix <code>IP-ORIGEN</code>. Des del client, usa la mateixa URL sense paràmetres:</p><pre>curl -x http://192.168.1.8:8080 -i http://IP-ORIGEN/prova.txt
-curl -x http://192.168.1.8:8080 -i http://IP-ORIGEN/prova.txt</pre><p>Identifica primera petició MISS i segona HIT al registre del proxy; si no apareix, conserva les capçaleres i explica què impedeix emmagatzemar l’objecte. No provoquis HIT sobre trànsit HTTPS/CONNECT.</p>
+<p>El professor proporciona un origen HTTP de prova a <code>personal1</code> amb <code>/prova.txt</code>, un text únic i <code>Cache-Control: public, max-age=300</code>. Consulta'n l'adreça amb <code>ip -brief a</code> a l'origen i substitueix <code>IP-ORIGEN</code>. Des del client, usa la mateixa URL sense paràmetres:</p><div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">curl -x http://192.168.1.8:8080 -i http://IP-ORIGEN/prova.txt
+curl -x http://192.168.1.8:8080 -i http://IP-ORIGEN/prova.txt</pre></div><p>Identifica primera petició MISS i segona HIT al registre del proxy; si no apareix, conserva les capçaleres i explica què impedeix emmagatzemar l’objecte. No provoquis HIT sobre trànsit HTTPS/CONNECT.</p>
 <p>Per provar la cau usa un objecte <strong>HTTP controlat</strong> amb Cache-Control: public, max-age=300, sense cookies ni autenticació. Conserva les capçaleres i demana la mateixa URL dues vegades sense recàrrega forçada; relaciona MISS/HIT amb access.log. Repetir qualsevol web no garanteix un HIT. Amb HTTPS/CONNECT sense inspecció TLS només es filtra el destí i el port, no el camí ni les paraules dins de la pàgina. Prova permisos i denegacions sota la política final.</p>
   <ol class="cq-steps">
     <li>
       <p><strong>Navega a través del proxy</strong> i que arribi:</p>
-<pre>curl -x http://IP-DEL-SERVIDOR:8080 http://example.com</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">curl -x http://IP-DEL-SERVIDOR:8080 http://example.com</pre></div>
     </li>
     <li>
       <p><strong>Un domini bloquejat falla:</strong></p>
-<pre>curl -x http://IP-DEL-SERVIDOR:8080 http://www.youtube.com</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">curl -x http://IP-DEL-SERVIDOR:8080 http://www.youtube.com</pre></div>
       <p>Ha de tornar un error, no la pàgina.</p>
     </li>
     <li>
       <p><strong>El registre ho demostra</strong>, al servidor:</p>
-<pre>sudo tail -n 5 /var/log/squid/access.log</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo tail -n 5 /var/log/squid/access.log</pre></div>
       <p>La primera petició hi surt amb <code>TCP_MISS</code> o
       <code>TCP_HIT</code>; la segona, amb <code>TCP_DENIED</code>.</p>
     </li>
@@ -343,7 +344,7 @@ curl -x http://192.168.1.8:8080 -i http://IP-ORIGEN/prova.txt</pre><p>Identifica
 
 <!-- ============ 13 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2 id="criteris-professionals">Criteris professionals</h2>
+  <h2 id="criteris-professionals">Bones pràctiques</h2>
   <ul>
     <li><strong><code>squid -k parse</code> abans de recarregar</strong>, sempre:
     un error de sintaxi no avisa sol.</li>
@@ -360,7 +361,7 @@ curl -x http://192.168.1.8:8080 -i http://IP-ORIGEN/prova.txt</pre><p>Identifica
 
 <!-- ============ 14 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2 id="errors-habituals">Errors habituals</h2>
+  <h2 id="errors-habituals">Problemes</h2>
   <dl class="cq-issues">
     <dt>El bloqueig no funciona i el domini es continua veient</dt>
     <dd>
@@ -414,7 +415,7 @@ curl -x http://192.168.1.8:8080 -i http://IP-ORIGEN/prova.txt</pre><p>Identifica
 
 <!-- ============ 15 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h2 id="fitxa-rapida">Fitxa ràpida</h2>
+  <h2 id="fitxa-rapida">Resum</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Què</th><th>On</th></tr></thead>
@@ -444,12 +445,12 @@ curl -x http://192.168.1.8:8080 -i http://IP-ORIGEN/prova.txt</pre><p>Identifica
 
 <!-- === PEU DE NAVEGACIÓ INICI === -->
 <nav class="cq-pager">
-  <a class="prev" href="../teoria/t8-4-publicar-un-servei-intern.html">
-    <span class="dir">Anterior · T8.4</span>
-    <span class="ttl">Publicar un servei intern</span></a>
-  <a class="next" href="../activitats/a8-1-el-proxy-de-l-aula.html">
-    <span class="dir">Següent · A8.1</span>
-    <span class="ttl">El proxy de l'aula</span></a>
+  <a class="prev" href="../index.html">
+    <span class="dir">Torna a · RA8</span>
+    <span class="ttl">RA8 · Accés des de xarxes locals a xarxes públiques</span></a>
+  <a class="next" href="../index.html">
+    <span class="dir">Torna a · RA8</span>
+    <span class="ttl">RA8 · Accés des de xarxes locals a xarxes públiques</span></a>
 </nav>
 <!-- === PEU DE NAVEGACIÓ FI === -->
 

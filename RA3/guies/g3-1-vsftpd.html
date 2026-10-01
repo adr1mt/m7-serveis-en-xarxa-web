@@ -6,29 +6,30 @@
 <title>G3.1 · Guia: vsftpd — Serveis en Xarxa (0227)</title>
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 <script src="../../_identitat/lectura.js"></script>
+<link rel="icon" href="../../_identitat/favicon.svg">
 </head>
 <body>
 <a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
-    <a href="../index.html">‹ RA3 · Instal·lació de serveis de transferència de fitxers</a>
-    <span class="pos">G3.1 · 4/8</span>
+    <a href="../index.html">‹ RA3 · FTP i SFTP</a>
+    <span class="pos">G3.1 · 1/2</span>
+    <!-- EINES LECTURA INICI -->
+<div class="cq-tools" role="group" aria-label="Aparença"><button type="button" class="cq-theme" data-preference="light" aria-label="Clar" title="Clar" aria-pressed="false" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg></button><button type="button" class="cq-theme" data-preference="auto" aria-label="Automàtic" title="Automàtic" aria-pressed="true" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8m-4-4v4"/></svg></button><button type="button" class="cq-theme" data-preference="dark" aria-label="Fosc" title="Fosc" aria-pressed="false" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M20.5 13A9 9 0 0 1 11 3.5 9 9 0 1 0 20.5 13Z"/></svg></button></div>
+<!-- EINES LECTURA FI -->
   </div>
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<!-- EINES LECTURA INICI -->
-<div class="cq-tools" hidden><label for="cq-tema">Tema</label> <select id="cq-tema" class="cq-theme"><option value="auto">Automàtic</option><option value="light">Clar</option><option value="dark">Fosc</option></select></div>
-<!-- EINES LECTURA FI -->
-<main id="contingut" tabindex="-1">
+<main data-layout="content" data-type="guies" id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA3 · G3.1</div>
   <h1>Guia: vsftpd</h1>
   <p class="lede">Usuaris locals enjaulats, accés anònim, límits i FTPS.</p>
 </header>
 <!-- TOC INICI -->
-<details class="cq-toc"><summary>En aquesta pàgina</summary><ol><li><a href="#que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</a></li><li><a href="#un-paquet-un-servei-un-fitxer">Un paquet, un servei, un fitxer</a></li><li><a href="#les-directives-que-has-de-decidir">Les directives que has de decidir</a></li><li><a href="#configuracio-per-a-usuaris-locals-enjaulats">Configuració per a usuaris locals enjaulats</a></li><li><a href="#l-arrel-del-chroot-no-pot-ser-escrivible">L&#x27;arrel del chroot no pot ser escrivible</a></li><li><a href="#muntar-el-servidor-amb-usuaris-enjaulats">Muntar el servidor amb usuaris enjaulats</a></li><li><a href="#les-directives-de-l-acces-anonim">Les directives de l&#x27;accés anònim</a></li><li><a href="#repositori-public-de-nomes-lectura-amb-limits">Repositori públic de només lectura, amb límits</a></li><li><a href="#publicar-un-repositori-anonim">Publicar un repositori anònim</a></li><li><a href="#les-directives-de-ftps">Les directives de FTPS</a></li><li><a href="#xifrar-les-sessions-amb-ftps">Xifrar les sessions amb FTPS</a></li><li><a href="#comprovar-ho-des-del-client">Comprovar-ho des del client</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#fitxa-rapida">Fitxa ràpida</a></li></ol></details>
+<details class="cq-toc"><summary>En aquesta pàgina · 15 apartats</summary><ol><li><a href="#que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</a></li><li><a href="#un-paquet-un-servei-un-fitxer">Un paquet, un servei, un fitxer</a></li><li><a href="#les-directives-que-has-de-decidir">Les directives que has de decidir</a></li><li><a href="#configuracio-per-a-usuaris-locals-enjaulats">Configuració per a usuaris locals enjaulats</a></li><li><a href="#l-arrel-del-chroot-no-pot-ser-escrivible">L&#x27;arrel del chroot no pot ser escrivible</a></li><li><a href="#muntar-el-servidor-amb-usuaris-enjaulats">Muntar el servidor amb usuaris enjaulats</a></li><li><a href="#les-directives-de-l-acces-anonim">Les directives de l&#x27;accés anònim</a></li><li><a href="#repositori-public-de-nomes-lectura-amb-limits">Repositori públic de només lectura, amb límits</a></li><li><a href="#publicar-un-repositori-anonim">Publicar un repositori anònim</a></li><li><a href="#les-directives-de-ftps">Les directives de FTPS</a></li><li><a href="#xifrar-les-sessions-amb-ftps">Xifrar les sessions amb FTPS</a></li><li><a href="#comprovar-ho-des-del-client">Comprovar-ho des del client</a></li><li><a href="#criteris-professionals">Bones pràctiques</a></li><li><a href="#errors-habituals">Problemes</a></li><li><a href="#fitxa-rapida">Resum</a></li></ol></details>
 <!-- TOC FI -->
 
 
@@ -96,7 +97,7 @@
 <div class="cq-block" data-kind="exemple">
   <h2 id="configuracio-per-a-usuaris-locals-enjaulats">Configuració per a usuaris locals enjaulats</h2>
   <p>Aquestes són les línies que canvies o afegeixes a <code>/etc/vsftpd.conf</code>:</p>
-<pre><span class="c"># Qui entra</span>
+<div class="cq-code"><div class="cq-code-head"><span>Fitxer · vsftpd.conf</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Fitxer · vsftpd.conf"><span class="c"># Qui entra</span>
 anonymous_enable=NO
 local_enable=YES
 
@@ -112,7 +113,7 @@ user_sub_token=$USER
 <span class="c"># Llista blanca: només aquests usuaris</span>
 userlist_enable=YES
 userlist_file=/etc/vsftpd.userlist
-userlist_deny=NO</pre>
+userlist_deny=NO</pre></div>
   <p>
     Amb <code>user_sub_token</code>, el <code>$USER</code> de <code>local_root</code> se substitueix
     pel nom de qui entra: cadascú aterra al seu directori personal i no en pot sortir.
@@ -147,47 +148,47 @@ userlist_deny=NO</pre>
   <ol class="cq-steps">
     <li>
       <p><strong>Instal·la i desa una còpia</strong> del fitxer original:</p>
-<pre>sudo apt install -y vsftpd
-sudo cp /etc/vsftpd.conf /etc/vsftpd.conf.original</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo apt install -y vsftpd
+sudo cp /etc/vsftpd.conf /etc/vsftpd.conf.original</pre></div>
     </li>
 
     <li>
       <p><strong>Crea el grup i l'usuari.</strong> El compte necessita una <em>shell</em> vàlida,
       o no podrà autenticar-se:</p>
-<pre>sudo groupadd ftpusers
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo groupadd ftpusers
 sudo useradd -m -g ftpusers -s /bin/bash alumne1
-sudo passwd alumne1</pre>
+sudo passwd alumne1</pre></div>
     </li>
 
     <li>
       <p><strong>Prepara el directori</strong>: arrel de <code>root</code>, i a dins la carpeta on
       sí que podrà escriure:</p>
-<pre>sudo chown root:root /home/alumne1
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo chown root:root /home/alumne1
 sudo chmod 755 /home/alumne1
 sudo mkdir /home/alumne1/fitxers
-sudo chown alumne1:ftpusers /home/alumne1/fitxers</pre>
+sudo chown alumne1:ftpusers /home/alumne1/fitxers</pre></div>
     </li>
 
     <li>
       <p><strong>Escriu la configuració</strong> amb l'exemple d'aquesta pàgina:</p>
-<pre>sudo nano /etc/vsftpd.conf</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo nano /etc/vsftpd.conf</pre></div>
     </li>
 
     <li>
       <p><strong>Crea la llista blanca</strong>, un nom d'usuari per línia:</p>
-<pre>echo "alumne1" | sudo tee /etc/vsftpd.userlist</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">echo "alumne1" | sudo tee /etc/vsftpd.userlist</pre></div>
     </li>
 
     <li>
       <p><strong>Reinicia i comprova</strong> que ha arrencat:</p>
-<pre>sudo systemctl restart vsftpd
-systemctl status vsftpd</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo systemctl restart vsftpd
+systemctl status vsftpd</pre></div>
     </li>
 
     <li>
       <p><strong>Prova-ho des del client</strong>, i mira que el <code>cd ..</code> no el tregui
       d'on és:</p>
-<pre>ftp 192.168.1.8</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">ftp 192.168.1.8</pre></div>
       <p>
         Un cop dins, <code>pwd</code> ha de dir <code>/</code> i <code>cd ..</code> l'ha de deixar
         al mateix lloc. El <code>put</code> a l'arrel fallarà: has d'entrar primer a
@@ -231,7 +232,7 @@ systemctl status vsftpd</pre>
 <!-- ============ 5 · EXEMPLE ============ -->
 <div class="cq-block" data-kind="exemple">
   <h2 id="repositori-public-de-nomes-lectura-amb-limits">Repositori públic de només lectura, amb límits</h2>
-<pre><span class="c"># Anònim, només baixar</span>
+<div class="cq-code"><div class="cq-code-head"><span>Fitxer · vsftpd.conf</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Fitxer · vsftpd.conf"><span class="c"># Anònim, només baixar</span>
 anonymous_enable=YES
 anon_root=/srv/ftp
 no_anon_password=YES
@@ -247,7 +248,7 @@ max_clients=20
 max_per_ip=2
 anon_max_rate=512000
 local_max_rate=2048000
-idle_session_timeout=120</pre>
+idle_session_timeout=120</pre></div>
   <p>
     Llegit en veu alta: qualsevol pot baixar el que hi ha a <code>/srv/ftp</code> a mig mega per
     segon, com a molt dues sessions per adreça, i si es despista dos minuts, fora.
@@ -262,32 +263,32 @@ idle_session_timeout=120</pre>
     <li>
       <p><strong>Comprova el directori públic.</strong> Ha de ser de <code>root</code> i no
       escrivible. Si no, el servei arrenca igualment, però cap anònim hi podrà entrar:</p>
-<pre>ls -ld /srv/ftp
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">ls -ld /srv/ftp
 sudo chown root:root /srv/ftp
-sudo chmod 755 /srv/ftp</pre>
+sudo chmod 755 /srv/ftp</pre></div>
     </li>
 
     <li>
       <p><strong>Posa-hi contingut</strong> llegible per tothom:</p>
-<pre>sudo mkdir /srv/ftp/public
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo mkdir /srv/ftp/public
 echo "manual" | sudo tee /srv/ftp/public/llegeix-me.txt
-sudo chmod -R a+r /srv/ftp/public</pre>
+sudo chmod -R a+r /srv/ftp/public</pre></div>
     </li>
 
     <li>
       <p><strong>Activa l'anònim i els límits</strong> a <code>/etc/vsftpd.conf</code>, amb
       l'exemple d'aquesta pàgina com a model:</p>
-<pre>sudo nano /etc/vsftpd.conf</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo nano /etc/vsftpd.conf</pre></div>
       <p>Si mantens la llista blanca del pas anterior, autoritza també els dos noms
       d'accés anònim. Sense això, <code>userlist_deny=NO</code> els rebutja abans de demanar la contrasenya:</p>
-<pre>printf '%s\n' anonymous ftp | sudo tee -a /etc/vsftpd.userlist
-sudo systemctl restart vsftpd</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">printf '%s\n' anonymous ftp | sudo tee -a /etc/vsftpd.userlist
+sudo systemctl restart vsftpd</pre></div>
     </li>
 
     <li>
       <p><strong>Prova-ho des del client</strong> amb l'usuari <code>anonymous</code>:</p>
-<pre>ftp 192.168.1.8
-<span class="c"># Name: anonymous</span></pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">ftp 192.168.1.8
+<span class="c"># Name: anonymous</span></pre></div>
       <p>
         Amb <code>no_anon_password=YES</code> ni tan sols et demana la contrasenya: entres directe
         amb <code>230 Login successful</code>. Has de poder fer <code>ls</code> i <code>get</code>,
@@ -298,7 +299,7 @@ sudo systemctl restart vsftpd</pre>
     <li>
       <p><strong>Comprova el límit per adreça</strong>: obre tres sessions alhora des de la mateixa
       màquina, sense tancar-ne cap. La tercera ha de dir:</p>
-<pre><span class="o">421 There are too many connections from your internet address.</span></pre>
+<div class="cq-code"><div class="cq-code-head"><span>Sortida esperada</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Sortida esperada"><span class="o">421 There are too many connections from your internet address.</span></pre></div>
       <p>
         Compten les sessions obertes, encara que estiguin aturades: fins que no les tanquis o
         passin els segons d'<code>idle_session_timeout</code>, ocupen lloc.
@@ -307,8 +308,8 @@ sudo systemctl restart vsftpd</pre>
 
     <li>
       <p><strong>Comprova el límit de velocitat</strong> amb un fitxer prou gran:</p>
-<pre>sudo dd if=/dev/zero of=/srv/ftp/public/gran.bin bs=1M count=100
-sudo chmod a+r /srv/ftp/public/gran.bin</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo dd if=/dev/zero of=/srv/ftp/public/gran.bin bs=1M count=100
+sudo chmod a+r /srv/ftp/public/gran.bin</pre></div>
       <p>
         Baixa'l i mira la velocitat que reporta el client: el valor
         <code>anon_max_rate=512000</code> limita a 512000 bytes/s (500 KiB/s).
@@ -329,7 +330,7 @@ sudo chmod a+r /srv/ftp/public/gran.bin</pre>
 <div class="cq-block" data-kind="exemple">
   <h2 id="les-directives-de-ftps">Les directives de FTPS</h2>
   <p>FTPS, a <code>/etc/vsftpd.conf</code>, amb el certificat que ja porta el sistema:</p>
-<pre>ssl_enable=YES
+<div class="cq-code"><div class="cq-code-head"><span>Fitxer · vsftpd.conf</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Fitxer · vsftpd.conf">ssl_enable=YES
 force_local_logins_ssl=YES
 force_local_data_ssl=YES
 ssl_tlsv1=NO
@@ -337,7 +338,7 @@ ssl_tlsv11=NO
 ssl_tlsv12=YES
 allow_anon_ssl=NO
 rsa_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem
-rsa_private_key_file=/etc/ssl/private/ssl-cert-snakeoil.key</pre>
+rsa_private_key_file=/etc/ssl/private/ssl-cert-snakeoil.key</pre></div>
   <p>
     Compte amb els noms: són <code>ssl_tlsv11</code> i <code>ssl_tlsv12</code>, sense el guió baix
     del final. El manual els escriu <code>ssl_tlsv1_1</code> i <code>ssl_tlsv1_2</code>, i molts
@@ -353,15 +354,15 @@ rsa_private_key_file=/etc/ssl/private/ssl-cert-snakeoil.key</pre>
 <li>
       <p><strong>Activa el TLS</strong> a <code>/etc/vsftpd.conf</code> amb l'exemple d'aquesta
       pàgina, i reinicia:</p>
-<pre>sudo systemctl restart vsftpd</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo systemctl restart vsftpd</pre></div>
     </li>
 
 <li>
       <p><strong>Comprova que ara el clar no passa.</strong> El client <code>ftp</code> no fa TLS:
       ha de fallar. Fes servir <code>lftp</code>, que sí que en fa:</p>
-<pre>sudo apt install -y lftp
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo apt install -y lftp
 lftp -u alumne1 -e "set ssl:verify-certificate no" \
-     localhost</pre>
+     localhost</pre></div>
       <p>
         El client <code>ftp</code> ha de rebre <code>530 Non-anonymous sessions must use
         encryption</code>. Repeteix la captura de <a class="cq-ref" href="../teoria/t3-3-ftps-i-sftp.html">T3.3</a> amb <code>lftp</code>: la salutació del servidor i
@@ -386,12 +387,12 @@ lftp -u alumne1 -e "set ssl:verify-certificate no" \
     <li>
       <p><strong>El servei ha arrencat de debò.</strong> Amb una directiva desconeguda,
       vsftpd surt sense dir res: no n'hi ha prou de no veure errors.</p>
-<pre>systemctl status vsftpd</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">systemctl status vsftpd</pre></div>
       <p>Ha de dir <code>active (running)</code>.</p>
     </li>
     <li>
       <p><strong>L'usuari entra i es queda a casa seva.</strong> Abans d'activar TLS, des d'una altra màquina:</p>
-<pre>ftp 192.168.1.8</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">ftp 192.168.1.8</pre></div>
       <p>Ha de respondre <code>230 Login successful</code>, i <code>pwd</code> ha de dir
       <code>/</code>: és la gàbia, no l'arrel del servidor. Amb TLS obligatori,
       fes aquesta comprovació amb <code>lftp</code>, com al bloc anterior,
@@ -399,13 +400,13 @@ lftp -u alumne1 -e "set ssl:verify-certificate no" \
     </li>
     <li>
       <p><strong>Mira qui es connecta</strong> mentre proves, des del servidor:</p>
-<pre>tail -f /var/log/vsftpd.log</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">tail -f /var/log/vsftpd.log</pre></div>
     </li>
   </ol>
 </div>
 
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2 id="criteris-professionals">Criteris professionals</h2>
+  <h2 id="criteris-professionals">Bones pràctiques</h2>
   <ul>
     <li><strong>Còpia del fitxer original</strong> abans de la primera edició.</li>
     <li><strong>L'arrel del chroot, mai escrivible</strong>: el servei es nega a arrencar.</li>
@@ -416,7 +417,7 @@ lftp -u alumne1 -e "set ssl:verify-certificate no" \
 </div>
 
 <div class="cq-block" data-kind="problemes">
-  <h2 id="errors-habituals">Errors habituals</h2>
+  <h2 id="errors-habituals">Problemes</h2>
   <dl class="cq-issues">
 <dt><code>500 OOPS: refusing to run with writable root inside chroot()</code></dt>
     <dd>
@@ -471,7 +472,7 @@ lftp -u alumne1 -e "set ssl:verify-certificate no" \
 </div>
 
 <div class="cq-block" data-kind="resum">
-  <h2 id="fitxa-rapida">Fitxa ràpida</h2>
+  <h2 id="fitxa-rapida">Resum</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Comanda</th><th>Per a què serveix</th></tr></thead>
@@ -498,9 +499,9 @@ lftp -u alumne1 -e "set ssl:verify-certificate no" \
 
 <!-- === PEU DE NAVEGACIÓ INICI === -->
 <nav class="cq-pager">
-  <a class="prev" href="../teoria/t3-3-ftps-i-sftp.html">
-    <span class="dir">Anterior · T3.3</span>
-    <span class="ttl">FTPS i SFTP</span></a>
+  <a class="prev" href="../index.html">
+    <span class="dir">Torna a · RA3</span>
+    <span class="ttl">RA3 · Instal·lació de serveis de transferència de fitxers</span></a>
   <a class="next" href="g3-2-sftp.html">
     <span class="dir">Següent · G3.2</span>
     <span class="ttl">Guia: SFTP d'OpenSSH</span></a>

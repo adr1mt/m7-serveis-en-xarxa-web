@@ -6,29 +6,30 @@
 <title>T2.1 · Noms i resolució al client — Serveis en Xarxa (0227)</title>
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 <script src="../../_identitat/lectura.js"></script>
+<link rel="icon" href="../../_identitat/favicon.svg">
 </head>
 <body>
 <a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
-    <a href="../index.html">‹ RA2 · Instal·lació de serveis de resolució de noms (DNS)</a>
-    <span class="pos">T2.1 · 1/9</span>
+    <a href="../index.html">‹ RA2 · DNS</a>
+    <span class="pos">T2.1 · 1/4</span>
+    <!-- EINES LECTURA INICI -->
+<div class="cq-tools" role="group" aria-label="Aparença"><button type="button" class="cq-theme" data-preference="light" aria-label="Clar" title="Clar" aria-pressed="false" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg></button><button type="button" class="cq-theme" data-preference="auto" aria-label="Automàtic" title="Automàtic" aria-pressed="true" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8m-4-4v4"/></svg></button><button type="button" class="cq-theme" data-preference="dark" aria-label="Fosc" title="Fosc" aria-pressed="false" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M20.5 13A9 9 0 0 1 11 3.5 9 9 0 1 0 20.5 13Z"/></svg></button></div>
+<!-- EINES LECTURA FI -->
   </div>
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<!-- EINES LECTURA INICI -->
-<div class="cq-tools" hidden><label for="cq-tema">Tema</label> <select id="cq-tema" class="cq-theme"><option value="auto">Automàtic</option><option value="light">Clar</option><option value="dark">Fosc</option></select></div>
-<!-- EINES LECTURA FI -->
-<main id="contingut" tabindex="-1">
+<main data-layout="content" data-type="teoria" id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA2 · T2.1</div>
   <h1>Noms i resolució al client</h1>
   <p class="lede">Què passa dins del teu equip entre que escrius un nom i surt una adreça IP.</p>
 </header>
 <!-- TOC INICI -->
-<details class="cq-toc"><summary>En aquesta pàgina</summary><ol><li><a href="#que-sabras-fer-en-acabar">Què sabràs fer en acabar</a></li><li><a href="#el-problema-que-resol-el-dns">El problema que resol el DNS</a></li><li><a href="#dos-mecanismes-i-un-ordre">Dos mecanismes, i un ordre</a></li><li><a href="#qui-pregunta-de-veritat-systemd-resolved">Qui pregunta de veritat: systemd-resolved</a></li><li><a href="#el-fitxer-etc-resolv-conf-ja-no-es-el-que-era">El fitxer /etc/resolv.conf ja no és el que era</a></li><li><a href="#el-domini-local-no-es-teu">El domini .local no és teu</a></li><li><a href="#mirar-com-resol-la-teva-maquina">Mirar com resol la teva màquina</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#resum">Resum</a></li><li><a href="#comprova-el-que-has-apres">Comprova el que has après</a></li></ol></details>
+<details class="cq-toc"><summary>En aquesta pàgina · 11 apartats</summary><ol><li><a href="#que-sabras-fer-en-acabar">Què sabràs fer en acabar</a></li><li><a href="#el-problema-que-resol-el-dns">El problema que resol el DNS</a></li><li><a href="#dos-mecanismes-i-un-ordre">Dos mecanismes, i un ordre</a></li><li><a href="#qui-pregunta-de-veritat-systemd-resolved">Qui pregunta de veritat: systemd-resolved</a></li><li><a href="#el-fitxer-etc-resolv-conf-ja-no-es-el-que-era">El fitxer /etc/resolv.conf ja no és el que era</a></li><li><a href="#el-domini-local-no-es-teu">El domini .local no és teu</a></li><li><a href="#mirar-com-resol-la-teva-maquina">Mirar com resol la teva màquina</a></li><li><a href="#criteris-professionals">Bones pràctiques</a></li><li><a href="#errors-habituals">Problemes</a></li><li><a href="#resum">Resum</a></li><li><a href="#comprova-el-que-has-apres">Comprova el que has après</a></li></ol></details>
 <!-- TOC FI -->
 
 
@@ -113,16 +114,16 @@
     Durant anys, el servidor DNS s'escrivia a mà a <code>/etc/resolv.conf</code>. Avui aquest
     fitxer el genera <code>systemd-resolved</code> i conté sempre el mateix:
   </p>
-<pre><span class="c"># This file is managed by man:systemd-resolved(8).</span>
+<div class="cq-code"><div class="cq-code-head"><span>Codi</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre><span class="c"># This file is managed by man:systemd-resolved(8).</span>
 nameserver 127.0.0.53
 options edns0 trust-ad
-search .</pre>
+search .</pre></div>
   <p>
     Aquesta adreça no és el teu servidor DNS: és el servei local. Per veure el servidor de
     veritat cal preguntar-l'hi:
   </p>
-<pre>resolvectl dns
-<span class="o">Link 2 (enp1s0): 10.0.0.1</span></pre>
+<div class="cq-code"><div class="cq-code-head"><span>Codi</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre>resolvectl dns
+<span class="o">Link 2 (enp1s0): 10.0.0.1</span></pre></div>
   <p><strong>Editar <code>/etc/resolv.conf</code> a mà no serveix de res:</strong> es torna a generar.</p>
 </div>
 
@@ -153,13 +154,13 @@ search .</pre>
   <ol class="cq-steps">
     <li>
       <p><strong>Mira quin servidor fa servir</strong> i quin domini de cerca té:</p>
-<pre>resolvectl status</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Codi</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre>resolvectl status</pre></div>
       <p>Fixa't en <code>Current DNS Server</code> i en <code>DNS Domain</code>.</p>
     </li>
 
     <li>
       <p><strong>Resol un nom</strong> i mira d'on surt la resposta:</p>
-<pre>resolvectl query www.upc.edu</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Codi</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre>resolvectl query www.upc.edu</pre></div>
       <p>
         Mira si la resposta ve de <code>network</code> o de <code>cache</code>.
         La cau pot reduir el temps, però no garanteix que la segona consulta sigui més ràpida.
@@ -168,20 +169,20 @@ search .</pre>
 
     <li>
       <p><strong>Consulta un servidor concret</strong>, saltant-te el servei local:</p>
-<pre>host www.upc.edu 9.9.9.9
-dig @9.9.9.9 www.upc.edu +short</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Codi</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre>host www.upc.edu 9.9.9.9
+dig @9.9.9.9 www.upc.edu +short</pre></div>
     </li>
 
     <li>
       <p><strong>Demana un tipus de registre</strong> diferent de l'adreça:</p>
-<pre>dig upc.edu MX +short      <span class="c"># servidors de correu</span>
-dig upc.edu NS +short      <span class="c"># servidors de noms</span></pre>
+<div class="cq-code"><div class="cq-code-head"><span>Codi</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre>dig upc.edu MX +short      <span class="c"># servidors de correu</span>
+dig upc.edu NS +short      <span class="c"># servidors de noms</span></pre></div>
     </li>
 
     <li>
       <p><strong>Fes trampa amb <code>/etc/hosts</code></strong> per comprovar l'ordre de resolució:</p>
-<pre>echo "127.0.0.1 provaordre.test" | sudo tee -a /etc/hosts
-getent hosts provaordre.test</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Codi</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre>echo "127.0.0.1 provaordre.test" | sudo tee -a /etc/hosts
+getent hosts provaordre.test</pre></div>
       <p>Esborra la línia quan ho hagis vist.</p>
     </li>
   </ol>
@@ -195,7 +196,7 @@ getent hosts provaordre.test</pre>
 
 <!-- ============ 8 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2 id="criteris-professionals">Criteris professionals</h2>
+  <h2 id="criteris-professionals">Bones pràctiques</h2>
   <ul>
     <li><strong><code>/etc/hosts</code> és per a proves</strong>, no per a administrar una xarxa. No escala i ningú se'n recorda.</li>
     <li><strong>No editis <code>/etc/resolv.conf</code></strong>: el DNS es configura al Netplan o s'obté per DHCP.</li>
@@ -207,7 +208,7 @@ getent hosts provaordre.test</pre>
 
 <!-- ============ 9 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2 id="errors-habituals">Errors habituals</h2>
+  <h2 id="errors-habituals">Problemes</h2>
   <dl class="cq-issues">
     <dt><code>ping 9.9.9.9</code> va, però <code>ping www.upc.edu</code> no</dt>
     <dd>

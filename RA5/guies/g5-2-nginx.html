@@ -6,29 +6,30 @@
 <title>G5.2 · Guia: Nginx — Serveis en Xarxa (0227)</title>
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 <script src="../../_identitat/lectura.js"></script>
+<link rel="icon" href="../../_identitat/favicon.svg">
 </head>
 <body>
 <a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
-    <a href="../index.html">‹ RA5 · Gestió de servidors web</a>
-    <span class="pos">G5.2 · 7/11</span>
+    <a href="../index.html">‹ RA5 · Web</a>
+    <span class="pos">G5.2 · 2/2</span>
+    <!-- EINES LECTURA INICI -->
+<div class="cq-tools" role="group" aria-label="Aparença"><button type="button" class="cq-theme" data-preference="light" aria-label="Clar" title="Clar" aria-pressed="false" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg></button><button type="button" class="cq-theme" data-preference="auto" aria-label="Automàtic" title="Automàtic" aria-pressed="true" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8m-4-4v4"/></svg></button><button type="button" class="cq-theme" data-preference="dark" aria-label="Fosc" title="Fosc" aria-pressed="false" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M20.5 13A9 9 0 0 1 11 3.5 9 9 0 1 0 20.5 13Z"/></svg></button></div>
+<!-- EINES LECTURA FI -->
   </div>
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<!-- EINES LECTURA INICI -->
-<div class="cq-tools" hidden><label for="cq-tema">Tema</label> <select id="cq-tema" class="cq-theme"><option value="auto">Automàtic</option><option value="light">Clar</option><option value="dark">Fosc</option></select></div>
-<!-- EINES LECTURA FI -->
-<main id="contingut" tabindex="-1">
+<main data-layout="content" data-type="guies" id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA5 · G5.2</div>
   <h1>Guia: Nginx</h1>
   <p class="lede">Manual de configuració de Nginx, dels blocs de servidor a HTTPS.</p>
 </header>
 <!-- TOC INICI -->
-<details class="cq-toc"><summary>En aquesta pàgina</summary><ol><li><a href="#que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</a></li><li><a href="#estructura-de-etc-nginx">Estructura de /etc/nginx</a></li><li><a href="#installar-nginx-i-preparar-el-contingut">Instal·lar Nginx i preparar el contingut</a></li><li><a href="#el-bloc-server-i-l-enllac-simbolic">El bloc server i l&#x27;enllaç simbòlic</a></li><li><a href="#pagina-d-error-404-personalitzada">Pàgina d&#x27;error 404 personalitzada</a></li><li><a href="#capcaleres-de-seguretat">Capçaleres de seguretat</a></li><li><a href="#https-amb-certificat-autofirmat">HTTPS amb certificat autofirmat</a></li><li><a href="#comprovacio-de-conjunt-des-del-client">Comprovació de conjunt, des del client</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#fitxa-rapida">Fitxa ràpida</a></li></ol></details>
+<details class="cq-toc"><summary>En aquesta pàgina · 11 apartats</summary><ol><li><a href="#que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</a></li><li><a href="#estructura-de-etc-nginx">Estructura de /etc/nginx</a></li><li><a href="#installar-nginx-i-preparar-el-contingut">Instal·lar Nginx i preparar el contingut</a></li><li><a href="#el-bloc-server-i-l-enllac-simbolic">El bloc server i l&#x27;enllaç simbòlic</a></li><li><a href="#pagina-d-error-404-personalitzada">Pàgina d&#x27;error 404 personalitzada</a></li><li><a href="#capcaleres-de-seguretat">Capçaleres de seguretat</a></li><li><a href="#https-amb-certificat-autofirmat">HTTPS amb certificat autofirmat</a></li><li><a href="#comprovacio-de-conjunt-des-del-client">Comprovació de conjunt, des del client</a></li><li><a href="#criteris-professionals">Bones pràctiques</a></li><li><a href="#errors-habituals">Problemes</a></li><li><a href="#fitxa-rapida">Resum</a></li></ol></details>
 <!-- TOC FI -->
 
 
@@ -85,27 +86,27 @@
   <ol class="cq-steps">
     <li>
       <p><strong>Instal·la el paquet:</strong></p>
-<pre>sudo apt update
-sudo apt install nginx</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo apt update
+sudo apt install nginx</pre></div>
     </li>
     <li>
       <p><strong>Desactiva el lloc per defecte</strong>, esborrant
       l'enllaç (Nginx no té <code>a2dissite</code>):</p>
-<pre>sudo unlink /etc/nginx/sites-enabled/default</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo unlink /etc/nginx/sites-enabled/default</pre></div>
     </li>
     <li>
       <p><strong>Crea el directori del lloc</strong> i una pàgina de
       prova:</p>
-<pre>sudo mkdir -p /var/www/web1.internal/html</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo mkdir -p /var/www/web1.internal/html</pre></div>
     </li>
     <li>
       <p><strong>Ajusta propietari i permisos:</strong> propietari i
       grup <code>www-data</code>, directoris 755 i fitxers 644.
       <strong>Mai 777.</strong></p>
-<pre>sudo chown -R www-data:www-data \
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo chown -R www-data:www-data \
   /var/www/web1.internal
 sudo find /var/www/web1.internal -type d -exec chmod 755 {} \;
-sudo find /var/www/web1.internal -type f -exec chmod 644 {} \;</pre>
+sudo find /var/www/web1.internal -type f -exec chmod 644 {} \;</pre></div>
     </li>
   </ol>
 </div>
@@ -116,8 +117,8 @@ sudo find /var/www/web1.internal -type f -exec chmod 644 {} \;</pre>
   <ol class="cq-steps">
     <li>
       <p><strong>Crea el fitxer del lloc:</strong></p>
-<pre>sudo nano /etc/nginx/sites-available/web1.internal</pre>
-<pre>server {
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo nano /etc/nginx/sites-available/web1.internal</pre></div>
+<div class="cq-code"><div class="cq-code-head"><span>Configuració · nginx</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Configuració · nginx">server {
     listen 80;
     listen [::]:80;
 
@@ -133,21 +134,21 @@ sudo find /var/www/web1.internal -type f -exec chmod 644 {} \;</pre>
     }
 
     autoindex off;
-}</pre>
+}</pre></div>
     </li>
     <li>
       <p><strong>Enllaça'l a sites-enabled</strong>, comprova la sintaxi
       i recarrega:</p>
-<pre>sudo ln -s /etc/nginx/sites-available/web1.internal \
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo ln -s /etc/nginx/sites-available/web1.internal \
   /etc/nginx/sites-enabled/
 sudo nginx -t
-sudo systemctl reload nginx</pre>
+sudo systemctl reload nginx</pre></div>
     </li>
     <li>
       <p><strong>Al client</strong>, esbrina la IP amb
       <code>ip -brief a</code> al servidor i afegeix el nom a
       <code>/etc/hosts</code>:</p>
-<pre>IP-DEL-SERVIDOR web1.internal</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Fitxer · /etc/hosts</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Fitxer · /etc/hosts">IP-DEL-SERVIDOR web1.internal</pre></div>
       <p>I obre <code>http://web1.internal</code>.</p>
     </li>
   </ol>
@@ -160,15 +161,15 @@ sudo systemctl reload nginx</pre>
     <li>
       <p><strong>Escriu la pàgina</strong> dins del mateix
       <code>root</code>:</p>
-<pre>sudo nano /var/www/web1.internal/\
-html/error404.html</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo nano /var/www/web1.internal/\
+html/error404.html</pre></div>
     </li>
     <li>
       <p><strong>Afegeix la directiva</strong> dins del bloc
       <code>server</code>:</p>
-<pre>error_page 404 /error404.html;</pre>
-<pre>sudo nginx -t
-sudo systemctl reload nginx</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Configuració · nginx</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Configuració · nginx">error_page 404 /error404.html;</pre></div>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo nginx -t
+sudo systemctl reload nginx</pre></div>
       <p>Prova amb una URL que no existeixi.</p>
     </li>
   </ol>
@@ -180,13 +181,13 @@ sudo systemctl reload nginx</pre>
   <ol class="cq-steps">
     <li>
       <p><strong>Afegeix-les</strong> dins del bloc <code>server</code>:</p>
-<pre>add_header X-Frame-Options "SAMEORIGIN";
-add_header X-Content-Type-Options "nosniff";</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Configuració · nginx</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Configuració · nginx">add_header X-Frame-Options "SAMEORIGIN";
+add_header X-Content-Type-Options "nosniff";</pre></div>
     </li>
     <li>
       <p><strong>Comprova i recarrega:</strong></p>
-<pre>sudo nginx -t
-sudo systemctl reload nginx</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo nginx -t
+sudo systemctl reload nginx</pre></div>
     </li>
   </ol>
 </div>
@@ -198,18 +199,18 @@ sudo systemctl reload nginx</pre>
     <li>
       <p><strong>Genera la clau i el certificat.</strong> El
       camp <em>subjectAltName</em> ha d'incloure el nom del lloc:</p>
-<pre>sudo mkdir /etc/nginx/ssl
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo mkdir /etc/nginx/ssl
 sudo openssl req -x509 -nodes -days 365 \
   -newkey rsa:2048 \
   -keyout /etc/nginx/ssl/web1.key \
   -out /etc/nginx/ssl/web1.crt \
   -subj "/CN=web1.internal" \
-  -addext "subjectAltName=DNS:web1.internal"</pre>
+  -addext "subjectAltName=DNS:web1.internal"</pre></div>
     </li>
     <li>
       <p><strong>Reescriu el fitxer del lloc</strong> amb un bloc per al
       443 i un altre pel 80 que redirigeix:</p>
-<pre>server {
+<div class="cq-code"><div class="cq-code-head"><span>Configuració · nginx</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Configuració · nginx">server {
     listen 443 ssl;
     listen [::]:443 ssl;
 
@@ -237,12 +238,12 @@ server {
 
     server_name web1.internal;
     return 301 https://$host$request_uri;
-}</pre>
+}</pre></div>
     </li>
     <li>
       <p><strong>Comprova i recarrega:</strong></p>
-<pre>sudo nginx -t
-sudo systemctl reload nginx</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo nginx -t
+sudo systemctl reload nginx</pre></div>
     </li>
     <li>
       <p><strong>Des del client</strong>, obre
@@ -277,7 +278,7 @@ sudo systemctl reload nginx</pre>
 
 <!-- ============ 9 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2 id="criteris-professionals">Criteris professionals</h2>
+  <h2 id="criteris-professionals">Bones pràctiques</h2>
   <ul>
     <li><strong>Mai 777</strong>: directoris 755, fitxers 644.</li>
     <li>Desactiva sempre el lloc per defecte quan el servidor és d'un
@@ -292,7 +293,7 @@ sudo systemctl reload nginx</pre>
 
 <!-- ============ 10 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2 id="errors-habituals">Errors habituals</h2>
+  <h2 id="errors-habituals">Problemes</h2>
   <dl class="cq-issues">
     <dt>Nginx no arrenca després d'instal·lar-lo</dt>
     <dd>
@@ -336,7 +337,7 @@ sudo systemctl reload nginx</pre>
 
 <!-- ============ 11 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h2 id="fitxa-rapida">Fitxa ràpida</h2>
+  <h2 id="fitxa-rapida">Resum</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Què</th><th>On</th></tr></thead>
@@ -378,9 +379,9 @@ sudo systemctl reload nginx</pre>
   <a class="prev" href="g5-1-apache.html">
     <span class="dir">Anterior · G5.1</span>
     <span class="ttl">Guia: Apache HTTP Server</span></a>
-  <a class="next" href="../activitats/a5-1-el-primer-servidor-web.html">
-    <span class="dir">Següent · A5.1</span>
-    <span class="ttl">El primer servidor web</span></a>
+  <a class="next" href="../index.html">
+    <span class="dir">Torna a · RA5</span>
+    <span class="ttl">RA5 · Gestió de servidors web</span></a>
 </nav>
 <!-- === PEU DE NAVEGACIÓ FI === -->
 

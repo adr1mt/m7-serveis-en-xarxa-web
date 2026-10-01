@@ -1,4 +1,4 @@
-// Tema i eines de lectura; funciona també en HTML autocontingut.
+// Aparença, còpia i cerca. Navegació i contingut continuen sent HTML.
 (function () {
   'use strict';
   var root = document.documentElement;
@@ -6,12 +6,11 @@
   var preference = 'auto';
   var media = window.matchMedia('(prefers-color-scheme: dark)');
   try { preference = localStorage.getItem(key) || 'auto'; } catch (e) {}
-  if (['auto', 'light', 'dark'].indexOf(preference) < 0) preference = 'auto';
-
+  if (!['auto', 'light', 'dark'].includes(preference)) preference = 'auto';
   function apply() {
     root.dataset.theme = preference === 'auto' ? (media.matches ? 'dark' : 'light') : preference;
-    document.querySelectorAll('.cq-theme').forEach(function (select) {
-      select.value = preference;
+    document.querySelectorAll('.cq-theme').forEach(function (button) {
+      button.setAttribute('aria-pressed', String(button.dataset.preference === preference));
     });
   }
   apply();
@@ -20,39 +19,30 @@
   else if (media.addListener) media.addListener(systemChanged);
   window.addEventListener('storage', function (event) {
     if (event.key !== key && event.key !== null) return;
-    preference = ['auto', 'light', 'dark'].indexOf(event.newValue) < 0 ? 'auto' : event.newValue;
+    preference = ['auto', 'light', 'dark'].includes(event.newValue) ? event.newValue : 'auto';
     apply();
   });
-
   document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.cq-tools').forEach(function (tools) { tools.hidden = false; });
-    document.querySelectorAll('.cq-theme').forEach(function (select) {
-      select.value = preference;
-      select.addEventListener('change', function () {
-        preference = select.value;
+    document.querySelectorAll('.cq-theme').forEach(function (button) {
+      button.disabled = false;
+      button.addEventListener('click', function () {
+        preference = button.dataset.preference;
         try { localStorage.setItem(key, preference); } catch (e) {}
         apply();
       });
     });
-
-    document.querySelectorAll('.cq-block pre').forEach(function (pre) {
-      var button = document.createElement('button');
-      button.type = 'button';
-      button.className = 'cq-copy-btn';
-      button.textContent = 'Copia';
-      button.setAttribute('aria-label', 'Copia el bloc de codi');
-      var status = document.createElement('span');
-      status.className = 'cq-copy-status';
-      status.setAttribute('role', 'status');
-      var bar = document.createElement('div');
-      bar.className = 'cq-code-tools';
-      bar.appendChild(button);
-      bar.appendChild(status);
-      pre.parentNode.insertBefore(bar, pre);
+    apply();
+    document.querySelectorAll('.cq-code').forEach(function (block) {
+      var pre = block.querySelector('pre');
+      var button = block.querySelector('.cq-copy-btn');
+      var status = block.querySelector('[role="status"]');
+      var reset;
+      button.disabled = false;
       button.addEventListener('click', async function () {
         button.disabled = true;
+        clearTimeout(reset);
+        var copied = false;
         try {
-          var copied = false;
           if (navigator.clipboard && window.isSecureContext) {
             try { await navigator.clipboard.writeText(pre.textContent); copied = true; } catch (e) {}
           }
@@ -65,34 +55,69 @@
             try { text.select(); copied = document.execCommand('copy'); }
             finally { text.remove(); button.focus(); }
           }
-          status.textContent = copied ? 'Copiat.' : 'Selecciona el codi i copia’l amb el teclat.';
-        } catch (e) {
-          status.textContent = 'Selecciona el codi i copia’l amb el teclat.';
-        } finally { button.disabled = false; }
+        } catch (e) {} finally { button.disabled = false; }
+        button.textContent = copied ? 'Copiat' : 'Copia';
+        status.textContent = copied ? 'Copiat' : 'Selecciona el codi i copia’l amb el teclat.';
+        status.classList.toggle('cq-copy-error', !copied);
+        if (copied) reset = setTimeout(function () { button.textContent = 'Copia'; status.textContent = ''; }, 2500);
       });
     });
-
     function normalize(value) {
       return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
     }
     document.querySelectorAll('.cq-search').forEach(function (search) {
-      search.hidden = false;
       var input = search.querySelector('input');
       var results = search.querySelector('.cq-search-results');
-      var items = Array.from(results.children);
       var status = search.querySelector('[role="status"]');
-      var texts = items.map(function (item) { return normalize(item.textContent); });
-      input.addEventListener('input', function () {
+      var catalog;
+      var loading;
+      function render() {
         var terms = normalize(input.value).trim().split(/\s+/).filter(Boolean);
-        var count = 0;
-        items.forEach(function (item, i) {
-          var matches = terms.length > 0 && terms.every(function (term) { return texts[i].indexOf(term) >= 0; });
-          item.hidden = !matches;
-          if (matches) count++;
+        results.replaceChildren();
+        status.textContent = '';
+        results.hidden = true;
+        if (!terms.length || !catalog) return;
+        var matches = catalog.filter(function (item) {
+          var text = normalize([item.code, item.title, item.description, item.ra, item.type].join(' '));
+          return terms.every(function (term) { return text.includes(term); });
         });
-        results.hidden = !terms.length || !count;
-        status.textContent = terms.length ? count + (count === 1 ? ' resultat.' : ' resultats.') : '';
-      });
+        matches.forEach(function (item) {
+          var li = document.createElement('li');
+          var link = document.createElement('a');
+          link.href = item.url;
+          link.textContent = item.code + ' · ' + item.title;
+          var description = document.createElement('span');
+          description.className = 'muted';
+          description.textContent = item.description;
+          li.append(link, description);
+          results.appendChild(li);
+        });
+        results.hidden = !matches.length;
+        status.textContent = matches.length ? matches.length + (matches.length === 1 ? ' resultat.' : ' resultats.') : 'No s’ha trobat cap material. Prova amb DHCP, Kea o DNS.';
+      }
+      async function load() {
+        if (catalog) return;
+        if (!loading) loading = (async function () {
+          try {
+            var embedded = document.getElementById('cq-cataleg');
+            if (embedded) catalog = JSON.parse(embedded.textContent);
+            else {
+              var response = await fetch(search.dataset.index);
+              if (!response.ok) throw new Error('Índex no disponible');
+              catalog = await response.json();
+            }
+            if (!Array.isArray(catalog)) throw new Error('Índex no vàlid');
+            render();
+          } catch (e) {
+            catalog = null;
+            loading = null;
+            status.textContent = 'La cerca no està disponible. Obre un RA per consultar els materials.';
+          }
+        })();
+        await loading;
+      }
+      search.addEventListener('toggle', function () { if (search.open) load(); });
+      input.addEventListener('input', function () { if (catalog) render(); else load(); });
     });
   });
 })();

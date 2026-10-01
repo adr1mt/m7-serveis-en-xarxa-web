@@ -6,29 +6,30 @@
 <title>T2.3 · Zones i registres — Serveis en Xarxa (0227)</title>
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 <script src="../../_identitat/lectura.js"></script>
+<link rel="icon" href="../../_identitat/favicon.svg">
 </head>
 <body>
 <a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
-    <a href="../index.html">‹ RA2 · Instal·lació de serveis de resolució de noms (DNS)</a>
-    <span class="pos">T2.3 · 3/9</span>
+    <a href="../index.html">‹ RA2 · DNS</a>
+    <span class="pos">T2.3 · 3/4</span>
+    <!-- EINES LECTURA INICI -->
+<div class="cq-tools" role="group" aria-label="Aparença"><button type="button" class="cq-theme" data-preference="light" aria-label="Clar" title="Clar" aria-pressed="false" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg></button><button type="button" class="cq-theme" data-preference="auto" aria-label="Automàtic" title="Automàtic" aria-pressed="true" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8m-4-4v4"/></svg></button><button type="button" class="cq-theme" data-preference="dark" aria-label="Fosc" title="Fosc" aria-pressed="false" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M20.5 13A9 9 0 0 1 11 3.5 9 9 0 1 0 20.5 13Z"/></svg></button></div>
+<!-- EINES LECTURA FI -->
   </div>
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<!-- EINES LECTURA INICI -->
-<div class="cq-tools" hidden><label for="cq-tema">Tema</label> <select id="cq-tema" class="cq-theme"><option value="auto">Automàtic</option><option value="light">Clar</option><option value="dark">Fosc</option></select></div>
-<!-- EINES LECTURA FI -->
-<main id="contingut" tabindex="-1">
+<main data-layout="content" data-type="teoria" id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA2 · T2.3</div>
   <h1>Zones i registres</h1>
   <p class="lede">Què és una zona, què hi ha dins i quins registres necessites.</p>
 </header>
 <!-- TOC INICI -->
-<details class="cq-toc"><summary>En aquesta pàgina</summary><ol><li><a href="#que-sabras-fer-en-acabar">Què sabràs fer en acabar</a></li><li><a href="#dues-zones-per-a-la-mateixa-xarxa">Dues zones per a la mateixa xarxa</a></li><li><a href="#la-capcalera-de-tota-zona-el-registre-soa">La capçalera de tota zona: el registre SOA</a></li><li><a href="#els-tipus-de-registre-que-faras-servir">Els tipus de registre que faràs servir</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#resum">Resum</a></li><li><a href="#comprova-el-que-has-apres">Comprova el que has après</a></li></ol></details>
+<details class="cq-toc"><summary>En aquesta pàgina · 8 apartats</summary><ol><li><a href="#que-sabras-fer-en-acabar">Què sabràs fer en acabar</a></li><li><a href="#dues-zones-per-a-la-mateixa-xarxa">Dues zones per a la mateixa xarxa</a></li><li><a href="#la-capcalera-de-tota-zona-el-registre-soa">La capçalera de tota zona: el registre SOA</a></li><li><a href="#els-tipus-de-registre-que-faras-servir">Els tipus de registre que faràs servir</a></li><li><a href="#criteris-professionals">Bones pràctiques</a></li><li><a href="#errors-habituals">Problemes</a></li><li><a href="#resum">Resum</a></li><li><a href="#comprova-el-que-has-apres">Comprova el que has après</a></li></ol></details>
 <!-- TOC FI -->
 
 
@@ -119,7 +120,7 @@
 
 <!-- ============ BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2 id="criteris-professionals">Criteris professionals</h2>
+  <h2 id="criteris-professionals">Bones pràctiques</h2>
   <ul>
     <li><strong>Apuja el serial a cada canvi</strong>: si no, per a la resta del món la zona no s'ha tocat.</li>
     <li><strong>Escriu els noms sencers amb punt final</strong> quan vulguis un nom absolut; és l'error tipogràfic que més costa de veure.</li>
@@ -131,7 +132,7 @@
 
 <!-- ============ PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2 id="errors-habituals">Errors habituals</h2>
+  <h2 id="errors-habituals">Problemes</h2>
   <dl class="cq-issues">
     <dt>Has canviat un registre i ningú no ho nota</dt>
     <dd>

@@ -6,30 +6,31 @@
 <title>G7.1 · Guia: Packet Tracer sense fils — Serveis en Xarxa (0227)</title>
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 <script src="../../_identitat/lectura.js"></script>
+<link rel="icon" href="../../_identitat/favicon.svg">
 </head>
 <body>
 <a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
-    <a href="../index.html">‹ RA7 · Desplegament de xarxes sense fils segures</a>
-    <span class="pos">G7.1 · 4/7</span>
+    <a href="../index.html">‹ RA7 · Sense fils</a>
+    <span class="pos">G7.1 · 1/1</span>
+    <!-- EINES LECTURA INICI -->
+<div class="cq-tools" role="group" aria-label="Aparença"><button type="button" class="cq-theme" data-preference="light" aria-label="Clar" title="Clar" aria-pressed="false" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg></button><button type="button" class="cq-theme" data-preference="auto" aria-label="Automàtic" title="Automàtic" aria-pressed="true" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8m-4-4v4"/></svg></button><button type="button" class="cq-theme" data-preference="dark" aria-label="Fosc" title="Fosc" aria-pressed="false" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M20.5 13A9 9 0 0 1 11 3.5 9 9 0 1 0 20.5 13Z"/></svg></button></div>
+<!-- EINES LECTURA FI -->
   </div>
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
 
-<!-- EINES LECTURA INICI -->
-<div class="cq-tools" hidden><label for="cq-tema">Tema</label> <select id="cq-tema" class="cq-theme"><option value="auto">Automàtic</option><option value="light">Clar</option><option value="dark">Fosc</option></select></div>
-<!-- EINES LECTURA FI -->
-<main id="contingut" tabindex="-1">
+<main data-layout="content" data-type="guies" id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA7 · G7.1</div>
   <h1>Guia: Packet Tracer sense fils</h1>
   <p class="lede">Manual de l'encaminador sense fil i del punt d'accés del simulador.</p>
 </header>
 <!-- TOC INICI -->
-<details class="cq-toc"><summary>En aquesta pàgina</summary><ol><li><a href="#que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</a></li><li><a href="#quin-aparell-es-cada-cosa">Quin aparell és cada cosa</a></li><li><a href="#les-pestanyes-de-la-gui-de-l-encaminador">Les pestanyes de la GUI de l&#x27;encaminador</a></li><li><a href="#la-xarxa-interna-i-el-dhcp">La xarxa interna i el DHCP</a></li><li><a href="#el-nom-de-la-xarxa-i-el-canal">El nom de la xarxa i el canal</a></li><li><a href="#posar-seguretat-a-la-xarxa">Posar seguretat a la xarxa</a></li><li><a href="#connectar-un-portatil-a-la-xarxa">Connectar un portàtil a la xarxa</a></li><li><a href="#afegir-un-punt-d-acces-a-la-mateixa-xarxa">Afegir un punt d&#x27;accés a la mateixa xarxa</a></li><li><a href="#comprovacio-de-conjunt">Comprovació de conjunt</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#problemes-habituals">Problemes habituals</a></li><li><a href="#fitxa-rapida">Fitxa ràpida</a></li></ol></details>
+<details class="cq-toc"><summary>En aquesta pàgina · 12 apartats</summary><ol><li><a href="#que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</a></li><li><a href="#quin-aparell-es-cada-cosa">Quin aparell és cada cosa</a></li><li><a href="#les-pestanyes-de-la-gui-de-l-encaminador">Les pestanyes de la GUI de l&#x27;encaminador</a></li><li><a href="#la-xarxa-interna-i-el-dhcp">La xarxa interna i el DHCP</a></li><li><a href="#el-nom-de-la-xarxa-i-el-canal">El nom de la xarxa i el canal</a></li><li><a href="#posar-seguretat-a-la-xarxa">Posar seguretat a la xarxa</a></li><li><a href="#connectar-un-portatil-a-la-xarxa">Connectar un portàtil a la xarxa</a></li><li><a href="#afegir-un-punt-d-acces-a-la-mateixa-xarxa">Afegir un punt d&#x27;accés a la mateixa xarxa</a></li><li><a href="#comprovacio-de-conjunt">Comprovació de conjunt</a></li><li><a href="#criteris-professionals">Bones pràctiques</a></li><li><a href="#problemes-habituals">Problemes</a></li><li><a href="#fitxa-rapida">Resum</a></li></ol></details>
 <!-- TOC FI -->
 
 
@@ -104,14 +105,14 @@
     <li>
       <p><strong>A Setup › Basic Setup, apartat Network Setup</strong>, escriu l'adreça
       de l'encaminador dins de la xarxa interna i la màscara:</p>
-<pre><span class="c">IP Address    192.168.1.1</span>
-<span class="c">Subnet Mask   255.255.255.0</span></pre>
+<div class="cq-code"><div class="cq-code-head"><span>Panell · Packet Tracer</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Panell · Packet Tracer"><span class="c">IP Address    192.168.1.1</span>
+<span class="c">Subnet Mask   255.255.255.0</span></pre></div>
     </li>
     <li>
       <p><strong>Just a sota, a DHCP Server Settings</strong>, deixa el servidor a
       <code>Enabled</code> i acota el rang:</p>
-<pre><span class="c">Start IP Address         192.168.1.100</span>
-<span class="c">Maximum number of Users  50</span></pre>
+<div class="cq-code"><div class="cq-code-head"><span>Panell · Packet Tracer</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Panell · Packet Tracer"><span class="c">Start IP Address         192.168.1.100</span>
+<span class="c">Maximum number of Users  50</span></pre></div>
       <p>El rang no s'escriu amb l'adreça final: es dona la primera i quantes n'hi
       caben. Amb aquests valors va de la <code>.100</code> a la <code>.149</code>.</p>
     </li>
@@ -154,8 +155,8 @@
     </li>
     <li>
       <p><strong>Tria el mode.</strong> La llista és sempre la mateixa:</p>
-<pre><span class="c">Disabled · WEP · WPA Personal · WPA2 Personal</span>
-<span class="c">WPA Enterprise · WPA2 Enterprise</span></pre>
+<div class="cq-code"><div class="cq-code-head"><span>Panell · Packet Tracer</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Panell · Packet Tracer"><span class="c">Disabled · WEP · WPA Personal · WPA2 Personal</span>
+<span class="c">WPA Enterprise · WPA2 Enterprise</span></pre></div>
       <p>Per a una xarxa amb clau compartida, <code>WPA2 Personal</code>.</p>
     </li>
     <li>
@@ -194,10 +195,10 @@
     </li>
     <li>
       <p><strong>Comprova la configuració rebuda</strong> a Desktop › Command Prompt:</p>
-<pre>ipconfig
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">ipconfig
 <span class="o">IP Address....................: 192.168.1.100</span>
 <span class="o">Subnet Mask...................: 255.255.255.0</span>
-<span class="o">Default Gateway...............: 192.168.1.1</span></pre>
+<span class="o">Default Gateway...............: 192.168.1.1</span></pre></div>
     </li>
   </ol>
   <div class="cq-note">
@@ -238,14 +239,14 @@
 <div class="cq-block" data-kind="comprovació">
   <h2 id="comprovacio-de-conjunt">Comprovació de conjunt</h2>
   <p>Tot des del Command Prompt d'un client connectat per l'aire:</p>
-<pre>ipconfig
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">ipconfig
 <span class="c">l'adreça ha de caure dins del rang del DHCP</span>
 
 ping 192.168.1.1
 <span class="c">la porta d'enllaç ha de respondre</span>
 
 ping 192.168.1.101
-<span class="c">un altre client de la mateixa xarxa</span></pre>
+<span class="c">un altre client de la mateixa xarxa</span></pre></div>
   <p>
     Si l'adreça comença per <code>169.254</code>, el client no ha rebut resposta del
     DHCP: està associat a la xarxa, però sense configuració.
@@ -254,7 +255,7 @@ ping 192.168.1.101
 
 <!-- ============ 10 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2 id="criteris-professionals">Criteris professionals</h2>
+  <h2 id="criteris-professionals">Bones pràctiques</h2>
   <ul>
     <li><strong>Save Settings a cada pestanya</strong>, abans de canviar-ne.</li>
     <li><strong>Canvia el SSID de sèrie</strong>: delata el model de l'aparell.</li>
@@ -265,7 +266,7 @@ ping 192.168.1.101
 
 <!-- ============ 11 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2 id="problemes-habituals">Problemes habituals</h2>
+  <h2 id="problemes-habituals">Problemes</h2>
   <dl class="cq-issues">
     <dt>El portàtil no veu cap xarxa</dt>
     <dd>
@@ -292,7 +293,7 @@ ping 192.168.1.101
 
 <!-- ============ 12 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h2 id="fitxa-rapida">Fitxa ràpida</h2>
+  <h2 id="fitxa-rapida">Resum</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Què vols fer</th><th>On es fa</th></tr></thead>
@@ -313,12 +314,12 @@ ping 192.168.1.101
 
 <!-- === PEU DE NAVEGACIÓ INICI === -->
 <nav class="cq-pager">
-  <a class="prev" href="../teoria/t7-3-seguretat-sense-fils.html">
-    <span class="dir">Anterior · T7.3</span>
-    <span class="ttl">Seguretat de les xarxes sense fils</span></a>
-  <a class="next" href="../activitats/a7-1-la-xarxa-sense-fils-de-l-aula.html">
-    <span class="dir">Següent · A7.1</span>
-    <span class="ttl">La xarxa sense fils de l'aula</span></a>
+  <a class="prev" href="../index.html">
+    <span class="dir">Torna a · RA7</span>
+    <span class="ttl">RA7 · Desplegament de xarxes sense fils segures</span></a>
+  <a class="next" href="../index.html">
+    <span class="dir">Torna a · RA7</span>
+    <span class="ttl">RA7 · Desplegament de xarxes sense fils segures</span></a>
 </nav>
 <!-- === PEU DE NAVEGACIÓ FI === -->
 

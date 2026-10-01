@@ -6,49 +6,45 @@
 <title>A3.3 · Tancar l'FTP en clar — Serveis en Xarxa (0227)</title>
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 <script src="../../_identitat/lectura.js"></script>
+<link rel="icon" href="../../_identitat/favicon.svg">
 </head>
 <body>
 <a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
-    <a href="../index.html">‹ RA3 · Instal·lació de serveis de transferència de fitxers</a>
-    <span class="pos">A3.3 · 8/8</span>
+    <a href="../index.html">‹ RA3 · FTP i SFTP</a>
+    <span class="pos">A3.3 · 3/3</span>
+    <!-- EINES LECTURA INICI -->
+<div class="cq-tools" role="group" aria-label="Aparença"><button type="button" class="cq-theme" data-preference="light" aria-label="Clar" title="Clar" aria-pressed="false" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg></button><button type="button" class="cq-theme" data-preference="auto" aria-label="Automàtic" title="Automàtic" aria-pressed="true" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8m-4-4v4"/></svg></button><button type="button" class="cq-theme" data-preference="dark" aria-label="Fosc" title="Fosc" aria-pressed="false" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M20.5 13A9 9 0 0 1 11 3.5 9 9 0 1 0 20.5 13Z"/></svg></button></div>
+<!-- EINES LECTURA FI -->
   </div>
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<!-- EINES LECTURA INICI -->
-<div class="cq-tools" hidden><label for="cq-tema">Tema</label> <select id="cq-tema" class="cq-theme"><option value="auto">Automàtic</option><option value="light">Clar</option><option value="dark">Fosc</option></select></div>
-<!-- EINES LECTURA FI -->
-<main id="contingut" tabindex="-1">
+<main data-layout="content" data-type="activitats" id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA3 · A3.3</div>
   <h1>Tancar l'FTP en clar</h1>
   <p class="lede">Veure la contrasenya viatjant, i deixar el servei de manera que ja no es pugui veure.</p>
 </header>
 <!-- TOC INICI -->
-<details class="cq-toc"><summary>En aquesta pàgina</summary><ol><li><a href="#que-has-de-saber-abans-de-comencar">Què has de saber abans de començar</a></li><li><a href="#amb-que-treballaras">Amb què treballaràs</a></li><li><a href="#que-has-de-fer">Què has de fer</a></li><li><a href="#d-on-has-de-treure-cada-cosa">D&#x27;on has de treure cada cosa</a></li><li><a href="#captura-nomes-la-teva-maquina">Captura només la teva màquina</a></li><li><a href="#dues-decisions-que-has-de-prendre-tu">Dues decisions que has de prendre tu</a></li><li><a href="#com-sabras-que-ho-has-fet-be">Com sabràs que ho has fet bé</a></li><li><a href="#si-alguna-cosa-no-va">Si alguna cosa no va</a></li><li><a href="#que-has-d-entregar">Què has d&#x27;entregar</a></li></ol></details>
+<details class="cq-toc"><summary>En aquesta pàgina · 7 apartats</summary><ol><li><a href="#amb-que-treballaras">Amb què treballaràs</a></li><li><a href="#que-has-de-fer">Què has de fer</a></li><li><a href="#captura-nomes-la-teva-maquina">Captura només la teva màquina</a></li><li><a href="#dues-decisions-que-has-de-prendre-tu">Dues decisions que has de prendre tu</a></li><li><a href="#com-sabras-que-ho-has-fet-be">Com sabràs que ho has fet bé</a></li><li><a href="#si-alguna-cosa-no-va">Problemes</a></li><li><a href="#que-has-d-entregar">Què has d’entregar</a></li></ol></details>
 <!-- TOC FI -->
 
 
 <!-- ============ OBJECTIUS ============ -->
-<div class="cq-block" data-kind="objectius">
-  <h2 id="que-has-de-saber-abans-de-comencar">Què has de saber abans de començar</h2>
-  <p>
-    Teories <a class="cq-ref" href="../teoria/t3-2-comptes-i-limits.html">T3.2</a> (comptes i jaules) i <a class="cq-ref" href="../teoria/t3-3-ftps-i-sftp.html">T3.3</a> (FTPS i SFTP), i les guies <a class="cq-ref" href="../guies/g3-1-vsftpd.html">G3.1</a> i <a class="cq-ref" href="../guies/g3-2-sftp.html">G3.2</a>. Et
-    convé tenir fresca la captura de trànsit del <a class="cq-ref" href="../../RA1/index.html">RA1</a>.
-  </p>
-  <p>
-    Amb aquesta activitat demostraràs amb una prova pròpia que l'FTP en clar exposa les
-    credencials, i oferiràs les dues alternatives xifrades sobre la mateixa màquina: FTPS forçat i
-    SFTP enjaulat.
-  </p>
-</div>
+
 
 <!-- ============ ESCENARI ============ -->
 <div class="cq-block" data-kind="escenari">
   <h2 id="amb-que-treballaras">Amb què treballaràs</h2>
+  <p class="cq-prerequisites" id="que-has-de-saber-abans-de-comencar"><strong>Abans de començar</strong></p>
+  <p>
+    Teories <a class="cq-ref" href="../teoria/t3-2-comptes-i-limits.html">T3.2</a> (comptes i jaules) i <a class="cq-ref" href="../teoria/t3-3-ftps-i-sftp.html">T3.3</a> (FTPS i SFTP), i les guies <a class="cq-ref" href="../guies/g3-1-vsftpd.html">G3.1</a> i <a class="cq-ref" href="../guies/g3-2-sftp.html">G3.2</a>. Et
+    convé tenir fresca la captura de trànsit del <a class="cq-ref" href="../../RA1/index.html">RA1</a>.
+  </p>
+
 <p><strong>Preparació del client:</strong> comprova que disposa de les eines de la guia. Si cal instal·lar paquets, connecta’l temporalment a puigcastellar1; després retira aquesta targeta. Les proves finals es fan només a personal1, sense suposar encaminament al servidor.</p>
   <div class="cq-tablewrap">
     <table class="cq-table">
@@ -82,11 +78,7 @@
       </tbody>
     </table>
   </div>
-</div>
-
-<!-- ============ ON BUSCAR ============ -->
-<div class="cq-block" data-kind="enunciat">
-  <h2 id="d-on-has-de-treure-cada-cosa">D'on has de treure cada cosa</h2>
+<p class="cq-prerequisites" id="d-on-has-de-treure-cada-cosa"><strong>On trobaràs ajuda</strong></p>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Què has de fer</th><th>On ho tens</th></tr></thead>
@@ -144,7 +136,7 @@
 
 <!-- ============ PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2 id="si-alguna-cosa-no-va">Si alguna cosa no va</h2>
+  <h2 id="si-alguna-cosa-no-va">Problemes</h2>
   <dl class="cq-issues">
     <dt>A la captura no surt res</dt>
     <dd>
@@ -174,7 +166,7 @@
 
 <!-- ============ LLIURAMENT ============ -->
 <div class="cq-block" data-kind="lliurament">
-  <h2 id="que-has-d-entregar">Què has d'entregar</h2>
+  <h2 id="que-has-d-entregar">Què has d’entregar</h2>
   <p>
     Un <strong>document tècnic</strong> amb les dues captures comparades, les configuracions
     d'FTPS i d'SFTP, i les proves de cada fila de la taula del que ha de poder i no ha de poder.
@@ -201,7 +193,7 @@
     <span class="dir">Anterior · A3.2</span>
     <span class="ttl">Repositori públic i límits</span></a>
   <a class="next" href="../index.html">
-    <span class="dir">Has acabat el · RA3</span>
+    <span class="dir">Torna a · RA3</span>
     <span class="ttl">RA3 · Instal·lació de serveis de transferència de fitxers</span></a>
 </nav>
 <!-- === PEU DE NAVEGACIÓ FI === -->

@@ -6,23 +6,24 @@
 <title>G1.4 · systemd-networkd</title>
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 <script src="../../_identitat/lectura.js"></script>
+<link rel="icon" href="../../_identitat/favicon.svg">
 </head>
 <body>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
-    <a href="../index.html">‹ RA1 · Instal·lació de serveis de configuració dinàmica (DHCP)</a>
-    <span class="pos">G1.4 · 7/11</span>
+    <a href="../index.html">‹ RA1 · DHCP</a>
+    <span class="pos">G1.4 · 4/4</span>
+    <!-- EINES LECTURA INICI -->
+<div class="cq-tools" role="group" aria-label="Aparença"><button type="button" class="cq-theme" data-preference="light" aria-label="Clar" title="Clar" aria-pressed="false" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg></button><button type="button" class="cq-theme" data-preference="auto" aria-label="Automàtic" title="Automàtic" aria-pressed="true" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8m-4-4v4"/></svg></button><button type="button" class="cq-theme" data-preference="dark" aria-label="Fosc" title="Fosc" aria-pressed="false" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M20.5 13A9 9 0 0 1 11 3.5 9 9 0 1 0 20.5 13Z"/></svg></button></div>
+<!-- EINES LECTURA FI -->
   </div>
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
 <a class="cq-skip" href="#contingut">Salta al contingut</a>
 
-<!-- EINES LECTURA INICI -->
-<div class="cq-tools" hidden><label for="cq-tema">Tema</label> <select id="cq-tema" class="cq-theme"><option value="auto">Automàtic</option><option value="light">Clar</option><option value="dark">Fosc</option></select></div>
-<!-- EINES LECTURA FI -->
-<main id="contingut" tabindex="-1">
+<main data-layout="content" data-type="guies" id="contingut" tabindex="-1">
 <header class="cq-header">
 <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · G1.4</div>
 <h1>Guia: DHCP amb systemd-networkd</h1>
@@ -33,25 +34,25 @@
 <h2 id="abans-de-canviar-la-xarxa">Abans de canviar la xarxa</h2>
 <p>Parteix del Server preparat a <a class="cq-ref" href="../activitats/a1-1-posada-a-punt.html">A1.1</a>. Treballa per SSH des de l’amfitrió i conserva accés a la consola d’Isard si es talla la connexió. Aquest exemple gestiona les targetes directament amb networkd, en lloc de Netplan. No hi ha d’haver cap altre servidor DHCP actiu.</p>
 <p>Comprova els noms de les targetes i el YAML existent. A Isard solen ser <code>enp1s0</code> (externa) i <code>enp2s0</code> (interna); adapta’ls si són diferents.</p>
-<pre>ip -brief a
-sudo cat /etc/netplan/*.yaml</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">ip -brief a
+sudo cat /etc/netplan/*.yaml</pre></div>
 <p>Consulta <code>man systemd.network</code> i la <a href="https://www.freedesktop.org/software/systemd/man/latest/systemd.network.html">documentació oficial de networkd</a>.</p>
 </div>
 <div class="cq-block" data-kind="pas a pas">
 <h2 id="prepara-els-dos-fitxers">Prepara els dos fitxers</h2>
 <p>Crea <code>/etc/systemd/network</code> si cal:</p>
-<pre>sudo mkdir -p /etc/systemd/network
-sudo nano /etc/systemd/network/10-externa.network</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo mkdir -p /etc/systemd/network
+sudo nano /etc/systemd/network/10-externa.network</pre></div>
 <p>Copia la configuració externa. Continua rebent la IP del centre per DHCP:</p>
-<pre>[Match]
+<div class="cq-code"><div class="cq-code-head"><span>Fitxer · systemd-networkd</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Fitxer · systemd-networkd">[Match]
 Name=enp1s0
 
 [Network]
-DHCP=ipv4</pre>
+DHCP=ipv4</pre></div>
 <p>Edita el fitxer de la interna:</p>
-<pre>sudo nano /etc/systemd/network/20-personal.network</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo nano /etc/systemd/network/20-personal.network</pre></div>
 <p>Copia el bloc complet. Només aquesta targeta oferirà DHCP:</p>
-<pre>[Match]
+<div class="cq-code"><div class="cq-code-head"><span>Fitxer · systemd-networkd</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Fitxer · systemd-networkd">[Match]
 Name=enp2s0
 
 [Network]
@@ -62,7 +63,7 @@ DHCPServer=yes
 PoolOffset=100
 PoolSize=20
 DNS=9.9.9.9
-EmitRouter=no</pre>
+EmitRouter=no</pre></div>
 <ul>
 <li><code>Name</code>: nom real de la targeta a la qual s’aplica el fitxer.</li>
 <li><code>Address</code>: IP fixa i prefix del servidor a <code>personal1</code>.</li>
@@ -76,19 +77,19 @@ EmitRouter=no</pre>
 <div class="cq-block" data-kind="pas a pas">
 <h2 id="aparta-netplan-i-aplica-el-canvi">Aparta Netplan i aplica el canvi</h2>
 <p>Amb els dos fitxers preparats, desa els YAML en una subcarpeta. Netplan deixarà de generar la configuració anterior:</p>
-<pre>sudo mkdir -p /etc/netplan/apartat-ra1
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo mkdir -p /etc/netplan/apartat-ra1
 sudo mv /etc/netplan/*.yaml /etc/netplan/apartat-ra1/
 sudo netplan apply
 sudo networkctl reload
-sudo networkctl reconfigure enp1s0 enp2s0</pre>
+sudo networkctl reconfigure enp1s0 enp2s0</pre></div>
 <p>Si es talla SSH, continua des de la consola. <code>reload</code> rellegeix els fitxers i <code>reconfigure</code> aplica la configuració a les targetes indicades.</p>
 <p>Per recuperar Netplan, retira els dos fitxers <code>.network</code> de l’exemple, torna els YAML a <code>/etc/netplan/</code> i aplica’ls des de la consola.</p>
 </div>
 <div class="cq-block" data-kind="comprovació">
 <h2 id="comprova-servidor-i-client">Comprova servidor i client</h2>
-<pre>networkctl status enp2s0
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">networkctl status enp2s0
 sudo ss -ulnp
-sudo journalctl -u systemd-networkd -n 30 --no-pager</pre>
+sudo journalctl -u systemd-networkd -n 30 --no-pager</pre></div>
 <p>Comprova la IP <code>10.0.0.1/8</code>, el fitxer <code>20-personal.network</code> i el port UDP 67. El client connectat a <code>personal1</code> ha de rebre una IP del rang, el DNS i arribar al servidor.</p>
 <p>Per capturar DORA, inicia la captura DHCP abans de connectar un client sense concessió. Una renovació pot mostrar només Request/ACK. Alguns clients negocien <em>Rapid Commit</em> (dos missatges); per observar els quatre, desactiva aquesta opció al client. Al Desktop comprova si el gestor és NetworkManager; <code>networkctl</code> correspon a networkd.</p>
 </div>
@@ -97,9 +98,9 @@ sudo journalctl -u systemd-networkd -n 30 --no-pager</pre>
   <a class="prev" href="g1-3-nftables.html">
     <span class="dir">Anterior · G1.3</span>
     <span class="ttl">Guia: nftables</span></a>
-  <a class="next" href="../activitats/a1-1-posada-a-punt.html">
-    <span class="dir">Següent · A1.1</span>
-    <span class="ttl">Posada a punt del servidor</span></a>
+  <a class="next" href="../index.html">
+    <span class="dir">Torna a · RA1</span>
+    <span class="ttl">RA1 · Instal·lació de serveis de configuració dinàmica (DHCP)</span></a>
 </nav>
 <!-- === PEU DE NAVEGACIÓ FI === -->
 

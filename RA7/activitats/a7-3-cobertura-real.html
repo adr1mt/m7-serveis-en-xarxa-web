@@ -6,49 +6,46 @@
 <title>A7.3 · Cobertura real — Serveis en Xarxa (0227)</title>
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 <script src="../../_identitat/lectura.js"></script>
+<link rel="icon" href="../../_identitat/favicon.svg">
 </head>
 <body>
 <a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
-    <a href="../index.html">‹ RA7 · Desplegament de xarxes sense fils segures</a>
-    <span class="pos">A7.3 · 7/7</span>
+    <a href="../index.html">‹ RA7 · Sense fils</a>
+    <span class="pos">A7.3 · 3/3</span>
+    <!-- EINES LECTURA INICI -->
+<div class="cq-tools" role="group" aria-label="Aparença"><button type="button" class="cq-theme" data-preference="light" aria-label="Clar" title="Clar" aria-pressed="false" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg></button><button type="button" class="cq-theme" data-preference="auto" aria-label="Automàtic" title="Automàtic" aria-pressed="true" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8m-4-4v4"/></svg></button><button type="button" class="cq-theme" data-preference="dark" aria-label="Fosc" title="Fosc" aria-pressed="false" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M20.5 13A9 9 0 0 1 11 3.5 9 9 0 1 0 20.5 13Z"/></svg></button></div>
+<!-- EINES LECTURA FI -->
   </div>
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
 
-<!-- EINES LECTURA INICI -->
-<div class="cq-tools" hidden><label for="cq-tema">Tema</label> <select id="cq-tema" class="cq-theme"><option value="auto">Automàtic</option><option value="light">Clar</option><option value="dark">Fosc</option></select></div>
-<!-- EINES LECTURA FI -->
-<main id="contingut" tabindex="-1">
+<main data-layout="content" data-type="activitats" id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA7 · A7.3</div>
   <h1>Cobertura real</h1>
   <p class="lede">Sortir del simulador i mirar què hi ha de veritat a l'aire de l'aula.</p>
 </header>
 <!-- TOC INICI -->
-<details class="cq-toc"><summary>En aquesta pàgina</summary><ol><li><a href="#que-has-de-saber-abans-de-comencar">Què has de saber abans de començar</a></li><li><a href="#amb-que-treballaras">Amb què treballaràs</a></li><li><a href="#que-has-de-fer">Què has de fer</a></li><li><a href="#com-es-llisten-les-xarxes-al-portatil">Com es llisten les xarxes al portàtil</a></li><li><a href="#dbm-i-tant-per-cent-no-son-el-mateix">dBm i tant per cent no són el mateix</a></li><li><a href="#dues-antenes-dues-lectures">Dues antenes, dues lectures</a></li><li><a href="#com-sabras-que-ho-has-fet-be">Com sabràs que ho has fet bé</a></li><li><a href="#si-alguna-cosa-no-va">Si alguna cosa no va</a></li><li><a href="#que-has-d-entregar">Què has d&#x27;entregar</a></li></ol></details>
+<details class="cq-toc"><summary>En aquesta pàgina · 8 apartats</summary><ol><li><a href="#amb-que-treballaras">Amb què treballaràs</a></li><li><a href="#que-has-de-fer">Què has de fer</a></li><li><a href="#com-es-llisten-les-xarxes-al-portatil">Com es llisten les xarxes al portàtil</a></li><li><a href="#dbm-i-tant-per-cent-no-son-el-mateix">dBm i tant per cent no són el mateix</a></li><li><a href="#dues-antenes-dues-lectures">Dues antenes, dues lectures</a></li><li><a href="#com-sabras-que-ho-has-fet-be">Com sabràs que ho has fet bé</a></li><li><a href="#si-alguna-cosa-no-va">Problemes</a></li><li><a href="#que-has-d-entregar">Què has d’entregar</a></li></ol></details>
 <!-- TOC FI -->
 
 
 <!-- ============ OBJECTIUS ============ -->
-<div class="cq-block" data-kind="objectius">
-  <h2 id="que-has-de-saber-abans-de-comencar">Què has de saber abans de començar</h2>
-  <p>
-    Teoria <a class="cq-ref" href="../teoria/t7-1-fonaments-sense-fils.html">T7.1</a>: bandes, canals solapats i factors que afecten el senyal. Aquesta
-    activitat no fa servir la guia <a class="cq-ref" href="../guies/g7-1-packet-tracer.html">G7.1</a>: no hi ha res a configurar.
-  </p>
-  <p>
-    Mesuraràs la cobertura sense fils de l'aula amb dos aparells diferents i proposaràs
-    un canal, amb dades teves per justificar-ho.
-  </p>
-</div>
+
 
 <!-- ============ ESCENARI ============ -->
 <div class="cq-block" data-kind="escenari">
   <h2 id="amb-que-treballaras">Amb què treballaràs</h2>
+  <p class="cq-prerequisites" id="que-has-de-saber-abans-de-comencar"><strong>Abans de començar</strong></p>
+  <p>
+    Teoria <a class="cq-ref" href="../teoria/t7-1-fonaments-sense-fils.html">T7.1</a>: bandes, canals solapats i factors que afecten el senyal. Aquesta
+    activitat no fa servir la guia <a class="cq-ref" href="../guies/g7-1-packet-tracer.html">G7.1</a>: no hi ha res a configurar.
+  </p>
+
   <p>
     Amb dos dispositius reals: un <strong>mòbil</strong> amb qualsevol aplicació
     d'anàlisi Wi-Fi i un <strong>portàtil</strong>, que porta una antena diferent i et
@@ -84,9 +81,9 @@
 <div class="cq-block" data-kind="enunciat">
   <h2 id="com-es-llisten-les-xarxes-al-portatil">Com es llisten les xarxes al portàtil</h2>
   <p>Amb Linux, des d'un terminal:</p>
-<pre>nmcli dev wifi list</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Codi</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre>nmcli dev wifi list</pre></div>
   <p>Amb Windows, des del símbol del sistema:</p>
-<pre>netsh wlan show networks mode=bssid</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Codi</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre>netsh wlan show networks mode=bssid</pre></div>
   <p>
     Les dues ordres donen el SSID, el canal i el nivell de senyal de cada xarxa que
     l'aparell detecta en aquell moment i en aquell lloc.
@@ -138,7 +135,7 @@
 
 <!-- ============ PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2 id="si-alguna-cosa-no-va">Si alguna cosa no va</h2>
+  <h2 id="si-alguna-cosa-no-va">Problemes</h2>
   <dl class="cq-issues">
     <dt>El portàtil només llista una xarxa o cap</dt>
     <dd>
@@ -166,7 +163,7 @@
 
 <!-- ============ LLIURAMENT ============ -->
 <div class="cq-block" data-kind="lliurament">
-  <h2 id="que-has-d-entregar">Què has d'entregar</h2>
+  <h2 id="que-has-d-entregar">Què has d’entregar</h2>
   <p>
     Un document tècnic amb la taula de mesures —tres punts, dos aparells— i les captures
     de pantalla que les sustenten, més la teva proposta de canal amb el motiu.
@@ -191,7 +188,7 @@
     <span class="dir">Anterior · A7.2</span>
     <span class="ttl">Escenaris i seguretat</span></a>
   <a class="next" href="../index.html">
-    <span class="dir">Has acabat el · RA7</span>
+    <span class="dir">Torna a · RA7</span>
     <span class="ttl">RA7 · Desplegament de xarxes sense fils segures</span></a>
 </nav>
 <!-- === PEU DE NAVEGACIÓ FI === -->

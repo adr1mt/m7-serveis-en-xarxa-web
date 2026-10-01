@@ -6,29 +6,30 @@
 <title>T4.1 · Com viatja un correu electrònic — Serveis en Xarxa (0227)</title>
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 <script src="../../_identitat/lectura.js"></script>
+<link rel="icon" href="../../_identitat/favicon.svg">
 </head>
 <body>
 <a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
-    <a href="../index.html">‹ RA4 · Gestió de servidors de correu electrònic</a>
-    <span class="pos">T4.1 · 1/7</span>
+    <a href="../index.html">‹ RA4 · Correu</a>
+    <span class="pos">T4.1 · 1/3</span>
+    <!-- EINES LECTURA INICI -->
+<div class="cq-tools" role="group" aria-label="Aparença"><button type="button" class="cq-theme" data-preference="light" aria-label="Clar" title="Clar" aria-pressed="false" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg></button><button type="button" class="cq-theme" data-preference="auto" aria-label="Automàtic" title="Automàtic" aria-pressed="true" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8m-4-4v4"/></svg></button><button type="button" class="cq-theme" data-preference="dark" aria-label="Fosc" title="Fosc" aria-pressed="false" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M20.5 13A9 9 0 0 1 11 3.5 9 9 0 1 0 20.5 13Z"/></svg></button></div>
+<!-- EINES LECTURA FI -->
   </div>
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<!-- EINES LECTURA INICI -->
-<div class="cq-tools" hidden><label for="cq-tema">Tema</label> <select id="cq-tema" class="cq-theme"><option value="auto">Automàtic</option><option value="light">Clar</option><option value="dark">Fosc</option></select></div>
-<!-- EINES LECTURA FI -->
-<main id="contingut" tabindex="-1">
+<main data-layout="content" data-type="teoria" id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA4 · T4.1</div>
   <h1>Com viatja un correu electrònic</h1>
   <p class="lede">Els actors, els protocols i el camí exacte que segueix un missatge del remitent al destinatari.</p>
 </header>
 <!-- TOC INICI -->
-<details class="cq-toc"><summary>En aquesta pàgina</summary><ol><li><a href="#ports-del-laboratori">Ports del laboratori</a></li><li><a href="#que-sabras-fer-en-acabar">Què sabràs fer en acabar</a></li><li><a href="#tres-papers-tres-programes-diferents">Tres papers, tres programes diferents</a></li><li><a href="#un-protocol-per-a-cada-tram-del-viatge">Un protocol per a cada tram del viatge</a></li><li><a href="#imap-i-pop3-es-queda-o-es-baixa">IMAP i POP3: es queda o es baixa</a></li><li><a href="#una-conversa-smtp-vista-per-dins">Una conversa SMTP vista per dins</a></li><li><a href="#d-anna-a-bruno-pas-a-pas">D&#x27;anna a bruno, pas a pas</a></li><li><a href="#observa-el-viatge-sense-muntar-res">Observa el viatge sense muntar res</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#resum">Resum</a></li><li><a href="#comprova-el-que-has-apres">Comprova el que has après</a></li></ol></details>
+<details class="cq-toc"><summary>En aquesta pàgina · 12 apartats</summary><ol><li><a href="#ports-del-laboratori">Ports del laboratori</a></li><li><a href="#que-sabras-fer-en-acabar">Què sabràs fer en acabar</a></li><li><a href="#tres-papers-tres-programes-diferents">Tres papers, tres programes diferents</a></li><li><a href="#un-protocol-per-a-cada-tram-del-viatge">Un protocol per a cada tram del viatge</a></li><li><a href="#imap-i-pop3-es-queda-o-es-baixa">IMAP i POP3: es queda o es baixa</a></li><li><a href="#una-conversa-smtp-vista-per-dins">Una conversa SMTP vista per dins</a></li><li><a href="#d-anna-a-bruno-pas-a-pas">D&#x27;anna a bruno, pas a pas</a></li><li><a href="#observa-el-viatge-sense-muntar-res">Observa el viatge sense muntar res</a></li><li><a href="#criteris-professionals">Bones pràctiques</a></li><li><a href="#errors-habituals">Problemes</a></li><li><a href="#resum">Resum</a></li><li><a href="#comprova-el-que-has-apres">Comprova el que has après</a></li></ol></details>
 <!-- TOC FI -->
 
 
@@ -156,7 +157,7 @@
     Igual que amb FTP a la <a class="cq-ref" href="../../RA3/teoria/t3-1-ftp-fonaments.html">T3.1</a>, darrere de "s'ha enviat el correu" hi ha un diàleg de text amb
     ordres i codis. Aquest és el que fa un MTA en entregar un missatge a un altre:
   </p>
-<pre><span class="o">220 mail.personal.internal ESMTP Postfix</span>
+<div class="cq-code"><div class="cq-code-head"><span>Codi</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre><span class="o">220 mail.personal.internal ESMTP Postfix</span>
 EHLO puigcastellar.internal
 <span class="o">250-mail.personal.internal</span>
 <span class="o">250-PIPELINING</span>
@@ -173,7 +174,7 @@ Subject: Reunió de dimarts
 .
 <span class="o">250 2.0.0 Ok: queued as A1B2C3</span>
 QUIT
-<span class="o">221 2.0.0 Bye</span></pre>
+<span class="o">221 2.0.0 Bye</span></pre></div>
   <p>
     <code>MAIL FROM</code> declara el remitent, <code>RCPT TO</code> el destinatari, i
     <code>DATA</code> obre l'enviament del contingut: el punt sol en una línia el tanca. Cap
@@ -213,13 +214,13 @@ QUIT
   <ol class="cq-steps">
     <li>
       <p><strong>Instal·la les eines de consulta DNS:</strong></p>
-<pre>sudo apt update
-sudo apt install -y bind9-dnsutils</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Codi</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre>sudo apt update
+sudo apt install -y bind9-dnsutils</pre></div>
     </li>
 
     <li>
       <p><strong>Mira els registres MX</strong> d'un domini real:</p>
-<pre>dig MX wikipedia.org</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Codi</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre>dig MX wikipedia.org</pre></div>
       <p>
         A la secció <code>ANSWER</code> hi surt cada servidor de correu amb la seva
         <strong>prioritat</strong>: el número més baix és el preferit.
@@ -228,7 +229,7 @@ sudo apt install -y bind9-dnsutils</pre>
 
     <li>
       <p><strong>Prova un domini amb diverses prioritats</strong>, per veure l'ordre de reserva:</p>
-<pre>dig MX gmail.com</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Codi</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre>dig MX gmail.com</pre></div>
       <p>
         Surten cinc servidors: s'intenta el de prioritat més baixa i la resta queden de reserva.
       </p>
@@ -237,7 +238,7 @@ sudo apt install -y bind9-dnsutils</pre>
     <li>
       <p><strong>Comprova el registre A</strong> del nom del MX: sense IP no s'hi pot
       connectar.</p>
-<pre>dig A gmail-smtp-in.l.google.com</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Codi</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre>dig A gmail-smtp-in.l.google.com</pre></div>
     </li>
   </ol>
 
@@ -250,7 +251,7 @@ sudo apt install -y bind9-dnsutils</pre>
 
 <!-- ============ 8 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2 id="criteris-professionals">Criteris professionals</h2>
+  <h2 id="criteris-professionals">Bones pràctiques</h2>
   <ul>
     <li><strong>Submission (587 o 465) per als clients</strong>, mai el 25 directe: el 25 és per a servidors.</li>
     <li><strong>IMAP com a opció per defecte</strong>: POP3 només quan de debò cal correu local i prou.</li>
@@ -262,7 +263,7 @@ sudo apt install -y bind9-dnsutils</pre>
 
 <!-- ============ 9 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2 id="errors-habituals">Errors habituals</h2>
+  <h2 id="errors-habituals">Problemes</h2>
   <dl class="cq-issues">
     <dt>Configurar el client de correu pel port 25</dt>
     <dd>

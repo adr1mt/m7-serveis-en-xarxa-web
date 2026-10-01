@@ -6,29 +6,30 @@
 <title>G1.2 · Guia: Kea — Serveis en Xarxa (0227)</title>
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 <script src="../../_identitat/lectura.js"></script>
+<link rel="icon" href="../../_identitat/favicon.svg">
 </head>
 <body>
 <a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
-    <a href="../index.html">‹ RA1 · Instal·lació de serveis de configuració dinàmica (DHCP)</a>
-    <span class="pos">G1.2 · 5/11</span>
+    <a href="../index.html">‹ RA1 · DHCP</a>
+    <span class="pos">G1.2 · 2/4</span>
+    <!-- EINES LECTURA INICI -->
+<div class="cq-tools" role="group" aria-label="Aparença"><button type="button" class="cq-theme" data-preference="light" aria-label="Clar" title="Clar" aria-pressed="false" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg></button><button type="button" class="cq-theme" data-preference="auto" aria-label="Automàtic" title="Automàtic" aria-pressed="true" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8m-4-4v4"/></svg></button><button type="button" class="cq-theme" data-preference="dark" aria-label="Fosc" title="Fosc" aria-pressed="false" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M20.5 13A9 9 0 0 1 11 3.5 9 9 0 1 0 20.5 13Z"/></svg></button></div>
+<!-- EINES LECTURA FI -->
   </div>
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<!-- EINES LECTURA INICI -->
-<div class="cq-tools" hidden><label for="cq-tema">Tema</label> <select id="cq-tema" class="cq-theme"><option value="auto">Automàtic</option><option value="light">Clar</option><option value="dark">Fosc</option></select></div>
-<!-- EINES LECTURA FI -->
-<main id="contingut" tabindex="-1">
+<main data-layout="content" data-type="guies" id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA1 · G1.2</div>
   <h1>Guia: Kea</h1>
   <p class="lede">El servidor DHCP: instal·lació, rang, opcions i reserves.</p>
 </header>
 <!-- TOC INICI -->
-<details class="cq-toc"><summary>En aquesta pàgina</summary><ol><li><a href="#que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</a></li><li><a href="#per-que-kea-i-no-una-altra-cosa">Per què Kea i no una altra cosa</a></li><li><a href="#que-has-de-posar-a-cada-camp">Què has de posar a cada camp</a></li><li><a href="#configuracio-completa-amb-reserves">Configuració completa amb reserves</a></li><li><a href="#temps-de-concessio-i-ajustos-de-lexemple">Temps de concessió i ajustos de l’exemple</a></li><li><a href="#muntar-el-servidor">Muntar el servidor</a></li><li><a href="#comprovar-que-reparteix-adreces">Comprovar que reparteix adreces</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#resum">Resum</a></li></ol></details>
+<details class="cq-toc"><summary>En aquesta pàgina · 10 apartats</summary><ol><li><a href="#que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</a></li><li><a href="#per-que-kea-i-no-una-altra-cosa">Per què Kea i no una altra cosa</a></li><li><a href="#que-has-de-posar-a-cada-camp">Què has de posar a cada camp</a></li><li><a href="#configuracio-completa-amb-reserves">Configuració completa amb reserves</a></li><li><a href="#temps-de-concessio-i-ajustos-de-lexemple">Temps de concessió i ajustos de l’exemple</a></li><li><a href="#muntar-el-servidor">Muntar el servidor</a></li><li><a href="#comprovar-que-reparteix-adreces">Comprovar que reparteix adreces</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#resum">Resum</a></li></ol></details>
 <!-- TOC FI -->
 
 
@@ -72,7 +73,7 @@
   <h2 id="configuracio-completa-amb-reserves">Configuració completa amb reserves</h2>
 <p>Adaptació de l’exemple de <a href="https://elpuig.xeill.net/Members/vcarceler/articulos/dhcp-con-kea">Víctor Cárceler: DHCP con Kea</a>. Manté la xarxa de <a class="cq-ref" href="g1-1-netplan.html">G1.1</a>: servidor <code>192.168.1.1/24</code>, externa per DHCP i interna fixa.</p>
 <p><strong>Copia el fitxer complet</strong> i substitueix interfície, xarxa, rang, opcions i MAC segons l’activitat. Les MAC són exemples. No incloem l’opció NTP de l’article perquè aquí no hem muntat un servidor d’hora.</p>
-<pre>{
+<div class="cq-code"><div class="cq-code-head"><span>Fitxer JSON · Kea</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Fitxer JSON · Kea">{
   &quot;Dhcp4&quot;: {
     &quot;interfaces-config&quot;: {
       &quot;interfaces&quot;: [
@@ -132,7 +133,7 @@
       }
     ]
   }
-}</pre>
+}</pre></div>
 <p>Les reserves <code>.11</code> i <code>.12</code> queden fora del rang. Si només necessites una reserva, elimina el segon objecte i la coma que els separa. Conserva les claus i valida abans de reiniciar.</p>
 </div>
 
@@ -152,23 +153,23 @@
   <ol class="cq-steps">
     <li>
       <p><strong>Instal·la el servei d'IPv4</strong>, que és l'únic que necessites:</p>
-<pre>sudo apt update
-sudo apt install -y kea-dhcp4-server</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo apt update
+sudo apt install -y kea-dhcp4-server</pre></div>
     </li>
 
     <li>
       <p><strong>Desa una còpia</strong> de la configuració original abans de tocar res:</p>
-<pre>sudo cp /etc/kea/kea-dhcp4.conf /etc/kea/kea-dhcp4.conf.original</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo cp /etc/kea/kea-dhcp4.conf /etc/kea/kea-dhcp4.conf.original</pre></div>
     </li>
 
     <li>
       <p><strong>Edita el fitxer</strong> i deixa'l com el de l'exemple, amb les teves dades:</p>
-<pre>sudo nano /etc/kea/kea-dhcp4.conf</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo nano /etc/kea/kea-dhcp4.conf</pre></div>
     </li>
 
     <li>
       <p><strong>Comprova la sintaxi abans d'arrencar.</strong> Kea té un mode de prova que llegeix el fitxer i et diu si està bé:</p>
-<pre>sudo -u _kea kea-dhcp4 -t /etc/kea/kea-dhcp4.conf</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo -u _kea kea-dhcp4 -t /etc/kea/kea-dhcp4.conf</pre></div>
       <p>
         Va com l'usuari <code>_kea</code>, el del servei, i no com a <code>root</code>: l'AppArmor
         que porta el paquet no deixa que el programa obri fitxers fora dels seus. Si t'hi
@@ -183,19 +184,19 @@ sudo apt install -y kea-dhcp4-server</pre>
 
     <li>
       <p><strong>Arrenca i comprova</strong> que està actiu:</p>
-<pre>sudo systemctl restart kea-dhcp4-server
-sudo systemctl status kea-dhcp4-server</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo systemctl restart kea-dhcp4-server
+sudo systemctl status kea-dhcp4-server</pre></div>
       <p>Ha de sortir <code>active (running)</code> en verd.</p>
     </li>
 
     <li>
       <p><strong>Verifica que escolta</strong> al port 67:</p>
-<pre>sudo ss -ulnp | grep :67</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo ss -ulnp | grep :67</pre></div>
     </li>
 
     <li>
       <p><strong>Mira les concessions en directe</strong> mentre arrenques el client:</p>
-<pre>sudo journalctl -u kea-dhcp4-server -f</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo journalctl -u kea-dhcp4-server -f</pre></div>
       <p>
         Veuràs línies <code>DHCP4_LEASE_ALLOC</code> amb la MAC i la IP concedida. La llista
         completa de concessions la tens a
@@ -220,18 +221,18 @@ sudo systemctl status kea-dhcp4-server</pre>
   <ol class="cq-steps">
     <li>
       <p><strong>El servei està actiu</strong> i escolta pel port UDP 67:</p>
-<pre>systemctl status kea-dhcp4-server
-ss -ulnp | grep :67</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">systemctl status kea-dhcp4-server
+ss -ulnp | grep :67</pre></div>
     </li>
     <li>
       <p><strong>Un client rep adreça.</strong> Amb el registre obert al servidor, engega el
       client i mira què hi passa:</p>
-<pre>sudo journalctl -u kea-dhcp4-server -f</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo journalctl -u kea-dhcp4-server -f</pre></div>
       <p>El registre acredita la concessió i la MAC del client. Per demostrar els quatre missatges del DORA utilitza la captura DHCP indicada abans.</p>
     </li>
     <li>
       <p><strong>La concessió ha quedat desada:</strong></p>
-<pre>sudo cat /var/lib/kea/kea-leases4.csv</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo cat /var/lib/kea/kea-leases4.csv</pre></div>
       <p>Una línia amb la IP donada i la MAC de qui l'ha rebuda. Si hi ha reserva,
       la IP ha de ser la reservada.</p>
     </li>

@@ -6,29 +6,30 @@
 <title>G5.1 · Guia: Apache HTTP Server — Serveis en Xarxa (0227)</title>
 <link rel="stylesheet" href="../../_identitat/sinapsi.css">
 <script src="../../_identitat/lectura.js"></script>
+<link rel="icon" href="../../_identitat/favicon.svg">
 </head>
 <body>
 <a class="cq-skip" href="#contingut">Salta al contingut</a>
 <!-- === NAVEGACIÓ INICI === -->
 <nav class="cq-nav">
   <div class="inner">
-    <a href="../index.html">‹ RA5 · Gestió de servidors web</a>
-    <span class="pos">G5.1 · 6/11</span>
+    <a href="../index.html">‹ RA5 · Web</a>
+    <span class="pos">G5.1 · 1/2</span>
+    <!-- EINES LECTURA INICI -->
+<div class="cq-tools" role="group" aria-label="Aparença"><button type="button" class="cq-theme" data-preference="light" aria-label="Clar" title="Clar" aria-pressed="false" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg></button><button type="button" class="cq-theme" data-preference="auto" aria-label="Automàtic" title="Automàtic" aria-pressed="true" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8m-4-4v4"/></svg></button><button type="button" class="cq-theme" data-preference="dark" aria-label="Fosc" title="Fosc" aria-pressed="false" disabled><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M20.5 13A9 9 0 0 1 11 3.5 9 9 0 1 0 20.5 13Z"/></svg></button></div>
+<!-- EINES LECTURA FI -->
   </div>
 </nav>
 <!-- === NAVEGACIÓ FI === -->
 
-<!-- EINES LECTURA INICI -->
-<div class="cq-tools" hidden><label for="cq-tema">Tema</label> <select id="cq-tema" class="cq-theme"><option value="auto">Automàtic</option><option value="light">Clar</option><option value="dark">Fosc</option></select></div>
-<!-- EINES LECTURA FI -->
-<main id="contingut" tabindex="-1">
+<main data-layout="content" data-type="guies" id="contingut" tabindex="-1">
 <header class="cq-header">
   <div class="eyebrow">0227 · Serveis en Xarxa · RA5 · G5.1</div>
   <h1>Guia: Apache HTTP Server</h1>
   <p class="lede">Manual de configuració d'Apache, de la instal·lació al proxy invers.</p>
 </header>
 <!-- TOC INICI -->
-<details class="cq-toc"><summary>En aquesta pàgina</summary><ol><li><a href="#que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</a></li><li><a href="#estructura-de-etc-apache2">Estructura de /etc/apache2</a></li><li><a href="#installar-apache-i-fer-la-primera-comprovacio">Instal·lar Apache i fer la primera comprovació</a></li><li><a href="#publicar-contingut-propi">Publicar contingut propi</a></li><li><a href="#publicar-lo-amb-un-host-virtual-per-nom">Publicar-lo amb un host virtual per nom</a></li><li><a href="#directives-dins-virtualhost">Directives dins &lt;VirtualHost&gt;</a></li><li><a href="#https-amb-certificat-autofirmat">HTTPS amb certificat autofirmat</a></li><li><a href="#control-d-acces">Control d&#x27;accés</a></li><li><a href="#estat-del-servidor-i-php">Estat del servidor i PHP</a></li><li><a href="#proxy-invers-cap-a-un-servidor-intern">Proxy invers cap a un servidor intern</a></li><li><a href="#comprovacio-de-conjunt-des-del-client">Comprovació de conjunt, des del client</a></li><li><a href="#criteris-professionals">Criteris professionals</a></li><li><a href="#errors-habituals">Errors habituals</a></li><li><a href="#fitxa-rapida">Fitxa ràpida</a></li></ol></details>
+<details class="cq-toc"><summary>En aquesta pàgina · 14 apartats</summary><ol><li><a href="#que-hi-ha-en-aquesta-guia">Què hi ha en aquesta guia</a></li><li><a href="#estructura-de-etc-apache2">Estructura de /etc/apache2</a></li><li><a href="#installar-apache-i-fer-la-primera-comprovacio">Instal·lar Apache i fer la primera comprovació</a></li><li><a href="#publicar-contingut-propi">Publicar contingut propi</a></li><li><a href="#publicar-lo-amb-un-host-virtual-per-nom">Publicar-lo amb un host virtual per nom</a></li><li><a href="#directives-dins-virtualhost">Directives dins &lt;VirtualHost&gt;</a></li><li><a href="#https-amb-certificat-autofirmat">HTTPS amb certificat autofirmat</a></li><li><a href="#control-d-acces">Control d&#x27;accés</a></li><li><a href="#estat-del-servidor-i-php">Estat del servidor i PHP</a></li><li><a href="#proxy-invers-cap-a-un-servidor-intern">Proxy invers cap a un servidor intern</a></li><li><a href="#comprovacio-de-conjunt-des-del-client">Comprovació de conjunt, des del client</a></li><li><a href="#criteris-professionals">Bones pràctiques</a></li><li><a href="#errors-habituals">Problemes</a></li><li><a href="#fitxa-rapida">Resum</a></li></ol></details>
 <!-- TOC FI -->
 
 
@@ -96,8 +97,8 @@
   <ol class="cq-steps">
     <li>
       <p><strong>Instal·la el paquet:</strong></p>
-<pre>sudo apt update
-sudo apt install apache2</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo apt update
+sudo apt install apache2</pre></div>
       <p>
         S'inicia sol i queda actiu al port 80 de totes les targetes, amb
         el lloc <code>000-default.conf</code> ja habilitat.
@@ -105,13 +106,13 @@ sudo apt install apache2</pre>
     </li>
     <li>
       <p><strong>Comprova el servei:</strong></p>
-<pre>systemctl status apache2</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">systemctl status apache2</pre></div>
       <p>Ha de sortir <span class="o">active (running)</span>.</p>
     </li>
     <li>
       <p><strong>Des del client</strong>, esbrina la IP del servidor a
       <code>puigcastellar1</code>:</p>
-<pre>ip -brief a</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">ip -brief a</pre></div>
       <p>
         I obre <code>http://IP-DEL-SERVIDOR</code> al navegador: ha de
         sortir la pàgina «Apache2 Default Page».
@@ -127,7 +128,7 @@ sudo apt install apache2</pre>
     <li>
       <p><strong>Crea el directori</strong> del lloc, fora del
       <code>DocumentRoot</code> per defecte:</p>
-<pre>sudo mkdir -p /var/www/web1.internal/public_html</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo mkdir -p /var/www/web1.internal/public_html</pre></div>
     </li>
     <li>
       <p><strong>Escriu una pàgina de prova</strong> a dins, per exemple
@@ -137,12 +138,12 @@ sudo apt install apache2</pre>
       <p><strong>Ajusta propietari i permisos:</strong> propietari
       l'administrador i grup <code>www-data</code>, directoris 755 i
       fitxers 644. <strong>Mai 777.</strong></p>
-<pre>sudo chown -R "$USER":www-data \
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo chown -R "$USER":www-data \
   /var/www/web1.internal
 sudo find /var/www/web1.internal \
   -type d -exec chmod 755 {} \;
 sudo find /var/www/web1.internal \
-  -type f -exec chmod 644 {} \;</pre>
+  -type f -exec chmod 644 {} \;</pre></div>
     </li>
   </ol>
 </div>
@@ -153,24 +154,24 @@ sudo find /var/www/web1.internal \
   <ol class="cq-steps">
     <li>
       <p><strong>Crea el fitxer del lloc:</strong></p>
-<pre>sudo nano /etc/apache2/sites-available/web1.internal.conf</pre>
-<pre>&lt;VirtualHost *:80&gt;
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo nano /etc/apache2/sites-available/web1.internal.conf</pre></div>
+<div class="cq-code"><div class="cq-code-head"><span>Configuració · Apache</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Configuració · Apache">&lt;VirtualHost *:80&gt;
     ServerName web1.internal
     ServerAlias www.web1.internal
     DocumentRoot /var/www/web1.internal/public_html
-&lt;/VirtualHost&gt;</pre>
+&lt;/VirtualHost&gt;</pre></div>
     </li>
     <li>
       <p><strong>Activa el lloc i comprova la sintaxi</strong> abans de
       recarregar (mai recarreguis a cegues):</p>
-<pre>sudo a2ensite web1.internal.conf
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo a2ensite web1.internal.conf
 sudo apache2ctl -t
-sudo systemctl reload apache2</pre>
+sudo systemctl reload apache2</pre></div>
     </li>
     <li>
       <p><strong>Al client</strong>, afegeix el nom a <code>/etc/hosts</code>
       amb la IP del servidor:</p>
-<pre>IP-DEL-SERVIDOR web1.internal</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Fitxer · /etc/hosts</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Fitxer · /etc/hosts">IP-DEL-SERVIDOR web1.internal</pre></div>
       <p>I obre <code>http://web1.internal</code>.</p>
       <p>Per al segon lloc, repeteix la preparació del contingut i del fitxer del lloc canviant <code>web1.internal</code> per <code>web2.internal</code>. Escriu un missatge diferent, activa <code>web2.internal.conf</code> i afegeix els dos noms a <code>/etc/hosts</code> del client. Comprova la sintaxi i recarrega.</p>
     </li>
@@ -216,15 +217,15 @@ sudo systemctl reload apache2</pre>
   <ol class="cq-steps">
     <li>
       <p><strong>Activa el mòdul SSL:</strong></p>
-<pre>sudo a2enmod ssl</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo a2enmod ssl</pre></div>
     </li>
     <li>
       <p><strong>Prepara un fitxer de configuració</strong> amb els dos
       noms al <code>subjectAltName</code> (SAN): els navegadors
       comproven el SAN, no el <em>Common Name</em>.</p>
-<pre>sudo mkdir /etc/apache2/ssl
-sudo nano /etc/apache2/ssl/openssl.cnf</pre>
-<pre>[req]
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo mkdir /etc/apache2/ssl
+sudo nano /etc/apache2/ssl/openssl.cnf</pre></div>
+<div class="cq-code"><div class="cq-code-head"><span>Fitxer · configuració</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Fitxer · configuració">[req]
 distinguished_name = req_distinguished_name
 x509_extensions = v3_req
 prompt = no
@@ -238,7 +239,7 @@ subjectAltName = @alt_names
 DNS.1 = web1.internal
 DNS.2 = web2.internal
 DNS.3 = www.web1.internal
-DNS.4 = www.web2.internal</pre>
+DNS.4 = www.web2.internal</pre></div>
       <div class="cq-note"><span class="lbl">Compte</span>
         Ha de dir <code>x509_extensions</code>. Amb
         <code>req_extensions</code>, que és el que posen molts manuals,
@@ -248,34 +249,34 @@ DNS.4 = www.web2.internal</pre>
     <li>
       <p><strong>Genera la clau i el certificat</strong> a partir
       d'aquest fitxer:</p>
-<pre>sudo openssl req -x509 -nodes -days 365 \
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo openssl req -x509 -nodes -days 365 \
   -newkey rsa:2048 \
   -keyout /etc/apache2/ssl/apache.key \
   -out /etc/apache2/ssl/apache.crt \
-  -config /etc/apache2/ssl/openssl.cnf</pre>
+  -config /etc/apache2/ssl/openssl.cnf</pre></div>
     </li>
     <li>
       <p><strong>Afegeix el bloc de port 443</strong> al mateix fitxer
       del lloc:</p>
-<pre>&lt;VirtualHost *:443&gt;
+<div class="cq-code"><div class="cq-code-head"><span>Configuració · Apache</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Configuració · Apache">&lt;VirtualHost *:443&gt;
     ServerName web1.internal
     ServerAlias www.web1.internal
     DocumentRoot /var/www/web1.internal/public_html
     SSLEngine on
     SSLCertificateFile /etc/apache2/ssl/apache.crt
     SSLCertificateKeyFile /etc/apache2/ssl/apache.key
-&lt;/VirtualHost&gt;</pre>
+&lt;/VirtualHost&gt;</pre></div>
     </li>
     <li>
       <p><strong>Repeteix el bloc 443 per a <code>web2.internal</code>, amb el seu <code>DocumentRoot</code> i el mateix certificat. Redirigeix el 80 al 443</strong>, dins del bloc de port
       80 del mateix fitxer:</p>
-<pre>&lt;VirtualHost *:80&gt;
+<div class="cq-code"><div class="cq-code-head"><span>Configuració · Apache</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Configuració · Apache">&lt;VirtualHost *:80&gt;
     ServerName web1.internal
     ServerAlias www.web1.internal
     Redirect permanent / https://web1.internal/
-&lt;/VirtualHost&gt;</pre>
-<pre>sudo apache2ctl -t
-sudo systemctl reload apache2</pre>
+&lt;/VirtualHost&gt;</pre></div>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo apache2ctl -t
+sudo systemctl reload apache2</pre></div>
     </li>
   </ol>
 </div>
@@ -287,22 +288,22 @@ sudo systemctl reload apache2</pre>
     <li>
       <p><strong>Crea el fitxer de contrasenyes</strong>, sempre fora del
       <code>DocumentRoot</code>:</p>
-<pre>sudo htpasswd -c /etc/apache2/.htpasswd admin
-sudo htpasswd /etc/apache2/.htpasswd visitant</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo htpasswd -c /etc/apache2/.htpasswd admin
+sudo htpasswd /etc/apache2/.htpasswd visitant</pre></div>
       <p><code>-c</code> només al primer usuari: crea el fitxer i
       l'esborraria si tornessis a fer-lo servir.</p>
     </li>
     <li>
       <p><strong>Crea el fitxer de grups:</strong></p>
-<pre>sudo nano /etc/apache2/.htgroup</pre>
-<pre>administradors: admin
-convidats: visitant</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo nano /etc/apache2/.htgroup</pre></div>
+<div class="cq-code"><div class="cq-code-head"><span>Fitxer · configuració</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Fitxer · configuració">administradors: admin
+convidats: visitant</pre></div>
     </li>
     <li>
       <p>Crea primer les carpetes <code>privat</code>, <code>bloqueig</code> i <code>admins</code> amb un <code>index.html</code> identificable a cadascuna, dins del <code>DocumentRoot</code>. Adapta la IP bloquejada a la del client que vols rebutjar. <strong>Afegeix els tres casos</strong> dins el bloc
       <code>&lt;VirtualHost *:443&gt;</code>, cadascun sobre un
       <code>&lt;Directory&gt;</code> propi:</p>
-<pre>&lt;Directory /var/www/web1.internal/public_html/privat&gt;
+<div class="cq-code"><div class="cq-code-head"><span>Configuració · Apache</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Configuració · Apache">&lt;Directory /var/www/web1.internal/public_html/privat&gt;
     AuthType Basic
     AuthName "Zona restringida"
     AuthUserFile /etc/apache2/.htpasswd
@@ -322,14 +323,14 @@ convidats: visitant</pre>
     AuthUserFile /etc/apache2/.htpasswd
     AuthGroupFile /etc/apache2/.htgroup
     Require group administradors
-&lt;/Directory&gt;</pre>
+&lt;/Directory&gt;</pre></div>
     </li>
     <li>
       <p><strong>Activa el mòdul de grups</strong> —no és actiu de
       sèrie— i recarrega:</p>
-<pre>sudo a2enmod authz_groupfile
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo a2enmod authz_groupfile
 sudo apache2ctl -t
-sudo systemctl reload apache2</pre>
+sudo systemctl reload apache2</pre></div>
     </li>
   </ol>
 </div>
@@ -344,16 +345,16 @@ sudo systemctl reload apache2</pre>
       <code>/etc/apache2/mods-available/status.conf</code> perquè el
       <code>&lt;Location "/server-status"&gt;</code> tingui
       <code>Require ip 127.0.0.1</code>:</p>
-<pre>apache2ctl -M | grep status
-sudo systemctl reload apache2</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">apache2ctl -M | grep status
+sudo systemctl reload apache2</pre></div>
       <p>Visita <code>/server-status</code> des del servidor mateix, al lloc HTTPS si has activat la redirecció. Si falta el mòdul, activa’l amb <code>sudo a2enmod status</code> abans de recarregar.</p>
     </li>
     <li>
       <p><strong>PHP</strong>: instal·la el mòdul i escriu una pàgina de
       prova.</p>
-<pre>sudo apt install libapache2-mod-php
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo apt install libapache2-mod-php
 echo "&lt;?php phpinfo(); ?&gt;" | sudo tee \
-  /var/www/web1.internal/public_html/info.php</pre>
+  /var/www/web1.internal/public_html/info.php</pre></div>
     </li>
   </ol>
 </div>
@@ -368,23 +369,23 @@ echo "&lt;?php phpinfo(); ?&gt;" | sudo tee \
   <ol class="cq-steps">
     <li>
       <p><strong>Activa els mòduls de proxy:</strong></p>
-<pre>sudo a2enmod proxy proxy_http</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo a2enmod proxy proxy_http</pre></div>
     </li>
     <li>
       <p><strong>Crea el lloc</strong>, sense <code>DocumentRoot</code>:</p>
-<pre>sudo nano /etc/apache2/sites-available/proxy.internal.conf</pre>
-<pre>&lt;VirtualHost *:80&gt;
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo nano /etc/apache2/sites-available/proxy.internal.conf</pre></div>
+<div class="cq-code"><div class="cq-code-head"><span>Configuració · Apache</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Configuració · Apache">&lt;VirtualHost *:80&gt;
     ServerName proxy.internal
     ProxyPreserveHost On
     ProxyPass / http://IP-SERVIDOR-INTERN/
     ProxyPassReverse / http://IP-SERVIDOR-INTERN/
-&lt;/VirtualHost&gt;</pre>
+&lt;/VirtualHost&gt;</pre></div>
     </li>
     <li>
       <p><strong>Activa i comprova:</strong></p>
-<pre>sudo a2ensite proxy.internal.conf
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">sudo a2ensite proxy.internal.conf
 sudo apache2ctl -t
-sudo systemctl reload apache2</pre>
+sudo systemctl reload apache2</pre></div>
       <p>
         <code>IP-SERVIDOR-INTERN</code> és la IP del servidor de darrere,
         esbrinada amb <code>ip -brief a</code> en aquella màquina.
@@ -413,14 +414,14 @@ sudo systemctl reload apache2</pre>
       actius: hi han de sortir <code>ssl</code>,
       <code>authz_groupfile</code> i, si s'ha configurat el proxy invers,
       <code>proxy</code> i <code>proxy_http</code>.</p>
-<pre>apache2ctl -M | grep -E "ssl|proxy|groupfile"</pre>
+<div class="cq-code"><div class="cq-code-head"><span>Terminal</span><button type="button" class="cq-copy-btn" disabled aria-label="Copia el bloc de codi">Copia</button><span class="cq-copy-status" role="status"></span></div><pre data-label="Terminal">apache2ctl -M | grep -E "ssl|proxy|groupfile"</pre></div>
     </li>
   </ol>
 </div>
 
 <!-- ============ 12 · BONES PRÀCTIQUES ============ -->
 <div class="cq-block" data-kind="bones pràctiques">
-  <h2 id="criteris-professionals">Criteris professionals</h2>
+  <h2 id="criteris-professionals">Bones pràctiques</h2>
   <ul>
     <li><strong>Mai 777</strong>: directoris 755, fitxers 644.</li>
     <li>El fitxer de contrasenyes, <strong>sempre fora del
@@ -437,7 +438,7 @@ sudo systemctl reload apache2</pre>
 
 <!-- ============ 13 · PROBLEMES ============ -->
 <div class="cq-block" data-kind="problemes">
-  <h2 id="errors-habituals">Errors habituals</h2>
+  <h2 id="errors-habituals">Problemes</h2>
   <dl class="cq-issues">
     <dt>Entro per la IP i surt un lloc que no és el que esperava</dt>
     <dd>
@@ -489,7 +490,7 @@ sudo systemctl reload apache2</pre>
 
 <!-- ============ 14 · RESUM ============ -->
 <div class="cq-block" data-kind="resum">
-  <h2 id="fitxa-rapida">Fitxa ràpida</h2>
+  <h2 id="fitxa-rapida">Resum</h2>
   <div class="cq-tablewrap">
     <table class="cq-table">
       <thead><tr><th>Què</th><th>On</th></tr></thead>
@@ -520,9 +521,9 @@ sudo systemctl reload apache2</pre>
 
 <!-- === PEU DE NAVEGACIÓ INICI === -->
 <nav class="cq-pager">
-  <a class="prev" href="../teoria/t5-5-moduls-i-codi.html">
-    <span class="dir">Anterior · T5.5</span>
-    <span class="ttl">Mòduls i codi</span></a>
+  <a class="prev" href="../index.html">
+    <span class="dir">Torna a · RA5</span>
+    <span class="ttl">RA5 · Gestió de servidors web</span></a>
   <a class="next" href="g5-2-nginx.html">
     <span class="dir">Següent · G5.2</span>
     <span class="ttl">Guia: Nginx</span></a>
